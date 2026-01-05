@@ -1,41 +1,84 @@
 
 import React, { useState } from 'react';
 import { User } from '../../../types';
+import { useAuth } from '../../../hooks/useAuth';
 
+// ... interface definitions ...
 interface Condition { id: string; name: string; date: string; status: 'Active' | 'Managed' | 'Resolved'; }
 interface Allergy { id: string; allergen: string; severity: 'Mild' | 'Moderate' | 'Severe'; reaction: string; }
 interface Medication { id: string; name: string; dosage: string; frequency: string; instructions?: string; }
 
-type SectionType = 'conditions' | 'allergies' | 'medications';
-type FormData = Partial<Condition> & Partial<Allergy> & Partial<Medication>;
+type SectionType = 'conditions' | 'allergies' | 'medications' | 'profile'; // Added 'profile'
+type FormData = Partial<Condition> & Partial<Allergy> & Partial<Medication> & Partial<User>;
 
 const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack }) => {
+    const { updateUser, logout } = useAuth(); // Get updateUser and logout
     const [activeSection, setActiveSection] = useState<SectionType>('conditions');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<any>(null);
-    
+
+    // ... existing mocked state ...
     const [conditions, setConditions] = useState<Condition[]>([]);
     const [allergies, setAllergies] = useState<Allergy[]>([]);
     const [medications, setMedications] = useState<Medication[]>([]);
-    
-    const [formData, setFormData] = useState<FormData>({});
 
-    const handleOpenModal = (item?: any) => {
+    const [formData, setFormData] = useState<FormData>({});
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+    const handleOpenModal = (item?: any, type?: SectionType) => {
         setEditingItem(item);
-        setFormData(item ? { ...item } : {});
+        setImagePreview(null);
+        // If type is profile, prepopulate with user data
+        if (type === 'profile') {
+            setFormData({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phoneNumber: user.phoneNumber,
+                gender: user.gender,
+                age: user.age,
+                bloodGroup: user.bloodGroup,
+                weight: user.weight,
+                profileImage: user.profileImage
+            } as unknown as FormData);
+            setActiveSection('profile');
+        } else {
+            setFormData(item ? { ...item } : {});
+        }
         setIsModalOpen(true);
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const result = reader.result as string;
+                setImagePreview(result);
+                setFormData(prev => ({ ...prev, profileImage: result }));
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setEditingItem(null);
         setFormData({});
+        // Reset active section if it was profile, maybe? Or keep it. 
+        if (activeSection === 'profile') setActiveSection('conditions');
     };
 
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (activeSection === 'profile') {
+            updateUser(formData as Partial<User>);
+            handleCloseModal();
+            return;
+        }
+
         const newItem = { ...formData, id: editingItem ? editingItem.id : Date.now().toString() };
-        
+
         if (activeSection === 'conditions') {
             setConditions(prev => editingItem ? prev.map(i => i.id === newItem.id ? newItem as Condition : i) : [...prev, newItem as Condition]);
         } else if (activeSection === 'allergies') {
@@ -46,6 +89,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
         handleCloseModal();
     };
 
+    // ... existing handleDelete ...
     const handleDelete = (id: string) => {
         if (activeSection === 'conditions') setConditions(prev => prev.filter(i => i.id !== id));
         else if (activeSection === 'allergies') setAllergies(prev => prev.filter(i => i.id !== id));
@@ -56,7 +100,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
         <div className="animate-fade-in-up pb-10 relative">
             <div className="flex items-center mb-8">
                 <button onClick={onBack} className="mr-4 p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors group">
-                     <svg className="w-5 h-5 text-gray-500 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                    <svg className="w-5 h-5 text-gray-500 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
                 <h2 className="text-2xl font-bold text-gray-900">My Profile</h2>
             </div>
@@ -65,19 +109,31 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                 {/* Profile Card */}
                 <div className="lg:col-span-1">
                     <div className="bg-white rounded-3xl shadow-sm p-8 text-center border border-gray-100 sticky top-4">
-                        <div className="w-32 h-32 bg-gradient-to-br from-primary to-blue-400 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl font-bold text-white shadow-xl ring-4 ring-blue-50">
-                            {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                        <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden shadow-xl ring-4 ring-blue-50 bg-gray-100 flex items-center justify-center relative group">
+                            {user.profileImage ? (
+                                <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-primary to-blue-400 flex items-center justify-center text-4xl font-bold text-white">
+                                    {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                                </div>
+                            )}
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900">{user.firstName} {user.lastName}</h2>
-                        <p className="text-gray-500 mb-6 text-sm">{user.email}</p>
+                        <p className="text-gray-500 mb-2 text-sm">{user.email}</p>
+                        <p className="text-gray-500 mb-6 text-sm">{user.phoneNumber || 'No phone number'}</p>
+
                         <div className="flex justify-center gap-4 mb-8 py-4 border-t border-b border-gray-50">
-                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">--</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Age</span></div>
+                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">{user.age || '--'}</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Age</span></div>
                             <div className="w-px bg-gray-100"></div>
-                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">--</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Blood</span></div>
+                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">{user.bloodGroup || '--'}</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Blood</span></div>
                             <div className="w-px bg-gray-100"></div>
-                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">--kg</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Weight</span></div>
+                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">{user.weight || '--'}kg</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Weight</span></div>
                         </div>
-                        <button className="w-full py-2.5 border border-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-50 transition-colors">Edit Details</button>
+                        <button onClick={() => handleOpenModal(null, 'profile')} className="w-full py-2.5 border border-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-50 transition-colors mb-3">Edit Details</button>
+                        <button onClick={logout} className="w-full py-2.5 bg-red-50 text-red-500 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors flex items-center justify-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            Logout
+                        </button>
                     </div>
                 </div>
 
@@ -94,6 +150,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                         </div>
 
                         <div className="space-y-3 min-h-[200px]">
+                            {/* ... Content rendering logic same as before ... */}
                             {activeSection === 'conditions' && (conditions.length === 0 ? <EmptyState text="No medical conditions recorded." icon={<svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>} /> : conditions.map(i => (
                                 <div key={i.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200 transition-all group">
                                     <div><h4 className="font-bold text-gray-800">{i.name}</h4><p className="text-xs text-gray-500 font-medium">Since: {i.date}</p></div>
@@ -120,8 +177,8 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                                 <div key={i.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200 transition-all group gap-3">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2">
-                                             <h4 className="font-bold text-gray-800">{i.name}</h4>
-                                             <span className="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">{i.dosage}</span>
+                                            <h4 className="font-bold text-gray-800">{i.name}</h4>
+                                            <span className="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">{i.dosage}</span>
                                         </div>
                                         <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
                                             <p className="text-xs text-gray-500 flex items-center gap-1">
@@ -149,36 +206,73 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4 animate-fade-in-up">
                     <div className="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-3xl shadow-2xl overflow-hidden transform transition-all">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                            <h3 className="text-xl font-bold text-gray-800">{editingItem ? 'Edit' : 'Add'} {activeSection.slice(0, -1)}</h3>
+                            <h3 className="text-xl font-bold text-gray-800">
+                                {activeSection === 'profile' ? 'Edit Profile' : (editingItem ? 'Edit' : 'Add') + ' ' + activeSection.slice(0, -1)}
+                            </h3>
                             <button onClick={handleCloseModal} className="bg-gray-200 p-1.5 rounded-full text-gray-500 hover:bg-gray-300 transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         </div>
-                        <form onSubmit={handleSave} className="p-6 space-y-4">
+                        <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                            {activeSection === 'profile' && (
+                                <div className="space-y-4">
+                                    <div className="flex flex-col items-center mb-4">
+                                        <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden mb-2 shadow-inner border border-gray-200 relative">
+                                            {imagePreview || (formData as User).profileImage ? (
+                                                <img src={imagePreview || (formData as User).profileImage} alt="Preview" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <label className="text-xs font-bold text-primary cursor-pointer hover:underline">
+                                            Change Photo
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                                        </label>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Input label="First Name" val={(formData as User).firstName} set={(v) => setFormData({ ...formData, firstName: v })} required />
+                                        <Input label="Last Name" val={(formData as User).lastName} set={(v) => setFormData({ ...formData, lastName: v })} required />
+                                    </div>
+                                    <Input label="Email" val={(formData as User).email} set={() => { }} placeholder="Email cannot be changed" />
+                                    <Input label="Phone Number" val={(formData as User).phoneNumber} set={(v) => setFormData({ ...formData, phoneNumber: v })} placeholder="+91 99999 99999" />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Input label="Age" type="number" val={String((formData as User).age || '')} set={(v) => setFormData({ ...formData, age: v ? parseInt(v) : '' })} />
+                                        <Select label="Gender" val={(formData as User).gender} set={(v) => setFormData({ ...formData, gender: v })} opts={['Male', 'Female', 'Other']} />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Select label="Blood Group" val={(formData as User).bloodGroup} set={(v) => setFormData({ ...formData, bloodGroup: v })} opts={['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']} />
+                                        <Input label="Weight (kg)" type="number" val={String((formData as User).weight || '')} set={(v) => setFormData({ ...formData, weight: v ? parseFloat(v) : '' })} />
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Existing form sections... */}
                             {activeSection === 'conditions' && (
                                 <>
-                                    <Input label="Condition Name" val={formData.name} set={(v) => setFormData({...formData, name: v})} placeholder="e.g. Hypertension" required />
+                                    <Input label="Condition Name" val={formData.name} set={(v) => setFormData({ ...formData, name: v })} placeholder="e.g. Hypertension" required />
                                     <div className="grid grid-cols-2 gap-4">
-                                        <Input label="Date Diagnosed" type="date" val={formData.date} set={(v) => setFormData({...formData, date: v})} required />
-                                        <Select label="Status" val={formData.status} set={(v) => setFormData({...formData, status: v as Condition['status']})} opts={['Active', 'Managed', 'Resolved']} />
+                                        <Input label="Date Diagnosed" type="date" val={formData.date} set={(v) => setFormData({ ...formData, date: v })} required />
+                                        <Select label="Status" val={formData.status} set={(v) => setFormData({ ...formData, status: v as Condition['status'] })} opts={['Active', 'Managed', 'Resolved']} />
                                     </div>
                                 </>
                             )}
                             {activeSection === 'allergies' && (
                                 <>
-                                    <Input label="Allergen" val={formData.allergen} set={(v) => setFormData({...formData, allergen: v})} placeholder="e.g. Peanuts" required />
+                                    <Input label="Allergen" val={formData.allergen} set={(v) => setFormData({ ...formData, allergen: v })} placeholder="e.g. Peanuts" required />
                                     <div className="grid grid-cols-2 gap-4">
-                                        <Select label="Severity" val={formData.severity} set={(v) => setFormData({...formData, severity: v as Allergy['severity']})} opts={['Mild', 'Moderate', 'Severe']} />
-                                        <Input label="Reaction" val={formData.reaction} set={(v) => setFormData({...formData, reaction: v})} placeholder="e.g. Skin rash" required />
+                                        <Select label="Severity" val={formData.severity} set={(v) => setFormData({ ...formData, severity: v as Allergy['severity'] })} opts={['Mild', 'Moderate', 'Severe']} />
+                                        <Input label="Reaction" val={formData.reaction} set={(v) => setFormData({ ...formData, reaction: v })} placeholder="e.g. Skin rash" required />
                                     </div>
                                 </>
                             )}
                             {activeSection === 'medications' && (
                                 <>
-                                    <Input label="Medication Name" val={formData.name} set={(v) => setFormData({...formData, name: v})} placeholder="e.g. Amoxicillin" required />
+                                    <Input label="Medication Name" val={formData.name} set={(v) => setFormData({ ...formData, name: v })} placeholder="e.g. Amoxicillin" required />
                                     <div className="grid grid-cols-2 gap-4">
-                                        <Input label="Dosage" val={formData.dosage} set={(v) => setFormData({...formData, dosage: v})} placeholder="e.g. 500mg" required />
-                                        <Input label="Frequency" val={formData.frequency} set={(v) => setFormData({...formData, frequency: v})} placeholder="e.g. Twice daily" required />
+                                        <Input label="Dosage" val={formData.dosage} set={(v) => setFormData({ ...formData, dosage: v })} placeholder="e.g. 500mg" required />
+                                        <Input label="Frequency" val={formData.frequency} set={(v) => setFormData({ ...formData, frequency: v })} placeholder="e.g. Twice daily" required />
                                     </div>
-                                    <Input label="Instructions (Optional)" val={formData.instructions} set={(v) => setFormData({...formData, instructions: v})} placeholder="e.g. Take after meals" />
+                                    <Input label="Instructions (Optional)" val={formData.instructions} set={(v) => setFormData({ ...formData, instructions: v })} placeholder="e.g. Take after meals" />
                                 </>
                             )}
                             <button type="submit" className="w-full py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-blue-200 mt-4">Save Changes</button>
@@ -189,8 +283,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
         </div>
     );
 };
-
-// Helper Components with Types
+// ... helper components same ...
 interface EmptyStateProps { text: string; icon?: React.ReactNode; }
 const EmptyState: React.FC<EmptyStateProps> = ({ text, icon }) => (
     <div className="text-center py-12 px-4 text-gray-400 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-100 flex flex-col items-center gap-3">

@@ -1,17 +1,24 @@
 
 export enum UserRole {
-  PATIENT = 'Patient',
-  DOCTOR = 'Doctor',
-  NURSE = 'Nurse',
-  ADMIN = 'Admin',
+    PATIENT = 'Patient',
+    DOCTOR = 'Doctor',
+    NURSE = 'Nurse',
+    ADMIN = 'Admin',
 }
 
 export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: UserRole;
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: UserRole;
+    isFirstLogin?: boolean;
+    phoneNumber?: string;
+    gender?: 'Male' | 'Female' | 'Other' | string;
+    age?: number | string;
+    bloodGroup?: string;
+    weight?: number | string;
+    profileImage?: string;
 }
 
 export interface ProductFAQ {

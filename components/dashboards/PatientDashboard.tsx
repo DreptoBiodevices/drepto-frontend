@@ -11,6 +11,7 @@ import LabTests from './patient/LabTests';
 import DreptoProducts from './patient/DreptoProducts';
 import Ambulance from './patient/Ambulance';
 import Profile from './patient/Profile';
+import NotificationsPage from './patient/NotificationsPage';
 
 // Icons
 import {
@@ -57,6 +58,8 @@ const PatientDashboard: React.FC<PatientDashboardProps> = ({ user }) => {
         return <DreptoProducts onBack={() => setCurrentView('home')} />;
       case 'ambulance':
         return <Ambulance onBack={() => setCurrentView('home')} />;
+      case 'notifications':
+        return <NotificationsPage onBack={() => setCurrentView('home')} />;
       case 'profile':
         return <Profile user={user} onBack={() => setCurrentView('home')} />;
       default:

@@ -7,6 +7,7 @@ interface AuthContextType {
   login: (identifier: string) => void;
   logout: () => void;
   register: (details: Omit<User, 'id'>) => void;
+  updateUser: (details: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -50,12 +51,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
     lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
 
+    const storageKey = `drepto_has_logged_in_${identifier}`;
+    const hasLoggedInBefore = localStorage.getItem(storageKey);
+    const isFirstLogin = !hasLoggedInBefore;
+
+    if (isFirstLogin) {
+      localStorage.setItem(storageKey, 'true');
+    }
+
     const mockUser: User = {
       id: '123',
       firstName,
       lastName,
       email: identifier.includes('@') ? identifier : `${identifier}@example.com`,
       role,
+      isFirstLogin,
+      phoneNumber: '+91 98765 43210',
+      gender: 'Male',
+      age: 28,
+      bloodGroup: 'O+',
+      weight: 70
     };
     setUser(mockUser);
   };
@@ -70,13 +85,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const newUser: User = {
       id: Date.now().toString(),
       ...details,
+      // Default empty/placeholder values for new profile fields if not provided
+      phoneNumber: '',
+      gender: '',
+      age: '',
+      bloodGroup: '',
+      weight: ''
     };
     setUser(newUser);
   };
 
+  const updateUser = (details: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...details };
+      setUser(updatedUser);
+      console.log('User profile updated:', updatedUser);
+    }
+  };
+
   return React.createElement(
     AuthContext.Provider,
-    { value: { user, login, logout, register } },
+    { value: { user, login, logout, register, updateUser } },
     children
   );
 };

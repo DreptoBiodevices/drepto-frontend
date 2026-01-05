@@ -26,7 +26,7 @@ const HeroSection: React.FC = () => {
               <span className="text-primary">Drepto Biodevices</span>
             </h1>
             <p className="mt-6 text-lg text-gray-600">
-              Connect with certified doctors, order medicines, book lab tests, and arrange home care—all in one secure app.
+              Connect with certified doctors, order medicines, book lab tests, and arrange home care all in one secure app.
             </p>
 
             {/* Dynamic Stats */}

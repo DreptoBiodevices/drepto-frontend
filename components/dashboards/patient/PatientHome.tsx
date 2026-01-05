@@ -46,21 +46,12 @@ const PatientHome: React.FC<PatientHomeProps> = ({ user, onNavigate }) => {
         <div className="absolute bottom-0 left-0 w-56 h-56 bg-blue-300 opacity-[0.1] rounded-full blur-2xl -ml-16 -mb-16 pointer-events-none"></div>
 
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-blue-50 mb-4 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]"></span>
-            System Operational
-          </div>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">
             {getTimeBasedGreeting()}, <br className="md:hidden" />{user.firstName}!
           </h2>
           <p className="text-blue-100/90 text-lg leading-relaxed font-light">
             Your health journey starts here. What would you like to do today?
           </p>
-        </div>
-
-        <div className="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-4 rounded-2xl text-center min-w-[140px] shadow-lg">
-          <p className="text-xs text-blue-200 uppercase tracking-widest font-bold mb-1">Today</p>
-          <p className="text-2xl font-bold tracking-tight text-white">{new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}</p>
         </div>
       </div>
 
