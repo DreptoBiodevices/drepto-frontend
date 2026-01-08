@@ -66,11 +66,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       email: identifier.includes('@') ? identifier : `${identifier}@example.com`,
       role,
       isFirstLogin,
-      phoneNumber: '+91 98765 43210',
-      gender: 'Male',
-      age: 28,
-      bloodGroup: 'O+',
-      weight: 70
+      mobileNumber: '',
+      gender: '',
+      age: '',
+      bloodGroup: '',
+      weight: ''
     };
     setUser(mockUser);
   };
@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       id: Date.now().toString(),
       ...details,
       // Default empty/placeholder values for new profile fields if not provided
-      phoneNumber: '',
+      mobileNumber: '',
       gender: '',
       age: '',
       bloodGroup: '',

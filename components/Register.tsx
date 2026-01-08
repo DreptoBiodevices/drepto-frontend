@@ -16,7 +16,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
+    mobileNumber: '',
     gender: '',
     age: '',
     password: '',
@@ -52,6 +52,9 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
       lastName: userDetails.lastName,
       email: userDetails.email,
       role: userDetails.role,
+      mobileNumber: userDetails.mobileNumber,
+      gender: userDetails.gender,
+      age: userDetails.age,
     });
   };
 
@@ -83,7 +86,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
           <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
         </div>
         <input type="email" name="email" placeholder="Email ID" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
-        <input type="tel" name="phone" placeholder="Phone Number" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        <input type="tel" name="mobileNumber" placeholder="Mobile Number" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
         <div className="grid grid-cols-2 gap-3">
           <select name="gender" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary text-gray-500">
             <option value="">Gender</option>
@@ -93,6 +96,8 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
           </select>
           <input type="number" name="age" placeholder="Age" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
         </div>
+
+
 
         <input type="password" name="password" placeholder="Password" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
         <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />

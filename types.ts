@@ -13,12 +13,14 @@ export interface User {
     email: string;
     role: UserRole;
     isFirstLogin?: boolean;
-    phoneNumber?: string;
+    mobileNumber?: string;
     gender?: 'Male' | 'Female' | 'Other' | string;
     age?: number | string;
     bloodGroup?: string;
     weight?: number | string;
     profileImage?: string;
+    // Nurse specific fields
+    serviceTypes?: string[];
 }
 
 export interface ProductFAQ {
