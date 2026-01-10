@@ -18,7 +18,6 @@ jobs:
           script: |
             cd /home/dreptoapp/drepto_websitess
             git pull origin main
-            npm install
             npm run build
             pm2 restart frontend
             sudo systemctl restart nginx
