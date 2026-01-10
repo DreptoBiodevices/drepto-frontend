@@ -8,6 +8,13 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3001,
       host: '0.0.0.0',
+      proxy: {
+        '/api': {
+          target: 'http://34.14.153.43:6001',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
     },
     plugins: [react()],
     define: {

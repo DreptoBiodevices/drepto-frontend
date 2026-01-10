@@ -1,7 +1,7 @@
 
 import axios, { AxiosResponse } from 'axios';
 
-const BASE_URL = 'http://34.14.153.43:6001';
+const BASE_URL = '/api';
 
 // Create Axios Instance
 export const api = axios.create({
