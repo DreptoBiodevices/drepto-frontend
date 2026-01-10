@@ -33,28 +33,34 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { password, confirmPassword, ...userDetails } = formData;
-    if (Object.values(userDetails).some(field => field === '')) {
+
+    // Check for empty fields including password
+    if (Object.values(userDetails).some(field => field === '') || !password) {
       setError('Please fill in all fields.');
       return;
     }
+
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
       setError('Passwords do not match.');
       return;
     }
+
     if (!agreedToTerms) {
       setError('You must agree to the Terms and Conditions.');
       return;
     }
+
     setError('');
+
     register({
       firstName: userDetails.firstName,
       lastName: userDetails.lastName,
       email: userDetails.email,
       role: userDetails.role,
-      mobileNumber: userDetails.mobileNumber,
+      mobileNumber: Number(userDetails.mobileNumber),
       gender: userDetails.gender,
-      age: userDetails.age,
+      age: Number(userDetails.age),
+      password: password
     });
   };
 

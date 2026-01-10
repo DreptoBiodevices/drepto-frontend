@@ -1,12 +1,38 @@
-
 import React, { useState } from 'react';
+import { ContactService } from '../lib/api_controller';
 
 const ContactSection: React.FC = () => {
     const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        contactNumber: '',
+        subject: '',
+        message: ''
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitted(true);
+        setLoading(true);
+        setError('');
+
+        try {
+            // Basic Validation if needed, but HTML5 validation handles 'required'
+            await ContactService.create(formData);
+            setSubmitted(true);
+            setFormData({ name: '', email: '', contactNumber: '', subject: '', message: '' }); // Reset
+        } catch (err: any) {
+            console.error("Contact submission failed", err);
+            setError(err.response?.data?.message || "Failed to send message. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -33,32 +59,89 @@ const ContactSection: React.FC = () => {
                             <div className="text-center py-10">
                                 <h3 className="text-2xl font-bold text-secondary mb-2">Thank You!</h3>
                                 <p className="text-gray-600">Your message has been sent successfully.</p>
+                                <button
+                                    onClick={() => setSubmitted(false)}
+                                    className="mt-6 text-primary underline hover:text-dark-blue"
+                                >
+                                    Send another message
+                                </button>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-4">
+                                {error && (
+                                    <div className="bg-red-50 text-red-500 p-3 rounded-md text-sm">
+                                        {error}
+                                    </div>
+                                )}
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name:</label>
-                                    <input type="text" id="name" required className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    />
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email:</label>
-                                    <input type="email" id="email" required className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    />
                                 </div>
                                 <div>
-                                    <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-1">Contact Number:</label>
-                                    <input type="tel" id="contact" className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                    <label htmlFor="contactNumber" className="block text-sm font-medium text-gray-700 mb-1">Contact Number:</label>
+                                    <input
+                                        type="tel"
+                                        id="contactNumber" // Changed ID to match DTO field name
+                                        value={formData.contactNumber}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    />
                                 </div>
                                 <div>
                                     <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">Subject:</label>
-                                    <input type="text" id="subject" required className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                                    <input
+                                        type="text"
+                                        id="subject"
+                                        value={formData.subject}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    />
                                 </div>
                                 <div>
                                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message:</label>
-                                    <textarea id="message" rows={4} required className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"></textarea>
+                                    <textarea
+                                        id="message"
+                                        rows={4}
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    ></textarea>
                                 </div>
                                 <div className="pt-4">
-                                    <button type="submit" className="bg-primary text-white font-semibold py-2 px-6 rounded hover:bg-dark-blue transition-colors">
-                                        Send Message
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className={`bg-primary text-white font-semibold py-2 px-6 rounded hover:bg-dark-blue transition-colors w-full flex justify-center items-center ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                Sending...
+                                            </>
+                                        ) : "Send Message"}
                                     </button>
                                 </div>
                             </form>

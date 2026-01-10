@@ -65,8 +65,12 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h2>
 
                     <div className="flex items-baseline gap-3 mb-6">
-                        <span className="text-4xl font-bold text-gray-900">${product.price}</span>
-                        <span className="text-xl text-gray-400 line-through">${product.mrp}</span>
+                        <span className="text-4xl font-bold text-gray-900">
+                            {/* ${product.price} */}
+                        </span>
+                        <span className="text-xl text-gray-400 line-through">
+                            {/* ${product.mrp} */}
+                        </span>
                     </div>
 
                     <div className="prose prose-sm text-gray-600 mb-8 space-y-6">
@@ -136,7 +140,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                     </div>
 
                     <div className="mt-auto pt-6 border-t border-gray-100 sticky bottom-0 bg-white">
-                        <button
+                        {/* <button
                             onClick={() => {
                                 onAddToCart(product);
                                 onClose();
@@ -145,7 +149,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                         >
                             <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             Add to Cart - ${product.price}
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>

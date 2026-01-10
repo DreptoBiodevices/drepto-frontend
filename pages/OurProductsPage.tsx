@@ -2,20 +2,39 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductDetailModal, { Product } from '../components/ProductDetailModal';
-
-// Shared product data (mock for now, ideally this comes from a shared constant or API)
-const PRODUCTS: Product[] = [];
+import { ProductService } from '../lib/api_controller';
 
 const OurProductsPage: React.FC = () => {
     const [cart, setCart] = useState<any[]>([]);
     const [notification, setNotification] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         try {
             const stored = localStorage.getItem('patient_cart');
             if (stored) setCart(JSON.parse(stored));
         } catch { }
+
+        const fetchProducts = async () => {
+            try {
+                const response = await ProductService.getAllProducts();
+                // Ensure response data matches Product interface or map it
+                // API response is likely in response.data or response.data.data
+                // Assuming response.data is the array based on typical usage, but adapting if nested
+                const fetchedProducts = Array.isArray(response.data) ? response.data :
+                    (response.data.products || response.data.data || []);
+
+                setProducts(fetchedProducts);
+            } catch (error) {
+                console.error("Failed to fetch products", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
     }, []);
 
     const addToCart = (product: Product) => {
@@ -46,55 +65,65 @@ const OurProductsPage: React.FC = () => {
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {PRODUCTS.map(product => (
-                        <div key={product.id} className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden border border-gray-100 flex flex-col">
-                            <div
-                                className="relative h-64 overflow-hidden bg-gray-100 cursor-pointer"
-                                onClick={() => setSelectedProduct(product)}
-                            >
-                                <img
-                                    src={product.images[0]}
-                                    alt={product.name}
-                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                />
-                                <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">
-                                    {product.category}
-                                </span>
-
-                                {/* Overlay with view details button */}
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <button className="bg-white text-gray-900 px-6 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                                        View Details
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="p-6 flex-1 flex flex-col">
-                                <h3
-                                    className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-primary transition-colors"
+                {loading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {products.map((product, index) => (
+                            <div key={index} className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden border border-gray-100 flex flex-col">
+                                <div
+                                    className="relative h-64 overflow-hidden bg-gray-100 cursor-pointer"
                                     onClick={() => setSelectedProduct(product)}
                                 >
-                                    {product.name}
-                                </h3>
-                                <p className="text-gray-500 text-sm mb-4 line-clamp-2">{product.description}</p>
+                                    <img
+                                        src={product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.png'}
+                                        alt={product.name}
+                                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                    <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">
+                                        {product.category}
+                                    </span>
 
-                                <div className="mt-auto flex justify-between items-center pt-4 border-t border-gray-50">
-                                    <div className="flex flex-col">
-                                        <span className="text-lg font-bold text-orange-500">${product.price}</span>
-                                        <span className="text-xs text-gray-400 line-through">MRP ${product.mrp}</span>
+                                    {/* Overlay with view details button */}
+                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <button className="bg-white text-gray-900 px-6 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                                            View Details
+                                        </button>
                                     </div>
-                                    <button
-                                        onClick={() => addToCart(product)}
-                                        className="bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-orange-500 transition-colors shadow-md group-active:scale-95 flex items-center gap-2 font-medium"
+                                </div>
+                                <div className="p-6 flex-1 flex flex-col">
+                                    <h3
+                                        className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-primary transition-colors"
+                                        onClick={() => setSelectedProduct(product)}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                                        Add
-                                    </button>
+                                        {product.name}
+                                    </h3>
+                                    <p className="text-gray-500 text-sm mb-4 line-clamp-2">{product.description}</p>
+
+                                    <div className="mt-auto flex justify-between items-center pt-4 border-t border-gray-50">
+                                        <div className="flex flex-col">
+                                            <span className="text-lg font-bold text-orange-500">
+                                                {/* ${product.price} */}
+                                            </span>
+                                            <span className="text-xs text-gray-400 line-through">
+                                                {/* MRP ${product.mrp} */}
+                                            </span>
+                                        </div>
+                                        {/* <button
+                                            onClick={() => addToCart(product)}
+                                            className="bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-orange-500 transition-colors shadow-md group-active:scale-95 flex items-center gap-2 font-medium"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+                                            Add
+                                        </button> */}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </main>
 
             <footer className="bg-white border-t py-12">

@@ -1,111 +1,215 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, UserRole } from '../types';
+import { UserService, NurseService, AuthorizedService, DoctorService } from '../lib/api_controller';
 
 interface AuthContextType {
   user: User | null;
-  login: (identifier: string) => void;
+  login: (identifier: string, password?: string, role?: string) => Promise<void>;
   logout: () => void;
-  register: (details: Omit<User, 'id'>) => void;
+  register: (details: any) => Promise<void>;
   updateUser: (details: Partial<User>) => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const login = (identifier: string) => {
-    // Determine Role Logic (Universal Login)
-    let role = UserRole.PATIENT;
-    const lowerId = identifier.toLowerCase();
+  useEffect(() => {
+    const initAuth = async () => {
+      const storedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
 
-    if (lowerId.includes('admin')) {
-      // Admin logic usually handled separate, but for mock purposes:
-      // In real app, AdminLogin component handles this separately or we redirect
-    } else if (lowerId.includes('dr') || lowerId.includes('doc')) {
-      role = UserRole.DOCTOR;
-    } else if (lowerId.includes('nurse')) {
-      role = UserRole.NURSE;
-    }
+      if (storedUser && token) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser); // Set immediate generic data
 
-    console.log(`Logging in using Universal Login for: ${identifier} -> Detected Role: ${role}`);
+          // Fetch fresh data to ensure valid token and up-to-date info
+          try {
+            let response;
+            // Determine service based on role
+            if (parsedUser.role === UserRole.NURSE) {
+              response = await NurseService.getNurseById(parsedUser.id);
+            } else if (parsedUser.role === UserRole.DOCTOR || parsedUser.role === UserRole.ADMIN) {
+              response = await AuthorizedService.getAuthorizedById(parsedUser.id);
+            } else {
+              // Default Patient
+              response = await UserService.getUserById(parsedUser.id);
+            }
 
-    // Generate dynamic name
-    let firstName = 'User';
-    let lastName = 'Test';
+            if (response && response.data) {
+              const freshUser = { ...parsedUser, ...response.data };
+              setUser(freshUser);
+              localStorage.setItem('user', JSON.stringify(freshUser));
+            }
+          } catch (apiError: any) {
+            console.error("Failed to refresh user data:", apiError);
+            if (apiError.response && apiError.response.status === 401) {
+              // Token expired or invalid
+              logout();
+            }
+          }
 
-    if (identifier.includes('@')) {
-      const namePart = identifier.split('@')[0];
-      if (namePart.includes('.')) {
-        firstName = namePart.split('.')[0];
-        lastName = namePart.split('.')[1] || 'User';
-      } else {
-        firstName = namePart;
+        } catch (e) {
+          console.error("Failed to parse stored user", e);
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+        }
       }
-    } else {
-      firstName = identifier;
-    }
-
-    // Capitalize
-    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-    lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
-
-    const storageKey = `drepto_has_logged_in_${identifier}`;
-    const hasLoggedInBefore = localStorage.getItem(storageKey);
-    const isFirstLogin = !hasLoggedInBefore;
-
-    if (isFirstLogin) {
-      localStorage.setItem(storageKey, 'true');
-    }
-
-    const mockUser: User = {
-      id: '123',
-      firstName,
-      lastName,
-      email: identifier.includes('@') ? identifier : `${identifier}@example.com`,
-      role,
-      isFirstLogin,
-      mobileNumber: '',
-      gender: '',
-      age: '',
-      bloodGroup: '',
-      weight: ''
+      setIsLoading(false);
     };
-    setUser(mockUser);
+
+    initAuth();
+  }, []);
+
+  const login = async (identifier: string, password?: string, role?: string) => {
+    setIsLoading(true);
+    try {
+      if (!password) throw new Error("Password is required");
+
+      let response;
+      // If identifier looks like an email, it MUST be a User/Patient or Admin email login (if supported)
+      // But endpoint docs say 'mobileNumber' for Nurse/Authorized. User supports 'email' OR 'mobileNumber'
+      const isEmail = identifier.includes('@');
+
+      const loginPayload = {
+        mobileNumber: isEmail ? undefined : Number(identifier),
+        password,
+      };
+
+
+
+      if (role === 'Nurse') {
+        if (isEmail) throw new Error("Nurses must login with a mobile number.");
+        response = await NurseService.login(loginPayload);
+      } else if (role === 'Doctor' || role === 'Admin') {
+        if (isEmail) throw new Error("Doctors and Admins must login with a mobile number.");
+        response = await AuthorizedService.login(loginPayload);
+      } else {
+        // Default to User (Patient)
+        const userPayload = isEmail ? { email: identifier, password } : { mobileNumber: Number(identifier), password };
+        response = await UserService.login(userPayload);
+      }
+
+      const { token, ...userData } = response.data; // Adjust based on actual API response structure
+      // If the response structure is different (e.g. data.token, data.user), we might need to adjust.
+      // Assuming response.data contains the token and user fields directly or nested.
+
+      // Let's assume standard JWT response: { accessToken: "...", user: { ... } } or similar.
+      // Since I don't have the response example, I'll log it and try to adapt.
+
+
+      const authToken = response.data.accessToken || response.data.token;
+      const userObj = response.data.user || response.data.data || userData;
+
+      if (authToken) {
+        localStorage.setItem('token', authToken);
+      }
+
+      // Map API user to App User type if necessary
+      const appUser: User = {
+        id: userObj._id || userObj.id,
+        firstName: userObj.firstName,
+        lastName: userObj.lastName,
+        email: userObj.email,
+        role: role as UserRole || UserRole.PATIENT, // Fallback
+        mobileNumber: userObj.mobileNumber,
+        gender: userObj.gender,
+        age: userObj.age,
+        // Add other fields as needed
+        ...userObj
+      };
+
+      localStorage.setItem('user', JSON.stringify(appUser));
+      setUser(appUser);
+
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      throw new Error(error.response?.data?.message || "Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
   };
 
-  const register = (details: Omit<User, 'id'>) => {
-    // Mock registration logic - Default to Patient
-    console.log('Registering user:', details);
-    const newUser: User = {
-      id: Date.now().toString(),
-      ...details,
-      // Default empty/placeholder values for new profile fields if not provided
-      mobileNumber: details.mobileNumber || '',
-      gender: details.gender || '',
-      age: details.age || '',
-      bloodGroup: details.bloodGroup || '',
-      weight: details.weight || ''
-    };
-    setUser(newUser);
+  const register = async (details: any) => {
+    setIsLoading(true);
+    try {
+      let response;
+      const { role, ...rest } = details;
+
+
+
+      if (role === UserRole.NURSE) {
+        response = await NurseService.register(rest);
+      } else if (role === UserRole.DOCTOR || role === UserRole.ADMIN) {
+        // Map to Authorized Register
+        // Authorized register needs 'roleTitle' maybe?
+        const authorizedPayload = {
+          ...rest,
+          role: role, // Pass the role string
+          roleTitle: role, // Maybe required?
+        };
+        response = await AuthorizedService.register(authorizedPayload);
+      } else {
+        // Default Patient
+        const userPayload = {
+          ...rest,
+          role: 'Patient'
+        };
+        response = await UserService.register(userPayload);
+      }
+
+
+
+      // Auto-login after register if token is returned, otherwise ask to login
+      const authToken = response.data.accessToken || response.data.token;
+      if (authToken) {
+        localStorage.setItem('token', authToken);
+        const userObj = response.data.user || response.data.data || rest;
+        const appUser: User = {
+          id: userObj._id || userObj.id || 'new_id',
+          firstName: userObj.firstName,
+          lastName: userObj.lastName,
+          email: userObj.email,
+          role: role,
+          mobileNumber: userObj.mobileNumber,
+          ...userObj
+        };
+        localStorage.setItem('user', JSON.stringify(appUser));
+        setUser(appUser);
+      }
+
+    } catch (error: any) {
+      console.error("Registration failed:", error);
+      throw new Error(error.response?.data?.message || "Registration failed.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const updateUser = (details: Partial<User>) => {
     if (user) {
       const updatedUser = { ...user, ...details };
       setUser(updatedUser);
-      console.log('User profile updated:', updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser)); // Keep sync
+      // Ideally call API to update user here too
+      // UserService.updateUser(user.id, details);
     }
   };
 
   return React.createElement(
     AuthContext.Provider,
-    { value: { user, login, logout, register, updateUser } },
+    { value: { user, login, logout, register, updateUser, isLoading } },
     children
   );
 };

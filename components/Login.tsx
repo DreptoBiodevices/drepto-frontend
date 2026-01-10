@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { UserRole } from '../types';
 
 import BackButton from './BackButton';
 
@@ -10,20 +11,24 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ onToggleView }) => {
-  // const [role, setRole] = useState<UserRole>(UserRole.PATIENT); // Universal Login: Role is auto-detected
+  const [role, setRole] = useState<UserRole | string>('Patient');
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!identifier || !password) {
       setError('Please fill in all fields.');
       return;
     }
     setError('');
-    login(identifier);
+    try {
+      await login(identifier, password, role as string);
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+    }
   };
 
   return (
@@ -33,6 +38,21 @@ const Login: React.FC<LoginProps> = ({ onToggleView }) => {
       </div>
       <h2 className="text-2xl font-bold text-center text-dark-blue mb-6">Sign In</h2>
       <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+
+        {/* Role Selection */}
+        <div className="relative">
+          <label className="text-xs font-semibold text-gray-500 ml-1 mb-1 block">Login As</label>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value as any)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary bg-white text-gray-700 font-medium"
+          >
+            <option value="Patient">Patient</option>
+            <option value="Doctor">Doctor</option>
+            <option value="Nurse">Nurse</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Email or Phone</label>
