@@ -15,6 +15,8 @@ import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import TermsOfService from './pages/legal/TermsOfService';
 import RefundPolicy from './pages/legal/RefundPolicy';
 import ShippingPolicy from './pages/legal/ShippingPolicy';
+import OurProductsPage from './pages/OurProductsPage';
+import CartPage from './pages/CartPage';
 
 
 const ScrollToTop = () => {
@@ -65,6 +67,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
 const Main: React.FC = () => {
   const { user } = useAuth();
+  const location = useLocation();
   return (
     <div className="bg-gray-50 min-h-screen font-sans pb-16 md:pb-0">
       <Routes>
@@ -72,7 +75,9 @@ const Main: React.FC = () => {
         <Route path="/medicines" element={<MedicinesPage />} />
         <Route path="/lab-tests" element={<LabTestsPage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
-        <Route path="/auth" element={user ? <Navigate to="/dashboard" replace /> : <AuthPage />} />
+        <Route path="/our-products" element={<OurProductsPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/auth" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
         <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/auth" replace />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />

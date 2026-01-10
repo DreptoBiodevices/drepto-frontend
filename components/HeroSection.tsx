@@ -8,7 +8,7 @@ const HeroSection: React.FC = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({ medicines: 0, labTests: 0 });
 
-// useEffect removed as per user request to disable API calling
+  // useEffect removed as per user request to disable API calling
   // useEffect(() => {
   //   const meds = loadMedicines();
   //   const labs = loadLabTests();
@@ -26,8 +26,8 @@ const HeroSection: React.FC = () => {
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-dark-blue leading-tight">
               <span className="text-primary">Drepto Biodevices</span>
             </h1>
-            <p className="mt-6 text-lg text-gray-600">
-              Connect with certified doctors, order medicines, book lab tests, and arrange home care all in one secure app.
+            <p className="mt-6 text-2xl text-gray-600">
+              Redefining Drug Delivery with Next-Gen Innovation
             </p>
 
             {/* Dynamic Stats */}

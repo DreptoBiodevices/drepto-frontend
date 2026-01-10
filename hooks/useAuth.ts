@@ -86,11 +86,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       id: Date.now().toString(),
       ...details,
       // Default empty/placeholder values for new profile fields if not provided
-      mobileNumber: '',
-      gender: '',
-      age: '',
-      bloodGroup: '',
-      weight: ''
+      mobileNumber: details.mobileNumber || '',
+      gender: details.gender || '',
+      age: details.age || '',
+      bloodGroup: details.bloodGroup || '',
+      weight: details.weight || ''
     };
     setUser(newUser);
   };

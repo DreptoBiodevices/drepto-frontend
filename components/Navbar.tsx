@@ -11,7 +11,8 @@ import {
   X,
   LogIn,
   UserPlus,
-  ChevronRight
+  ChevronRight,
+  ShoppingBag
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -31,6 +32,31 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [cartCount, setCartCount] = useState(0);
+
+  const updateCartCount = () => {
+    try {
+      const stored = localStorage.getItem('patient_cart');
+      if (stored) {
+        const items = JSON.parse(stored);
+        if (Array.isArray(items)) setCartCount(items.length);
+      } else {
+        setCartCount(0);
+      }
+    } catch {
+      setCartCount(0);
+    }
+  };
+
+  useEffect(() => {
+    updateCartCount();
+    window.addEventListener('cart:updated', updateCartCount);
+    window.addEventListener('storage', updateCartCount);
+    return () => {
+      window.removeEventListener('cart:updated', updateCartCount);
+      window.removeEventListener('storage', updateCartCount);
+    };
+  }, []);
 
   const isHomePage = location.pathname === '/';
 
@@ -38,6 +64,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
     { name: 'Home', ref: sectionRefs.home, path: '/', icon: Home },
     { name: 'Medicines', path: '/medicines', icon: Pill },
     { name: 'Lab Tests', path: '/lab-tests', icon: TestTube2 },
+    { name: 'Our Products', path: '/our-products', icon: ShoppingBag },
     { name: 'Features', ref: sectionRefs.product, path: '/', icon: Zap },
     { name: 'About Us', path: '/about-us', icon: Info },
     { name: 'Contact', ref: sectionRefs.contact, path: '/', icon: Mail },
@@ -110,21 +137,27 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
             ))}
           </div>
 
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-4">
             <button
+              onClick={() => navigate('/cart')}
+              className="p-2 text-gray-600 hover:text-primary hover:bg-primary/5 rounded-full transition-colors relative"
+              title="Cart"
+            >
+              <ShoppingBag className="w-6 h-6" />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+            <div
+              className="flex items-center gap-1 cursor-pointer font-medium hover:text-primary transition-colors"
               onClick={() => navigate('/auth')}
-              className="text-primary font-semibold hover:bg-primary/5 px-4 py-2 rounded-full transition-colors text-sm"
             >
-              Sign In
-            </button>
-            <button
-              onClick={() => navigate('/auth?mode=signup')}
-              className="bg-primary text-white px-5 py-2 rounded-full font-bold hover:bg-teal-700 transition-all shadow-md hover:shadow-lg text-sm flex items-center gap-2"
-            >
-              Sign Up
-              <ChevronRight className="w-4 h-4" />
-            </button>
+              <LogIn className="w-4 h-4" />
+              <span>Login</span>
+            </div>
           </div>
 
           {/* Mobile Hamburger */}
