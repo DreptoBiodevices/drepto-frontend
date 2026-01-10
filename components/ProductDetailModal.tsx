@@ -2,7 +2,6 @@ import React from 'react';
 import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check } from 'lucide-react';
 
 export interface Product {
-    id: number;
     name: string;
     description: string;
     detailedDescription?: string;
