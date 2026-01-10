@@ -7,10 +7,11 @@ const PopularLabTests: React.FC = () => {
     const [tests, setTests] = useState<any[]>([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const all = loadLabTests();
-        setTests(all.slice(0, 3)); // Top 3
-    }, []);
+    // useEffect removed as per user request to disable API calling
+    // useEffect(() => {
+    //     const all = loadLabTests();
+    //     setTests(all.slice(0, 3)); // Top 3
+    // }, []);
 
     if (tests.length === 0) return null;
 

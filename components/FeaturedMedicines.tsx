@@ -7,11 +7,12 @@ const FeaturedMedicines: React.FC = () => {
     const [medicines, setMedicines] = useState<any[]>([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const all = loadMedicines();
-        // Take first 4 or random 4
-        setMedicines(all.slice(0, 4));
-    }, []);
+    // useEffect removed as per user request to disable API calling
+    // useEffect(() => {
+    //     const all = loadMedicines();
+    //     // Take first 4 or random 4
+    //     setMedicines(all.slice(0, 4));
+    // }, []);
 
     if (medicines.length === 0) return null;
 

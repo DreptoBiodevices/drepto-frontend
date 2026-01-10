@@ -11,9 +11,10 @@ const ProjectManager = () => {
     const [view, setView] = useState<'list' | 'form' | 'board' | 'timeline'>('list');
     const [activeProject, setActiveProject] = useState<Project | null>(null);
 
-    useEffect(() => {
-        setProjects(loadProjects());
-    }, [view]);
+    // useEffect removed as per user request to disable API calling
+    // useEffect(() => {
+    //     setProjects(loadProjects());
+    // }, [view]);
 
     const handleCreate = () => {
         setActiveProject(null);

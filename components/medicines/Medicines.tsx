@@ -115,27 +115,28 @@ const Medicines: React.FC<MedicinesProps> = ({ onViewDetails }) => {
   const fileRef = useRef<HTMLInputElement>(null);
 
   // Load medicines from localStorage, fallback to constants
-  useEffect(() => {
-    const load = () => {
-      try {
-        const items = loadMedicines();
-        // If we have items in filtering or data management, we should trust loadMedicines
-        // However, if it returns ONLY the initial seed, we might want to check if that's intended.
-        // For now, let's treat loadMedicines as the Single Source of Truth.
-        setAll(items);
-      } catch {
-        setAll(DEFAULT_MEDICINES);
-      }
-    };
-    load();
-    const onUpdate = () => load();
-    window.addEventListener('medicines:updated', onUpdate);
-    window.addEventListener('storage', onUpdate as any);
-    return () => {
-      window.removeEventListener('medicines:updated', onUpdate);
-      window.removeEventListener('storage', onUpdate as any);
-    };
-  }, []);
+  // useEffect removed as per user request to disable API calling
+  // useEffect(() => {
+  //   const load = () => {
+  //     try {
+  //       const items = loadMedicines();
+  //       // If we have items in filtering or data management, we should trust loadMedicines
+  //       // However, if it returns ONLY the initial seed, we might want to check if that's intended.
+  //       // For now, let's treat loadMedicines as the Single Source of Truth.
+  //       setAll(items);
+  //     } catch {
+  //       setAll(DEFAULT_MEDICINES);
+  //     }
+  //   };
+  //   load();
+  //   const onUpdate = () => load();
+  //   window.addEventListener('medicines:updated', onUpdate);
+  //   window.addEventListener('storage', onUpdate as any);
+  //   return () => {
+  //     window.removeEventListener('medicines:updated', onUpdate);
+  //     window.removeEventListener('storage', onUpdate as any);
+  //   };
+  // }, []);
 
   const addToCart = (m: Medicine) => {
     try {

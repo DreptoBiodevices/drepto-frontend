@@ -207,24 +207,25 @@ const LabTestsPage: React.FC = () => {
     };
 
     // Load lab tests from localStorage, fallback to constants
-    useEffect(() => {
-        const load = () => {
-            try {
-                const items = loadLabTests();
-                setTests(items && items.length ? items as LabTestDetail[] : LAB_TESTS_DATA as LabTestDetail[]);
-            } catch {
-                setTests(LAB_TESTS_DATA as LabTestDetail[]);
-            }
-        };
-        load();
-        const onUpdate = () => load();
-        window.addEventListener('labtests:updated', onUpdate);
-        window.addEventListener('storage', onUpdate as any);
-        return () => {
-            window.removeEventListener('labtests:updated', onUpdate);
-            window.removeEventListener('storage', onUpdate as any);
-        };
-    }, []);
+    // useEffect removed as per user request to disable API calling
+    // useEffect(() => {
+    //     const load = () => {
+    //         try {
+    //             const items = loadLabTests();
+    //             setTests(items && items.length ? items as LabTestDetail[] : LAB_TESTS_DATA as LabTestDetail[]);
+    //         } catch {
+    //             setTests(LAB_TESTS_DATA as LabTestDetail[]);
+    //         }
+    //     };
+    //     load();
+    //     const onUpdate = () => load();
+    //     window.addEventListener('labtests:updated', onUpdate);
+    //     window.addEventListener('storage', onUpdate as any);
+    //     return () => {
+    //         window.removeEventListener('labtests:updated', onUpdate);
+    //         window.removeEventListener('storage', onUpdate as any);
+    //     };
+    // }, []);
 
 
 

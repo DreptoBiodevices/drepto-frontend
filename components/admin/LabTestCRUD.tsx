@@ -30,9 +30,10 @@ const LabTestCRUD = () => {
   const [form, setForm] = useState(emptyTest);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    setItems(loadLabTests());
-  }, []);
+  // useEffect removed as per user request to disable API calling
+  // useEffect(() => {
+  //   setItems(loadLabTests());
+  // }, []);
 
   const startEdit = (t) => {
     setEditingId(t.id);

@@ -38,9 +38,10 @@ const MedicineCRUD = () => {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    setItems(loadMedicines());
-  }, []);
+  // useEffect removed as per user request to disable API calling
+  // useEffect(() => {
+  //   setItems(loadMedicines());
+  // }, []);
 
   const startEdit = (m) => {
     setEditingId(m.id);

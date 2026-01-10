@@ -8,14 +8,15 @@ const HeroSection: React.FC = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({ medicines: 0, labTests: 0 });
 
-  useEffect(() => {
-    const meds = loadMedicines();
-    const labs = loadLabTests();
-    setStats({
-      medicines: meds.length,
-      labTests: labs.length
-    });
-  }, []);
+// useEffect removed as per user request to disable API calling
+  // useEffect(() => {
+  //   const meds = loadMedicines();
+  //   const labs = loadLabTests();
+  //   setStats({
+  //     medicines: meds.length,
+  //     labTests: labs.length
+  //   });
+  // }, []);
 
   return (
     <section className="bg-light-blue pt-24 md:pt-32 pb-16">

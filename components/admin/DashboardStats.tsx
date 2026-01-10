@@ -10,33 +10,34 @@ const DashboardStats = () => {
         projects: 0
     });
 
-    useEffect(() => {
-        const update = () => {
-            const meds = loadMedicines();
-            const labs = loadLabTests();
-            const projects = loadProjects();
+    // useEffect removed as per user request to disable API calling
+    // useEffect(() => {
+    //     const update = () => {
+    //         const meds = loadMedicines();
+    //         const labs = loadLabTests();
+    //         const projects = loadProjects();
 
-            setStats({
-                medicines: meds.length,
-                labTests: labs.length,
-                projects: projects.length
-            });
-        };
+    //         setStats({
+    //             medicines: meds.length,
+    //             labTests: labs.length,
+    //             projects: projects.length
+    //         });
+    //     };
 
-        update();
+    //     update();
 
-        window.addEventListener('medicines:updated', update);
-        window.addEventListener('labtests:updated', update);
-        window.addEventListener('projects:updated', update);
-        window.addEventListener('storage', update);
+    //     window.addEventListener('medicines:updated', update);
+    //     window.addEventListener('labtests:updated', update);
+    //     window.addEventListener('projects:updated', update);
+    //     window.addEventListener('storage', update);
 
-        return () => {
-            window.removeEventListener('medicines:updated', update);
-            window.removeEventListener('labtests:updated', update);
-            window.removeEventListener('projects:updated', update);
-            window.removeEventListener('storage', update);
-        };
-    }, []);
+    //     return () => {
+    //         window.removeEventListener('medicines:updated', update);
+    //         window.removeEventListener('labtests:updated', update);
+    //         window.removeEventListener('projects:updated', update);
+    //         window.removeEventListener('storage', update);
+    //     };
+    // }, []);
 
     const cards = [
         { label: 'Total Medicines', value: stats.medicines, color: 'bg-blue-500', icon: '💊' },
