@@ -36,7 +36,7 @@ const NAV_ITEMS = [
   { id: 'lab', label: 'Lab Tests', icon: TestTube2 },
   { id: 'pharmacy', label: 'Pharmacy', icon: Pill },
   { id: 'nurse', label: 'Nurse Visit', icon: UserPlus },
-  { id: 'products', label: 'Drepto Store', icon: ShoppingBag },
+  { id: 'products', label: 'Drepto Pharmacy', icon: ShoppingBag },
   { id: 'ambulance', label: 'Ambulance', icon: AmbulanceIcon },
   { id: 'profile', label: 'Settings', icon: UserCog },
 ];
