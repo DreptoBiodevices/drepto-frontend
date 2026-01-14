@@ -188,6 +188,7 @@ const ContactSection: React.FC = () => {
                                 Connect With Us
                             </h3>
                             <div className="flex flex-col gap-4 text-left max-w-sm mx-auto">
+                                {/* Email */}
                                 <div className="flex items-start gap-3">
                                     <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <span className="text-lg">✉</span>
@@ -197,6 +198,19 @@ const ContactSection: React.FC = () => {
                                         <a href="mailto:office@dreptobiodevices.com" className="text-gray-700 hover:text-primary transition-colors break-all">office@dreptobiodevices.com</a>
                                     </div>
                                 </div>
+
+                                {/* Contact Number */}
+                                <div className="flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-lg">📞</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-primary text-sm">Phone</p>
+                                        <a href="tel:+91 91699 66198" className="text-gray-700 hover:text-primary transition-colors">+91 91699 66198</a>
+                                    </div>
+                                </div>
+
+                                {/* Working Hours */}
                                 <div className="flex items-start gap-3">
                                     <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <span className="text-lg">🕒</span>
