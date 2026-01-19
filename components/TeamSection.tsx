@@ -11,7 +11,7 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
     {
         name: 'Rahul Kumar Gupta',
-        role: 'Founder and CEO',
+        role: 'Founder & Director',
         description: 'IIT Bombay',
         image: '/images/rahulsir.jpeg',
         linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/'

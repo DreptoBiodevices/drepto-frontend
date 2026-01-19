@@ -1,163 +1,165 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IKContext, IKImage } from 'imagekitio-react';
 
 const urlEndpoint = 'https://ik.imagekit.io/ke6x9gsjs';
 const publicKey = 'public_Hauz4WSMbOr/vm58ZbnpsPR/h1o=';
-// The user doesn't have a valid auth endpoint for listing files client-side, 
-// so we define the paths manually. Update this list with your actual file paths in the 'Drepto' folder.
+
 const galleryImagePaths = [
-    'Drepto/1',
-    'Drepto/10.jpg',
-    'Drepto/7.jpg',
-    'Drepto/3.jpg',
-    'Drepto/6.jpg',
-    'Drepto/9.jpeg',
-    'Drepto/2.jpg',
-    'Drepto/8.jpeg',
-    'Drepto/4.jpg',
-    'Drepto/5.jpg',
-    'Drepto/11.jpeg'
+    'Drepto/1', 'Drepto/10.jpg', 'Drepto/7.jpg', 'Drepto/3.jpg',
+    'Drepto/6.jpg', 'Drepto/9.jpeg', 'Drepto/2.jpg', 'Drepto/8.jpeg',
+    'Drepto/4.jpg', 'Drepto/5.jpg', 'Drepto/11.jpeg'
 ];
 
-interface GallerySectionProps {
-    onOpenMenu?: () => void;
-}
+const awardImagePaths = ['Drepto/aweard1.jpeg'];
 
-const GallerySection: React.FC<GallerySectionProps> = ({ onOpenMenu }) => {
+const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [awardIndex, setAwardIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
 
-    // Auto-scroll logic
     useEffect(() => {
         if (isHovered) return;
-
         const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % galleryImagePaths.length);
-        }, 2000); // Scroll every 2 seconds
-
+            setCurrentIndex((prev) => (prev + 1) % galleryImagePaths.length);
+            if (awardImagePaths.length > 1) {
+                setAwardIndex((prev) => (prev + 1) % awardImagePaths.length);
+            }
+        }, 3500);
         return () => clearInterval(interval);
     }, [isHovered]);
 
-    const scrollToImage = (index: number) => {
-        setCurrentIndex(index);
-    };
-
-    const nextSlide = () => {
-        setCurrentIndex((prev) => (prev + 1) % galleryImagePaths.length);
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex((prev) => (prev === 0 ? galleryImagePaths.length - 1 : prev - 1));
-    };
-
     return (
-        <IKContext
-            publicKey={publicKey}
-            urlEndpoint={urlEndpoint}
-        // authenticationEndpoint='http://www.yourserver.com/auth' // Commented out as it's invalid/placeholder
-        >
-            <section className="py-16 relative overflow-hidden" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-                {/* Background decoration */}
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-teal-50/50 pointer-events-none"></div>
+        <IKContext publicKey={publicKey} urlEndpoint={urlEndpoint}>
+            <section
+                className="relative py-24 overflow-hidden bg-slate-50"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                {/* Decorative Background Elements */}
+                <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent"></div>
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+                <div className="absolute top-1/2 -left-24 w-72 h-72 bg-secondary/5 rounded-full blur-3xl"></div>
 
                 <div className="container mx-auto px-4 relative z-10">
-                    <div className="text-center mb-12 relative">
-                        {/* Mobile Navigation Header for Gallery */}
-                        <div className="md:hidden flex justify-between items-center absolute w-full top-0 left-0 right-0 px-4 -mt-12 z-50 pointer-events-auto">
-                            <button
-                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                                className="p-3 text-gray-700 hover:text-primary bg-white shadow-lg rounded-full border border-gray-100 transition-transform active:scale-95"
-                                aria-label="Back to Top"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                                </svg>
-                            </button>
-                            {onOpenMenu && (
+
+                    {/* --- MODERN GALLERY SECTION --- */}
+                    <div className="max-w-6xl mx-auto mb-32">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                            <div className="space-y-2">
+                                <span className="text-primary font-bold tracking-[0.2em] uppercase text-sm block ml-1">Visual Journey</span>
+                                <h2 className="text-5xl font-display font-black text-slate-900 leading-tight">Gallery</h2>
+                            </div>
+                            <div className="relative w-full group">
+                                {/* --- Previous Button (Left) --- */}
                                 <button
-                                    onClick={onOpenMenu}
-                                    className="p-3 text-gray-700 hover:text-primary bg-white shadow-lg rounded-full border border-gray-100 transition-transform active:scale-95"
-                                    aria-label="Open Menu"
+                                    onClick={() => setCurrentIndex((prev) => (prev === 0 ? galleryImagePaths.length - 1 : prev - 1))}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/80 hover:bg-white shadow-lg text-gray-800 hover:text-primary transition-all duration-300 backdrop-blur-sm"
+                                    aria-label="Previous Slide"
                                 >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16m-7 6h7"></path>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
                                     </svg>
                                 </button>
-                            )}
-                        </div>
 
-                        <h2 className="text-4xl font-display font-bold text-primary tracking-tight pt-4 md:pt-0">Gallery</h2>
-                        <div className="h-1 w-20 bg-gradient-to-r from-primary to-secondary mx-auto mt-4 rounded-full opacity-80"></div>
-                    </div>
-
-                    <div className="relative max-w-7xl mx-auto flex items-center justify-center">
-                        {/* Left Arrow */}
-                        <button
-                            onClick={prevSlide}
-                            className="absolute left-0 md:-left-16 z-20 p-3 text-secondary hover:text-primary transition-all duration-300 hover:scale-110 focus:outline-none backdrop-blur-sm bg-white/30 rounded-full shadow-lg"
-                        >
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        {/* Carousel Container */}
-                        <div className="w-full overflow-hidden relative h-[600px] flex items-center justify-center rounded-3xl shadow-2xl bg-gray-50/20 backdrop-blur-md border border-white/50">
-                            <div
-                                className="flex transition-transform duration-700 cubic-bezier(0.4, 0, 0.2, 1) h-full items-center"
-                                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-                            >
-                                {galleryImagePaths.map((path, index) => (
-                                    <div key={index} className="w-full flex-shrink-0 flex justify-center h-full p-2">
-                                        <div className="relative w-full h-full rounded-xl overflow-hidden shadow-sm flex items-center justify-center">
-                                            <IKImage
-                                                path={path}
-                                                transformation={[{
-                                                    height: "1000",
-                                                    width: "1600",
-                                                    crop: "at_max"
-                                                }]}
-                                                loading="lazy"
-                                                className="w-full h-full object-contain"
-                                                onError={(e) => {
-                                                    // console.error(`Failed to load image: ${path}`);
-                                                    // Replace with a placeholder or hide
-                                                    e.currentTarget.src = '/images/logo.png';
-                                                    e.currentTarget.style.objectFit = 'contain';
-                                                    e.currentTarget.style.padding = '40px';
-                                                    e.currentTarget.style.backgroundColor = '#f0fdfa';
-                                                }}
-                                            />
-                                            {/* Gradient Overlay for text if needed later */}
-                                            <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                                        </div>
-                                    </div>
-                                ))}
+                                {/* --- Next Button (Right) --- */}
+                                <button
+                                    onClick={() => setCurrentIndex((prev) => (prev + 1) % galleryImagePaths.length)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/80 hover:bg-white shadow-lg text-gray-800 hover:text-primary transition-all duration-300 backdrop-blur-sm"
+                                    aria-label="Next Slide"
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
-                        {/* Right Arrow */}
-                        <button
-                            onClick={nextSlide}
-                            className="absolute right-0 md:-right-16 z-20 p-3 text-secondary hover:text-primary transition-all duration-300 hover:scale-110 focus:outline-none backdrop-blur-sm bg-white/30 rounded-full shadow-lg"
-                        >
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
+                        {/* Main Image Viewport */}
+                        <div className="relative group">
+                            <div className="overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white aspect-[16/10] md:aspect-[21/9]">
+                                <div
+                                    className="flex transition-transform duration-1000 cubic-bezier(0.23, 1, 0.32, 1) h-full"
+                                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                                >
+                                    {galleryImagePaths.map((path, index) => (
+                                        <div key={index} className="w-full flex-shrink-0 h-full relative">
+                                            <IKImage
+                                                path={path}
+                                                transformation={[{ height: "1200", width: "2000", crop: "at_max" }]}
+                                                className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-[2s]"
+                                            />
+                                            {/* Modern Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Pagination Pill */}
+                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center gap-3 border border-white/50">
+                                {galleryImagePaths.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setCurrentIndex(i)}
+                                        className={`transition-all duration-300 rounded-full ${i === currentIndex ? 'bg-primary w-8 h-2' : 'bg-slate-300 w-2 h-2 hover:bg-primary/50'}`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Dots Pagination */}
-                    <div className="flex justify-center mt-10 space-x-3">
-                        {galleryImagePaths.map((_, index) => (
-                            <button
-                                key={index}
-                                onClick={() => scrollToImage(index)}
-                                className={`h-2 rounded-full transition-all duration-500 ${index === currentIndex ? 'bg-primary w-8' : 'bg-gray-300 w-2 hover:bg-primary/50'
-                                    }`}
-                            />
-                        ))}
+                    {/* --- PRESTIGE AWARDS SECTION --- */}
+                    <div className="max-w-5xl mx-auto">
+                        <div className="relative p-1 bg-gradient-to-br from-amber-200 via-primary/20 to-amber-200 rounded-[3rem]">
+                            <div className="bg-slate-900
+                             overflow-hidden p-8 md:p-16">
+                                <div className="grid md:grid-cols-2 gap-12 items-center">
+
+                                    <div className="order-2 md:order-1 space-y-6">
+                                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-bold tracking-widest uppercase">
+                                            Recognition of Excellence
+                                        </div>
+                                        <h2 className="text-4xl md:text-5xl font-display font-bold text-white">Awards & Distinction</h2>
+                                        <p className="text-slate-400 text-lg leading-relaxed">
+                                            Celebrating the milestones that define our commitment to quality,
+                                            innovation, and excellence in every project we undertake.
+                                        </p>
+                                        <div className="flex items-center gap-4 pt-4">
+                                            <div className="h-[2px] w-12 bg-amber-500"></div>
+                                            <span className="text-white font-medium uppercase tracking-widest text-sm">Certified Achievement</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="order-1 md:order-2 relative">
+                                        {/* Luxury Image Frame */}
+                                        <div className="relative z-10 p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
+                                            <div className="overflow-hidden rounded-xl aspect-[4/5] bg-slate-800">
+                                                <div
+                                                    className="flex transition-transform duration-700 ease-in-out h-full"
+                                                    style={{ transform: `translateX(-${awardIndex * 100}%)` }}
+                                                >
+                                                    {awardImagePaths.map((path, index) => (
+                                                        <div key={index} className="w-full flex-shrink-0 h-full">
+                                                            <IKImage
+                                                                path={path}
+                                                                transformation={[{ height: "800", width: "600", crop: "at_max" }]}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* Floating background glow for Award */}
+                                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/20 rounded-full blur-[80px]"></div>
+                                        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-primary/20 rounded-full blur-[80px]"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </section>
         </IKContext>
