@@ -180,8 +180,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                         )}
                     </div>
 
-                    <div className="mt-auto pt-6 border-t border-gray-100 sticky bottom-0 bg-white">
-                        {/* <button
+                    <div className="p-6 lg:p-10">
+                        <button
                             onClick={() => {
                                 onAddToCart(product);
                                 onClose();
@@ -189,8 +189,12 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                             className="w-full bg-gray-900 text-white py-4 rounded-xl hover:bg-orange-500 transition-all shadow-lg flex items-center justify-center gap-2 font-bold text-lg group active:scale-[0.98]"
                         >
                             <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                            Add to Cart - ${product.price}
-                        </button> */}
+                            Get Your Free Samples
+                        </button>
+                        <p className="text-gray-600 text-sm mt-3 text-center font-bold flex items-center justify-center gap-1">
+                            <Truck className="w-4 h-4" />
+                            *Only Shipping Charges Applies
+                        </p>
                     </div>
                 </div>
             </div>
