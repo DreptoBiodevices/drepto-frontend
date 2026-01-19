@@ -152,3 +152,9 @@ export const UserService = {
 export const ContactService = {
   create: (data: any) => api.post('/contact', data),
 };
+
+// Payment Controller
+export const PaymentService = {
+  recordTransaction: (data: any) => api.post('/payment/record-transaction', data),
+  updateStatus: (data: any) => api.post('/payment/update-status', data),
+};

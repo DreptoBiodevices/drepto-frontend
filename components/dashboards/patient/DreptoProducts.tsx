@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ProductService } from '../../../lib/api_controller';
+import { ProductService, PaymentService } from '../../../lib/api_controller';
 import ProductDetailModal, { Product } from '../../ProductDetailModal';
 
 interface ProductWithId extends Product {
@@ -109,9 +109,99 @@ const DreptoProducts: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 product={selectedProduct}
                 isOpen={!!selectedProduct}
                 onClose={() => setSelectedProduct(null)}
-                onAddToCart={(product) => {
-                    console.log("Add to cart:", product.name);
-                    // Add to cart logic can be implemented here if needed
+                onAddToCart={async (product) => {
+                    console.log("Get Samples for:", product.name);
+
+                    const storedUser = localStorage.getItem('user');
+                    let userDetails = {
+                        name: "",
+                        email: "",
+                        contact: ""
+                    };
+
+                    if (storedUser) {
+                        try {
+                            const user = JSON.parse(storedUser);
+                            userDetails = {
+                                name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+                                email: user.email || "",
+                                contact: user.mobileNumber ? String(user.mobileNumber) : ""
+                            };
+                        } catch (e) {
+                            console.error("Error parsing user from local storage", e);
+                        }
+                    }
+
+                    // Generate a temporary Order ID for tracking purposes since we lack a backend create-order endpoint
+                    // valid Razorpay Order IDs start with "order_"
+                    const mockOrderId = `order_${Date.now()}`;
+
+                    try {
+                        // 1. Record Transaction (before payment)
+                        await PaymentService.recordTransaction({
+                            razorpayOrderId: mockOrderId,
+                            amount: 50 * 100,
+                            currency: "INR",
+                            notes: {
+                                productName: product.name,
+                                userEmail: userDetails.email
+                            }
+                        });
+                    } catch (error) {
+                        console.error("Failed to record transaction", error);
+                        // Continue flow or block? Usually continue to let user pay, 
+                        // but ideally we should block if tracking is critical.
+                    }
+
+                    const options = {
+                        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+                        amount: 50 * 100, // Amount in currency subunits. Default currency is INR.
+                        currency: "INR",
+                        name: "Drepto Biodevices Pvt. Ltd.",
+                        description: `Sample for ${product.name}`,
+                        image: "/favicon.svg", // You can use your logo here
+                        // status update call
+                        handler: async function (response: any) {
+                            alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+
+                            try {
+                                // 2. Update Status (after payment)
+                                await PaymentService.updateStatus({
+                                    razorpayOrderId: mockOrderId, // Using the same ID we recorded
+                                    razorpayPaymentId: response.razorpay_payment_id,
+                                    razorpaySignature: response.razorpay_signature || "signature_unavailable_client_mode",
+                                    status: "success"
+                                });
+                                console.log("Payment status updated in backend");
+                            } catch (error) {
+                                console.error("Failed to update payment status in backend", error);
+                            }
+                        },
+                        prefill: {
+                            name: userDetails.name,
+                            email: userDetails.email,
+                            contact: userDetails.contact
+                        },
+                        notes: {
+                            payment: `Sample for ${product.name}`,
+                            internal_order_id: mockOrderId
+                        },
+                        theme: {
+                            color: "#208428ff" // Orange-500
+                        }
+                    };
+
+                    const rzp1 = new (window as any).Razorpay(options);
+                    rzp1.on('payment.failed', function (response: any) {
+                        alert(response.error.code);
+                        alert(response.error.description);
+                        alert(response.error.source);
+                        alert(response.error.step);
+                        alert(response.error.reason);
+                        alert(response.error.metadata.order_id);
+                        alert(response.error.metadata.payment_id);
+                    });
+                    rzp1.open();
                 }}
             />
         </div>

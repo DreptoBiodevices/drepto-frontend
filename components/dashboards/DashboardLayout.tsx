@@ -8,6 +8,9 @@ interface NavItem {
     id: string;
     label: string;
     icon: React.ElementType;
+    disabled?: boolean;
+    badge?: string;
+    badgeColor?: string;
 }
 
 interface DashboardLayoutProps {
@@ -69,22 +72,37 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                         return (
                             <button
                                 key={item.id}
-                                onClick={() => onTabChange(item.id)}
+                                disabled={item.disabled}
+                                onClick={() => !item.disabled && onTabChange(item.id)}
                                 className={`
-                                    w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-200 group
+                                    w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-200 group relative
                                     ${isActive
                                         ? 'bg-blue-50 text-blue-600 shadow-sm'
-                                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                                        : item.disabled
+                                            ? 'text-slate-300 cursor-not-allowed opacity-70'
+                                            : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                                     }
                                 `}
                             >
                                 <div className={`
                                     w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200
-                                    ${isActive ? 'bg-white shadow-sm text-blue-600' : 'bg-slate-50 text-slate-400 group-hover:bg-white group-hover:shadow-sm group-hover:text-slate-600'}
+                                    ${isActive
+                                        ? 'bg-white shadow-sm text-blue-600'
+                                        : item.disabled
+                                            ? 'bg-slate-50 text-slate-300'
+                                            : 'bg-slate-50 text-slate-400 group-hover:bg-white group-hover:shadow-sm group-hover:text-slate-600'
+                                    }
                                 `}>
                                     <item.icon size={18} />
                                 </div>
-                                {item.label}
+                                <div className="flex flex-col items-start">
+                                    <span>{item.label}</span>
+                                    {item.badge && (
+                                        <span className={`text-[10px] leading-tight font-bold ${item.badgeColor || 'text-green-500'}`}>
+                                            {item.badge}
+                                        </span>
+                                    )}
+                                </div>
                                 {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />}
                             </button>
                         );
