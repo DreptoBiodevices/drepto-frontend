@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ShippingAddressForm from '../components/ShippingAddressForm';
 import { Address, Order } from '../types';
 import { Truck, MapPin, CreditCard, X, Check } from 'lucide-react';
+import useRazorpay from '../hooks/useRazorpay';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -17,6 +18,9 @@ const CartPage: React.FC = () => {
     const [shippingAddress, setShippingAddress] = useState<Address | null>(null);
     const [processing, setProcessing] = useState(false); // Can be removed later if unused
     const [success, setSuccess] = useState(false);
+
+    // Load Razorpay script
+    const isRazorpayLoaded = useRazorpay();
 
     useEffect(() => {
         const loadCart = () => {
@@ -63,12 +67,7 @@ const CartPage: React.FC = () => {
         setCheckoutStep('payment');
     };
 
-    const handlePaymentSuccess = () => {
-        if (!shippingAddress || !user) return;
-
-        setShowPaymentGateway(false);
-        setSuccess(true);
-
+    const createOrder = () => {
         // Create Order Object
         const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
 
@@ -76,7 +75,6 @@ const CartPage: React.FC = () => {
         let nextIdNumber = 1;
         const dbOrders = existingOrders.filter((o: any) => o.id.startsWith('DB'));
         if (dbOrders.length > 0) {
-            // Extract numbers, find max, increment
             const maxId = Math.max(...dbOrders.map((o: any) => parseInt(o.id.substring(2)) || 0));
             nextIdNumber = maxId + 1;
         }
@@ -94,23 +92,59 @@ const CartPage: React.FC = () => {
             })),
             total: calculateTotal(),
             status: 'Placed',
-            shippingAddress: shippingAddress,
+            shippingAddress: shippingAddress!,
             trackingId: `TRK-${Math.floor(Math.random() * 1000000)}`,
             estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toDateString() // +5 days
         };
 
         // Save to LocalStorage
-        // existingOrders is already defined above
         localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
 
         setCart([]);
         localStorage.removeItem('patient_cart');
         window.dispatchEvent(new Event('cart:updated'));
 
+        setSuccess(true);
         setTimeout(() => {
             setSuccess(false);
-            navigate(`/invoice/${newOrder.id}`); // Redirect to Invoice Page
+            navigate(`/invoice/${newOrder.id}`);
         }, 2000);
+    };
+
+    const handlePayment = () => {
+        if (!shippingAddress || !user) return;
+
+        if (!isRazorpayLoaded) {
+            alert("Payment gateway is loading, please wait...");
+            return;
+        }
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: calculateTotal() * 100, // Amount in paise
+            currency: "INR",
+            name: "Drepto Biodevices",
+            description: "Medical Products Purchase",
+            image: "https://drepto.com/logo.png",
+            handler: function (response: any) {
+                console.log("Payment Successful:", response);
+                createOrder();
+            },
+            prefill: {
+                name: `${user.firstName} ${user.lastName}` || "User",
+                email: user.email || "user@example.com",
+                contact: user.mobileNumber || ""
+            },
+            theme: {
+                color: "#0D9488"
+            }
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.on('payment.failed', function (response: any) {
+            alert("Payment Failed: " + response.error.description);
+        });
+        rzp.open();
     };
 
     return (
@@ -272,18 +306,18 @@ const CartPage: React.FC = () => {
                                             </div>
 
                                             <p className="text-xs text-center text-gray-500 mb-4">
-                                                You will be redirected to the secure payment gateway to complete your purchase.
+                                                Clicking "Pay Now" will open the secure Razorpay payment gateway.
                                             </p>
 
                                             <button
                                                 onClick={handlePayment}
-                                                disabled={processing}
+                                                disabled={processing || !isRazorpayLoaded}
                                                 className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg flex items-center justify-center gap-2"
                                             >
                                                 {processing ? (
                                                     <>
                                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                                        Redirecting to Payment Gateway...
+                                                        Processing...
                                                     </>
                                                 ) : (
                                                     'Pay Now'
