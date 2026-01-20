@@ -15,7 +15,7 @@ const CartPage: React.FC = () => {
     const navigate = useNavigate();
     const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>('cart');
     const [shippingAddress, setShippingAddress] = useState<Address | null>(null);
-    const [processing, setProcessing] = useState(false);
+    const [processing, setProcessing] = useState(false); // Can be removed later if unused
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const CartPage: React.FC = () => {
         window.dispatchEvent(new Event('cart:updated'));
     };
 
-    const calculateTotal = () => {
+    const calculateSubtotal = () => {
         return cart.reduce((total, item) => {
             const price = typeof item.price === 'string'
                 ? parseFloat(item.price.replace(/[^0-9.]/g, ''))
@@ -46,6 +46,9 @@ const CartPage: React.FC = () => {
             return total + (isNaN(price) ? 0 : price);
         }, 0);
     };
+
+    const deliveryCharge = 50;
+    const calculateTotal = () => calculateSubtotal() + deliveryCharge;
 
     const handleProceedToCheckout = () => {
         if (!user) {
@@ -60,45 +63,53 @@ const CartPage: React.FC = () => {
         setCheckoutStep('payment');
     };
 
-    const handlePayment = () => {
+    const handlePaymentSuccess = () => {
         if (!shippingAddress || !user) return;
 
-        setProcessing(true);
-        // Simulate API call
+        setShowPaymentGateway(false);
+        setSuccess(true);
+
+        // Create Order Object
+        const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+
+        // Generate DBxxxx ID
+        let nextIdNumber = 1;
+        const dbOrders = existingOrders.filter((o: any) => o.id.startsWith('DB'));
+        if (dbOrders.length > 0) {
+            // Extract numbers, find max, increment
+            const maxId = Math.max(...dbOrders.map((o: any) => parseInt(o.id.substring(2)) || 0));
+            nextIdNumber = maxId + 1;
+        }
+        const orderId = `DB${nextIdNumber.toString().padStart(4, '0')}`;
+
+        const newOrder: Order = {
+            id: orderId,
+            date: new Date().toISOString(),
+            items: cart.map(item => ({
+                name: item.name || item.title,
+                price: typeof item.price === 'number' ? item.price : parseFloat(item.price.replace(/[^0-9.]/g, '')),
+                quantity: 1, // Assuming quantity 1 for now
+                image: Array.isArray(item.images) ? item.images[0] : item.image,
+                shippingSource: item.shippingSource
+            })),
+            total: calculateTotal(),
+            status: 'Placed',
+            shippingAddress: shippingAddress,
+            trackingId: `TRK-${Math.floor(Math.random() * 1000000)}`,
+            estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toDateString() // +5 days
+        };
+
+        // Save to LocalStorage
+        // existingOrders is already defined above
+        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
+
+        setCart([]);
+        localStorage.removeItem('patient_cart');
+        window.dispatchEvent(new Event('cart:updated'));
+
         setTimeout(() => {
-            setProcessing(false);
-            setSuccess(true);
-
-            // Create Order Object
-            const newOrder: Order = {
-                id: `ORD-${Date.now()}`,
-                date: new Date().toISOString(),
-                items: cart.map(item => ({
-                    name: item.name || item.title,
-                    price: typeof item.price === 'number' ? item.price : parseFloat(item.price.replace(/[^0-9.]/g, '')),
-                    quantity: 1, // Assuming quantity 1 for now
-                    image: Array.isArray(item.images) ? item.images[0] : item.image,
-                    shippingSource: item.shippingSource
-                })),
-                total: calculateTotal(),
-                status: 'Placed',
-                shippingAddress: shippingAddress,
-                trackingId: `TRK-${Math.floor(Math.random() * 1000000)}`,
-                estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toDateString() // +5 days
-            };
-
-            // Save to LocalStorage
-            const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-            localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
-
-            setCart([]);
-            localStorage.removeItem('patient_cart');
-            window.dispatchEvent(new Event('cart:updated'));
-
-            setTimeout(() => {
-                setSuccess(false);
-                navigate('/orders'); // Redirect to Order History
-            }, 2000);
+            setSuccess(false);
+            navigate(`/invoice/${newOrder.id}`); // Redirect to Invoice Page
         }, 2000);
     };
 
@@ -165,7 +176,7 @@ const CartPage: React.FC = () => {
                                                     </div>
                                                 )}
                                                 <p className="text-primary font-bold mt-1">
-                                                    ${typeof item.price === 'number' ? item.price : item.price.replace('$', '')}
+                                                    ₹{typeof item.price === 'number' ? item.price : item.price.replace('$', '')}
                                                 </p>
                                             </div>
                                             <button
@@ -183,15 +194,15 @@ const CartPage: React.FC = () => {
                                         <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
                                         <div className="flex justify-between mb-2 text-gray-600">
                                             <span>Subtotal</span>
-                                            <span>${calculateTotal().toFixed(2)}</span>
+                                            <span>₹{calculateSubtotal().toFixed(2)}</span>
                                         </div>
                                         <div className="flex justify-between mb-4 text-gray-600">
-                                            <span>Shipping</span>
-                                            <span>Free</span>
+                                            <span>Delivery Charge</span>
+                                            <span>₹{deliveryCharge}</span>
                                         </div>
                                         <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6">
                                             <span>Total</span>
-                                            <span>${calculateTotal().toFixed(2)}</span>
+                                            <span>₹{calculateTotal().toFixed(2)}</span>
                                         </div>
                                         <button
                                             onClick={handleProceedToCheckout}
@@ -254,20 +265,16 @@ const CartPage: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        <div className="p-4 border border-primary/20 bg-primary/5 rounded-xl flex items-center gap-3 cursor-pointer ring-2 ring-primary relative">
-                                            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl shadow-sm">💳</div>
-                                            <div>
-                                                <p className="font-bold text-gray-900">Credit/Debit Card</p>
-                                                <p className="text-xs text-gray-500">Secure encryption</p>
-                                            </div>
-                                            <div className="ml-auto w-4 h-4 rounded-full bg-primary"></div>
-                                        </div>
-
                                         <div className="pt-4 mt-4 border-t">
                                             <div className="flex justify-between text-sm mb-4">
                                                 <span className="text-gray-600">Total Amount</span>
-                                                <span className="font-bold text-lg">${calculateTotal().toFixed(2)}</span>
+                                                <span className="font-bold text-lg">₹{calculateTotal().toFixed(2)}</span>
                                             </div>
+
+                                            <p className="text-xs text-center text-gray-500 mb-4">
+                                                You will be redirected to the secure payment gateway to complete your purchase.
+                                            </p>
+
                                             <button
                                                 onClick={handlePayment}
                                                 disabled={processing}
@@ -276,7 +283,7 @@ const CartPage: React.FC = () => {
                                                 {processing ? (
                                                     <>
                                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                                        Processing...
+                                                        Redirecting to Payment Gateway...
                                                     </>
                                                 ) : (
                                                     'Pay Now'

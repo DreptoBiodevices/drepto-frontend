@@ -100,10 +100,14 @@ const TransactionHistory: React.FC = () => {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right font-medium text-gray-900">
-                                        ${t.total.toFixed(2)}
+                                        ₹{t.total.toFixed(2)}
                                     </td>
-                                    <td className="px-6 py-4 text-center">
-                                        <button className="p-2 text-gray-400 hover:text-primary transition-colors hover:bg-primary/5 rounded-lg">
+                                    <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
+                                        <button
+                                            onClick={() => window.open(`/invoice/${t.id}`, '_blank')}
+                                            className="p-2 text-gray-400 hover:text-primary transition-colors hover:bg-primary/5 rounded-lg"
+                                            title="View Invoice"
+                                        >
                                             <FileText className="w-4 h-4" />
                                         </button>
                                     </td>

@@ -67,7 +67,7 @@ const OrderHistoryPage: React.FC = () => {
                                                     {new Date(order.date).toLocaleDateString()}
                                                 </span>
                                                 <span className="font-medium text-gray-900">
-                                                    ${order.total.toFixed(2)}
+                                                    ₹{order.total.toFixed(2)}
                                                 </span>
                                                 <span className="text-gray-400">
                                                     ({order.items.length} items)
@@ -75,8 +75,19 @@ const OrderHistoryPage: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="text-gray-400">
-                                        {expandedOrderId === order.id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                window.location.href = `/invoice/${order.id}`;
+                                            }}
+                                            className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
+                                        >
+                                            View Invoice
+                                        </button>
+                                        <div className="text-gray-400">
+                                            {expandedOrderId === order.id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -103,7 +114,7 @@ const OrderHistoryPage: React.FC = () => {
                                                             </div>
                                                             <div>
                                                                 <div className="font-medium text-gray-900 text-sm">{item.name}</div>
-                                                                <div className="text-xs text-gray-500">Qty: {item.quantity} × ${item.price}</div>
+                                                                <div className="text-xs text-gray-500">Qty: {item.quantity} × ₹{item.price}</div>
                                                                 {item.shippingSource && (
                                                                     <div className="text-[10px] font-bold text-blue-600 mt-0.5">
                                                                         Source: {item.shippingSource}
