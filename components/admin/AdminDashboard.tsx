@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import React, { useState } from 'react';
 import AdminLayout from './AdminLayout';
 import MedicineCRUD from './MedicineCRUD';
@@ -6,9 +6,10 @@ import LabTestCRUD from './LabTestCRUD';
 import DashboardStats from './DashboardStats';
 import ActivityFeed from './ActivityFeed';
 import ProjectManager from './ProjectManager';
+import TransactionHistory from './TransactionHistory';
 
 const AdminDashboard = () => {
-  const [tab, setTab] = useState('medicines');
+  const [tab, setTab] = useState('dashboard');
 
   const getTitle = () => {
     switch (tab) {
@@ -16,6 +17,7 @@ const AdminDashboard = () => {
       case 'medicines': return 'Medicine Management';
       case 'labtests': return 'Lab Test Management';
       case 'projects': return 'Project Management';
+      case 'transactions': return 'Transaction History';
       default: return 'Admin Dashboard';
     }
   };
@@ -49,6 +51,8 @@ const AdminDashboard = () => {
       {tab === 'labtests' && <LabTestCRUD />}
 
       {tab === 'projects' && <ProjectManager />}
+
+      {tab === 'transactions' && <TransactionHistory />}
     </AdminLayout>
   );
 };

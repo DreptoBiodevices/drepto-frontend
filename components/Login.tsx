@@ -50,7 +50,6 @@ const Login: React.FC<LoginProps> = ({ onToggleView }) => {
             <option value="Patient">Patient</option>
             <option value="Doctor">Doctor</option>
             <option value="Nurse">Nurse</option>
-            <option value="Admin">Admin</option>
           </select>
         </div>
 

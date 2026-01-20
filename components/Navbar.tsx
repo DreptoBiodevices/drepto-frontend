@@ -1,5 +1,6 @@
 import React, { useState, useEffect, RefObject } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import {
   Home,
   Pill,
@@ -12,7 +13,10 @@ import {
   LogIn,
   UserPlus,
   ChevronRight,
-  ShoppingBag
+  ShoppingBag,
+  User,
+  LogOut,
+  Package
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -25,6 +29,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const isMobileMenuOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsMobileMenuOpen = externalSetIsOpen || setInternalIsOpen;
@@ -113,13 +118,44 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-4">
+            {/* Cart Icon - Simple Link for now */}
             <div
-              className="flex items-center gap-1 cursor-pointer font-medium hover:text-primary transition-colors"
-              onClick={() => navigate('/auth')}
+              className="p-2 hover:bg-gray-100 rounded-full cursor-pointer transition-colors relative"
+              onClick={() => navigate('/cart')}
             >
-              <LogIn className="w-4 h-4" />
-              <span>Login</span>
+              <ShoppingBag className="w-5 h-5 text-gray-700" />
+              {/* Count could be added here */}
             </div>
+
+            {user ? (
+              <div className="flex items-center gap-4">
+                <div
+                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded-full transition-all"
+                  onClick={() => navigate('/orders')}
+                >
+                  <Package className="w-5 h-5 text-gray-700" />
+                  <span className="text-sm font-medium">My Orders</span>
+                </div>
+                <div
+                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded-full transition-all"
+                  onClick={() => navigate('/dashboard')}
+                >
+                  <User className="w-5 h-5 text-gray-700" />
+                  <span className="text-sm font-medium">{user.firstName}</span>
+                </div>
+                <button onClick={logout} className="text-gray-500 hover:text-red-500">
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            ) : (
+              <div
+                className="flex items-center gap-1 cursor-pointer font-medium hover:text-primary transition-colors"
+                onClick={() => navigate('/auth')}
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Login</span>
+              </div>
+            )}
           </div>
 
           {/* Mobile Hamburger */}
@@ -183,31 +219,88 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                     <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-primary/50" />
                   </button>
                 ))}
+
+                {/* Mobile User Links */}
+                {user && (
+                  <>
+                    <div className="h-px bg-gray-100 my-2 mx-2"></div>
+                    <button
+                      onClick={() => { navigate('/cart'); setIsMobileMenuOpen(false); }}
+                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
+                          <ShoppingBag className="w-5 h-5" />
+                        </div>
+                        <span className="text-base">My Cart</span>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => { navigate('/orders'); setIsMobileMenuOpen(false); }}
+                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
+                          <Package className="w-5 h-5" />
+                        </div>
+                        <span className="text-base">My Orders</span>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => { navigate('/dashboard'); setIsMobileMenuOpen(false); }}
+                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
+                          <User className="w-5 h-5" />
+                        </div>
+                        <span className="text-base">Dashboard</span>
+                      </div>
+                    </button>
+                  </>
+                )}
+
               </div>
             </div>
 
             {/* Footer / Auth Actions */}
             <div className="p-6 border-t border-gray-100 bg-gray-50/50 space-y-3">
-              <button
-                onClick={() => {
-                  navigate('/auth');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="w-full flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl font-bold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
-              >
-                <LogIn className="w-5 h-5" />
-                Sign In
-              </button>
-              <button
-                onClick={() => {
-                  navigate('/auth?mode=signup');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-600 to-primary text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:opacity-95 transition-all transform active:scale-[0.98]"
-              >
-                <UserPlus className="w-5 h-5" />
-                Sign Up Now
-              </button>
+              {!user ? (
+                <>
+                  <button
+                    onClick={() => {
+                      navigate('/auth');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl font-bold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
+                  >
+                    <LogIn className="w-5 h-5" />
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate('/auth?mode=signup');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-600 to-primary text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:opacity-95 transition-all transform active:scale-[0.98]"
+                  >
+                    <UserPlus className="w-5 h-5" />
+                    Sign Up Now
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsMobileMenuOpen(false);
+                    navigate('/');
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-red-600 border border-red-100 rounded-xl font-bold hover:bg-red-100 transition-all"
+                >
+                  <LogOut className="w-5 h-5" />
+                  Sign Out
+                </button>
+              )}
               <p className="text-xs text-center text-gray-400 mt-4">
                 © 2025 Drepto Biodevices
               </p>
@@ -221,3 +314,4 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
 };
 
 export default Navbar;
+

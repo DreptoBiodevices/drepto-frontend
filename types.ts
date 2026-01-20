@@ -124,3 +124,38 @@ export interface City {
     id: string;
     name: string;
 }
+
+export interface Address {
+    houseNo: string;
+    buildingName: string;
+    street: string;
+    landmark: string;
+    city: string;
+    state: string;
+    country: string;
+    pincode: string;
+    contactNumber: string;
+}
+
+export type ShippingSource = 'IIT Bombay' | 'Warehouse';
+
+export type OrderStatus = 'Placed' | 'Packaging' | 'Dispatched' | 'Delivered';
+
+export interface OrderItem {
+    name: string;
+    price: number;
+    quantity: number;
+    image?: string;
+    shippingSource?: ShippingSource; // For free samples
+}
+
+export interface Order {
+    id: string;
+    date: string;
+    items: OrderItem[];
+    total: number;
+    status: OrderStatus;
+    shippingAddress: Address;
+    trackingId?: string;
+    estimatedDelivery?: string;
+}

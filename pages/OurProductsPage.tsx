@@ -42,25 +42,32 @@ const OurProductsPage: React.FC = () => {
         fetchProducts();
     }, []);
 
+
     const addToCart = (product: Product) => {
         if (!user) {
             setNotification('Please login to get samples');
             setTimeout(() => {
                 setNotification('');
-                navigate('/auth');
+                navigate('/auth', { state: { from: '/our-products' } });
             }, 1500);
             return;
         }
 
-        // If user IS logged in, what to do?
-        // The prompt says "while user is not logged in".
-        // Assuming we should redirect them to the dashboard product page where they can pay?
-        // Or handle it here. For now, since the payment logic is in dashboard, let's redirect/notify.
+        const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
+        const updatedCart = [...currentCart, product];
+        localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
+        setCart(updatedCart);
 
-        // Let's just assume for now the goal was the unauth flow. 
-        // If auth, maybe we redirect to dashboard products?
-        navigate('/dashboard?tab=products');
+        // Dispatch event to update Navbar count
+        window.dispatchEvent(new Event('cart:updated'));
+
+        setNotification('Sample added to box!');
+        setTimeout(() => {
+            setNotification('');
+            navigate('/cart');
+        }, 1000);
     };
+
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -117,8 +124,15 @@ const OurProductsPage: React.FC = () => {
                                     </h3>
                                     <p className="text-gray-500 text-sm mb-4 line-clamp-2">{product.description}</p>
 
-                                    <div className="mt-auto flex justify-between items-center pt-4 border-t border-gray-50">
+                                    <div className="mt-auto pt-4 border-t border-gray-50">
                                         <div className="flex flex-col">
+                                            <button
+                                                onClick={() => setSelectedProduct(product)}
+                                                className="w-full py-2.5 px-4 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                                            >
+                                                Get Your Free Samples
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                            </button>
                                             <span className="text-lg font-bold text-orange-500">
                                                 {/* ${product.price} */}
                                             </span>

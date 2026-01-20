@@ -7,43 +7,53 @@ const DashboardStats = () => {
     const [stats, setStats] = useState({
         medicines: 0,
         labTests: 0,
-        projects: 0
+        projects: 0,
+        transactions: 0
     });
 
-    // useEffect removed as per user request to disable API calling
-    // useEffect(() => {
-    //     const update = () => {
-    //         const meds = loadMedicines();
-    //         const labs = loadLabTests();
-    //         const projects = loadProjects();
+    useEffect(() => {
+        const update = () => {
+            const meds = loadMedicines();
+            const labs = loadLabTests();
+            const projects = loadProjects();
+            let transactionCount = 0;
+            try {
+                const storedOrders = localStorage.getItem('orders');
+                if (storedOrders) {
+                    transactionCount = JSON.parse(storedOrders).length;
+                }
+            } catch (e) {
+                console.error("Failed to count transactions", e);
+            }
 
-    //         setStats({
-    //             medicines: meds.length,
-    //             labTests: labs.length,
-    //             projects: projects.length
-    //         });
-    //     };
+            setStats({
+                medicines: meds.length,
+                labTests: labs.length,
+                projects: projects.length,
+                transactions: transactionCount
+            });
+        };
 
-    //     update();
+        update();
 
-    //     window.addEventListener('medicines:updated', update);
-    //     window.addEventListener('labtests:updated', update);
-    //     window.addEventListener('projects:updated', update);
-    //     window.addEventListener('storage', update);
+        window.addEventListener('medicines:updated', update);
+        window.addEventListener('labtests:updated', update);
+        window.addEventListener('projects:updated', update);
+        window.addEventListener('storage', update);
 
-    //     return () => {
-    //         window.removeEventListener('medicines:updated', update);
-    //         window.removeEventListener('labtests:updated', update);
-    //         window.removeEventListener('projects:updated', update);
-    //         window.removeEventListener('storage', update);
-    //     };
-    // }, []);
+        return () => {
+            window.removeEventListener('medicines:updated', update);
+            window.removeEventListener('labtests:updated', update);
+            window.removeEventListener('projects:updated', update);
+            window.removeEventListener('storage', update);
+        };
+    }, []);
 
     const cards = [
         { label: 'Total Medicines', value: stats.medicines, color: 'bg-blue-500', icon: '💊' },
         { label: 'Total Lab Tests', value: stats.labTests, color: 'bg-green-500', icon: '🧪' },
+        { label: 'Total Transactions', value: stats.transactions, color: 'bg-orange-500', icon: '💰' },
         { label: 'Active Projects', value: stats.projects, color: 'bg-purple-500', icon: '📁' },
-        { label: 'Pending Reviews', value: 12, color: 'bg-orange-500', icon: '📝' } // Mock
     ];
 
     return (

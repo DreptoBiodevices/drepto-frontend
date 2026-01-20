@@ -17,6 +17,7 @@ import RefundPolicy from './pages/legal/RefundPolicy';
 import ShippingPolicy from './pages/legal/ShippingPolicy';
 import OurProductsPage from './pages/OurProductsPage';
 import CartPage from './pages/CartPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
 
 
 const ScrollToTop = () => {
@@ -77,6 +78,7 @@ const Main: React.FC = () => {
         <Route path="/about-us" element={<AboutUsPage />} />
         <Route path="/our-products" element={<OurProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
         <Route path="/auth" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
         <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/auth" replace />} />
         <Route path="/admin/login" element={<AdminLogin />} />
