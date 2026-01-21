@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
                 </p>
               </div>
               <div>
-                <h4 className="text-white text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Incubation Address</h4>
+                <h4 className="text-white text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Registered Address</h4>
                 <p className="text-teal-100/80 text-sm leading-relaxed">
                   1001-T1, Rustomjee Ozone, Goregaon West,<br />
                   Mumbai, Maharashtra 400104, India
