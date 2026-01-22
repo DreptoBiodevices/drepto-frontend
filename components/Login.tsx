@@ -39,19 +39,7 @@ const Login: React.FC<LoginProps> = ({ onToggleView }) => {
       <h2 className="text-2xl font-bold text-center text-dark-blue mb-6">Sign In</h2>
       <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
 
-        {/* Role Selection */}
-        <div className="relative">
-          <label className="text-xs font-semibold text-gray-500 ml-1 mb-1 block">Login As</label>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value as any)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary bg-white text-gray-700 font-medium"
-          >
-            <option value="Patient">Patient</option>
-            <option value="Doctor">Doctor</option>
-            <option value="Nurse">Nurse</option>
-          </select>
-        </div>
+
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Email or Phone</label>
