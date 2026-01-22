@@ -25,7 +25,7 @@ const PatientHome: React.FC<PatientHomeProps> = ({ user, onNavigate }) => {
     { id: "nurse", title: "Nurse Appointment", description: "Home care, elderly support & professional nursing.", icon: UserPlus, color: "bg-emerald-500", lightColor: "bg-emerald-50 text-emerald-600" },
     { id: "pharmacy", title: "Pharmacy", description: "Order medicines & upload prescriptions.", icon: Pill, color: "bg-purple-500", lightColor: "bg-purple-50 text-purple-600" },
     { id: "lab", title: "Lab Tests", description: "Book diagnostics & view reports online.", icon: TestTube2, color: "bg-indigo-500", lightColor: "bg-indigo-50 text-indigo-600" },
-    { id: "products", title: "Drepto Store", description: "Healthcare devices & wellness products.", icon: ShoppingBag, color: "bg-orange-500", lightColor: "bg-orange-50 text-orange-600" },
+    { id: "products", title: "Drepto Pharmacy", description: "Healthcare devices & wellness products.", icon: ShoppingBag, color: "bg-orange-500", lightColor: "bg-orange-50 text-orange-600" },
     { id: "ambulance", title: "Ambulance", description: "Emergency 24/7 road & air ambulance.", icon: Ambulance, color: "bg-red-500", lightColor: "bg-red-50 text-red-600" },
     { id: "profile", title: "My Profile", description: "Medical records, history & settings.", icon: UserCog, color: "bg-slate-700", lightColor: "bg-slate-100 text-slate-700" },
   ];

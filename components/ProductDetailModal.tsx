@@ -31,8 +31,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
     const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
 
     const handleAddToCartClick = () => {
-        // If it's a "Free Sample" (implied by the button text in original code), show selection
-        setShowSourceSelection(true);
+        // Bypass selection and use a default source
+        confirmAddToCart('Warehouse');
     };
 
     const confirmAddToCart = (source: 'IIT Bombay' | 'Warehouse') => {
@@ -155,37 +155,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
             </div>
 
             {/* Source Selection Modal Overlay */}
-            {showSourceSelection && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-fade-in">
-                    <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl animate-scale-in">
-                        <h3 className="text-2xl font-bold text-center mb-6">Select Sample Source</h3>
-                        <div className="grid grid-cols-1 gap-4">
-                            <button
-                                onClick={() => confirmAddToCart('IIT Bombay')}
-                                className="p-4 border-2 border-primary/20 hover:border-primary bg-primary/5 hover:bg-primary/10 rounded-xl transition-all group"
-                            >
-                                <Building2 className="w-8 h-8 text-primary mb-2 mx-auto group-hover:scale-110 transition-transform" />
-                                <div className="font-bold text-lg text-primary">IIT Bombay</div>
-                                <div className="text-xs text-gray-500">Research Lab</div>
-                            </button>
-                            <button
-                                onClick={() => confirmAddToCart('Warehouse')}
-                                className="p-4 border-2 border-gray-200 hover:border-gray-400 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all group"
-                            >
-                                <Box className="w-8 h-8 text-gray-600 mb-2 mx-auto group-hover:scale-110 transition-transform" />
-                                <div className="font-bold text-lg text-gray-700">Central Warehouse</div>
-                                <div className="text-xs text-gray-500">Standard Shipping</div>
-                            </button>
-                        </div>
-                        <button
-                            onClick={() => setShowSourceSelection(false)}
-                            className="w-full mt-6 text-gray-500 hover:text-gray-800 text-sm"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            )}
+
         </div>
     );
 };

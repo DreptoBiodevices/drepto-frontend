@@ -158,4 +158,7 @@ export interface Order {
     shippingAddress: Address;
     trackingId?: string;
     estimatedDelivery?: string;
+    shippingMethod?: 'India Post' | 'Speed Post';
+    shippingCost?: number;
+    gst?: number;
 }

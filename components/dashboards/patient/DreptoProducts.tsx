@@ -4,7 +4,6 @@ import { ProductService, PaymentService } from '../../../lib/api_controller';
 import { useAuth } from '../../../hooks/useAuth';
 import ProductDetailModal, { Product } from '../../ProductDetailModal';
 
-import Navbar from '../../Navbar';
 import useRazorpay from '../../../hooks/useRazorpay';
 
 interface ProductWithId extends Product {
@@ -58,7 +57,9 @@ const DreptoProducts: React.FC = () => {
         }
 
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const updatedCart = [...currentCart, product];
+        // Default shipping source since we removed the selection modal
+        const productWithSource = { ...product, shippingSource: 'Central Warehouse' };
+        const updatedCart = [...currentCart, productWithSource];
         localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
         setCart(updatedCart);
 
@@ -75,7 +76,6 @@ const DreptoProducts: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
 
             <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
                 <div className="text-center mb-12 animate-fade-in-up">
@@ -131,7 +131,7 @@ const DreptoProducts: React.FC = () => {
                                     <div className="mt-auto pt-4 border-t border-gray-50">
                                         <div className="flex flex-col">
                                             <button
-                                                onClick={() => setSelectedProduct(product)}
+                                                onClick={() => addToCart(product)}
                                                 className="w-full py-2.5 px-4 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
                                             >
                                                 Get Your Free Samples
@@ -165,12 +165,12 @@ const DreptoProducts: React.FC = () => {
                 </div>
             </footer>
 
-            <ProductDetailModal
+            {/* <ProductDetailModal
                 product={selectedProduct}
                 isOpen={!!selectedProduct}
                 onClose={() => setSelectedProduct(null)}
                 onAddToCart={addToCart}
-            />
+            /> */}
         </div>
     );
 };

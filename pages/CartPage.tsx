@@ -19,6 +19,11 @@ const CartPage: React.FC = () => {
     const [processing, setProcessing] = useState(false); // Can be removed later if unused
     const [success, setSuccess] = useState(false);
 
+    const [shippingMethod, setShippingMethod] = useState<'India Post' | 'Speed Post'>('India Post');
+    const [distance, setDistance] = useState<number>(0);
+    const [shippingCost, setShippingCost] = useState<number>(0);
+    const [estimatedDays, setEstimatedDays] = useState<number>(7);
+
     // Load Razorpay script
     const isRazorpayLoaded = useRazorpay();
 
@@ -33,6 +38,33 @@ const CartPage: React.FC = () => {
         window.addEventListener('cart:updated', loadCart);
         return () => window.removeEventListener('cart:updated', loadCart);
     }, []);
+
+    // Mock distance calculation based on pincode
+    useEffect(() => {
+        if (shippingAddress?.pincode) {
+            // Simple mock: take first 3 digits mod 10 * 100 + random base
+            const pinVal = parseInt(shippingAddress.pincode.substring(0, 3) || "100");
+            const mockDistance = (pinVal % 9) * 150 + 50; // Range: 50km - 1250km
+            setDistance(mockDistance);
+        }
+    }, [shippingAddress]);
+
+    // Recalculate shipping cost and time when method or distance changes
+    useEffect(() => {
+        let cost = 0;
+        let days = 7;
+
+        if (shippingMethod === 'India Post') {
+            cost = 40 + (distance * 0.1); // Base 40 + 0.1 per km
+            days = 5 + Math.floor(distance / 200); // Base 5 days + 1 day per 200km
+        } else {
+            cost = 90 + (distance * 0.25); // Base 90 + 0.25 per km
+            days = 2 + Math.floor(distance / 400); // Faster: Base 2 days
+        }
+
+        setShippingCost(Math.round(cost));
+        setEstimatedDays(days);
+    }, [shippingMethod, distance]);
 
     const removeFromCart = (index: number) => {
         const newCart = [...cart];
@@ -51,8 +83,9 @@ const CartPage: React.FC = () => {
         }, 0);
     };
 
-    const deliveryCharge = 50;
-    const calculateTotal = () => calculateSubtotal() + deliveryCharge;
+    const gstRate = 0.18;
+    const calculateGST = () => (calculateSubtotal() + shippingCost) * gstRate;
+    const calculateTotal = () => calculateSubtotal() + shippingCost + calculateGST();
 
     const handleProceedToCheckout = () => {
         if (!user) {
@@ -94,7 +127,10 @@ const CartPage: React.FC = () => {
             status: 'Placed',
             shippingAddress: shippingAddress!,
             trackingId: `TRK-${Math.floor(Math.random() * 1000000)}`,
-            estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toDateString() // +5 days
+            estimatedDelivery: new Date(Date.now() + estimatedDays * 24 * 60 * 60 * 1000).toDateString(),
+            shippingMethod: shippingMethod,
+            shippingCost: shippingCost,
+            gst: calculateGST()
         };
 
         // Save to LocalStorage
@@ -230,13 +266,13 @@ const CartPage: React.FC = () => {
                                             <span>Subtotal</span>
                                             <span>₹{calculateSubtotal().toFixed(2)}</span>
                                         </div>
-                                        <div className="flex justify-between mb-4 text-gray-600">
-                                            <span>Delivery Charge</span>
-                                            <span>₹{deliveryCharge}</span>
+                                        <div className="flex justify-between mb-4 text-gray-600 text-sm italic">
+                                            <span>Shipping & GST</span>
+                                            <span>Calculated at checkout</span>
                                         </div>
                                         <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6">
-                                            <span>Total</span>
-                                            <span>₹{calculateTotal().toFixed(2)}</span>
+                                            <span>Est. Total</span>
+                                            <span>₹{calculateSubtotal().toFixed(2)} + tax</span>
                                         </div>
                                         <button
                                             onClick={handleProceedToCheckout}
@@ -277,8 +313,8 @@ const CartPage: React.FC = () => {
                                         <CreditCard className="w-5 h-5 text-green-600" />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-bold text-gray-900">Secure Payment</h2>
-                                        <p className="text-sm text-gray-500">Complete your purchase</p>
+                                        <h2 className="text-xl font-bold text-gray-900">Review & Pay</h2>
+                                        <p className="text-sm text-gray-500">Select delivery & complete purchase</p>
                                     </div>
                                 </div>
 
@@ -291,28 +327,87 @@ const CartPage: React.FC = () => {
                                         <p className="text-gray-500 mt-2">Redirecting to order history...</p>
                                     </div>
                                 ) : (
-                                    <div className="space-y-4">
-                                        <div className="p-4 bg-gray-50 rounded-xl mb-4 text-sm">
-                                            <div className="font-semibold text-gray-700">Shipping to:</div>
-                                            <div className="text-gray-600">
-                                                {shippingAddress?.houseNo}, {shippingAddress?.buildingName ? `${shippingAddress.buildingName}, ` : ''}{shippingAddress?.street}, {shippingAddress?.city}, {shippingAddress?.state} - {shippingAddress?.pincode}, {shippingAddress?.country}
+                                    <div className="space-y-6">
+                                        <div className="p-4 bg-gray-50 rounded-xl text-sm border border-gray-100">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <div className="font-semibold text-gray-700">Shipping to:</div>
+                                                    <div className="text-gray-600 mt-1">
+                                                        {shippingAddress?.houseNo}, {shippingAddress?.street}, {shippingAddress?.city} - {shippingAddress?.pincode}
+                                                    </div>
+                                                </div>
+                                                <button onClick={() => setCheckoutStep('address')} className="text-primary text-xs font-bold hover:underline">One-Edit</button>
                                             </div>
                                         </div>
 
-                                        <div className="pt-4 mt-4 border-t">
-                                            <div className="flex justify-between text-sm mb-4">
-                                                <span className="text-gray-600">Total Amount</span>
-                                                <span className="font-bold text-lg">₹{calculateTotal().toFixed(2)}</span>
+                                        {/* Shipping Method Selection */}
+                                        <div>
+                                            <h3 className="font-bold text-gray-800 mb-3">Delivery Method</h3>
+                                            <div className="space-y-3">
+                                                <div
+                                                    onClick={() => setShippingMethod('India Post')}
+                                                    className={`p-4 rounded-xl border-2 cursor-pointer flex items-center justify-between transition-all ${shippingMethod === 'India Post' ? 'border-primary bg-primary/5' : 'border-gray-100 hover:border-gray-200'}`}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${shippingMethod === 'India Post' ? 'border-primary' : 'border-gray-300'}`}>
+                                                            {shippingMethod === 'India Post' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                                                        </div>
+                                                        <div>
+                                                            <div className="font-bold text-gray-800">India Post</div>
+                                                            <div className="text-xs text-gray-500">Est. {5 + Math.floor(distance / 200)} days</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="font-bold text-gray-700">
+                                                        ₹{Math.round(40 + (distance * 0.1))}
+                                                    </div>
+                                                </div>
+
+                                                <div
+                                                    onClick={() => setShippingMethod('Speed Post')}
+                                                    className={`p-4 rounded-xl border-2 cursor-pointer flex items-center justify-between transition-all ${shippingMethod === 'Speed Post' ? 'border-primary bg-primary/5' : 'border-gray-100 hover:border-gray-200'}`}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${shippingMethod === 'Speed Post' ? 'border-primary' : 'border-gray-300'}`}>
+                                                            {shippingMethod === 'Speed Post' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                                                        </div>
+                                                        <div>
+                                                            <div className="font-bold text-gray-800">Speed Post</div>
+                                                            <div className="text-xs text-gray-500">Est. {2 + Math.floor(distance / 400)} days (Fast)</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="font-bold text-gray-700">
+                                                        ₹{Math.round(90 + (distance * 0.25))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-4 mt-4 border-t space-y-2">
+                                            <div className="flex justify-between text-sm text-gray-600">
+                                                <span>Subtotal</span>
+                                                <span>₹{calculateSubtotal().toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm text-gray-600">
+                                                <span>Shipping ({shippingMethod})</span>
+                                                <span>₹{shippingCost.toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm text-gray-600">
+                                                <span>GST (18%)</span>
+                                                <span>₹{calculateGST().toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between text-lg font-bold text-gray-900 mt-2 pt-2 border-t border-dashed">
+                                                <span>Total Amount</span>
+                                                <span>₹{calculateTotal().toFixed(2)}</span>
                                             </div>
 
-                                            <p className="text-xs text-center text-gray-500 mb-4">
+                                            <p className="text-xs text-center text-gray-500 mt-4">
                                                 Clicking "Pay Now" will open the secure Razorpay payment gateway.
                                             </p>
 
                                             <button
                                                 onClick={handlePayment}
                                                 disabled={processing || !isRazorpayLoaded}
-                                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg flex items-center justify-center gap-2 mt-2"
                                             >
                                                 {processing ? (
                                                     <>
@@ -320,7 +415,7 @@ const CartPage: React.FC = () => {
                                                         Processing...
                                                     </>
                                                 ) : (
-                                                    'Pay Now'
+                                                    `Pay ₹${calculateTotal().toFixed(2)}`
                                                 )}
                                             </button>
                                         </div>

@@ -33,7 +33,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
             setFormData({
                 firstName: user.firstName,
                 lastName: user.lastName,
-                phoneNumber: user.phoneNumber,
+                phoneNumber: user.mobileNumber,
                 gender: user.gender,
                 age: user.age,
                 bloodGroup: user.bloodGroup,
@@ -107,39 +107,59 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Profile Card */}
+                {/* Profile Card */}
                 <div className="lg:col-span-1">
-                    <div className="bg-white rounded-3xl shadow-sm p-8 text-center border border-gray-100 sticky top-4">
-                        <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden shadow-xl ring-4 ring-blue-50 bg-gray-100 flex items-center justify-center relative group">
-                            {user.profileImage ? (
-                                <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-primary to-blue-400 flex items-center justify-center text-4xl font-bold text-white">
-                                    {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                    <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 text-center border border-gray-100 sticky top-4">
+                        <div className="w-36 h-36 mx-auto mb-6 rounded-full p-1.5 border-2 border-gray-100 bg-white relative group cursor-pointer transition-transform hover:scale-[1.02]">
+                            <div className="w-full h-full rounded-full overflow-hidden relative">
+                                {user.profileImage ? (
+                                    <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-primary to-blue-400 flex items-center justify-center text-4xl font-bold text-white">
+                                        {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center" onClick={() => handleOpenModal(null, 'profile')}>
+                                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </div>
-                            )}
+                            </div>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">{user.firstName} {user.lastName}</h2>
-                        <p className="text-gray-500 mb-2 text-sm">{user.email}</p>
-                        <p className="text-gray-500 mb-6 text-sm">{user.phoneNumber || 'No phone number'}</p>
 
-                        <div className="flex justify-center gap-4 mb-8 py-4 border-t border-b border-gray-50">
-                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">{user.age || '--'}</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Age</span></div>
-                            <div className="w-px bg-gray-100"></div>
-                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">{user.bloodGroup || '--'}</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Blood</span></div>
-                            <div className="w-px bg-gray-100"></div>
-                            <div className="text-center"><span className="block text-lg font-bold text-gray-800">{user.weight || '--'}kg</span><span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Weight</span></div>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-1">{user.firstName} {user.lastName}</h2>
+                        <div className="flex items-center justify-center gap-2 mb-6">
+                            <p className="text-gray-500 text-sm font-medium">{user.email}</p>
+                            {user.mobileNumber && <span className="w-1 h-1 rounded-full bg-gray-300"></span>}
+                            {user.mobileNumber && <p className="text-gray-500 text-sm font-medium">{user.mobileNumber}</p>}
                         </div>
-                        <button onClick={() => handleOpenModal(null, 'profile')} className="w-full py-2.5 border border-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-50 transition-colors mb-3">Edit Details</button>
-                        <button onClick={logout} className="w-full py-2.5 bg-red-50 text-red-500 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors flex items-center justify-center gap-2">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                            Logout
-                        </button>
+
+                        <div className="grid grid-cols-3 gap-3 mb-8">
+                            <div className="bg-gray-50 rounded-2xl p-3 hover:bg-blue-50 transition-colors group">
+                                <span className="block text-lg font-bold text-gray-900 group-hover:text-primary transition-colors">{user.age || '--'}</span>
+                                <span className="text-[11px] text-gray-500 uppercase tracking-wider font-bold">Age</span>
+                            </div>
+                            <div className="bg-gray-50 rounded-2xl p-3 hover:bg-blue-50 transition-colors group">
+                                <span className="block text-lg font-bold text-gray-900 group-hover:text-primary transition-colors">{user.bloodGroup || '--'}</span>
+                                <span className="text-[11px] text-gray-500 uppercase tracking-wider font-bold">Blood</span>
+                            </div>
+                            <div className="bg-gray-50 rounded-2xl p-3 hover:bg-blue-50 transition-colors group">
+                                <span className="block text-lg font-bold text-gray-900 group-hover:text-primary transition-colors">{user.weight || '--'}</span>
+                                <span className="text-[11px] text-gray-500 uppercase tracking-wider font-bold">Weight (kg)</span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            <button onClick={() => handleOpenModal(null, 'profile')} className="w-full py-3 border border-gray-200 rounded-xl font-bold text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all">Edit Profile Details</button>
+                            <button onClick={logout} className="w-full py-3 bg-red-50 text-red-600 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors flex items-center justify-center gap-2">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                Logout
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 {/* Medical History Section */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-white rounded-3xl shadow-sm p-6 md:p-8 border border-gray-100">
+                    <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 border border-gray-100">
                         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                             <h3 className="text-xl font-bold text-gray-900 self-start md:self-center">Medical History</h3>
                             <div className="flex bg-gray-100/80 p-1 rounded-xl w-full md:w-auto overflow-x-auto scrollbar-hide">
@@ -203,50 +223,65 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4 animate-fade-in-up">
-                    <div className="bg-white w-full md:max-w-md rounded-t-[2rem] md:rounded-3xl shadow-2xl overflow-hidden transform transition-all">
-                        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                            <h3 className="text-xl font-bold text-gray-800">
-                                {activeSection === 'profile' ? 'Edit Profile' : (editingItem ? 'Edit' : 'Add') + ' ' + activeSection.slice(0, -1)}
-                            </h3>
-                            <button onClick={handleCloseModal} className="bg-gray-200 p-1.5 rounded-full text-gray-500 hover:bg-gray-300 transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                <div className="fixed inset-0 bg-white/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white w-full md:max-w-xl rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
+                        <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
+                            <div>
+                                <h3 className="text-2xl font-bold text-gray-900">
+                                    {activeSection === 'profile' ? 'Edit Profile' : (editingItem ? 'Edit' : 'Add') + ' ' + activeSection.slice(0, -1)}
+                                </h3>
+                                <p className="text-sm text-gray-500 font-medium">Make changes to your {activeSection === 'profile' ? 'personal details' : activeSection}</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-all"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                         </div>
-                        <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+
+                        <form onSubmit={handleSave} className="p-8 space-y-6 overflow-y-auto custom-scrollbar">
                             {activeSection === 'profile' && (
-                                <div className="space-y-4">
-                                    <div className="flex flex-col items-center mb-4">
-                                        <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden mb-2 shadow-inner border border-gray-200 relative">
+                                <div className="space-y-8">
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-28 h-28 rounded-full bg-gray-50 overflow-hidden mb-4 ring-4 ring-white shadow-lg relative group cursor-pointer">
                                             {imagePreview || (formData as User).profileImage ? (
                                                 <img src={imagePreview || (formData as User).profileImage} alt="Preview" className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                                 </div>
                                             )}
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center backdrop-blur-[1px]">
+                                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                            </div>
+                                            <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" onChange={handleImageChange} />
                                         </div>
-                                        <label className="text-xs font-bold text-primary cursor-pointer hover:underline">
-                                            Change Photo
-                                            <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
-                                        </label>
+                                        <div className="text-center">
+                                            <p className="text-sm font-bold text-gray-900">Profile Photo</p>
+                                            <p className="text-xs text-gray-500">Tap to change</p>
+                                        </div>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <Input label="First Name" val={(formData as User).firstName} set={(v) => setFormData({ ...formData, firstName: v })} required />
-                                        <Input label="Last Name" val={(formData as User).lastName} set={(v) => setFormData({ ...formData, lastName: v })} required />
+
+                                    <div className="space-y-4">
+                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-2">Personal Information</h4>
+                                        <div className="grid grid-cols-2 gap-5">
+                                            <Input label="First Name" val={(formData as User).firstName} set={(v) => setFormData({ ...formData, firstName: v })} required />
+                                            <Input label="Last Name" val={(formData as User).lastName} set={(v) => setFormData({ ...formData, lastName: v })} required />
+                                        </div>
+                                        <Input label="Email Address" val={(formData as User).email} set={() => { }} disabled />
+                                        <Input label="Phone Number" val={(formData as User).mobileNumber} set={(v) => setFormData({ ...formData, mobileNumber: v })} placeholder="+91 99999 99999" />
                                     </div>
-                                    <Input label="Email" val={(formData as User).email} set={() => { }} placeholder="Email cannot be changed" />
-                                    <Input label="Phone Number" val={(formData as User).phoneNumber} set={(v) => setFormData({ ...formData, phoneNumber: v })} placeholder="+91 99999 99999" />
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <Input label="Age" type="number" val={String((formData as User).age || '')} set={(v) => setFormData({ ...formData, age: v ? parseInt(v) : '' })} />
-                                        <Select label="Gender" val={(formData as User).gender} set={(v) => setFormData({ ...formData, gender: v })} opts={['Male', 'Female', 'Other']} />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <Select label="Blood Group" val={(formData as User).bloodGroup} set={(v) => setFormData({ ...formData, bloodGroup: v })} opts={['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']} />
-                                        <Input label="Weight (kg)" type="number" val={String((formData as User).weight || '')} set={(v) => setFormData({ ...formData, weight: v ? parseFloat(v) : '' })} />
+
+                                    <div className="space-y-4">
+                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-2">Vitals & Other</h4>
+                                        <div className="grid grid-cols-2 gap-5">
+                                            <Input label="Age" type="number" val={String((formData as User).age || '')} set={(v) => setFormData({ ...formData, age: v ? parseInt(v) : '' })} />
+                                            <Select label="Gender" val={(formData as User).gender} set={(v) => setFormData({ ...formData, gender: v })} opts={['Male', 'Female', 'Other']} />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-5">
+                                            <Select label="Blood Group" val={(formData as User).bloodGroup} set={(v) => setFormData({ ...formData, bloodGroup: v })} opts={['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']} />
+                                            <Input label="Weight (kg)" type="number" val={String((formData as User).weight || '')} set={(v) => setFormData({ ...formData, weight: v ? parseFloat(v) : '' })} />
+                                        </div>
                                     </div>
                                 </div>
                             )}
 
-                            {/* Existing form sections... */}
                             {activeSection === 'conditions' && (
                                 <>
                                     <Input label="Condition Name" val={formData.name} set={(v) => setFormData({ ...formData, name: v })} placeholder="e.g. Hypertension" required />
@@ -275,7 +310,12 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                                     <Input label="Instructions (Optional)" val={formData.instructions} set={(v) => setFormData({ ...formData, instructions: v })} placeholder="e.g. Take after meals" />
                                 </>
                             )}
-                            <button type="submit" className="w-full py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-blue-200 mt-4">Save Changes</button>
+
+                            <div className="pt-4">
+                                <button type="submit" className="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-blue-600 transition-all shadow-[0_10px_20px_-10px_rgba(37,99,235,0.4)] hover:shadow-[0_15px_30px_-10px_rgba(37,99,235,0.5)] transform hover:-translate-y-0.5">
+                                    Save Changes
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -300,21 +340,42 @@ const Actions: React.FC<ActionsProps> = ({ onEdit, onDelete }) => (
     </div>
 );
 
-interface InputProps { label: string; val?: string; set: (v: string) => void; type?: string; placeholder?: string; required?: boolean; }
-const Input: React.FC<InputProps> = ({ label, val, set, type = 'text', placeholder, required }) => (
-    <div>
-        <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">{label}</label>
-        <input type={type} value={val || ''} onChange={e => set(e.target.value)} placeholder={placeholder} className="w-full p-3 bg-gray-50 rounded-xl border-transparent focus:border-primary focus:bg-white focus:ring-0 transition-all font-medium text-sm text-gray-800" required={required} />
+interface InputProps { label: string; val?: string; set: (v: string) => void; type?: string; placeholder?: string; required?: boolean; disabled?: boolean; }
+const Input: React.FC<InputProps> = ({ label, val, set, type = 'text', placeholder, required, disabled }) => (
+    <div className={`group ${disabled ? 'opacity-75' : ''}`}>
+        <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">{label} {required && <span className="text-red-500">*</span>}</label>
+        <div className="relative">
+            <input
+                type={type}
+                value={val || ''}
+                onChange={e => set(e.target.value)}
+                placeholder={placeholder}
+                className={`w-full px-4 py-3 bg-white rounded-xl border transition-all font-medium text-gray-900 placeholder-gray-400
+                ${disabled
+                        ? 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-gray-300'}`}
+                required={required}
+                disabled={disabled}
+            />
+            {disabled && <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>}
+        </div>
     </div>
 );
 
 interface SelectProps { label: string; val?: string; set: (v: string) => void; opts: string[]; }
 const Select: React.FC<SelectProps> = ({ label, val, set, opts }) => (
-    <div>
-        <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">{label}</label>
-        <select value={val || opts[0]} onChange={e => set(e.target.value)} className="w-full p-3 bg-gray-50 rounded-xl border-transparent focus:border-primary focus:bg-white focus:ring-0 transition-all font-medium text-sm text-gray-800">
-            {opts.map((o) => <option key={o} value={o}>{o}</option>)}
-        </select>
+    <div className="group">
+        <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">{label}</label>
+        <div className="relative">
+            <select value={val || opts[0]} onChange={e => set(e.target.value)} className="w-full px-4 py-[13.5px] bg-white rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-gray-300 transition-all font-medium text-gray-900 appearance-none cursor-pointer">
+                {opts.map((o) => <option key={o} value={o}>{o}</option>)}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+        </div>
     </div>
 );
 
