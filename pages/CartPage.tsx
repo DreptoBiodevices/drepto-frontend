@@ -55,7 +55,8 @@ const CartPage: React.FC = () => {
         let days = 7;
 
         if (shippingMethod === 'India Post') {
-            cost = 40 + (distance * 0.1); // Base 40 + 0.1 per km
+            // Updated pricing for 20g product: 19 to 30 range
+            cost = distance <= 200 ? 19 : 30;
             days = 5 + Math.floor(distance / 200); // Base 5 days + 1 day per 200km
         } else {
             cost = 90 + (distance * 0.25); // Base 90 + 0.25 per km
@@ -358,27 +359,10 @@ const CartPage: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="font-bold text-gray-700">
-                                                        ₹{Math.round(40 + (distance * 0.1))}
+                                                        ₹{distance <= 200 ? 19 : 30}
                                                     </div>
                                                 </div>
 
-                                                <div
-                                                    onClick={() => setShippingMethod('Speed Post')}
-                                                    className={`p-4 rounded-xl border-2 cursor-pointer flex items-center justify-between transition-all ${shippingMethod === 'Speed Post' ? 'border-primary bg-primary/5' : 'border-gray-100 hover:border-gray-200'}`}
-                                                >
-                                                    <div className="flex items-center gap-3">
-                                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${shippingMethod === 'Speed Post' ? 'border-primary' : 'border-gray-300'}`}>
-                                                            {shippingMethod === 'Speed Post' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-bold text-gray-800">Speed Post</div>
-                                                            <div className="text-xs text-gray-500">Est. {2 + Math.floor(distance / 400)} days (Fast)</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="font-bold text-gray-700">
-                                                        ₹{Math.round(90 + (distance * 0.25))}
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
 

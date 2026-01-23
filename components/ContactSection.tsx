@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ContactService } from '../lib/api_controller';
+import { Phone } from 'lucide-react';
 
 const ContactSection: React.FC = () => {
     const [submitted, setSubmitted] = useState(false);
@@ -202,11 +203,17 @@ const ContactSection: React.FC = () => {
                                 {/* Contact Number */}
                                 <div className="flex items-start gap-3">
                                     <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <span className="text-lg">📞</span>
+                                        <Phone className="w-4 h-4 text-green-600" />
                                     </div>
+
                                     <div>
                                         <p className="font-bold text-primary text-sm">Phone</p>
-                                        <a href="tel:+91 84518 22256" className="text-gray-700 hover:text-primary transition-colors">+91 84518 22256</a>
+                                        <a
+                                            href="tel:+918451822256"
+                                            className="text-gray-700 hover:text-primary transition-colors"
+                                        >
+                                            +91 84518 22256
+                                        </a>
                                     </div>
                                 </div>
 

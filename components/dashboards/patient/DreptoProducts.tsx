@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ProductService, PaymentService } from '../../../lib/api_controller';
 import { useAuth } from '../../../hooks/useAuth';
 import ProductDetailModal, { Product } from '../../ProductDetailModal';
+import { X, CheckCircle, ExternalLink } from 'lucide-react';
+import { Order } from '../../../types';
 
 import useRazorpay from '../../../hooks/useRazorpay';
 
@@ -15,6 +17,11 @@ const DreptoProducts: React.FC = () => {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+
+    // Subscription Modal State
+    const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+    const [formFilled, setFormFilled] = useState(false);
+    const isRazorpayLoaded = useRazorpay();
 
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -71,6 +78,108 @@ const DreptoProducts: React.FC = () => {
             setNotification('');
             navigate('/cart');
         }, 1000);
+    };
+
+    const handleSubscription = () => {
+        if (!user) {
+            setNotification('Please login to subscribe');
+            setTimeout(() => {
+                setNotification('');
+                navigate('/auth', { state: { from: '/our-products' } });
+            }, 1500);
+            return;
+        }
+
+        const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+        if (existingOrders.length === 0) {
+            alert("This subscription option is only open after you buy something. Please purchase a product first to unlock this.");
+            return;
+        }
+
+        setShowSubscriptionModal(true);
+    };
+
+    const createSubscriptionOrder = (paymentId: string) => {
+        const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+
+        // Generate ID
+        let nextIdNumber = 1;
+        const dbOrders = existingOrders.filter((o: any) => o.id.startsWith('SUB'));
+        if (dbOrders.length > 0) {
+            const maxId = Math.max(...dbOrders.map((o: any) => parseInt(o.id.substring(3)) || 0));
+            nextIdNumber = maxId + 1;
+        }
+        const orderId = `SUB${nextIdNumber.toString().padStart(4, '0')}`;
+
+        const newOrder: Order = {
+            id: orderId,
+            date: new Date().toISOString(),
+            items: [{
+                name: "Drepto Premium Subscription",
+                price: 1500,
+                quantity: 1,
+                image: "/images/logo.png", // specific placeholder for subscription
+                shippingSource: "Digital"
+            }],
+            total: 1500,
+            status: 'Active',
+            shippingAddress: { // Mock address or fetch from user profile if available
+                houseNo: "N/A",
+                street: "Digital Subscription",
+                city: "N/A",
+                pincode: "000000",
+                mobileNumber: user?.mobileNumber || ""
+            },
+            trackingId: `SUB-${Math.floor(Math.random() * 1000000)}`,
+            estimatedDelivery: "Instant Activation",
+            shippingMethod: "Digital",
+            shippingCost: 0,
+            gst: 0
+        };
+
+        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
+        setNotification('Subscription Activated Successfully!');
+        setShowSubscriptionModal(false);
+        setFormFilled(false);
+
+        setTimeout(() => {
+            setNotification('');
+            navigate(`/invoice/${orderId}`);
+        }, 2000);
+    };
+
+    const handleSubscriptionPayment = () => {
+        if (!isRazorpayLoaded) {
+            alert("Payment gateway is loading, please wait...");
+            return;
+        }
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: 1500 * 100, // 1500 INR in paise
+            currency: "INR",
+            name: "Drepto Biodevices",
+            description: "Premium Subscription",
+            image: "https://drepto.com/logo.png",
+            handler: function (response: any) {
+                console.log("Subscription Payment Successful:", response);
+                createSubscriptionOrder(response.razorpay_payment_id);
+            },
+            prefill: {
+                name: `${user?.firstName} ${user?.lastName}` || "User",
+                email: user?.email || "user@example.com",
+                contact: user?.mobileNumber || ""
+            },
+            theme: {
+                color: "#0D9488"
+            }
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.on('payment.failed', function (response: any) {
+            alert("Payment Failed: " + response.error.description);
+        });
+        rzp.open();
     };
 
 
@@ -137,6 +246,13 @@ const DreptoProducts: React.FC = () => {
                                                 Get Your Free Samples
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                             </button>
+                                            <button
+                                                onClick={handleSubscription}
+                                                className="w-full mt-2 py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                                            >
+                                                Subscribe @ ₹1500
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            </button>
                                             <span className="text-lg font-bold text-orange-500">
                                                 {/* ${product.price} */}
                                             </span>
@@ -171,6 +287,70 @@ const DreptoProducts: React.FC = () => {
                 onClose={() => setSelectedProduct(null)}
                 onAddToCart={addToCart}
             /> */}
+
+            {/* Subscription Modal */}
+            {showSubscriptionModal && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-teal-50/50">
+                            <h3 className="text-xl font-bold text-gray-900">Get Premium Subscription</h3>
+                            <button
+                                onClick={() => setShowSubscriptionModal(false)}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div className="p-6 space-y-6">
+                            <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                <h4 className="font-bold text-blue-800 mb-1">Step 1: Review Form</h4>
+                                <p className="text-sm text-blue-600 mb-3">Please fill out the mandatory review form to proceed.</p>
+                                <a
+                                    href="https://docs.google.com/forms/u/0/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900 underline"
+                                >
+                                    Open Google Form <ExternalLink className="w-3 h-3" />
+                                </a>
+                            </div>
+
+                            <div className="space-y-4">
+                                <h4 className="font-bold text-gray-800">Step 2: Payment</h4>
+                                <label className="flex items-start gap-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${formFilled ? 'bg-primary border-primary text-white' : 'border-gray-300 bg-white'}`}>
+                                        {formFilled && <CheckCircle className="w-3.5 h-3.5" />}
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        className="hidden"
+                                        checked={formFilled}
+                                        onChange={(e) => setFormFilled(e.target.checked)}
+                                    />
+                                    <span className="text-sm text-gray-600 select-none">
+                                        I confirm that I have filled and submitted the review form.
+                                    </span>
+                                </label>
+
+                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex justify-between items-center">
+                                    <span className="text-gray-600 font-medium">Total Amount</span>
+                                    <span className="text-2xl font-bold text-gray-900">₹1500</span>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleSubscriptionPayment}
+                                disabled={!formFilled || !isRazorpayLoaded}
+                                className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all transform active:scale-95 ${formFilled ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:shadow-teal-500/25' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    }`}
+                            >
+                                Pay ₹1500 & Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
