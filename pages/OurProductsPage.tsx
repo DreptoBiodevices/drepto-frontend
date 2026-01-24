@@ -8,6 +8,7 @@ import { ProductService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink } from 'lucide-react';
 import { Order } from '../types';
+import { supabase } from '../lib/supabase';
 
 const OurProductsPage: React.FC = () => {
     const [cart, setCart] = useState<any[]>([]);
@@ -134,6 +135,35 @@ const OurProductsPage: React.FC = () => {
         };
 
         localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
+
+        // --- SUPABASE INTEGRATION ---
+        const saveSubscriptionToSupabase = async () => {
+            try {
+                const { error } = await supabase
+                    .from('subscriptions')
+                    .insert({
+                        id: orderId,
+                        user_id: user?.id || null, // Assuming user.id available
+                        user_email: user?.email || '',
+                        plan_name: 'Drepto Premium Subscription',
+                        amount: 1500,
+                        status: 'Active',
+                        payment_id: paymentId,
+                        end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() // 1 Year validity example
+                    });
+
+                if (error) {
+                    console.error("Supabase Error saving subscription:", error);
+                } else {
+                    console.log("Subscription saved to Supabase successfully");
+                }
+            } catch (err) {
+                console.error("Failed to save subscription to Supabase:", err);
+            }
+        };
+        saveSubscriptionToSupabase();
+        // -----------------------------
+
         setNotification('Subscription Activated Successfully!');
         setShowSubscriptionModal(false);
         setFormFilled(false);

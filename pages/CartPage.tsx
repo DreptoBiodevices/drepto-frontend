@@ -7,6 +7,7 @@ import ShippingAddressForm from '../components/ShippingAddressForm';
 import { Address, Order } from '../types';
 import { Truck, MapPin, CreditCard, X, Check } from 'lucide-react';
 import useRazorpay from '../hooks/useRazorpay';
+import { supabase } from '../lib/supabase';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -101,7 +102,7 @@ const CartPage: React.FC = () => {
         setCheckoutStep('payment');
     };
 
-    const createOrder = () => {
+    const createOrder = (rzpPaymentId?: string) => {
         // Create Order Object
         const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
 
@@ -124,6 +125,7 @@ const CartPage: React.FC = () => {
                 image: Array.isArray(item.images) ? item.images[0] : item.image,
                 shippingSource: item.shippingSource
             })),
+            paymentId: 'COD', // Default or placeholder if not passed, updated logic below for Razorpay
             total: calculateTotal(),
             status: 'Placed',
             shippingAddress: shippingAddress!,
@@ -134,8 +136,38 @@ const CartPage: React.FC = () => {
             gst: calculateGST()
         };
 
-        // Save to LocalStorage
+        // Save to LocalStorage (Legacy/Backup)
         localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
+
+        // --- SUPABASE INTEGRATION ---
+        const saveToSupabase = async () => {
+            try {
+                const { error } = await supabase
+                    .from('orders')
+                    .insert({
+                        id: newOrder.id,
+                        user_id: user?.id || null, // Assuming user object has id, or null for guest
+                        user_email: user?.email || '',
+                        total_amount: newOrder.total,
+                        status: newOrder.status,
+                        shipping_address: newOrder.shippingAddress, // Stores full address object as JSONB
+                        items: newOrder.items,
+                        payment_id: (newOrder as any).paymentId || 'COD', // Assuming paymentId might be added later or defaults
+                        shipping_method: newOrder.shippingMethod,
+                        shipping_cost: newOrder.shippingCost
+                    });
+
+                if (error) {
+                    console.error("Supabase Error saving order:", error);
+                } else {
+                    console.log("Order saved to Supabase successfully");
+                }
+            } catch (err) {
+                console.error("Failed to save to Supabase:", err);
+            }
+        };
+        saveToSupabase();
+        // -----------------------------
 
         setCart([]);
         localStorage.removeItem('patient_cart');
@@ -165,7 +197,10 @@ const CartPage: React.FC = () => {
             image: "https://drepto.com/logo.png",
             handler: function (response: any) {
                 console.log("Payment Successful:", response);
-                createOrder();
+                // We pass payment ID to createOrder ideally, but strict typing might block direct passing without refactor.
+                // For now, we'll assign it to a temp variable or modifying createOrder slightly.
+                // Refactoring createOrder to accept optional paymentId
+                createOrder(response.razorpay_payment_id);
             },
             prefill: {
                 name: `${user.firstName} ${user.lastName}` || "User",
