@@ -9,10 +9,7 @@ import { supabase } from '../../../lib/supabase';
 
 import useRazorpay from '../../../hooks/useRazorpay';
 
-interface ProductWithId extends Product {
-    _id: string;
-}
-const DreptoProducts: React.FC = () => {
+export default function DreptoProducts() {
     const [cart, setCart] = useState<any[]>([]);
     const [notification, setNotification] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -65,9 +62,7 @@ const DreptoProducts: React.FC = () => {
         }
 
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        // Default shipping source since we removed the selection modal
-        const productWithSource = { ...product, shippingSource: 'Central Warehouse' };
-        const updatedCart = [...currentCart, productWithSource];
+        const updatedCart = [...currentCart, { ...product, price: 90, mrp: 190, freeShipping: true }];
         localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
         setCart(updatedCart);
 
@@ -151,13 +146,13 @@ const DreptoProducts: React.FC = () => {
                     .from('subscriptions')
                     .insert({
                         id: orderId,
-                        user_id: user?.id || null,
+                        user_id: user?.id || null, // Assuming user.id available
                         user_email: user?.email || '',
                         plan_name: 'Drepto Premium Subscription',
                         amount: 1500,
                         status: 'Active',
                         payment_id: paymentId,
-                        end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+                        end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() // 1 Year validity example
                     });
 
                 if (error) {
@@ -220,6 +215,7 @@ const DreptoProducts: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
 
+
             <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
                 <div className="text-center mb-12 animate-fade-in-up">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>
@@ -227,7 +223,7 @@ const DreptoProducts: React.FC = () => {
                         Discover our curated selection of top-quality wellness and healthcare essentials.
                     </p>
                     <p className="text-sm text-red-500 italic mt-2">
-                        *Only one sample product you can get for free, you just have to pay for delivery.
+                        *Get a sample product by just paying existing handling charges.
                     </p>
                 </div>
 
@@ -276,11 +272,17 @@ const DreptoProducts: React.FC = () => {
 
                                     <div className="mt-auto pt-4 border-t border-gray-50">
                                         <div className="flex flex-col">
+                                            <div className="flex flex-col items-start w-full mb-2">
+                                                <span className="text-sm text-gray-500 line-through">
+                                                    Actual MRP ₹190
+                                                </span>
+                                            </div>
+
                                             <button
                                                 onClick={() => addToCart(product)}
                                                 className="w-full py-2.5 px-4 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
                                             >
-                                                Get Your Free Samples
+                                                Only Handling Charges: ₹90
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                             </button>
                                             <button
@@ -290,12 +292,6 @@ const DreptoProducts: React.FC = () => {
                                                 Subscribe @ ₹1500
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                             </button>
-                                            <span className="text-lg font-bold text-orange-500">
-                                                {/* ${product.price} */}
-                                            </span>
-                                            <span className="text-xs text-gray-400 line-through">
-                                                {/* MRP ${product.mrp} */}
-                                            </span>
                                         </div>
                                         {/* <button
                                             onClick={() => addToCart(product)}
@@ -318,12 +314,12 @@ const DreptoProducts: React.FC = () => {
                 </div>
             </footer>
 
-            {/* <ProductDetailModal
+            <ProductDetailModal
                 product={selectedProduct}
                 isOpen={!!selectedProduct}
                 onClose={() => setSelectedProduct(null)}
                 onAddToCart={addToCart}
-            /> */}
+            />
 
             {/* Subscription Modal */}
             {showSubscriptionModal && (
@@ -344,7 +340,7 @@ const DreptoProducts: React.FC = () => {
                                 <h4 className="font-bold text-blue-800 mb-1">Step 1: Review Form</h4>
                                 <p className="text-sm text-blue-600 mb-3">Please fill out the mandatory review form to proceed.</p>
                                 <a
-                                    href="https://docs.google.com/forms/u/0/"
+                                    href="https://forms.gle/PUGyMy8k5QNL6AA89"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900 underline"
@@ -391,4 +387,6 @@ const DreptoProducts: React.FC = () => {
         </div>
     );
 };
-export default DreptoProducts;
+
+
+

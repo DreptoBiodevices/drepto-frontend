@@ -7,7 +7,7 @@ const publicKey = 'public_Hauz4WSMbOr/vm58ZbnpsPR/h1o=';
 const galleryImagePaths = [
     'Drepto/1', 'Drepto/10.jpg', 'Drepto/7.jpg', 'Drepto/3.jpg',
     'Drepto/6.jpg', 'Drepto/9.jpeg', 'Drepto/2.jpg', 'Drepto/8.jpeg',
-    'Drepto/4.jpg', 'Drepto/5.jpg', 'Drepto/11.jpeg'
+    'Drepto/4.jpg', 'Drepto/5.jpg', 'Drepto/11.jpeg', 'Drepto/31.jpg', 'Drepto/32.jpg'
 ];
 
 const awardImagePaths = ['Drepto/aweard1.jpeg'];
