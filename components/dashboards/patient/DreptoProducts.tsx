@@ -126,10 +126,14 @@ const DreptoProducts: React.FC = () => {
             status: 'Active',
             shippingAddress: { // Mock address or fetch from user profile if available
                 houseNo: "N/A",
+                buildingName: "N/A",
                 street: "Digital Subscription",
+                landmark: "N/A",
                 city: "N/A",
+                state: "N/A",
+                country: "N/A",
                 pincode: "000000",
-                mobileNumber: user?.mobileNumber || ""
+                contactNumber: user?.mobileNumber || ""
             },
             trackingId: `SUB-${Math.floor(Math.random() * 1000000)}`,
             estimatedDelivery: "Instant Activation",
@@ -221,6 +225,9 @@ const DreptoProducts: React.FC = () => {
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Discover our curated selection of top-quality wellness and healthcare essentials.
+                    </p>
+                    <p className="text-sm text-red-500 italic mt-2">
+                        *Only one sample product you can get for free, you just have to pay for delivery.
                     </p>
                 </div>
 

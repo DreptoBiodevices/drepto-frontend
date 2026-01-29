@@ -55,7 +55,18 @@ const CartPage: React.FC = () => {
         let cost = 0;
         let days = 7;
 
-        if (shippingMethod === 'India Post') {
+        // Check if any item in cart has free shipping (Handling charge model)
+        const hasFreeShipping = cart.length > 0 && cart.every(item => item.freeShipping);
+
+        if (hasFreeShipping) {
+            cost = 0;
+            // Days calculation remains same
+            if (shippingMethod === 'India Post') {
+                days = 5 + Math.floor(distance / 200);
+            } else {
+                days = 2 + Math.floor(distance / 400);
+            }
+        } else if (shippingMethod === 'India Post') {
             // Updated pricing for 20g product: 19 to 30 range
             cost = distance <= 200 ? 19 : 30;
             days = 5 + Math.floor(distance / 200); // Base 5 days + 1 day per 200km
@@ -85,9 +96,12 @@ const CartPage: React.FC = () => {
         }, 0);
     };
 
-    const gstRate = 0.18;
-    const calculateGST = () => (calculateSubtotal() + shippingCost) * gstRate;
-    const calculateTotal = () => calculateSubtotal() + shippingCost + calculateGST();
+    // const gstRate = 0.18;
+    // const calculateGST = () => (calculateSubtotal() + shippingCost) * gstRate;
+    // const gstRate = 0.18;
+    // const calculateGST = () => (calculateSubtotal() + shippingCost) * gstRate;
+    // const calculateTotal = () => calculateSubtotal() + shippingCost + calculateGST();
+    const calculateTotal = () => calculateSubtotal() + shippingCost;
 
     const handleProceedToCheckout = () => {
         if (!user) {
@@ -133,7 +147,7 @@ const CartPage: React.FC = () => {
             estimatedDelivery: new Date(Date.now() + estimatedDays * 24 * 60 * 60 * 1000).toDateString(),
             shippingMethod: shippingMethod,
             shippingCost: shippingCost,
-            gst: calculateGST()
+            // gst: calculateGST()
         };
 
         // Save to LocalStorage (Legacy/Backup)
@@ -152,7 +166,7 @@ const CartPage: React.FC = () => {
                         status: newOrder.status,
                         shipping_address: newOrder.shippingAddress, // Stores full address object as JSONB
                         items: newOrder.items,
-                        payment_id: (newOrder as any).paymentId || 'COD', // Assuming paymentId might be added later or defaults
+                        payment_id: newOrder.paymentId || 'COD', // Assuming paymentId might be added later or defaults
                         shipping_method: newOrder.shippingMethod,
                         shipping_cost: newOrder.shippingCost
                     });
@@ -302,13 +316,13 @@ const CartPage: React.FC = () => {
                                             <span>Subtotal</span>
                                             <span>₹{calculateSubtotal().toFixed(2)}</span>
                                         </div>
-                                        <div className="flex justify-between mb-4 text-gray-600 text-sm italic">
+                                        {/* <div className="flex justify-between mb-4 text-gray-600 text-sm italic">
                                             <span>Shipping & GST</span>
                                             <span>Calculated at checkout</span>
-                                        </div>
+                                        </div> */}
                                         <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6">
                                             <span>Est. Total</span>
-                                            <span>₹{calculateSubtotal().toFixed(2)} + tax</span>
+                                            <span>₹{calculateSubtotal().toFixed(2)}</span>
                                         </div>
                                         <button
                                             onClick={handleProceedToCheckout}
@@ -410,10 +424,10 @@ const CartPage: React.FC = () => {
                                                 <span>Shipping ({shippingMethod})</span>
                                                 <span>₹{shippingCost.toFixed(2)}</span>
                                             </div>
-                                            <div className="flex justify-between text-sm text-gray-600">
+                                            {/* <div className="flex justify-between text-sm text-gray-600">
                                                 <span>GST (18%)</span>
                                                 <span>₹{calculateGST().toFixed(2)}</span>
-                                            </div>
+                                            </div> */}
                                             <div className="flex justify-between text-lg font-bold text-gray-900 mt-2 pt-2 border-t border-dashed">
                                                 <span>Total Amount</span>
                                                 <span>₹{calculateTotal().toFixed(2)}</span>

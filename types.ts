@@ -137,9 +137,9 @@ export interface Address {
     contactNumber: string;
 }
 
-export type ShippingSource = 'IIT Bombay' | 'Warehouse';
+export type ShippingSource = 'IIT Bombay' | 'Warehouse' | 'Digital';
 
-export type OrderStatus = 'Placed' | 'Packaging' | 'Dispatched' | 'Delivered';
+export type OrderStatus = 'Placed' | 'Packaging' | 'Dispatched' | 'Delivered' | 'Active';
 
 export interface OrderItem {
     name: string;
@@ -158,7 +158,8 @@ export interface Order {
     shippingAddress: Address;
     trackingId?: string;
     estimatedDelivery?: string;
-    shippingMethod?: 'India Post' | 'Speed Post';
+    shippingMethod?: 'India Post' | 'Speed Post' | 'Digital';
     shippingCost?: number;
     gst?: number;
+    paymentId?: string;
 }
