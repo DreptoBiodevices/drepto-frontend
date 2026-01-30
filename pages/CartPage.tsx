@@ -68,7 +68,8 @@ const CartPage: React.FC = () => {
             }
         } else if (shippingMethod === 'India Post') {
             // Updated pricing for 20g product: 19 to 30 range
-            cost = distance <= 200 ? 19 : 30;
+            // cost = distance <= 200 ? 19 : 30;
+            cost = 19;
             days = 5 + Math.floor(distance / 200); // Base 5 days + 1 day per 200km
         } else {
             cost = 90 + (distance * 0.25); // Base 90 + 0.25 per km
@@ -408,7 +409,8 @@ const CartPage: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="font-bold text-gray-700">
-                                                        ₹{distance <= 200 ? 19 : 30}
+                                                        {/* ₹{distance <= 200 ? 19 : 30} */}
+
                                                     </div>
                                                 </div>
 
