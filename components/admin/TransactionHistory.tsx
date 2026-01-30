@@ -8,6 +8,7 @@ const TransactionHistory: React.FC = () => {
     const [transactions, setTransactions] = useState<Order[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
     const itemsPerPage = 10;
 
     useEffect(() => {
@@ -41,6 +42,8 @@ const TransactionHistory: React.FC = () => {
                 }
             } catch (error) {
                 console.error("Failed to load transactions", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -89,119 +92,125 @@ const TransactionHistory: React.FC = () => {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
-                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Order Info</th>
-                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Customer Details</th>
-                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Address</th>
-                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Items & Payment</th>
-                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-4 font-semibold text-center text-xs uppercase tracking-wider">Invoice</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {paginatedTransactions.length > 0 ? (
-                            paginatedTransactions.map((t) => (
-                                <tr key={t.id} className="hover:bg-gray-50/50 transition-colors">
-                                    {/* Order Info */}
-                                    <td className="px-6 py-6 align-top">
-                                        <div className="font-bold text-gray-900">{t.id}</div>
-                                        <div className="text-gray-500 text-xs mt-1">
-                                            {new Date(t.date).toLocaleDateString()}
-                                            <br />
-                                            {new Date(t.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </div>
-                                    </td>
-
-                                    {/* Customer Details */}
-                                    <td className="px-6 py-6 align-top">
-                                        <div className="flex flex-col gap-1">
-                                            <div className="font-medium text-gray-900">{t.shippingAddress.contactNumber}</div>
-                                            {t.userEmail && (
-                                                <div className="text-sm text-blue-600 break-all">{t.userEmail}</div>
-                                            )}
-                                        </div>
-                                    </td>
-
-                                    {/* Full Address */}
-                                    <td className="px-6 py-6 align-top">
-                                        <div className="text-sm text-gray-600 leading-relaxed min-w-[200px]">
-                                            <span className="font-medium text-gray-900">{t.shippingAddress.houseNo}, {t.shippingAddress.buildingName}</span><br />
-                                            {t.shippingAddress.street}<br />
-                                            {t.shippingAddress.landmark && <span>Near {t.shippingAddress.landmark}<br /></span>}
-                                            {t.shippingAddress.city}, {t.shippingAddress.state}<br />
-                                            <span className="font-medium text-gray-900">Pin: {t.shippingAddress.pincode}</span>
-                                        </div>
-                                    </td>
-
-                                    {/* Items & Payment */}
-                                    <td className="px-6 py-6 align-top">
-                                        <div className="space-y-3 min-w-[200px]">
-                                            {/* Items List */}
-                                            <div className="space-y-1">
-                                                {t.items.map((item, idx) => (
-                                                    <div key={idx} className="text-sm text-gray-700 flex justify-between items-start gap-2 border-b border-gray-100 pb-1 last:border-0">
-                                                        <span className="line-clamp-2">{item.name}</span>
-                                                        <span className="text-gray-400 text-xs whitespace-nowrap">x{item.quantity}</span>
-                                                    </div>
-                                                ))}
+            {loading ? (
+                <div className="flex justify-center items-center h-64">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                </div>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
+                                <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Order Info</th>
+                                <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Customer Details</th>
+                                <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Address</th>
+                                <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Items & Payment</th>
+                                <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-4 font-semibold text-center text-xs uppercase tracking-wider">Invoice</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {paginatedTransactions.length > 0 ? (
+                                paginatedTransactions.map((t) => (
+                                    <tr key={t.id} className="hover:bg-gray-50/50 transition-colors">
+                                        {/* Order Info */}
+                                        <td className="px-6 py-6 align-top">
+                                            <div className="font-bold text-gray-900">{t.id}</div>
+                                            <div className="text-gray-500 text-xs mt-1">
+                                                {new Date(t.date).toLocaleDateString()}
+                                                <br />
+                                                {new Date(t.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                             </div>
+                                        </td>
 
-                                            {/* Payment Details */}
-                                            <div className="bg-gray-50 p-2 rounded-lg text-xs space-y-1">
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-500">Total:</span>
-                                                    <span className="font-bold text-gray-900">₹{t.total.toFixed(2)}</span>
-                                                </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-500">Method:</span>
-                                                    <span className="text-gray-700">{t.shippingMethod || 'Standard'}</span>
-                                                </div>
-                                                {t.paymentId && t.paymentId !== 'COD' && (
-                                                    <div className="flex justify-between gap-2">
-                                                        <span className="text-gray-500">Pay ID:</span>
-                                                        <span className="text-gray-500 font-mono break-all">{t.paymentId}</span>
-                                                    </div>
+                                        {/* Customer Details */}
+                                        <td className="px-6 py-6 align-top">
+                                            <div className="flex flex-col gap-1">
+                                                <div className="font-medium text-gray-900">{t.shippingAddress.contactNumber}</div>
+                                                {t.userEmail && (
+                                                    <div className="text-sm text-blue-600 break-all">{t.userEmail}</div>
                                                 )}
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
 
-                                    {/* Status */}
-                                    <td className="px-6 py-6 align-top">
-                                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${t.status === 'Delivered' ? 'bg-green-50 text-green-700 border border-green-100' :
-                                            t.status === 'Dispatched' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
-                                                t.status === 'Packaging' ? 'bg-yellow-50 text-yellow-700 border border-yellow-100' :
-                                                    'bg-gray-100 text-gray-700 border border-gray-200'
-                                            }`}>
-                                            {t.status}
-                                        </span>
-                                    </td>
+                                        {/* Full Address */}
+                                        <td className="px-6 py-6 align-top">
+                                            <div className="text-sm text-gray-600 leading-relaxed min-w-[200px]">
+                                                <span className="font-medium text-gray-900">{t.shippingAddress.houseNo}, {t.shippingAddress.buildingName}</span><br />
+                                                {t.shippingAddress.street}<br />
+                                                {t.shippingAddress.landmark && <span>Near {t.shippingAddress.landmark}<br /></span>}
+                                                {t.shippingAddress.city}, {t.shippingAddress.state}<br />
+                                                <span className="font-medium text-gray-900">Pin: {t.shippingAddress.pincode}</span>
+                                            </div>
+                                        </td>
 
-                                    {/* Actions */}
-                                    <td className="px-6 py-6 align-top text-center">
-                                        <button
-                                            onClick={() => window.open(`/invoice/${t.id}`, '_blank')}
-                                            className="p-2 text-gray-400 hover:text-primary transition-colors hover:bg-primary/5 rounded-lg"
-                                            title="View Invoice"
-                                        >
-                                            <FileText className="w-5 h-5" />
-                                        </button>
+                                        {/* Items & Payment */}
+                                        <td className="px-6 py-6 align-top">
+                                            <div className="space-y-3 min-w-[200px]">
+                                                {/* Items List */}
+                                                <div className="space-y-1">
+                                                    {t.items.map((item, idx) => (
+                                                        <div key={idx} className="text-sm text-gray-700 flex justify-between items-start gap-2 border-b border-gray-100 pb-1 last:border-0">
+                                                            <span className="line-clamp-2">{item.name}</span>
+                                                            <span className="text-gray-400 text-xs whitespace-nowrap">x{item.quantity}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                {/* Payment Details */}
+                                                <div className="bg-gray-50 p-2 rounded-lg text-xs space-y-1">
+                                                    <div className="flex justify-between">
+                                                        <span className="text-gray-500">Total:</span>
+                                                        <span className="font-bold text-gray-900">₹{t.total.toFixed(2)}</span>
+                                                    </div>
+                                                    <div className="flex justify-between">
+                                                        <span className="text-gray-500">Method:</span>
+                                                        <span className="text-gray-700">{t.shippingMethod || 'Standard'}</span>
+                                                    </div>
+                                                    {t.paymentId && t.paymentId !== 'COD' && (
+                                                        <div className="flex justify-between gap-2">
+                                                            <span className="text-gray-500">Pay ID:</span>
+                                                            <span className="text-gray-500 font-mono break-all">{t.paymentId}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        {/* Status */}
+                                        <td className="px-6 py-6 align-top">
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${t.status === 'Delivered' ? 'bg-green-50 text-green-700 border border-green-100' :
+                                                t.status === 'Dispatched' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
+                                                    t.status === 'Packaging' ? 'bg-yellow-50 text-yellow-700 border border-yellow-100' :
+                                                        'bg-gray-100 text-gray-700 border border-gray-200'
+                                                }`}>
+                                                {t.status}
+                                            </span>
+                                        </td>
+
+                                        {/* Actions */}
+                                        <td className="px-6 py-6 align-top text-center">
+                                            <button
+                                                onClick={() => window.open(`/invoice/${t.id}`, '_blank')}
+                                                className="p-2 text-gray-400 hover:text-primary transition-colors hover:bg-primary/5 rounded-lg"
+                                                title="View Invoice"
+                                            >
+                                                <FileText className="w-5 h-5" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                                        No transactions found.
                                     </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                                    No transactions found.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
 
             {/* Pagination settings need no change if using same logic */}
             {totalPages > 1 && (
