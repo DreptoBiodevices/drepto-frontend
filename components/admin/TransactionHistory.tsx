@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Order } from '../../types';
+import { supabase } from '../../lib/supabase';
 import { Search, ChevronDown, ChevronLeft, ChevronRight, FileText, Download } from 'lucide-react';
 
 const TransactionHistory: React.FC = () => {
@@ -10,14 +11,40 @@ const TransactionHistory: React.FC = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        try {
-            const storedOrders = localStorage.getItem('orders');
-            if (storedOrders) {
-                setTransactions(JSON.parse(storedOrders));
+        const fetchOrders = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('orders')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    throw error;
+                }
+
+                if (data) {
+                    const mappedOrders: Order[] = data.map((order: any) => ({
+                        id: order.id,
+                        userEmail: order.user_email,
+                        date: order.created_at, // Mapping created_at to date
+                        items: order.items,
+                        total: order.total_amount, // Mapping total_amount to total
+                        status: order.status,
+                        shippingAddress: order.shipping_address, // Mapping snake_case to camelCase
+                        shippingMethod: order.shipping_method,
+                        shippingCost: order.shipping_cost,
+                        paymentId: order.payment_id,
+                        // trackingId: order.tracking_id, // If available in DB
+                        // estimatedDelivery: order.estimated_delivery // If available
+                    }));
+                    setTransactions(mappedOrders);
+                }
+            } catch (error) {
+                console.error("Failed to load transactions", error);
             }
-        } catch (error) {
-            console.error("Failed to load transactions", error);
-        }
+        };
+
+        fetchOrders();
     }, []);
 
     // Filter logic
@@ -66,49 +93,101 @@ const TransactionHistory: React.FC = () => {
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
-                            <th className="px-6 py-4 font-semibold">Order ID</th>
-                            <th className="px-6 py-4 font-semibold">Date</th>
-                            <th className="px-6 py-4 font-semibold">Customer</th>
-                            <th className="px-6 py-4 font-semibold">Status</th>
-                            <th className="px-6 py-4 font-semibold text-right">Amount</th>
-                            <th className="px-6 py-4 font-semibold text-center">Actions</th>
+                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Order Info</th>
+                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Customer Details</th>
+                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Address</th>
+                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Items & Payment</th>
+                            <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Status</th>
+                            <th className="px-6 py-4 font-semibold text-center text-xs uppercase tracking-wider">Invoice</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                         {paginatedTransactions.length > 0 ? (
                             paginatedTransactions.map((t) => (
                                 <tr key={t.id} className="hover:bg-gray-50/50 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-gray-900">
-                                        {t.id}
-                                    </td>
-                                    <td className="px-6 py-4 text-gray-500 text-sm">
-                                        {new Date(t.date).toLocaleDateString()}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="text-gray-900 font-medium text-sm">{t.shippingAddress.contactNumber}</div>
-                                        <div className="text-gray-400 text-xs truncate max-w-[150px]">
-                                            {t.shippingAddress.city}, {t.shippingAddress.state}, {t.shippingAddress.country}
+                                    {/* Order Info */}
+                                    <td className="px-6 py-6 align-top">
+                                        <div className="font-bold text-gray-900">{t.id}</div>
+                                        <div className="text-gray-500 text-xs mt-1">
+                                            {new Date(t.date).toLocaleDateString()}
+                                            <br />
+                                            {new Date(t.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${t.status === 'Delivered' ? 'bg-green-50 text-green-700' :
-                                            t.status === 'Dispatched' ? 'bg-blue-50 text-blue-700' :
-                                                t.status === 'Packaging' ? 'bg-yellow-50 text-yellow-700' :
-                                                    'bg-gray-100 text-gray-700'
+
+                                    {/* Customer Details */}
+                                    <td className="px-6 py-6 align-top">
+                                        <div className="flex flex-col gap-1">
+                                            <div className="font-medium text-gray-900">{t.shippingAddress.contactNumber}</div>
+                                            {t.userEmail && (
+                                                <div className="text-sm text-blue-600 break-all">{t.userEmail}</div>
+                                            )}
+                                        </div>
+                                    </td>
+
+                                    {/* Full Address */}
+                                    <td className="px-6 py-6 align-top">
+                                        <div className="text-sm text-gray-600 leading-relaxed min-w-[200px]">
+                                            <span className="font-medium text-gray-900">{t.shippingAddress.houseNo}, {t.shippingAddress.buildingName}</span><br />
+                                            {t.shippingAddress.street}<br />
+                                            {t.shippingAddress.landmark && <span>Near {t.shippingAddress.landmark}<br /></span>}
+                                            {t.shippingAddress.city}, {t.shippingAddress.state}<br />
+                                            <span className="font-medium text-gray-900">Pin: {t.shippingAddress.pincode}</span>
+                                        </div>
+                                    </td>
+
+                                    {/* Items & Payment */}
+                                    <td className="px-6 py-6 align-top">
+                                        <div className="space-y-3 min-w-[200px]">
+                                            {/* Items List */}
+                                            <div className="space-y-1">
+                                                {t.items.map((item, idx) => (
+                                                    <div key={idx} className="text-sm text-gray-700 flex justify-between items-start gap-2 border-b border-gray-100 pb-1 last:border-0">
+                                                        <span className="line-clamp-2">{item.name}</span>
+                                                        <span className="text-gray-400 text-xs whitespace-nowrap">x{item.quantity}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Payment Details */}
+                                            <div className="bg-gray-50 p-2 rounded-lg text-xs space-y-1">
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Total:</span>
+                                                    <span className="font-bold text-gray-900">₹{t.total.toFixed(2)}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Method:</span>
+                                                    <span className="text-gray-700">{t.shippingMethod || 'Standard'}</span>
+                                                </div>
+                                                {t.paymentId && t.paymentId !== 'COD' && (
+                                                    <div className="flex justify-between gap-2">
+                                                        <span className="text-gray-500">Pay ID:</span>
+                                                        <span className="text-gray-500 font-mono break-all">{t.paymentId}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    {/* Status */}
+                                    <td className="px-6 py-6 align-top">
+                                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${t.status === 'Delivered' ? 'bg-green-50 text-green-700 border border-green-100' :
+                                            t.status === 'Dispatched' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
+                                                t.status === 'Packaging' ? 'bg-yellow-50 text-yellow-700 border border-yellow-100' :
+                                                    'bg-gray-100 text-gray-700 border border-gray-200'
                                             }`}>
                                             {t.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right font-medium text-gray-900">
-                                        ₹{t.total.toFixed(2)}
-                                    </td>
-                                    <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
+
+                                    {/* Actions */}
+                                    <td className="px-6 py-6 align-top text-center">
                                         <button
                                             onClick={() => window.open(`/invoice/${t.id}`, '_blank')}
                                             className="p-2 text-gray-400 hover:text-primary transition-colors hover:bg-primary/5 rounded-lg"
                                             title="View Invoice"
                                         >
-                                            <FileText className="w-4 h-4" />
+                                            <FileText className="w-5 h-5" />
                                         </button>
                                     </td>
                                 </tr>
@@ -124,7 +203,7 @@ const TransactionHistory: React.FC = () => {
                 </table>
             </div>
 
-            {/* Pagination */}
+            {/* Pagination settings need no change if using same logic */}
             {totalPages > 1 && (
                 <div className="p-4 border-t border-gray-100 flex items-center justify-between">
                     <p className="text-sm text-gray-500">

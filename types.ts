@@ -151,6 +151,7 @@ export interface OrderItem {
 
 export interface Order {
     id: string;
+    userEmail?: string;
     date: string;
     items: OrderItem[];
     total: number;
