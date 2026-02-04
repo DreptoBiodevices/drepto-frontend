@@ -6,7 +6,7 @@ const publicKey = 'public_Hauz4WSMbOr/vm58ZbnpsPR/h1o=';
 
 const galleryImagePaths = [
     'Drepto/45.jpeg',
-    'https://ik.imagekit.io/ke6x9gsjs/tr:w-1200/Drepto/43.jpeg', 'Drepto/44.jpeg',
+    'Drepto/44.jpeg',
     'Drepto/7.jpeg', 'Drepto/7.jpg',
     'Drepto/6.jpg', 'Drepto/2.jpg', 'Drepto/42.jpeg',
     'Drepto/10.jpg', 'Drepto/8.jpeg'
