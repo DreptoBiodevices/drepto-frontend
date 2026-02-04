@@ -6,10 +6,9 @@ const publicKey = 'public_Hauz4WSMbOr/vm58ZbnpsPR/h1o=';
 
 const galleryImagePaths = [
     'Drepto/45.jpeg',
-    'Drepto/43.jpeg', 'Drepto/44.jpeg',
+    'https://ik.imagekit.io/ke6x9gsjs/tr:w-1200/Drepto/43.jpeg', 'Drepto/44.jpeg',
     'Drepto/7.jpeg', 'Drepto/7.jpg',
-    'Drepto/6.jpg', 'Drepto/2.jpg',
-    'Drepto/41.jpeg', 'Drepto/42.jpeg',
+    'Drepto/6.jpg', 'Drepto/2.jpg', 'Drepto/42.jpeg',
     'Drepto/10.jpg', 'Drepto/8.jpeg'
 ];
 
@@ -19,7 +18,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [awardIndex, setAwardIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
-    const [aspectRatios, setAspectRatios] = useState<Record<number, number>>({});
+
 
     useEffect(() => {
         if (isHovered) return;
@@ -81,8 +80,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                         {/* Main Image Viewport */}
                         <div className="relative group">
                             <div
-                                className="overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white transition-all duration-500 ease-in-out"
-                                style={{ aspectRatio: aspectRatios[currentIndex] || 16 / 9 }}
+                                className="overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white transition-all duration-500 ease-in-out aspect-video"
                             >
                                 <div
                                     className="flex transition-transform duration-1000 cubic-bezier(0.23, 1, 0.32, 1) h-full"
@@ -93,15 +91,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                                             <IKImage
                                                 path={path}
                                                 transformation={[{ width: "1200" }]}
-                                                className="max-h-full max-w-full object-contain"
+                                                className="w-full h-full object-cover"
                                                 loading="lazy"
-                                                onLoad={(e) => {
-                                                    const img = e.target as HTMLImageElement;
-                                                    if (img.naturalWidth && img.naturalHeight) {
-                                                        const ratio = img.naturalWidth / img.naturalHeight;
-                                                        setAspectRatios(prev => ({ ...prev, [index]: ratio }));
-                                                    }
-                                                }}
                                             />
                                             {/* Modern Overlay */}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
