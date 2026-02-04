@@ -48,13 +48,6 @@ const Footer: React.FC = () => {
                   SINE IIT Bombay, Mumbai 400076, India
                 </p>
               </div>
-              <div>
-                <h4 className="text-white text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Registered Address</h4>
-                <p className="text-teal-100/80 text-sm leading-relaxed">
-                  1001-T1, Rustomjee Ozone, Goregaon West,<br />
-                  Mumbai, Maharashtra 400104, India
-                </p>
-              </div>
             </div>
           </div>
 
@@ -84,7 +77,7 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-teal-200/40 text-[11px] font-medium tracking-widest uppercase">
           <p>&copy; {new Date().getFullYear()} Drepto Biodevices Pvt. Ltd.</p>
-          <p>Designed with excellence</p>
+          <p>© Drepto Biodevices Pvt. Ltd. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

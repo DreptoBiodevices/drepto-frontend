@@ -1,7 +1,7 @@
 
 import axios, { AxiosResponse } from 'axios';
 
-const BASE_URL = '/api';
+const BASE_URL = 'http://localhost:6001';
 
 // Create Axios Instance
 export const api = axios.create({
@@ -157,4 +157,11 @@ export const ContactService = {
 export const PaymentService = {
   recordTransaction: (data: any) => api.post('/payment/record-transaction', data),
   updateStatus: (data: any) => api.post('/payment/update-status', data),
+  createOrder: (data: any) => api.post('/payment/create-order', data),
+  getAllTransactions: () => api.get('/payment/all-orders'),
+};
+
+export const ShippingAddressService = {
+  create: (data: any) => api.post('/shipping-address', data),
+  getById: (id: string) => api.get(`/shipping-address/${id}`),
 };

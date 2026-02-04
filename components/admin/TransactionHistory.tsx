@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Order } from '../../types';
-import { supabase } from '../../lib/supabase';
+import { PaymentService } from '../../lib/api_controller';
 import { Search, ChevronDown, ChevronLeft, ChevronRight, FileText, Download } from 'lucide-react';
 
 const TransactionHistory: React.FC = () => {
@@ -14,29 +14,22 @@ const TransactionHistory: React.FC = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const { data, error } = await supabase
-                    .from('orders')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) {
-                    throw error;
-                }
-
-                if (data) {
-                    const mappedOrders: Order[] = data.map((order: any) => ({
-                        id: order.id,
-                        userEmail: order.user_email,
-                        date: order.created_at, // Mapping created_at to date
-                        items: order.items,
-                        total: order.total_amount, // Mapping total_amount to total
+                const response = await PaymentService.getAllTransactions();
+                // response.data is the array
+                if (response.data) {
+                    const mappedOrders: Order[] = response.data.map((order: any) => ({
+                        id: order.orderId || order._id,
+                        userEmail: '', // Not stored in backend Payment model currently
+                        date: order.createdAt || order.created_at,
+                        items: order.items || [],
+                        total: order.amount,
                         status: order.status,
-                        shippingAddress: order.shipping_address, // Mapping snake_case to camelCase
-                        shippingMethod: order.shipping_method,
-                        shippingCost: order.shipping_cost,
-                        paymentId: order.payment_id,
-                        // trackingId: order.tracking_id, // If available in DB
-                        // estimatedDelivery: order.estimated_delivery // If available
+                        shippingAddress: order.shippingAddress || {
+                            houseNo: '', buildingName: '', street: '', landmark: '', city: '', state: '', country: '', pincode: '', contactNumber: 'N/A'
+                        },
+                        shippingMethod: order.shippingMethod || 'Standard',
+                        shippingCost: order.shippingCost || 0,
+                        paymentId: order.transactionId || order.razorpayPaymentId || order.payment_id,
                     }));
                     setTransactions(mappedOrders);
                 }

@@ -5,9 +5,12 @@ const urlEndpoint = 'https://ik.imagekit.io/ke6x9gsjs';
 const publicKey = 'public_Hauz4WSMbOr/vm58ZbnpsPR/h1o=';
 
 const galleryImagePaths = [
-    'Drepto/1', 'Drepto/10.jpg', 'Drepto/7.jpg', 'Drepto/3.jpg',
-    'Drepto/6.jpg', 'Drepto/9.jpeg', 'Drepto/2.jpg', 'Drepto/8.jpeg',
-    'Drepto/4.jpg', 'Drepto/5.jpg', 'Drepto/11.jpeg', 'Drepto/31.jpg', 'Drepto/32.jpg'
+    'Drepto/45.jpeg',
+    'Drepto/43.jpeg', 'Drepto/44.jpeg',
+    'Drepto/7.jpeg', 'Drepto/7.jpg',
+    'Drepto/6.jpg', 'Drepto/2.jpg',
+    'Drepto/41.jpeg', 'Drepto/42.jpeg',
+    'Drepto/10.jpg', 'Drepto/8.jpeg'
 ];
 
 const awardImagePaths = ['Drepto/aweard1.jpeg'];
@@ -16,6 +19,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [awardIndex, setAwardIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
+    const [aspectRatios, setAspectRatios] = useState<Record<number, number>>({});
 
     useEffect(() => {
         if (isHovered) return;
@@ -76,27 +80,38 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
                         {/* Main Image Viewport */}
                         <div className="relative group">
-                            <div className="overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white aspect-[16/10] md:aspect-[21/9]">
+                            <div
+                                className="overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white transition-all duration-500 ease-in-out"
+                                style={{ aspectRatio: aspectRatios[currentIndex] || 16 / 9 }}
+                            >
                                 <div
                                     className="flex transition-transform duration-1000 cubic-bezier(0.23, 1, 0.32, 1) h-full"
                                     style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                                 >
                                     {galleryImagePaths.map((path, index) => (
-                                        <div key={index} className="w-full flex-shrink-0 h-full relative">
+                                        <div key={index} className="w-full flex-shrink-0 h-full relative flex items-center justify-center bg-gray-50">
                                             <IKImage
                                                 path={path}
-                                                transformation={[{ height: "1200", width: "2000", crop: "at_max" }]}
-                                                className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-[2s]"
+                                                transformation={[{ width: "1200" }]}
+                                                className="max-h-full max-w-full object-contain"
+                                                loading="lazy"
+                                                onLoad={(e) => {
+                                                    const img = e.target as HTMLImageElement;
+                                                    if (img.naturalWidth && img.naturalHeight) {
+                                                        const ratio = img.naturalWidth / img.naturalHeight;
+                                                        setAspectRatios(prev => ({ ...prev, [index]: ratio }));
+                                                    }
+                                                }}
                                             />
                                             {/* Modern Overlay */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
 
                             {/* Pagination Pill */}
-                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center gap-3 border border-white/50">
+                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center gap-3 border border-white/50 z-20">
                                 {galleryImagePaths.map((_, i) => (
                                     <button
                                         key={i}

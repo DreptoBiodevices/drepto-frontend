@@ -5,7 +5,6 @@ import { useAuth } from '../../../hooks/useAuth';
 import ProductDetailModal, { Product } from '../../ProductDetailModal';
 import { X, CheckCircle, ExternalLink } from 'lucide-react';
 import { Order } from '../../../types';
-import { supabase } from '../../../lib/supabase';
 
 import useRazorpay from '../../../hooks/useRazorpay';
 
@@ -139,33 +138,30 @@ export default function DreptoProducts() {
 
         localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
 
-        // --- SUPABASE INTEGRATION ---
-        const saveSubscriptionToSupabase = async () => {
+        // --- API INTEGRATION ---
+        const saveSubscriptionToBackend = async () => {
             try {
-                const { error } = await supabase
-                    .from('subscriptions')
-                    .insert({
-                        id: orderId,
-                        user_id: user?.id || null, // Assuming user.id available
-                        user_email: user?.email || '',
-                        plan_name: 'Drepto Premium Subscription',
-                        amount: 1500,
-                        status: 'Active',
-                        payment_id: paymentId,
-                        end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() // 1 Year validity example
-                    });
+                // Determine transaction ID
+                const txId = paymentId || 'SUB_FREE';
 
-                if (error) {
-                    console.error("Supabase Error saving subscription:", error);
-                } else {
-                    console.log("Subscription saved to Supabase successfully");
-                }
+                await PaymentService.createOrder({
+                    orderId: orderId,
+                    transactionId: txId,
+                    amount: 1500,
+                    currency: 'INR',
+                    shippingAddress: newOrder.shippingAddress,
+                    items: newOrder.items, // Contains subscription item
+                    shippingMethod: 'Digital',
+                    shippingCost: 0,
+                    userId: user?.id || 'guest'
+                });
+                console.log("Subscription saved to Backend successfully");
             } catch (err) {
-                console.error("Failed to save subscription to Supabase:", err);
+                console.error("Failed to save subscription to Backend:", err);
             }
         };
-        saveSubscriptionToSupabase();
-        // -----------------------------
+        saveSubscriptionToBackend();
+        // -----------------------------        // -----------------------------
 
         setNotification('Subscription Activated Successfully!');
         setShowSubscriptionModal(false);
