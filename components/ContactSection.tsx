@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ContactService } from '../lib/api_controller';
-import { Phone } from 'lucide-react';
+import { Phone, Linkedin } from 'lucide-react';
 
 const ContactSection: React.FC = () => {
     const [submitted, setSubmitted] = useState(false);
@@ -225,6 +225,24 @@ const ContactSection: React.FC = () => {
                                     <div>
                                         <p className="font-bold text-primary text-sm">Working Hours</p>
                                         <p className="text-gray-700">Monday - Friday, 9am - 5pm IST</p>
+                                    </div>
+                                </div>
+
+                                {/* LinkedIn */}
+                                <div className="flex items-start gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <Linkedin className="w-4 h-4 text-[#0077b5]" />
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-primary text-sm">LinkedIn</p>
+                                        <a
+                                            href="https://www.linkedin.com/company/drepto-biodevices-pvt-ltd/posts/?feedView=all"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-gray-700 hover:text-primary transition-colors"
+                                        >
+                                            Follow us on LinkedIn
+                                        </a>
                                     </div>
                                 </div>
                             </div>
