@@ -7,7 +7,7 @@ const DashboardStats = () => {
     const [stats, setStats] = useState({
         medicines: 0,
         labTests: 0,
-        projects: 0,
+        // projects: 0,
         transactions: 0
     });
 
@@ -15,7 +15,7 @@ const DashboardStats = () => {
         const update = () => {
             const meds = loadMedicines();
             const labs = loadLabTests();
-            const projects = loadProjects();
+            // const projects = loadProjects();
             let transactionCount = 0;
             try {
                 const storedOrders = localStorage.getItem('orders');
@@ -29,7 +29,7 @@ const DashboardStats = () => {
             setStats({
                 medicines: meds.length,
                 labTests: labs.length,
-                projects: projects.length,
+                // projects: projects.length,
                 transactions: transactionCount
             });
         };
@@ -38,13 +38,13 @@ const DashboardStats = () => {
 
         window.addEventListener('medicines:updated', update);
         window.addEventListener('labtests:updated', update);
-        window.addEventListener('projects:updated', update);
+        // window.addEventListener('projects:updated', update);
         window.addEventListener('storage', update);
 
         return () => {
             window.removeEventListener('medicines:updated', update);
             window.removeEventListener('labtests:updated', update);
-            window.removeEventListener('projects:updated', update);
+            // window.removeEventListener('projects:updated', update);
             window.removeEventListener('storage', update);
         };
     }, []);
@@ -53,7 +53,7 @@ const DashboardStats = () => {
         { label: 'Total Medicines', value: stats.medicines, color: 'bg-blue-500', icon: '💊' },
         { label: 'Total Lab Tests', value: stats.labTests, color: 'bg-green-500', icon: '🧪' },
         { label: 'Total Transactions', value: stats.transactions, color: 'bg-orange-500', icon: '💰' },
-        { label: 'Active Projects', value: stats.projects, color: 'bg-purple-500', icon: '📁' },
+        // { label: 'Active Projects', value: stats.projects, color: 'bg-purple-500', icon: '📁' },
     ];
 
     return (

@@ -63,7 +63,14 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
         const { name, value } = e.target;
 
         if (name === 'contactNumber' || name === 'pincode') {
-            const numericValue = value.replace(/\D/g, '');
+            let numericValue = value.replace(/\D/g, '');
+
+            if (name === 'pincode') {
+                numericValue = numericValue.slice(0, 6);
+            } else if (name === 'contactNumber') {
+                numericValue = numericValue.slice(0, 10);
+            }
+
             setFormData(prev => ({ ...prev, [name]: numericValue }));
             return;
         }
@@ -78,6 +85,17 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
             alert("Please fill in all required fields.");
             return;
         }
+
+        if (formData.pincode.length !== 6) {
+            alert("Pincode must be 6 digits.");
+            return;
+        }
+
+        if (formData.contactNumber.length !== 10) {
+            alert("Contact number must be 10 digits.");
+            return;
+        }
+
         onSubmit(formData);
     };
 
@@ -187,6 +205,8 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                         value={formData.pincode}
                         onChange={handleChange}
                         required
+                        maxLength={6}
+                        inputMode="numeric"
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
                     />
                 </div>
@@ -200,6 +220,8 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                     value={formData.contactNumber}
                     onChange={handleChange}
                     required
+                    maxLength={10}
+                    inputMode="numeric"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
                 />
             </div>

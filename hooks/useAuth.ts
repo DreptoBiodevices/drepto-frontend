@@ -10,6 +10,7 @@ interface AuthContextType {
   register: (details: any) => Promise<void>;
   updateUser: (details: Partial<User>) => void;
   isLoading: boolean;
+  checkPasswordStrength: (password: string) => { strong: boolean; message: string };
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -91,7 +92,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         response = await AuthorizedService.login(loginPayload);
       } else {
         // Default to User (Patient)
-        const userPayload = isEmail ? { email: identifier, password } : { mobileNumber: Number(identifier), password };
+        const userPayload = isEmail
+          ? { email: identifier, password }
+          : { mobileNumber: Number(identifier.replace(/\D/g, '')), password }; // Sanitize mobile number
         response = await UserService.login(userPayload);
       }
 
@@ -128,8 +131,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(appUser);
 
     } catch (error: any) {
-      console.error("Login failed:", error);
-      throw new Error(error.response?.data?.message || "Login failed. Please check your credentials.");
+      console.error("Login failed full error:", error); // Enhanced Logging
+      console.error("Login response data:", error.response?.data); // Log response data
+      throw new Error(error.response?.data?.message || error.message || "Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
     }
@@ -141,9 +145,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
   };
 
+  const checkPasswordStrength = (password: string): { strong: boolean; message: string } => {
+    if (!password) return { strong: false, message: "Password is required" };
+    if (password.length < 8) return { strong: false, message: "Password must be at least 8 characters long" };
+    if (!/[A-Z]/.test(password)) return { strong: false, message: "Password must contain at least one uppercase letter" };
+    if (!/[a-z]/.test(password)) return { strong: false, message: "Password must contain at least one lowercase letter" };
+    if (!/\d/.test(password)) return { strong: false, message: "Password must contain at least one number" };
+    if (!/[\W_]/.test(password)) return { strong: false, message: "Password must contain at least one special character" };
+
+    return { strong: true, message: "Strong password" };
+  };
+
   const register = async (details: any) => {
     setIsLoading(true);
     try {
+      // Password validation
+      const password = details.password;
+      const strength = checkPasswordStrength(password);
+
+      if (!strength.strong) {
+        throw new Error(strength.message);
+      }
+
       let response;
       const { role, ...rest } = details;
 
@@ -191,7 +214,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     } catch (error: any) {
       console.error("Registration failed:", error);
-      throw new Error(error.response?.data?.message || "Registration failed.");
+      throw new Error(error.response?.data?.message || error.message || "Registration failed.");
     } finally {
       setIsLoading(false);
     }
@@ -209,7 +232,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   return React.createElement(
     AuthContext.Provider,
-    { value: { user, login, logout, register, updateUser, isLoading } },
+    { value: { user, login, logout, register, updateUser, isLoading, checkPasswordStrength } },
     children
   );
 };

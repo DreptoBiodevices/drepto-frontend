@@ -24,19 +24,31 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
   });
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState('');
-  const { register } = useAuth();
+  const [passwordStrength, setPasswordStrength] = useState<{ strong: boolean; message: string }>({ strong: false, message: '' });
+  const { register, checkPasswordStrength } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === 'password') {
+      const strength = checkPasswordStrength(value);
+      setPasswordStrength(strength);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { password, confirmPassword, ...userDetails } = formData;
 
     // Check for empty fields including password
     if (Object.values(userDetails).some(field => field === '') || !password) {
       setError('Please fill in all fields.');
+      return;
+    }
+
+    if (!passwordStrength.strong) {
+      setError(passwordStrength.message);
       return;
     }
 
@@ -52,16 +64,20 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
 
     setError('');
 
-    register({
-      firstName: userDetails.firstName,
-      lastName: userDetails.lastName,
-      email: userDetails.email,
-      role: userDetails.role,
-      mobileNumber: Number(userDetails.mobileNumber),
-      gender: userDetails.gender,
-      age: Number(userDetails.age),
-      password: password
-    });
+    try {
+      await register({
+        firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
+        email: userDetails.email,
+        role: userDetails.role,
+        mobileNumber: Number(userDetails.mobileNumber),
+        gender: userDetails.gender,
+        age: Number(userDetails.age),
+        password: password
+      });
+    } catch (err: any) {
+      setError(err.message || "Registration failed");
+    }
   };
 
   return (
@@ -88,25 +104,86 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
-          <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+            value={formData.firstName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+          />
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last Name"
+            value={formData.lastName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+          />
         </div>
-        <input type="email" name="email" placeholder="Email ID" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
-        <input type="tel" name="mobileNumber" placeholder="Mobile Number" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email ID"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+        />
+        <input
+          type="tel"
+          name="mobileNumber"
+          placeholder="Mobile Number"
+          value={formData.mobileNumber}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+        />
         <div className="grid grid-cols-2 gap-3">
-          <select name="gender" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary text-gray-500">
+          <select
+            name="gender"
+            onChange={handleChange}
+            value={formData.gender}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary text-gray-500"
+          >
             <option value="">Gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
-          <input type="number" name="age" placeholder="Age" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+          <input
+            type="number"
+            name="age"
+            placeholder="Age"
+            value={formData.age}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+          />
         </div>
 
+        <div className="space-y-1">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary ${formData.password && !passwordStrength.strong ? 'border-red-500' : 'border-gray-300'
+              }`}
+          />
+          {formData.password && (
+            <p className={`text-xs ${passwordStrength.strong ? 'text-green-600' : 'text-red-500'}`}>
+              {passwordStrength.message}
+            </p>
+          )}
+        </div>
 
-
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+        />
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
 

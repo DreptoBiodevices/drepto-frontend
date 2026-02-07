@@ -5,7 +5,7 @@ import MedicineCRUD from './MedicineCRUD';
 import LabTestCRUD from './LabTestCRUD';
 import DashboardStats from './DashboardStats';
 import ActivityFeed from './ActivityFeed';
-import ProjectManager from './ProjectManager';
+// import ProjectManager from './ProjectManager';
 import TransactionHistory from './TransactionHistory';
 import ProductCRUD from './ProductCRUD';
 
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
 
       {tab === 'products' && <ProductCRUD />}
 
-      {tab === 'projects' && <ProjectManager />}
+      {/* {tab === 'projects' && <ProjectManager />} */}
 
       {tab === 'transactions' && <TransactionHistory />}
     </AdminLayout>

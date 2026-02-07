@@ -112,13 +112,46 @@ const CartPage: React.FC = () => {
         setCheckoutStep('address');
     };
 
-    const handleAddressSubmit = (address: Address) => {
+    // Load Saved Address
+    useEffect(() => {
+        if (user && checkoutStep === 'address') {
+            const fetchAddress = async () => {
+                try {
+                    // Assuming getById uses userId or we need a new endpoint for 'getMyAddress'
+                    // If endpoint is /shipping-address/:id, we need a way to get address by user ID.
+                    // If the backend returns user's address on GET /shipping-address/user/:userId
+                    // For now, let's assume we can fetch it or it's part of user profile.
+                    // If not readily available, we might need to rely on local state or ask user to enter.
+                    // Let's try to fetch using user ID if supported, or skip if we don't know the ID.
+
+                    // Note: based on api_controller, we have getById(id). 
+                    // If we don't have an address ID stored in user profile, we can't fetch it directly 
+                    // unless there's an endpoint like /shipping-address?userId=...
+                    // For this implementation, we will proceed with saving the address.
+                    // If the user object has an address, we can use it.
+
+                } catch (error) {
+                    console.error("Failed to fetch address", error);
+                }
+            };
+            fetchAddress();
+        }
+    }, [user, checkoutStep]);
+
+    const handleAddressSubmit = async (address: Address) => {
         setShippingAddress(address);
+        try {
+            if (user) {
+                await ShippingAddressService.create({ ...address, userId: user.id });
+            }
+        } catch (e) {
+            console.error("Failed to save address", e);
+        }
         setCheckoutStep('payment');
     };
 
-    const createOrder = (rzpPaymentId?: string) => {
-        // Create Order Object
+    const createOrder = async (rzpPaymentId: string, rzpOrderId: string, rzpSignature: string) => {
+        // Create Order Object (Client side for display/legacy)
         const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
 
         // Generate DBxxxx ID
@@ -140,7 +173,7 @@ const CartPage: React.FC = () => {
                 image: Array.isArray(item.images) ? item.images[0] : item.image,
                 shippingSource: item.shippingSource
             })),
-            paymentId: 'COD', // Default or placeholder if not passed, updated logic below for Razorpay
+            paymentId: rzpPaymentId,
             total: calculateTotal(),
             status: 'Placed',
             shippingAddress: shippingAddress!,
@@ -148,33 +181,31 @@ const CartPage: React.FC = () => {
             estimatedDelivery: new Date(Date.now() + estimatedDays * 24 * 60 * 60 * 1000).toDateString(),
             shippingMethod: shippingMethod,
             shippingCost: shippingCost,
-            // gst: calculateGST()
         };
 
         // Save to LocalStorage (Legacy/Backup)
         localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
 
         // --- API INTEGRATION ---
-        const saveOrderToBackend = async () => {
-            try {
-                await PaymentService.createOrder({
-                    orderId: newOrder.id,
-                    transactionId: rzpPaymentId || newOrder.paymentId || 'COD',
-                    amount: newOrder.total,
-                    currency: 'INR',
-                    shippingAddress: newOrder.shippingAddress,
-                    items: newOrder.items,
-                    shippingMethod: newOrder.shippingMethod,
-                    shippingCost: newOrder.shippingCost,
-                    userId: user?.id || 'guest'
-                });
-                console.log("Order saved to Backend successfully");
-            } catch (err) {
-                console.error("Failed to save to Backend:", err);
-            }
-        };
-        saveOrderToBackend();
-        // -----------------------------        // -----------------------------
+        try {
+            // Confirm/Record Transaction
+            await PaymentService.recordTransaction({
+                orderId: rzpOrderId, // Razorpay Order ID
+                paymentId: rzpPaymentId,
+                signature: rzpSignature,
+                amount: newOrder.total,
+                userId: user?.id || 'guest',
+                shippingAddress: newOrder.shippingAddress,
+                items: newOrder.items,
+                shippingMethod: newOrder.shippingMethod,
+                shippingCost: newOrder.shippingCost,
+            });
+            console.log("Transaction recorded successfully");
+        } catch (err) {
+            console.error("Failed to record transaction:", err);
+            alert("Payment recorded locally but failed to sync with server. Please contact support.");
+        }
+        // ----------------------------- 
 
         setCart([]);
         localStorage.removeItem('patient_cart');
@@ -187,7 +218,7 @@ const CartPage: React.FC = () => {
         }, 2000);
     };
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         if (!shippingAddress || !user) return;
 
         if (!isRazorpayLoaded) {
@@ -195,35 +226,58 @@ const CartPage: React.FC = () => {
             return;
         }
 
-        const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: calculateTotal() * 100, // Amount in paise
-            currency: "INR",
-            name: "Drepto Biodevices",
-            description: "Medical Products Purchase",
-            image: "https://drepto.com/logo.png",
-            handler: function (response: any) {
-                console.log("Payment Successful:", response);
-                // We pass payment ID to createOrder ideally, but strict typing might block direct passing without refactor.
-                // For now, we'll assign it to a temp variable or modifying createOrder slightly.
-                // Refactoring createOrder to accept optional paymentId
-                createOrder(response.razorpay_payment_id);
-            },
-            prefill: {
-                name: `${user.firstName} ${user.lastName}` || "User",
-                email: user.email || "user@example.com",
-                contact: user.mobileNumber || ""
-            },
-            theme: {
-                color: "#0D9488"
-            }
-        };
+        setProcessing(true);
 
-        const rzp = new (window as any).Razorpay(options);
-        rzp.on('payment.failed', function (response: any) {
-            alert("Payment Failed: " + response.error.description);
-        });
-        rzp.open();
+        try {
+            // 1. Create Order on Backend
+            const orderResponse = await PaymentService.createOrder({
+                amount: calculateTotal(), // Send amount (backend should validation)
+                currency: "INR",
+                receipt: `receipt_${Date.now()}`,
+                userId: user.id
+            });
+
+            const { orderId, amount, currency, key } = orderResponse.data; // Expecting backend to return Razorpay Order ID
+
+            const options = {
+                key: key || import.meta.env.VITE_RAZORPAY_KEY_ID,
+                amount: amount,
+                currency: currency,
+                name: "Drepto Biodevices",
+                description: "Medical Products Purchase",
+                image: "https://drepto.com/logo.png",
+                order_id: orderId, // Use backend generated order ID
+                handler: function (response: any) {
+                    console.log("Payment Successful:", response);
+                    createOrder(
+                        response.razorpay_payment_id,
+                        response.razorpay_order_id,
+                        response.razorpay_signature
+                    );
+                },
+                prefill: {
+                    name: `${user.firstName} ${user.lastName}` || "User",
+                    email: user.email || "user@example.com",
+                    contact: user.mobileNumber || ""
+                },
+                theme: {
+                    color: "#0D9488"
+                }
+            };
+
+            const rzp = new (window as any).Razorpay(options);
+            rzp.on('payment.failed', function (response: any) {
+                alert("Payment Failed: " + response.error.description);
+                console.error(response.error);
+                setProcessing(false);
+            });
+            rzp.open();
+
+        } catch (error: any) {
+            console.error("Error creating order:", error);
+            alert("Failed to initiate payment. Please try again.");
+            setProcessing(false);
+        }
     };
 
     return (
