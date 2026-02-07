@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Order } from '../../types';
 import { PaymentService } from '../../lib/api_controller';
+import { supabase } from '../../lib/supabase';
 import { Search, ChevronDown, ChevronLeft, ChevronRight, FileText, Download } from 'lucide-react';
 
 const TransactionHistory: React.FC = () => {
@@ -14,27 +15,33 @@ const TransactionHistory: React.FC = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await PaymentService.getAllTransactions();
-                // response.data is the array
-                if (response.data) {
-                    const mappedOrders: Order[] = response.data.map((order: any) => ({
-                        id: order.orderId || order._id,
-                        userEmail: '', // Not stored in backend Payment model currently
-                        date: order.createdAt || order.created_at,
+                // Fetch from Supabase directly as requested
+                const { data, error } = await supabase
+                    .from('orders')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (data) {
+                    const mappedOrders: Order[] = data.map((order: any) => ({
+                        id: order.order_id || order.id, // Adjust based on Supabase column names
+                        userEmail: order.user_email || '',
+                        date: order.created_at,
                         items: order.items || [],
-                        total: order.amount,
+                        total: order.amount || order.total_amount,
                         status: order.status,
-                        shippingAddress: order.shippingAddress || {
+                        shippingAddress: order.shipping_address || {
                             houseNo: '', buildingName: '', street: '', landmark: '', city: '', state: '', country: '', pincode: '', contactNumber: 'N/A'
                         },
-                        shippingMethod: order.shippingMethod || 'Standard',
-                        shippingCost: order.shippingCost || 0,
-                        paymentId: order.transactionId || order.razorpayPaymentId || order.payment_id,
+                        shippingMethod: order.shipping_method || 'Standard',
+                        shippingCost: order.shipping_cost || 0,
+                        paymentId: order.transaction_id || order.payment_id,
                     }));
                     setTransactions(mappedOrders);
                 }
             } catch (error) {
-                console.error("Failed to load transactions", error);
+                console.error("Failed to load transactions from Supabase", error);
             } finally {
                 setLoading(false);
             }
