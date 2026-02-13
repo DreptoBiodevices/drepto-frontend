@@ -7,7 +7,7 @@ import ShippingAddressForm from '../components/ShippingAddressForm';
 import { Address, Order } from '../types';
 import { Truck, MapPin, CreditCard, X, Check } from 'lucide-react';
 import useRazorpay from '../hooks/useRazorpay';
-import { PaymentService } from '../lib/api_controller';
+import { supabase } from '../lib/supabase';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -140,18 +140,12 @@ const CartPage: React.FC = () => {
 
     const handleAddressSubmit = async (address: Address) => {
         setShippingAddress(address);
-        try {
-            if (user) {
-                await ShippingAddressService.create({ ...address, userId: user.id });
-            }
-        } catch (e) {
-            console.error("Failed to save address", e);
-        }
+        // Address will be saved via the create-order endpoint
         setCheckoutStep('payment');
     };
 
-    const createOrder = async (rzpPaymentId: string, rzpOrderId: string, rzpSignature: string) => {
-        // Create Order Object (Client side for display/legacy)
+    const createOrder = async (rzpPaymentId: string) => {
+        // Create Order Object for localStorage (legacy/backup)
         const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
 
         // Generate DBxxxx ID
@@ -163,16 +157,18 @@ const CartPage: React.FC = () => {
         }
         const orderId = `DB${nextIdNumber.toString().padStart(4, '0')}`;
 
+        const orderItems = cart.map(item => ({
+            name: item.name || item.title,
+            price: typeof item.price === 'number' ? item.price : parseFloat(item.price.replace(/[^0-9.]/g, '')),
+            quantity: 1,
+            image: Array.isArray(item.images) ? item.images[0] : item.image,
+            shippingSource: item.shippingSource
+        }));
+
         const newOrder: Order = {
             id: orderId,
             date: new Date().toISOString(),
-            items: cart.map(item => ({
-                name: item.name || item.title,
-                price: typeof item.price === 'number' ? item.price : parseFloat(item.price.replace(/[^0-9.]/g, '')),
-                quantity: 1, // Assuming quantity 1 for now
-                image: Array.isArray(item.images) ? item.images[0] : item.image,
-                shippingSource: item.shippingSource
-            })),
+            items: orderItems,
             paymentId: rzpPaymentId,
             total: calculateTotal(),
             status: 'Placed',
@@ -186,26 +182,43 @@ const CartPage: React.FC = () => {
         // Save to LocalStorage (Legacy/Backup)
         localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
 
-        // --- API INTEGRATION ---
+        // --- SAVE TO SUPABASE ---
         try {
-            // Confirm/Record Transaction
-            await PaymentService.recordTransaction({
-                orderId: rzpOrderId, // Razorpay Order ID
-                paymentId: rzpPaymentId,
-                signature: rzpSignature,
-                amount: newOrder.total,
-                userId: user?.id || 'guest',
-                shippingAddress: newOrder.shippingAddress,
-                items: newOrder.items,
-                shippingMethod: newOrder.shippingMethod,
-                shippingCost: newOrder.shippingCost,
-            });
-            console.log("Transaction recorded successfully");
+            const { error } = await supabase
+                .from('orders')
+                .insert({
+                    id: orderId,
+                    user_id: user?.id || 'guest',
+                    user_email: user?.email || '',
+                    total_amount: newOrder.total,
+                    status: 'Placed',
+                    shipping_address: {
+                        houseNo: shippingAddress!.houseNo,
+                        street: shippingAddress!.street,
+                        city: shippingAddress!.city,
+                        state: shippingAddress!.state,
+                        pincode: shippingAddress!.pincode,
+                        country: 'India',
+                        contactNumber: String(user?.mobileNumber || ''),
+                        landmark: shippingAddress!.landmark || '',
+                    },
+                    items: orderItems,
+                    payment_id: rzpPaymentId,
+                    shipping_method: shippingMethod,
+                    shipping_cost: shippingCost,
+                    created_at: new Date().toISOString(),
+                });
+
+            if (error) {
+                console.error("Supabase insert error:", error);
+                alert("Order placed but failed to sync with database. Your order is saved locally.");
+            } else {
+                console.log("Order saved to Supabase successfully!");
+            }
         } catch (err) {
-            console.error("Failed to record transaction:", err);
-            alert("Payment recorded locally but failed to sync with server. Please contact support.");
+            console.error("Failed to save order to Supabase:", err);
         }
-        // ----------------------------- 
+        // -------------------------
 
         setCart([]);
         localStorage.removeItem('patient_cart');
@@ -229,36 +242,24 @@ const CartPage: React.FC = () => {
         setProcessing(true);
 
         try {
-            // 1. Create Order on Backend
-            const orderResponse = await PaymentService.createOrder({
-                amount: calculateTotal(), // Send amount (backend should validation)
-                currency: "INR",
-                receipt: `receipt_${Date.now()}`,
-                userId: user.id
-            });
-
-            const { orderId, amount, currency, key } = orderResponse.data; // Expecting backend to return Razorpay Order ID
+            const totalAmount = calculateTotal();
+            const key = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
             const options = {
-                key: key || import.meta.env.VITE_RAZORPAY_KEY_ID,
-                amount: amount,
-                currency: currency,
+                key: key,
+                amount: Math.round(totalAmount * 100), // Razorpay expects amount in paise
+                currency: "INR",
                 name: "Drepto Biodevices",
                 description: "Medical Products Purchase",
                 image: "https://drepto.com/logo.png",
-                order_id: orderId, // Use backend generated order ID
                 handler: function (response: any) {
                     console.log("Payment Successful:", response);
-                    createOrder(
-                        response.razorpay_payment_id,
-                        response.razorpay_order_id,
-                        response.razorpay_signature
-                    );
+                    createOrder(response.razorpay_payment_id);
                 },
                 prefill: {
                     name: `${user.firstName} ${user.lastName}` || "User",
                     email: user.email || "user@example.com",
-                    contact: user.mobileNumber || ""
+                    contact: String(user.mobileNumber || "")
                 },
                 theme: {
                     color: "#0D9488"
@@ -274,7 +275,7 @@ const CartPage: React.FC = () => {
             rzp.open();
 
         } catch (error: any) {
-            console.error("Error creating order:", error);
+            console.error("Error opening payment:", error);
             alert("Failed to initiate payment. Please try again.");
             setProcessing(false);
         }
