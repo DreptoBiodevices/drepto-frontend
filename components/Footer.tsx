@@ -60,6 +60,8 @@ const Footer: React.FC = () => {
                 <Link to="/contact-section" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Contact</Link>
                 <Link to="/our-products" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Pharmacy</Link>
                 <Link to="/lab-tests" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Lab Tests</Link>
+                <Link to="/feedback" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Feedback</Link>
+                {/* <Link to="/social" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Blog</Link> */}
               </nav>
             </div>
             <div className="flex flex-col gap-4">

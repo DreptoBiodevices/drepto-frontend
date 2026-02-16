@@ -1,5 +1,5 @@
 
-import { Medicine, FAQItem, Testimonial, LabTestDetail, LabPackageDetail, LabReview, City } from './types';
+import { Medicine, FAQItem, Testimonial, LabTestDetail, LabPackageDetail, LabReview, City, SocialMediaPost } from './types';
 
 export const MEDICINES: Medicine[] = [];
 
@@ -40,4 +40,45 @@ export const LAB_REVIEWS: LabReview[] = [
     { id: '1', userName: 'Suresh Raina', date: '2 days ago', rating: 5, comment: 'Excellent service. The phlebotomist arrived on time and was very professional.' },
     { id: '2', userName: 'Anjali Menon', date: '1 week ago', rating: 4, comment: 'Reports were delivered on time via email. Good experience.' },
     { id: '3', userName: 'Vikram Singh', date: '3 weeks ago', rating: 5, comment: 'Very affordable packages compared to local labs. Highly recommend.' },
+];
+
+// --- Social Media Embeds ---
+// Add your social media post URLs here. The blog page will embed them automatically.
+export const SOCIAL_MEDIA_EMBEDS: SocialMediaPost[] = [
+    {
+        platform: 'instagram',
+        embedUrl: 'https://www.instagram.com/p/EXAMPLE1/',
+        caption: 'Drepto Biodevices — Innovating healthcare diagnostics',
+        date: '2025-12-15',
+    },
+    {
+        platform: 'linkedin',
+        embedUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:share:EXAMPLE1',
+        caption: 'Our journey in biotech innovation',
+        date: '2025-12-10',
+    },
+    {
+        platform: 'twitter',
+        embedUrl: 'https://twitter.com/DreptoDevices/status/EXAMPLE1',
+        caption: 'Launching our new water quality testing device!',
+        date: '2025-12-05',
+    },
+    {
+        platform: 'instagram',
+        embedUrl: 'https://www.instagram.com/p/EXAMPLE2/',
+        caption: 'Behind the scenes at SINE IIT Bombay',
+        date: '2025-11-20',
+    },
+    {
+        platform: 'linkedin',
+        embedUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:share:EXAMPLE2',
+        caption: 'Drepto team at the healthcare innovation summit',
+        date: '2025-11-15',
+    },
+    {
+        platform: 'twitter',
+        embedUrl: 'https://twitter.com/DreptoDevices/status/EXAMPLE2',
+        caption: 'Thank you for 1000+ customers!',
+        date: '2025-11-01',
+    },
 ];

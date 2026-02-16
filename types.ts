@@ -164,3 +164,22 @@ export interface Order {
     gst?: number;
     paymentId?: string;
 }
+
+// --- Feedback & Social Media Types ---
+
+export interface FeedbackSubmission {
+    id?: string;
+    name: string;
+    email?: string;
+    rating: number;
+    message: string;
+    is_approved?: boolean;
+    created_at?: string;
+}
+
+export interface SocialMediaPost {
+    platform: 'instagram' | 'linkedin' | 'twitter';
+    embedUrl: string;
+    caption?: string;
+    date?: string;
+}

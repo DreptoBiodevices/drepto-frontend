@@ -19,6 +19,9 @@ import OurProductsPage from './pages/OurProductsPage';
 import CartPage from './pages/CartPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import InvoicePage from './pages/InvoicePage';
+import FeedbackPage from './pages/FeedbackPage';
+import TestimonialsPage from './pages/TestimonialsPage';
+import SocialMediaBlogPage from './pages/SocialMediaBlogPage';
 
 
 const ScrollToTop = () => {
@@ -85,6 +88,11 @@ const Main: React.FC = () => {
         <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/auth" replace />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+
+        {/* Feature Routes */}
+        <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/testimonials" element={<TestimonialsPage />} />
+        {/* <Route path="/social" element={<SocialMediaBlogPage />} /> */}
 
         {/* Legal Routes */}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

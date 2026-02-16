@@ -10,6 +10,7 @@ import Footer from '../components/Footer';
 import FeaturedMedicines from '../components/FeaturedMedicines';
 import PopularLabTests from '../components/PopularLabTests';
 import GallerySection from '../components/GallerySection';
+import TestimonialsPreview from '../components/TestimonialsPreview';
 
 const LandingPage: React.FC = () => {
   const homeRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,9 @@ const LandingPage: React.FC = () => {
         <div className="relative">
           <GallerySection onOpenMenu={() => setIsMobileMenuOpen(true)} />
         </div>
+
+        {/* Testimonials Preview */}
+        <TestimonialsPreview />
 
         <div ref={contactRef}><ContactSection /></div>
       </main>
