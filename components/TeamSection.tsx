@@ -12,7 +12,7 @@ const teamMembers: TeamMember[] = [
     {
         name: 'Rahul Kumar Gupta',
         role: 'Founder & Director',
-        description: 'IIT Bombay',
+        description: 'M.Tech-PhD, IIT Bombay',
         image: '/images/rahulsir.jpeg',
         linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/'
     },
@@ -26,20 +26,13 @@ const teamMembers: TeamMember[] = [
     {
         name: 'Dr. Rupesh Ghyar',
         role: 'Technical Advisor',
-        description: 'Alumni, IIT Bombay',
+        description: 'Alumnus, IIT Bombay',
         image: '/images/dr_rupesh.jpg',
         linkedin: 'https://www.linkedin.com/in/rupesh-ghyar-7510442b7/'
     },
     {
-        name: 'Rupesh Kumar Gupta',
-        role: 'Business Head',
-        description: 'Director at DyCine Pharmaceuticals Ltd.',
-        image: '/images/rupesh_gupta.webp',
-        linkedin: 'https://www.linkedin.com/company/dycine-pharmaceuticals-ltd/'
-    },
-    {
         name: 'Dr. Chandan Yadav',
-        role: 'Chief Medical Officer',
+        role: 'Medical Advisor',
         description: 'Senior Radiologist, Medanta Hospital',
         image: '/images/dr_chandan.jpg',
         linkedin: 'https://www.dreptobiodevices.com/'
@@ -68,15 +61,9 @@ const TeamSection: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
-                    {/* Render first 4 members */}
-                    {teamMembers.slice(0, 4).map((member, index) => (
+                    {teamMembers.map((member, index) => (
                         <TeamMemberCard key={index} member={member} />
                     ))}
-                </div>
-
-                {/* Render last member centered */}
-                <div className="flex justify-center mt-8">
-                    <TeamMemberCard member={teamMembers[4]} />
                 </div>
             </div>
         </section>
