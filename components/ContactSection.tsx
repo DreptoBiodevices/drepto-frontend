@@ -53,7 +53,7 @@ const ContactSection: React.FC = () => {
                     {/* Left Column: Contact Form */}
                     <div className="bg-white p-8 rounded-lg shadow-lg">
                         <h3 className="text-2xl font-bold text-primary text-center mb-8">
-                            Send Us a Message
+                            Send a Collaboration Request
                         </h3>
 
                         {submitted ? (
