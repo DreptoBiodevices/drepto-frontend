@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
@@ -34,12 +35,14 @@ const ScrollToTop = () => {
 
 const App: React.FC = () => {
   return (
+    <HelmetProvider>
     <AuthProvider>
       <BrowserRouter>
         <ScrollToTop />
         <Main />
       </BrowserRouter>
     </AuthProvider>
+    </HelmetProvider>
   );
 };
 
@@ -82,10 +85,11 @@ const Main: React.FC = () => {
         <Route path="/about-us" element={<AboutUsPage />} />
         <Route path="/our-products" element={<OurProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
-        <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/auth" replace />} />
-        <Route path="/auth" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
-        <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/auth" replace />} />
+        <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/login" replace />} />
+        <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/login" replace />} />
+        <Route path="/login" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
+        <Route path="/signup" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
+        <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/login" replace />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
 

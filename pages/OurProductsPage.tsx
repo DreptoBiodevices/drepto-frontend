@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/Breadcrumbs';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductDetailModal, { Product } from '../components/ProductDetailModal';
@@ -57,7 +59,7 @@ const OurProductsPage: React.FC = () => {
             setNotification('Please login to get samples');
             setTimeout(() => {
                 setNotification('');
-                navigate('/auth', { state: { from: '/our-products' } });
+                navigate('/login', { state: { from: '/our-products' } });
             }, 1500);
             return;
         }
@@ -82,7 +84,7 @@ const OurProductsPage: React.FC = () => {
             setNotification('Please login to subscribe');
             setTimeout(() => {
                 setNotification('');
-                navigate('/auth', { state: { from: '/our-products' } });
+                navigate('/login', { state: { from: '/our-products' } });
             }, 1500);
             return;
         }
@@ -210,9 +212,16 @@ const OurProductsPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
+            <SEOHead
+                title="Our Products - Healthcare Essentials"
+                description="Discover our curated selection of top-quality wellness and healthcare products. Get samples at handling charges or subscribe for premium access."
+                keywords="healthcare products, wellness products, medical supplies, health essentials, product samples"
+                url="/our-products"
+            />
             <Navbar />
 
             <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
+                <Breadcrumbs items={[{ label: 'Our Products' }]} className="mb-6" />
                 <div className="text-center mb-12 animate-fade-in-up">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">

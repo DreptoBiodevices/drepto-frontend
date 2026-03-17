@@ -1,6 +1,7 @@
 import React, { useState, useEffect, RefObject } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import LocationSelector from './LocationSelector';
 import {
   Home,
   Pill,
@@ -16,7 +17,8 @@ import {
   ShoppingBag,
   User,
   LogOut,
-  Package
+  Package,
+  Search
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -29,6 +31,8 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState('Select Location');
+  const [searchQuery, setSearchQuery] = useState('');
   const { user, logout } = useAuth();
 
   const isMobileMenuOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
@@ -79,65 +83,67 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
 
   return (
     <>
+      {/* Top Level Navbar */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || !isHomePage
-          ? 'bg-white/80 backdrop-blur-md shadow-sm py-2'
-          : 'bg-transparent py-4'
-          }`}
+        className={`bg-white fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b`}
       >
-        <div className="container mx-auto px-6 flex justify-between items-center text-gray-800">
-
-          {/* LOGO CLICKABLE */}
-          <div
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={() => navigate('/')}
-          >
-            <img
-              src="/images/logo.png"
-              alt="Drepto Biodevices Logo"
-              className="h-10 md:h-12 w-auto object-contain"
-            />
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => handleNavigation(link)}
-                className={`text-sm font-medium transition-all hover:text-primary relative group ${location.pathname === link.path && link.path !== '/'
-                  ? 'text-primary font-bold'
-                  : 'text-gray-600'
-                  }`}
-              >
-                {link.name}
-                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full ${location.pathname === link.path && link.path !== '/' ? 'w-full' : ''}`}></span>
-              </button>
-            ))}
-          </div>
-
-          {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center space-x-4">
-            {/* Cart Icon - Simple Link for now */}
+        <div className="container mx-auto px-6 py-3 flex justify-between items-center">
+          {/* Logo and Location */}
+          <div className="flex items-center gap-4">
             <div
-              className="p-2 hover:bg-gray-100 rounded-full cursor-pointer transition-colors relative"
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => navigate('/')}
+            >
+              <img
+                src="/images/logo.png"
+                alt="Drepto Biodevices Logo"
+                className="h-12 w-auto object-contain"
+              />
+            </div>
+            <div className="hidden lg:block">
+              <LocationSelector
+                selectedLocation={selectedLocation}
+                onLocationSelect={setSelectedLocation}
+              />
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="hidden lg:flex flex-1 max-w-md mx-8">
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search medicines, lab tests..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 focus:bg-white transition-colors"
+              />
+            </div>
+          </div>
+
+          {/* Right Actions */}
+          <div className="flex items-center space-x-4">
+            {/* Cart */}
+            <div
+              className="p-2 hover:bg-gray-100 rounded cursor-pointer transition-colors relative"
               onClick={() => navigate('/cart')}
             >
               <ShoppingBag className="w-5 h-5 text-gray-700" />
-              {/* Count could be added here */}
             </div>
 
+            {/* User Actions */}
             {user ? (
-              <div className="flex items-center gap-4">
+              <div className="hidden lg:flex items-center gap-4">
                 <div
-                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded-full transition-all"
+                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded transition-all"
                   onClick={() => navigate('/orders')}
                 >
                   <Package className="w-5 h-5 text-gray-700" />
                   <span className="text-sm font-medium">My Orders</span>
                 </div>
                 <div
-                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded-full transition-all"
+                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded transition-all"
                   onClick={() => navigate('/dashboard')}
                 >
                   <User className="w-5 h-5 text-gray-700" />
@@ -148,23 +154,56 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                 </button>
               </div>
             ) : (
-              <div
-                className="flex items-center gap-1 cursor-pointer font-medium hover:text-primary transition-colors"
-                onClick={() => navigate('/auth')}
-              >
-                <LogIn className="w-4 h-4" />
-                <span>Login</span>
+              <div className="hidden lg:flex items-center gap-4">
+                <div
+                  className="flex items-center gap-1 cursor-pointer font-medium bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors"
+                  onClick={() => navigate('/login')}
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Login</span>
+                </div>
+                <div
+                  className="flex items-center gap-1 cursor-pointer font-medium hover:text-primary transition-colors px-3 py-1.5 rounded hover:bg-gray-100"
+                  onClick={() => navigate('/signup')}
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>Sign Up</span>
+                </div>
               </div>
             )}
-          </div>
 
-          {/* Mobile Hamburger */}
-          <button
-            className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
-            onClick={() => setIsMobileMenuOpen(true)}
-          >
-            <Menu className="w-7 h-7" />
-          </button>
+            {/* Mobile Hamburger */}
+            <button
+              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded transition-colors focus:outline-none"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu className="w-7 h-7" />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Second Level - Navigation Links */}
+      <nav className="fixed top-[72px] left-0 right-0 z-40 bg-white border-b border-gray-200 hidden lg:block">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center justify-center space-x-8 py-3">
+            {navLinks.map((link) => (
+              <button
+                key={link.name}
+                onClick={() => handleNavigation(link)}
+                className={`text-sm font-medium transition-all hover:text-primary relative group ${
+                  location.pathname === link.path && link.path !== '/'
+                    ? 'text-primary font-bold'
+                    : 'text-gray-600'
+                }`}
+              >
+                {link.name}
+                <span className={`absolute -bottom-3 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full ${
+                  location.pathname === link.path && link.path !== '/' ? 'w-full' : ''
+                }`}></span>
+              </button>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -269,7 +308,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                 <>
                   <button
                     onClick={() => {
-                      navigate('/auth');
+                      navigate('/login');
                       setIsMobileMenuOpen(false);
                     }}
                     className="w-full flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl font-bold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
@@ -279,7 +318,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                   </button>
                   <button
                     onClick={() => {
-                      navigate('/auth?mode=signup');
+                      navigate('/signup');
                       setIsMobileMenuOpen(false);
                     }}
                     className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-600 to-primary text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:opacity-95 transition-all transform active:scale-[0.98]"
@@ -302,13 +341,16 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                 </button>
               )}
               <p className="text-xs text-center text-gray-400 mt-4">
-                © 2025 Drepto Biodevices
+                © 2026 Drepto Biodevices
               </p>
             </div>
 
           </div>
         </div>
       )}
+
+      {/* Spacer for fixed navbar */}
+      <div className="h-[72px] lg:h-[120px]"></div>
     </>
   );
 };

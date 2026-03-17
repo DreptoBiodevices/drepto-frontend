@@ -55,7 +55,7 @@ export default function DreptoProducts() {
             setNotification('Please login to get samples');
             setTimeout(() => {
                 setNotification('');
-                navigate('/auth', { state: { from: '/our-products' } });
+                navigate('/login', { state: { from: '/our-products' } });
             }, 1500);
             return;
         }
@@ -80,7 +80,7 @@ export default function DreptoProducts() {
             setNotification('Please login to subscribe');
             setTimeout(() => {
                 setNotification('');
-                navigate('/auth', { state: { from: '/our-products' } });
+                navigate('/login', { state: { from: '/our-products' } });
             }, 1500);
             return;
         }

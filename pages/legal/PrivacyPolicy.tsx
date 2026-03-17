@@ -3,7 +3,7 @@ import LegalPageLayout from './LegalPageLayout';
 
 const PrivacyPolicy: React.FC = () => {
     return (
-        <LegalPageLayout title="Privacy Policy" lastUpdated="December 23, 2025">
+        <LegalPageLayout title="Privacy Policy" lastUpdated="December 23, 2025" breadcrumbLabel="Privacy Policy">
             <section className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Overview</h3>
                 <p>

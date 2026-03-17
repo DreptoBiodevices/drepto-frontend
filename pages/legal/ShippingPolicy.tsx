@@ -3,7 +3,7 @@ import LegalPageLayout from './LegalPageLayout';
 
 const ShippingPolicy: React.FC = () => {
     return (
-        <LegalPageLayout title="Shipping Policy">
+        <LegalPageLayout title="Shipping Policy" breadcrumbLabel="Shipping Policy">
             <section className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Shipping Destinations</h3>
                 <p>

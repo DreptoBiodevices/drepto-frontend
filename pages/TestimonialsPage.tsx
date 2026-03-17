@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, MessageSquarePlus, ArrowLeft, Filter } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/Breadcrumbs';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { supabase } from '../lib/supabase';
@@ -55,6 +57,12 @@ const TestimonialsPage: React.FC = () => {
 
     return (
         <div className="bg-gray-50 min-h-screen">
+            <SEOHead
+                title="Customer Testimonials & Reviews"
+                description="Read real customer testimonials and reviews about Drepto's telemedicine services. See what our patients say about their healthcare experience."
+                keywords="customer testimonials, patient reviews, healthcare reviews, telemedicine feedback, drepto reviews"
+                url="/testimonials"
+            />
             <Navbar />
 
             {/* Hero */}
@@ -140,6 +148,7 @@ const TestimonialsPage: React.FC = () => {
 
             {/* Testimonials Grid */}
             <section className="container mx-auto px-6 py-12">
+                <Breadcrumbs items={[{ label: 'Testimonials' }]} className="mb-8" />
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
                         <div className="w-8 h-8 border-3 border-primary/20 border-t-primary rounded-full animate-spin" />

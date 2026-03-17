@@ -1,5 +1,14 @@
 {
+  "name": "Drepto - Modern Telemedicine",
+  "short_name": "Drepto",
+  "description": "Book doctor consultations, order medicines, and get lab tests done at home with Drepto.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0D9488",
   "background_color": "#ffffff",
+  "categories": ["health", "medical"],
+  "lang": "en-IN",
   "icons": [
     {
       "src": "../icons/icon-48.webp",

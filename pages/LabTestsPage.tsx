@@ -1,6 +1,8 @@
 
 
 import React, { useState, useEffect } from 'react';
+import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/Breadcrumbs';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BackButton from '../components/BackButton';
@@ -231,6 +233,12 @@ const LabTestsPage: React.FC = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-[#F1F5F9]">
+            <SEOHead
+                title="Lab Tests at Home"
+                description="Book lab tests online with free home sample collection. Get accurate results from trusted labs with fast reports and affordable prices."
+                keywords="lab tests at home, blood test, health checkup, pathology tests, diagnostic tests, home collection"
+                url="/lab-tests"
+            />
             {showCitySelector && <CitySelector current={selectedCity} onSelect={setSelectedCity} onClose={() => setShowCitySelector(false)} />}
 
 
@@ -263,6 +271,7 @@ const LabTestsPage: React.FC = () => {
 
 
             <main className="flex-grow container mx-auto px-4 lg:px-8 py-6">
+                <Breadcrumbs items={[{ label: 'Lab Tests' }]} className="mb-4" />
                 <div className="mb-4">
                     <BackButton />
                 </div>

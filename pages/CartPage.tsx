@@ -106,7 +106,7 @@ const CartPage: React.FC = () => {
 
     const handleProceedToCheckout = () => {
         if (!user) {
-            navigate('/auth', { state: { from: '/cart' } });
+            navigate('/login', { state: { from: '/cart' } });
             return;
         }
         setCheckoutStep('address');

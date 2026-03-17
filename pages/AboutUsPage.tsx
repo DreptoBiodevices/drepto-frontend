@@ -1,4 +1,6 @@
 import React from 'react';
+import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/Breadcrumbs';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AboutSection from '../components/AboutSection';
@@ -19,6 +21,12 @@ const AboutUsPage: React.FC = () => {
 
     return (
         <div className="flex flex-col min-h-screen">
+            <SEOHead
+                title="About Us - Healthcare Innovation"
+                description="Learn about Drepto Biodevices - India's leading telemedicine platform. Meet our expert team of doctors and healthcare professionals."
+                keywords="about drepto, healthcare team, telemedicine company, medical professionals, healthcare innovation"
+                url="/about-us"
+            />
             {/* Navbar */}
             <Navbar
                 sectionRefs={dummyRefs as any}
@@ -29,6 +37,9 @@ const AboutUsPage: React.FC = () => {
             <main className="flex-grow">
                 {/* Add padding top for desktop only since Navbar is fixed. MobileHeader is sticky. */}
                 <div className="md:pt-20">
+                    <div className="container mx-auto px-6 py-6">
+                        <Breadcrumbs items={[{ label: 'About Us' }]} />
+                    </div>
                     <GallerySection />
                     <AboutSection />
                     <TeamSection />

@@ -58,7 +58,7 @@ const AdminLogin = () => {
           <button type="submit" className="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-teal-700 transition-colors">
             Login
           </button>
-          <button type="button" onClick={() => navigate('/auth')} className="w-full text-primary mt-2 hover:underline">
+          <button type="button" onClick={() => navigate('/login')} className="w-full text-primary mt-2 hover:underline">
             Back to user login
           </button>
         </form>

@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
+import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/Breadcrumbs';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BackButton from '../components/BackButton';
@@ -32,12 +34,19 @@ const MedicinesPage: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <SEOHead
+        title="Buy Medicines Online"
+        description="Order medicines online with home delivery. Browse our wide range of prescription and over-the-counter medicines at affordable prices."
+        keywords="buy medicines online, online pharmacy, prescription medicines, OTC medicines, medicine delivery"
+        url="/medicines"
+      />
 
       <div className="hidden md:block">
         <Navbar sectionRefs={dummyRefs as any} />
       </div>
       <main className="flex-grow">
         <div className="container mx-auto px-6 py-6">
+          <Breadcrumbs items={[{ label: 'Medicines' }]} />
           <BackButton />
         </div>
         {selectedMedicine ? (

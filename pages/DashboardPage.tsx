@@ -14,7 +14,7 @@ const DashboardPage: React.FC = () => {
 
   if (!user) {
     // If no user in context, send to auth login
-    return <Navigate to="/auth" />;
+    return <Navigate to="/login" />;
   }
 
   const renderDashboard = () => {

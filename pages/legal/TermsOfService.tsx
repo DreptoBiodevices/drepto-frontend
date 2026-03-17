@@ -3,7 +3,7 @@ import LegalPageLayout from './LegalPageLayout';
 
 const TermsOfService: React.FC = () => {
     return (
-        <LegalPageLayout title="Terms and Conditions" lastUpdated="December 23, 2025">
+        <LegalPageLayout title="Terms and Conditions" lastUpdated="December 23, 2025" breadcrumbLabel="Terms of Service">
             <section className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Introduction</h3>
                 <p>

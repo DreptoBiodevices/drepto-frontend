@@ -1,5 +1,6 @@
 
 import React, { useRef } from 'react';
+import SEOHead from '../components/SEOHead';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import ProductSection from '../components/ProductSection';
@@ -30,7 +31,13 @@ const LandingPage: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative bg-white">
+      <SEOHead
+        title="Modern Telemedicine Platform"
+        description="Book doctor consultations online, order medicines, book lab tests at home, and get expert healthcare from the comfort of your home with Drepto."
+        keywords="telemedicine, online doctor consultation, order medicines online, lab tests at home, healthcare, online pharmacy, health checkup"
+        url="/"
+      />
       <Navbar
         sectionRefs={sectionRefs}
         isMobileMenuOpen={isMobileMenuOpen}

@@ -62,7 +62,7 @@ const PopularLabTests: React.FC = () => {
                                     )}
                                 </div>
                                 <button
-                                    onClick={() => navigate('/auth')}
+                                    onClick={() => navigate('/login')}
                                     className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
                                 >
                                     Book Now

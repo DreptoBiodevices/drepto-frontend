@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Send, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { supabase } from '../lib/supabase';
 
 const FeedbackPage: React.FC = () => {
@@ -80,7 +82,14 @@ const FeedbackPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-emerald-50 flex items-center justify-center p-4 md:p-6">
+            <SEOHead
+                title="Share Your Feedback"
+                description="Share your experience with Drepto's telemedicine services. Your feedback helps us improve our healthcare platform."
+                keywords="feedback, customer feedback, healthcare feedback, telemedicine review, patient experience"
+                url="/feedback"
+            />
             <div className="max-w-lg w-full">
+                <Breadcrumbs items={[{ label: 'Feedback' }]} className="mb-6" />
                 {/* Back Link */}
                 <Link
                     to="/"

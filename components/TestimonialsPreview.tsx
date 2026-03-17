@@ -64,7 +64,7 @@ const TestimonialsPreview: React.FC = () => {
 
     if (loading) {
         return (
-            <section className="py-24 bg-gray-50">
+            <section className="py-24 bg-white">
                 <div className="container mx-auto px-6 text-center">
                     <div className="w-8 h-8 border-3 border-primary/20 border-t-primary rounded-full animate-spin mx-auto" />
                 </div>

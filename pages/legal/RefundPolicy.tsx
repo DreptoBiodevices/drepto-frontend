@@ -3,7 +3,7 @@ import LegalPageLayout from './LegalPageLayout';
 
 const RefundPolicy: React.FC = () => {
     return (
-        <LegalPageLayout title="Refund and Return Policy">
+        <LegalPageLayout title="Refund and Return Policy" breadcrumbLabel="Refund Policy">
             <section className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Overview</h3>
                 <p>
