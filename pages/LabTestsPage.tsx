@@ -246,35 +246,25 @@ const LabTestsPage: React.FC = () => {
             <div className="hidden md:block">
                 <Navbar sectionRefs={dummyRefs as any} />
             </div>
-            <Navbar sectionRefs={dummyRefs as any} />
-
-            {/* Sub-Header / Module Nav */}
-            <div className="bg-white border-b border-gray-200 sticky top-16 z-30">
-                <div className="container mx-auto px-4 lg:px-8">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between py-3 gap-4">
-                        {/* Tabs */}
-                        {/* <div className="flex items-center gap-6 overflow-x-auto scrollbar-hide">
-                             {['Medicine', 'Lab Tests', 'Health Blogs', 'PLUS', 'Value Store'].map((tab, i) => (
-                                 <button key={tab} className={`whitespace-nowrap text-sm font-bold pb-1 border-b-2 transition-colors ${i === 1 ? 'text-teal-600 border-teal-600' : 'text-gray-500 border-transparent hover:text-gray-800'}`}>
-                                     {tab}
-                                 </button>
-                             ))}
-                         </div> */}
-                        {/* City Selector Pill */}
-                        <button onClick={() => setShowCitySelector(true)} className="flex items-center gap-2 bg-[#E7EEF8] px-4 py-2 rounded-full text-sm font-bold text-blue-700 hover:bg-blue-100 transition-colors self-start md:self-auto">
-                            <span>Delivering to: {cityName}</span>
-                            <HeaderIcon d="m6 9 6 6 6-6" />
-                        </button>
+            <main className="flex-grow pt-[120px] lg:pt-[120px]">
+                {/* Sub-Header / Module Nav */}
+                <div className="bg-white border-b border-gray-200 sticky top-[120px] z-30">
+                    <div className="container mx-auto px-4 lg:px-8">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between py-3 gap-4">
+                            {/* City Selector Pill */}
+                            <button onClick={() => setShowCitySelector(true)} className="flex items-center gap-2 bg-[#E7EEF8] px-4 py-2 rounded-full text-sm font-bold text-blue-700 hover:bg-blue-100 transition-colors self-start md:self-auto">
+                                <span>Delivering to: {cityName}</span>
+                                <HeaderIcon d="m6 9 6 6 6-6" />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
-            <main className="flex-grow container mx-auto px-4 lg:px-8 py-6">
-                <Breadcrumbs items={[{ label: 'Lab Tests' }]} className="mb-4" />
-                <div className="mb-4">
-                    <BackButton />
-                </div>
+                
+                <div className="container mx-auto px-4 lg:px-8 py-6">
+                    <Breadcrumbs items={[{ label: 'Lab Tests' }]} className="mb-4" />
+                    <div className="mb-4">
+                        <BackButton />
+                    </div>
                 <div className="flex flex-col lg:flex-row gap-8">
 
                     {/* Sidebar Navigation - Hidden on Detail View to give more space */}
@@ -381,9 +371,9 @@ const LabTestsPage: React.FC = () => {
                             )
                         }
 
-                    </div >
-                </div >
-            </main >
+                    </div>
+                </div>
+            </main>
             <Footer />
         </div >
     );

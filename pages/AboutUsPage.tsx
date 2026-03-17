@@ -34,9 +34,9 @@ const AboutUsPage: React.FC = () => {
                 setIsMobileMenuOpen={setIsMobileMenuOpen}
             />
 
-            <main className="flex-grow">
+            <main className="flex-grow pt-[120px] lg:pt-[120px]">
                 {/* Add padding top for desktop only since Navbar is fixed. MobileHeader is sticky. */}
-                <div className="md:pt-20">
+                <div className="">
                     <div className="container mx-auto px-6 py-6">
                         <Breadcrumbs items={[{ label: 'About Us' }]} />
                     </div>

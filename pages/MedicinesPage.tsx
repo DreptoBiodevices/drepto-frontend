@@ -44,7 +44,7 @@ const MedicinesPage: React.FC = () => {
       <div className="hidden md:block">
         <Navbar sectionRefs={dummyRefs as any} />
       </div>
-      <main className="flex-grow">
+      <main className="flex-grow pt-[120px] lg:pt-[120px]">
         <div className="container mx-auto px-6 py-6">
           <Breadcrumbs items={[{ label: 'Medicines' }]} />
           <BackButton />

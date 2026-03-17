@@ -20,6 +20,14 @@ const CartPage: React.FC = () => {
     const [processing, setProcessing] = useState(false); // Can be removed later if unused
     const [success, setSuccess] = useState(false);
 
+    // Dummy refs for Navbar
+    const dummyRefs = {
+        home: { current: null },
+        product: { current: null },
+        about: { current: null },
+        contact: { current: null },
+    };
+
     const [shippingMethod, setShippingMethod] = useState<'India Post' | 'Speed Post'>('India Post');
     const [distance, setDistance] = useState<number>(0);
     const [shippingCost, setShippingCost] = useState<number>(0);
@@ -283,9 +291,9 @@ const CartPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
+            <Navbar sectionRefs={dummyRefs as any} />
 
-            <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-4xl mx-auto w-full">
+            <main className="flex-grow pt-[120px] lg:pt-[120px] pb-16 px-4 md:px-8 max-w-4xl mx-auto w-full">
                 <h1 className="text-3xl font-bold text-gray-900 mb-8">
                     {checkoutStep === 'cart' ? 'Your Cart' : checkoutStep === 'address' ? 'Shipping Address' : 'Payment'}
                 </h1>

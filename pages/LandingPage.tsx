@@ -1,5 +1,6 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import SEOHead from '../components/SEOHead';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
@@ -18,6 +19,7 @@ const LandingPage: React.FC = () => {
   const productRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   const sectionRefs = {
     home: homeRef,
@@ -25,6 +27,19 @@ const LandingPage: React.FC = () => {
     about: aboutRef,
     contact: contactRef,
   };
+
+  // Handle scrolling when navigated from another page
+  useEffect(() => {
+    const state = location.state as { scrollTo?: string };
+    if (state?.scrollTo) {
+      const targetRef = sectionRefs[state.scrollTo as keyof typeof sectionRefs];
+      if (targetRef?.current) {
+        setTimeout(() => {
+          targetRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.state]);
 
   // ...
 

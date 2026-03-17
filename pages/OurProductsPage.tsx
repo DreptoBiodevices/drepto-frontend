@@ -27,6 +27,14 @@ const OurProductsPage: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
+    // Dummy refs for Navbar
+    const dummyRefs = {
+        home: { current: null },
+        product: { current: null },
+        about: { current: null },
+        contact: { current: null },
+    };
+
     useEffect(() => {
         try {
             const stored = localStorage.getItem('patient_cart');
@@ -218,9 +226,9 @@ const OurProductsPage: React.FC = () => {
                 keywords="healthcare products, wellness products, medical supplies, health essentials, product samples"
                 url="/our-products"
             />
-            <Navbar />
+            <Navbar sectionRefs={dummyRefs as any} />
 
-            <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
+            <main className="flex-grow pt-[120px] lg:pt-[120px] pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
                 <Breadcrumbs items={[{ label: 'Our Products' }]} className="mb-6" />
                 <div className="text-center mb-12 animate-fade-in-up">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>

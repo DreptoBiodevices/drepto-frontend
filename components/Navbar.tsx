@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
   const isHomePage = location.pathname === '/';
 
   const navLinks = [
-    { name: 'Home', ref: sectionRefs.home, path: '/', icon: Home },
+    { name: 'Home',  path: '/', icon: Home },
     { name: 'Medicines', path: '/medicines', icon: Pill },
     { name: 'Lab Tests', path: '/lab-tests', icon: TestTube2 },
     { name: 'Our Products', path: '/our-products', icon: ShoppingBag },
@@ -62,7 +62,14 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
     }
 
     if (!isHomePage) {
-      navigate('/');
+      // Navigate to home with section identifier
+      if (link.name === 'Features') {
+        navigate('/', { state: { scrollTo: 'product' } });
+      } else if (link.name === 'Contact') {
+        navigate('/', { state: { scrollTo: 'contact' } });
+      } else {
+        navigate('/');
+      }
       return;
     }
 
