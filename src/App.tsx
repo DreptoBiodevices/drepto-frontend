@@ -77,7 +77,7 @@ const Main: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
   return (
-    <div className="bg-gray-50 min-h-screen font-sans pb-16 md:pb-0">
+    <div className="bg-white min-h-screen font-sans">
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/medicines" element={<MedicinesPage />} />
