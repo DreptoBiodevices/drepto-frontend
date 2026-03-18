@@ -1,6 +1,6 @@
-import Breadcrumbs from '@/components/Breadcrumbs';
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
+import Breadcrumbs from '@/src/components/Breadcrumbs';
+import Footer from '@/src/components/Footer';
+import Navbar from '@/src/components/Navbar';
 import React from 'react';
 
 

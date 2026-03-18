@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User } from '../../types';
-import { cn } from '@/lib/utils';
+import { cn } from '@/src/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation } from '../ui/Navigation';
 import { Button } from '../ui/Button';

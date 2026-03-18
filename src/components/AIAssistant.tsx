@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenAI } from "@google/genai";
 import { motion, AnimatePresence } from "framer-motion";
-import DreptoIcon from "../public/icon.png";
+const DreptoIcon = "/icon.png";
 
 const AIAssistant: React.FC = () => {
   const [open, setOpen] = useState(false);
