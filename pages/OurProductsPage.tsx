@@ -8,397 +8,365 @@ import Footer from '../components/Footer';
 import ProductDetailModal, { Product } from '../components/ProductDetailModal';
 import { ProductService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
-import { X, CheckCircle, ExternalLink } from 'lucide-react';
+import { X, CheckCircle, ExternalLink, ArrowRight } from 'lucide-react';
 import { Order } from '../types';
 
+/* ── Spinner ──────────────────────────────────────────────── */
+const Spinner = () => (
+  <div className="flex justify-center items-center h-64">
+    <div className="w-6 h-6 border-2 border-gray-200 border-t-primary rounded-full animate-spin" />
+  </div>
+);
 
-const OurProductsPage: React.FC = () => {
-    const [cart, setCart] = useState<any[]>([]);
-    const [notification, setNotification] = useState('');
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+/* ── Product Card ─────────────────────────────────────────── */
+const ProductCard: React.FC<{
+  product: Product;
+  index: number;
+  onView: () => void;
+  onSample: () => void;
+  onSubscribe: () => void;
+}> = ({ product, index, onView, onSample, onSubscribe }) => (
+  <div className="group flex flex-col border-b border-gray-100 py-8 first:pt-0 md:border-b-0 md:py-0">
+    {/* image */}
+    <div
+      className="overflow-hidden bg-gray-50 aspect-[4/3] mb-5 cursor-pointer"
+      onClick={onView}
+    >
+      <img
+        src={product.images?.[0] ?? '/images/placeholder.png'}
+        alt={product.name}
+        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+      />
+    </div>
 
-    // Subscription Modal State
-    const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
-    const [formFilled, setFormFilled] = useState(false);
-    const isRazorpayLoaded = useRazorpay();
+    {/* index + category */}
+    <div className="flex items-center justify-between mb-3">
+      <span className="text-xs tabular-nums text-gray-300">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <span className="text-[10px] font-semibold tracking-widest uppercase text-gray-400">
+        {product.category}
+      </span>
+    </div>
 
-    const { user } = useAuth();
-    const navigate = useNavigate();
+    {/* name */}
+    <h3
+      className="text-base font-bold text-gray-900 mb-1 cursor-pointer hover:text-primary transition-colors duration-200 leading-snug"
+      onClick={onView}
+    >
+      {product.name}
+    </h3>
 
-    // Dummy refs for Navbar
-    const dummyRefs = {
-        home: { current: null },
-        product: { current: null },
-        about: { current: null },
-        contact: { current: null },
-    };
+    {/* description */}
+    <p className="text-xs text-gray-400 leading-relaxed line-clamp-2 mb-5">
+      {product.description}
+    </p>
 
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem('patient_cart');
-            if (stored) setCart(JSON.parse(stored));
-        } catch { }
+    {/* pricing + actions */}
+    <div className="mt-auto space-y-2">
+      <button
+        onClick={onSample}
+        style={{ borderRadius: '0.25rem' }}
+        className="w-full flex items-center justify-between px-4 py-3 border border-gray-200 text-sm font-semibold text-gray-700 hover:border-primary hover:text-primary transition-colors duration-200"
+      >
+        <span>Sample — ₹90</span>
+        <span className="text-xs text-gray-400 line-through">MRP ₹190</span>
+      </button>
+      <button
+        onClick={onSubscribe}
+        style={{ borderRadius: '0.25rem' }}
+        className="w-full flex items-center justify-between px-4 py-3 bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors duration-200"
+      >
+        <span>Subscribe</span>
+        <span>₹1,500 / yr</span>
+      </button>
+    </div>
+  </div>
+);
 
-        const fetchProducts = async () => {
-            try {
-                const response = await ProductService.getAllProducts();
-                // Ensure response data matches Product interface or map it
-                // API response is likely in response.data or response.data.data
-                // Assuming response.data is the array based on typical usage, but adapting if nested
-                const fetchedProducts = Array.isArray(response.data) ? response.data :
-                    (response.data.products || response.data.data || []);
+/* ── Subscription Modal ───────────────────────────────────── */
+const SubscriptionModal: React.FC<{
+  formFilled: boolean;
+  setFormFilled: (v: boolean) => void;
+  onPay: () => void;
+  onClose: () => void;
+  razorpayReady: boolean;
+}> = ({ formFilled, setFormFilled, onPay, onClose, razorpayReady }) => (
+  <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40">
+    <div className="bg-white w-full max-w-md" style={{ borderRadius: '0.25rem' }}>
 
-                setProducts(fetchedProducts);
-            } catch (error) {
-                console.error("Failed to fetch products", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+      {/* header */}
+      <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100">
+        <h3 className="text-base font-bold text-gray-900">Premium Subscription</h3>
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-700 transition-colors">
+          <X className="w-4 h-4" />
+        </button>
+      </div>
 
-        fetchProducts();
-    }, []);
+      <div className="px-8 py-6 space-y-6">
 
-
-    const addToCart = (product: Product) => {
-        if (!user) {
-            setNotification('Please login to get samples');
-            setTimeout(() => {
-                setNotification('');
-                navigate('/login', { state: { from: '/our-products' } });
-            }, 1500);
-            return;
-        }
-
-        const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const updatedCart = [...currentCart, { ...product, price: 90, mrp: 190, freeShipping: true }];
-        localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
-        setCart(updatedCart);
-
-        // Dispatch event to update Navbar count
-        window.dispatchEvent(new Event('cart:updated'));
-
-        setNotification('Sample added to box!');
-        setTimeout(() => {
-            setNotification('');
-            navigate('/cart');
-        }, 1000);
-    };
-
-    const handleSubscription = () => {
-        if (!user) {
-            setNotification('Please login to subscribe');
-            setTimeout(() => {
-                setNotification('');
-                navigate('/login', { state: { from: '/our-products' } });
-            }, 1500);
-            return;
-        }
-
-        const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-        if (existingOrders.length === 0) {
-            alert("This subscription option is only open after you buy something. Please purchase a product first to unlock this.");
-            return;
-        }
-
-        setShowSubscriptionModal(true);
-    };
-
-    const createSubscriptionOrder = (paymentId: string) => {
-        const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-
-        // Generate ID
-        let nextIdNumber = 1;
-        const dbOrders = existingOrders.filter((o: any) => o.id.startsWith('SUB'));
-        if (dbOrders.length > 0) {
-            const maxId = Math.max(...dbOrders.map((o: any) => parseInt(o.id.substring(3)) || 0));
-            nextIdNumber = maxId + 1;
-        }
-        const orderId = `SUB${nextIdNumber.toString().padStart(4, '0')}`;
-
-        const newOrder: Order = {
-            id: orderId,
-            date: new Date().toISOString(),
-            items: [{
-                name: "Drepto Premium Subscription",
-                price: 1500,
-                quantity: 1,
-                image: "/images/logo.png", // specific placeholder for subscription
-                shippingSource: "Digital"
-            }],
-            total: 1500,
-            status: 'Active',
-            shippingAddress: { // Mock address or fetch from user profile if available
-                houseNo: "N/A",
-                buildingName: "N/A",
-                street: "Digital Subscription",
-                landmark: "N/A",
-                city: "N/A",
-                state: "N/A",
-                country: "N/A",
-                pincode: "000000",
-                contactNumber: user?.mobileNumber || ""
-            },
-            trackingId: `SUB-${Math.floor(Math.random() * 1000000)}`,
-            estimatedDelivery: "Instant Activation",
-            shippingMethod: "Digital",
-            shippingCost: 0,
-            gst: 0
-        };
-
-        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
-
-        // --- API INTEGRATION ---
-        const saveSubscriptionToBackend = async () => {
-            try {
-                await PaymentService.createOrder({
-                    orderId: orderId,
-                    transactionId: paymentId || 'SUB_FREE',
-                    amount: 1500,
-                    currency: 'INR',
-                    shippingAddress: newOrder.shippingAddress,
-                    items: newOrder.items,
-                    shippingMethod: 'Digital',
-                    shippingCost: 0,
-                    userId: user?.id || 'guest'
-                });
-                console.log("Subscription saved to Backend successfully");
-            } catch (err) {
-                console.error("Failed to save subscription to Backend:", err);
-            }
-        };
-        saveSubscriptionToBackend();
-        // -----------------------------
-        // -----------------------------
-
-        setNotification('Subscription Activated Successfully!');
-        setShowSubscriptionModal(false);
-        setFormFilled(false);
-
-        setTimeout(() => {
-            setNotification('');
-            navigate(`/invoice/${orderId}`);
-        }, 2000);
-    };
-
-    const handleSubscriptionPayment = () => {
-        if (!isRazorpayLoaded) {
-            alert("Payment gateway is loading, please wait...");
-            return;
-        }
-
-        const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: 1500 * 100, // 1500 INR in paise
-            currency: "INR",
-            name: "Drepto Biodevices",
-            description: "Premium Subscription",
-            image: "https://drepto.com/logo.png",
-            handler: function (response: any) {
-                console.log("Subscription Payment Successful:", response);
-                createSubscriptionOrder(response.razorpay_payment_id);
-            },
-            prefill: {
-                name: `${user?.firstName} ${user?.lastName}` || "User",
-                email: user?.email || "user@example.com",
-                contact: user?.mobileNumber || ""
-            },
-            theme: {
-                color: "#0D9488"
-            }
-        };
-
-        const rzp = new (window as any).Razorpay(options);
-        rzp.on('payment.failed', function (response: any) {
-            alert("Payment Failed: " + response.error.description);
-        });
-        rzp.open();
-    };
-
-
-    return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-            <SEOHead
-                title="Our Products - Healthcare Essentials"
-                description="Discover our curated selection of top-quality wellness and healthcare products. Get samples at handling charges or subscribe for premium access."
-                keywords="healthcare products, wellness products, medical supplies, health essentials, product samples"
-                url="/our-products"
-            />
-            <Navbar sectionRefs={dummyRefs as any} />
-
-            <main className="flex-grow pt-[120px] lg:pt-[120px] pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
-                <Breadcrumbs items={[{ label: 'Our Products' }]} className="mb-6" />
-                <div className="text-center mb-12 animate-fade-in-up">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Discover our curated selection of top-quality wellness and healthcare essentials.
-                    </p>
-                    <p className="text-sm text-red-500 italic mt-2">
-                        *Get a sample product by just paying existing handling charges.
-                    </p>
-                </div>
-
-                {notification && (
-                    <div className="fixed top-24 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-bounce-in">
-                        {notification}
-                    </div>
-                )}
-
-                {loading ? (
-                    <div className="flex justify-center items-center h-64">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {products.map((product, index) => (
-                            <div key={index} className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden border border-gray-100 flex flex-col">
-                                <div
-                                    className="relative h-64 overflow-hidden bg-gray-100 cursor-pointer"
-                                    onClick={() => setSelectedProduct(product)}
-                                >
-                                    <img
-                                        src={product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.png'}
-                                        alt={product.name}
-                                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                    <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">
-                                        {product.category}
-                                    </span>
-
-                                    {/* Overlay with view details button */}
-                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <button className="bg-white text-gray-900 px-6 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                                            View Details
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="p-6 flex-1 flex flex-col">
-                                    <h3
-                                        className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-primary transition-colors"
-                                        onClick={() => setSelectedProduct(product)}
-                                    >
-                                        {product.name}
-                                    </h3>
-                                    <p className="text-gray-500 text-sm mb-4 line-clamp-2">{product.description}</p>
-
-                                    <div className="mt-auto pt-4 border-t border-gray-50">
-                                        <div className="flex flex-col">
-                                            <div className="flex flex-col items-start w-full mb-2">
-                                                <span className="text-sm text-gray-500 line-through">
-                                                    Actual MRP ₹190
-                                                </span>
-                                            </div>
-
-                                            <button
-                                                onClick={() => addToCart(product)}
-                                                className="w-full py-2.5 px-4 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
-                                            >
-                                                Only Handling Charges: ₹90
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                            </button>
-                                            <button
-                                                onClick={handleSubscription}
-                                                className="w-full mt-2 py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
-                                            >
-                                                Subscribe @ ₹1500
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                            </button>
-                                        </div>
-                                        {/* <button
-                                            onClick={() => addToCart(product)}
-                                            className="bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-orange-500 transition-colors shadow-md group-active:scale-95 flex items-center gap-2 font-medium"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-                                            Add
-                                        </button> */}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </main>
-
-            <footer className="bg-white border-t py-12">
-                <div className="max-w-7xl mx-auto px-4 text-center text-gray-500">
-                    <p>&copy; {new Date().getFullYear()} Drepto. All rights reserved.</p>
-                </div>
-            </footer>
-
-            <ProductDetailModal
-                product={selectedProduct}
-                isOpen={!!selectedProduct}
-                onClose={() => setSelectedProduct(null)}
-                onAddToCart={addToCart}
-            />
-
-            {/* Subscription Modal */}
-            {showSubscriptionModal && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in">
-                        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-teal-50/50">
-                            <h3 className="text-xl font-bold text-gray-900">Get Premium Subscription</h3>
-                            <button
-                                onClick={() => setShowSubscriptionModal(false)}
-                                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <div className="p-6 space-y-6">
-                            <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                                <h4 className="font-bold text-blue-800 mb-1">Step 1: Review Form</h4>
-                                <p className="text-sm text-blue-600 mb-3">Please fill out the mandatory review form to proceed.</p>
-                                <a
-                                    href="https://forms.gle/PUGyMy8k5QNL6AA89"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900 underline"
-                                >
-                                    Open Google Form <ExternalLink className="w-3 h-3" />
-                                </a>
-                            </div>
-
-                            <div className="space-y-4">
-                                <h4 className="font-bold text-gray-800">Step 2: Payment</h4>
-                                <label className="flex items-start gap-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
-                                    <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${formFilled ? 'bg-primary border-primary text-white' : 'border-gray-300 bg-white'}`}>
-                                        {formFilled && <CheckCircle className="w-3.5 h-3.5" />}
-                                    </div>
-                                    <input
-                                        type="checkbox"
-                                        className="hidden"
-                                        checked={formFilled}
-                                        onChange={(e) => setFormFilled(e.target.checked)}
-                                    />
-                                    <span className="text-sm text-gray-600 select-none">
-                                        I confirm that I have filled and submitted the review form.
-                                    </span>
-                                </label>
-
-                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex justify-between items-center">
-                                    <span className="text-gray-600 font-medium">Total Amount</span>
-                                    <span className="text-2xl font-bold text-gray-900">₹1500</span>
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={handleSubscriptionPayment}
-                                disabled={!formFilled || !isRazorpayLoaded}
-                                className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all transform active:scale-95 ${formFilled ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:shadow-teal-500/25' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                    }`}
-                            >
-                                Pay ₹1500 & Subscribe
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+        {/* step 1 */}
+        <div>
+          <p className="text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-3">
+            01 — Review Form
+          </p>
+          <p className="text-sm text-gray-500 mb-3 leading-relaxed">
+            Fill out the mandatory review form before proceeding to payment.
+          </p>
+          <a
+            href="https://forms.gle/PUGyMy8k5QNL6AA89"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary border-b border-primary pb-0.5 hover:opacity-70 transition-opacity"
+          >
+            Open form <ExternalLink className="w-3 h-3" />
+          </a>
         </div>
-    );
+
+        <div className="border-t border-gray-100" />
+
+        {/* step 2 */}
+        <div>
+          <p className="text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-4">
+            02 — Confirm & Pay
+          </p>
+
+          <label className="flex items-start gap-3 cursor-pointer mb-5">
+            <div
+              className={`w-4 h-4 mt-0.5 flex-shrink-0 border flex items-center justify-center transition-colors ${
+                formFilled ? 'bg-primary border-primary' : 'border-gray-300'
+              }`}
+              style={{ borderRadius: '0.125rem' }}
+            >
+              {formFilled && <CheckCircle className="w-3 h-3 text-white" />}
+            </div>
+            <input
+              type="checkbox"
+              className="hidden"
+              checked={formFilled}
+              onChange={e => setFormFilled(e.target.checked)}
+            />
+            <span className="text-xs text-gray-500 leading-relaxed select-none">
+              I confirm I have submitted the review form.
+            </span>
+          </label>
+
+          <div className="flex items-center justify-between py-4 border-t border-b border-gray-100 mb-5">
+            <span className="text-xs font-semibold tracking-widest uppercase text-gray-400">Total</span>
+            <span className="text-xl font-bold text-gray-900">₹1,500</span>
+          </div>
+
+          <button
+            onClick={onPay}
+            disabled={!formFilled || !razorpayReady}
+            style={{ borderRadius: '0.25rem' }}
+            className="w-full flex items-center justify-between px-5 py-3.5 bg-primary text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors duration-200"
+          >
+            Pay ₹1,500 & Subscribe
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+/* ── Toast ────────────────────────────────────────────────── */
+const Toast: React.FC<{ message: string }> = ({ message }) => (
+  <div
+    style={{ borderRadius: '0.25rem' }}
+    className="fixed top-24 right-4 bg-gray-900 text-white text-sm font-medium px-5 py-3 z-50 shadow-lg"
+  >
+    {message}
+  </div>
+);
+
+/* ── Page ─────────────────────────────────────────────────── */
+const OurProductsPage: React.FC = () => {
+  const [cart, setCart] = useState<any[]>([]);
+  const [notification, setNotification] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [formFilled, setFormFilled] = useState(false);
+  const isRazorpayLoaded = useRazorpay();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const dummyRefs = {
+    home: { current: null }, product: { current: null },
+    about: { current: null }, contact: { current: null },
+  };
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('patient_cart');
+      if (stored) setCart(JSON.parse(stored));
+    } catch {}
+
+    const fetchProducts = async () => {
+      try {
+        const response = await ProductService.getAllProducts();
+        const fetched = Array.isArray(response.data)
+          ? response.data
+          : (response.data.products || response.data.data || []);
+        setProducts(fetched);
+      } catch (err) {
+        console.error('Failed to fetch products', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const notify = (msg: string, then?: () => void, delay = 1200) => {
+    setNotification(msg);
+    setTimeout(() => { setNotification(''); then?.(); }, delay);
+  };
+
+  const addToCart = (product: Product) => {
+    if (!user) {
+      notify('Please login to get samples', () => navigate('/login', { state: { from: '/our-products' } }));
+      return;
+    }
+    const current = JSON.parse(localStorage.getItem('patient_cart') || '[]');
+    const updated = [...current, { ...product, price: 90, mrp: 190, freeShipping: true }];
+    localStorage.setItem('patient_cart', JSON.stringify(updated));
+    setCart(updated);
+    window.dispatchEvent(new Event('cart:updated'));
+    notify('Sample added!', () => navigate('/cart'));
+  };
+
+  const handleSubscription = () => {
+    if (!user) {
+      notify('Please login to subscribe', () => navigate('/login', { state: { from: '/our-products' } }));
+      return;
+    }
+    const existing = JSON.parse(localStorage.getItem('orders') || '[]');
+    if (existing.length === 0) {
+      alert('Please purchase a product first to unlock subscription.');
+      return;
+    }
+    setShowSubscriptionModal(true);
+  };
+
+  const createSubscriptionOrder = (paymentId: string) => {
+    const existing = JSON.parse(localStorage.getItem('orders') || '[]');
+    const subs = existing.filter((o: any) => o.id.startsWith('SUB'));
+    const nextNum = subs.length > 0
+      ? Math.max(...subs.map((o: any) => parseInt(o.id.substring(3)) || 0)) + 1
+      : 1;
+    const orderId = `SUB${String(nextNum).padStart(4, '0')}`;
+
+    const newOrder: Order = {
+      id: orderId,
+      date: new Date().toISOString(),
+      items: [{ name: 'Drepto Premium Subscription', price: 1500, quantity: 1, image: '/images/logo.png', shippingSource: 'Digital' }],
+      total: 1500,
+      status: 'Active',
+      shippingAddress: { houseNo: 'N/A', buildingName: 'N/A', street: 'Digital Subscription', landmark: 'N/A', city: 'N/A', state: 'N/A', country: 'N/A', pincode: '000000', contactNumber: user?.mobileNumber || '' },
+      trackingId: `SUB-${Math.floor(Math.random() * 1000000)}`,
+      estimatedDelivery: 'Instant Activation',
+      shippingMethod: 'Digital',
+      shippingCost: 0,
+      gst: 0,
+    };
+
+    localStorage.setItem('orders', JSON.stringify([newOrder, ...existing]));
+    setShowSubscriptionModal(false);
+    setFormFilled(false);
+    notify('Subscription activated!', () => navigate(`/invoice/${orderId}`));
+  };
+
+  const handleSubscriptionPayment = () => {
+    if (!isRazorpayLoaded) { alert('Payment gateway loading, please wait…'); return; }
+    const rzp = new (window as any).Razorpay({
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: 150000,
+      currency: 'INR',
+      name: 'Drepto Biodevices',
+      description: 'Premium Subscription',
+      handler: (response: any) => createSubscriptionOrder(response.razorpay_payment_id),
+      prefill: { name: `${user?.firstName} ${user?.lastName}`, email: user?.email, contact: user?.mobileNumber },
+      theme: { color: '#0D9488' },
+    });
+    rzp.on('payment.failed', (r: any) => alert('Payment failed: ' + r.error.description));
+    rzp.open();
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <SEOHead
+        title="Our Products — Drepto Biodevices"
+        description="Explore Drepto's transdermal drug delivery products. Get samples at handling charges or subscribe for premium access."
+        keywords="drepto products, transdermal, drug delivery, rheumatoid arthritis, medical devices"
+        url="/our-products"
+      />
+
+      <Navbar sectionRefs={dummyRefs as any} />
+
+      <main className="flex-grow pb-24">
+        <div className="container mx-auto px-6 max-w-6xl">
+
+          <div className="py-4">
+            <Breadcrumbs items={[{ label: 'Our Products' }]} />
+          </div>
+
+          {/* page header */}
+          <div className="border-t border-gray-100 pt-8 mb-16">
+            <p className="text-xs font-semibold tracking-widest uppercase text-primary mb-2">Products</p>
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-none">
+                Our Products.
+              </h1>
+              <p className="text-xs text-gray-400 max-w-xs leading-relaxed md:text-right">
+                Sample any product for just ₹90 handling charges.
+                Subscribe for full annual access at ₹1,500.
+              </p>
+            </div>
+          </div>
+
+          {notification && <Toast message={notification} />}
+
+          {loading ? <Spinner /> : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+              {products.map((product, i) => (
+                <ProductCard
+                  key={i}
+                  product={product}
+                  index={i}
+                  onView={() => setSelectedProduct(product)}
+                  onSample={() => addToCart(product)}
+                  onSubscribe={handleSubscription}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+
+      <Footer />
+
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onAddToCart={addToCart}
+      />
+
+      {showSubscriptionModal && (
+        <SubscriptionModal
+          formFilled={formFilled}
+          setFormFilled={setFormFilled}
+          onPay={handleSubscriptionPayment}
+          onClose={() => { setShowSubscriptionModal(false); setFormFilled(false); }}
+          razorpayReady={isRazorpayLoaded}
+        />
+      )}
+    </div>
+  );
 };
 
 export default OurProductsPage;

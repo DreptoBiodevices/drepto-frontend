@@ -49,6 +49,12 @@ const Footer: React.FC = () => {
                   SINE IIT Bombay, Mumbai 400076, India
                 </p>
               </div>
+              <div>
+                <h4 className="text-black text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Registered Address</h4>
+                <p className="text-black text-sm leading-relaxed">
+                  1001-11, Rustomjee Ozone, Co-op Hsg Behind Teleexch, Goregaon (Mumbai). Mumbai, Goregaon West, Maharashtra, India, 400104.
+                </p>
+              </div>
             </div>
           </div>
 

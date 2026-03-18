@@ -1,54 +1,52 @@
+import Breadcrumbs from '@/components/Breadcrumbs';
+import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 import React from 'react';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
-import Breadcrumbs from '../../components/Breadcrumbs';
+
 
 interface LegalPageLayoutProps {
-    title: string;
-    lastUpdated?: string;
-    children: React.ReactNode;
-    breadcrumbLabel: string;
+  title: string;
+  lastUpdated?: string;
+  breadcrumbLabel: string;
+  children: React.ReactNode;
 }
 
-const LegalPageLayout: React.FC<LegalPageLayoutProps> = ({ title, lastUpdated, children, breadcrumbLabel }) => {
-    // Dummy refs for Navbar
-    const dummyRefs = {
-        home: { current: null },
-        product: { current: null },
-        about: { current: null },
-        contact: { current: null },
-    };
-
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-
-    return (
-        <div className="flex flex-col min-h-screen bg-gray-50">
-            <Navbar
-                sectionRefs={dummyRefs as any}
-                isMobileMenuOpen={isMobileMenuOpen}
-                setIsMobileMenuOpen={setIsMobileMenuOpen}
-            />
-
-            <main className="flex-grow pt-24 md:pt-28 pb-16 px-6">
-                <div className="max-w-4xl mx-auto">
-                    <Breadcrumbs items={[{ label: breadcrumbLabel }]} className="mb-6" />
-                    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-12">
-                    <header className="mb-10 text-center border-b border-gray-100 pb-8">
-                        <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3 font-display">{title}</h1>
-                        {lastUpdated && (
-                            <p className="text-gray-500 text-sm font-medium">Effective Date: {lastUpdated}</p>
-                        )}
-                    </header>
-                    <div className="prose prose-teal prose-lg max-w-none text-gray-700">
-                        {children}
-                    </div>
-                    </div>
-                </div>
-            </main>
-
-            <Footer />
-        </div>
-    );
+const dummyRefs = {
+  home: { current: null }, product: { current: null },
+  about: { current: null }, contact: { current: null },
 };
+
+const LegalPageLayout: React.FC<LegalPageLayoutProps> = ({ title, lastUpdated, breadcrumbLabel, children }) => (
+  <div className="flex flex-col min-h-screen bg-white">
+    <Navbar sectionRefs={dummyRefs as any} />
+
+    <main className="flex-grow pb-24">
+      <div className="container mx-auto px-6 max-w-3xl">
+
+        {/* breadcrumb */}
+        <div className="py-4">
+          <Breadcrumbs items={[{ label: breadcrumbLabel }]} />
+        </div>
+
+        {/* page header */}
+        <div className="border-t border-gray-100 pt-8 mb-14">
+          <p className="text-[10px] font-semibold tracking-widest uppercase text-primary mb-2">Legal</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-none mb-3">{title}</h1>
+          {lastUpdated && (
+            <p className="text-xs text-gray-400">Last updated: {lastUpdated}</p>
+          )}
+        </div>
+
+        {/* content */}
+        <div className="space-y-12">
+          {children}
+        </div>
+
+      </div>
+    </main>
+
+    <Footer />
+  </div>
+);
 
 export default LegalPageLayout;

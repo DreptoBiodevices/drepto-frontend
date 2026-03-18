@@ -48,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
     { name: 'Medicines', path: '/medicines', icon: Pill },
     { name: 'Lab Tests', path: '/lab-tests', icon: TestTube2 },
     { name: 'Our Products', path: '/our-products', icon: ShoppingBag },
-    { name: 'Features', ref: sectionRefs.product, path: '/', icon: Zap },
+    // { name: 'Features', ref: sectionRefs.product, path: '/', icon: Zap },
     { name: 'About Us', path: '/about-us', icon: Info },
     { name: 'Contact', ref: sectionRefs.contact, path: '/', icon: Mail },
   ];
@@ -76,7 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
     if (link.ref) {
       link.ref.current?.scrollIntoView({ behavior: 'smooth' });
     } else if (link.name === 'Home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 100, behavior: 'smooth' });
     }
   };
 

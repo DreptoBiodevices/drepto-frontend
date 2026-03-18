@@ -1,31 +1,31 @@
-
-
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { UserRole } from '../types';
-
-import BackButton from './BackButton';
 
 interface LoginProps {
   onToggleView: () => void;
 }
 
+const inputCls = 'w-full px-4 py-3 bg-white border border-gray-200 text-sm text-gray-900 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors duration-200';
+
+const Field: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
+  <div className="flex flex-col gap-1.5">
+    <label className="text-[10px] font-semibold tracking-widest uppercase text-gray-400">{label}</label>
+    {children}
+  </div>
+);
+
 const Login: React.FC<LoginProps> = ({ onToggleView }) => {
-  const [role, setRole] = useState<UserRole | string>('Patient');
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
   const [error, setError] = useState('');
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!identifier || !password) {
-      setError('Please fill in all fields.');
-      return;
-    }
+    if (!identifier || !password) { setError('Please fill in all fields.'); return; }
     setError('');
     try {
-      await login(identifier, password, role as string);
+      await login(identifier, password);
     } catch (err: any) {
       setError(err.message || 'Login failed');
     }
@@ -33,44 +33,58 @@ const Login: React.FC<LoginProps> = ({ onToggleView }) => {
 
   return (
     <div>
-      <div className="mb-4">
-        <BackButton />
+      <div className="mb-8">
+        <p className="text-[10px] font-semibold tracking-widest uppercase text-primary mb-2">Welcome back</p>
+        <h2 className="text-3xl font-bold text-gray-900 leading-tight">Sign in.</h2>
+        <p className="text-sm text-gray-400 mt-1">Enter your credentials to continue.</p>
       </div>
-      <h2 className="text-2xl font-bold text-center text-dark-blue mb-6">Sign In</h2>
-      <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
 
-
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email or Phone</label>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <Field label="Email or phone">
           <input
             type="text"
             value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+            onChange={e => setIdentifier(e.target.value)}
+            placeholder="jane@example.com"
+            style={{ borderRadius: '0.25rem' }}
+            className={inputCls}
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        </Field>
+
+        <Field label="Password">
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+            onChange={e => setPassword(e.target.value)}
+            placeholder="••••••••"
+            style={{ borderRadius: '0.25rem' }}
+            className={inputCls}
           />
-        </div>
-        {error && <p className="text-red-500 text-sm bg-red-50 p-2 rounded-lg border border-red-100 flex items-center gap-2">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          {error}
-        </p>}
-        <button type="submit" className="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-dark-blue transition-all shadow-lg hover:shadow-primary/30 transform hover:-translate-y-0.5">
-          Sign In
+        </Field>
+
+        {error && (
+          <p className="text-xs text-red-500 border-l-2 border-red-400 pl-3">{error}</p>
+        )}
+
+        <button
+          type="submit"
+          style={{ borderRadius: '0.25rem' }}
+          className="w-full flex items-center justify-between px-5 py-3.5 bg-gray-900 text-white text-sm font-bold hover:bg-primary transition-colors duration-200 mt-2"
+        >
+          Sign in
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />
+          </svg>
         </button>
       </form>
-      <p className="text-center text-sm text-gray-600 mt-6">
+
+      <p className="text-xs text-gray-400 text-center mt-8">
         Don't have an account?{' '}
-        <button onClick={onToggleView} className="font-semibold text-primary hover:underline">
-          Sign Up
+        <button
+          onClick={onToggleView}
+          className="font-semibold text-gray-900 border-b border-gray-900 pb-0.5 hover:text-primary hover:border-primary transition-colors"
+        >
+          Sign up
         </button>
       </p>
     </div>
