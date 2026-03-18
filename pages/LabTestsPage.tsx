@@ -265,6 +265,8 @@ const LabTestsPage: React.FC = () => {
                     <div className="mb-4">
                         <BackButton />
                     </div>
+                    </div>
+
                 <div className="flex flex-col lg:flex-row gap-8">
 
                     {/* Sidebar Navigation - Hidden on Detail View to give more space */}
