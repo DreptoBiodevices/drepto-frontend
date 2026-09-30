@@ -11,6 +11,8 @@ interface AuthContextType {
   updateUser: (details: Partial<User>) => void;
   isLoading: boolean;
   checkPasswordStrength: (password: string) => { strong: boolean; message: string };
+  authModalView: 'login' | 'signup' | null;
+  setAuthModalView: (view: 'login' | 'signup' | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,6 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [authModalView, setAuthModalView] = useState<'login' | 'signup' | null>(null);
 
   useEffect(() => {
     const initAuth = async () => {
@@ -129,6 +132,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       localStorage.setItem('user', JSON.stringify(appUser));
       setUser(appUser);
+      setAuthModalView(null);
 
     } catch (error: any) {
       console.error("Login failed full error:", error); // Enhanced Logging
@@ -210,6 +214,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         };
         localStorage.setItem('user', JSON.stringify(appUser));
         setUser(appUser);
+        setAuthModalView(null);
       }
 
     } catch (error: any) {
@@ -232,7 +237,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   return React.createElement(
     AuthContext.Provider,
-    { value: { user, login, logout, register, updateUser, isLoading, checkPasswordStrength } },
+    { value: { user, login, logout, register, updateUser, isLoading, checkPasswordStrength, authModalView, setAuthModalView } },
     children
   );
 };

@@ -3,7 +3,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import LandingPage from './pages/LandingPage';
-import AuthPage from './pages/AuthPage';
+import AuthModal from './components/AuthModal';
+// Removed AuthPage import as we use modal now
 import DashboardPage from './pages/DashboardPage';
 import MedicinesPage from './pages/MedicinesPage';
 import LabTestsPage from './pages/LabTestsPage';
@@ -83,9 +84,10 @@ const Main: React.FC = () => {
         <Route path="/our-products" element={<OurProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
-        <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/auth" replace />} />
-        <Route path="/auth" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
-        <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/auth" replace />} />
+        <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/" replace />} />
+        {/* Auth is now handled via modal, we map /auth to home as fallback if directly accessed */}
+        <Route path="/auth" element={<Navigate to="/" replace />} />
+        <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/" replace />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
 
@@ -102,7 +104,7 @@ const Main: React.FC = () => {
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-
+      <AuthModal />
     </div>
   );
 }

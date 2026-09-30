@@ -8,9 +8,10 @@ import BackButton from './BackButton';
 
 interface LoginProps {
   onToggleView: () => void;
+  hideBackButton?: boolean;
 }
 
-const Login: React.FC<LoginProps> = ({ onToggleView }) => {
+const Login: React.FC<LoginProps> = ({ onToggleView, hideBackButton }) => {
   const [role, setRole] = useState<UserRole | string>('Patient');
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -33,9 +34,11 @@ const Login: React.FC<LoginProps> = ({ onToggleView }) => {
 
   return (
     <div>
-      <div className="mb-4">
-        <BackButton />
-      </div>
+      {!hideBackButton && (
+        <div className="mb-4">
+          <BackButton />
+        </div>
+      )}
       <h2 className="text-2xl font-bold text-center text-dark-blue mb-6">Sign In</h2>
       <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
 

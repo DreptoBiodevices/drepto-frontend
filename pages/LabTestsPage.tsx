@@ -17,18 +17,23 @@ const HeaderIcon = ({ d }: { d: string }) => (
 
 // 1. City Selector Overlay
 const CitySelector: React.FC<{ current: string; onSelect: (id: string) => void; onClose: () => void }> = ({ current, onSelect, onClose }) => (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/40 backdrop-blur-sm" onClick={onClose}>
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold text-gray-800">Choose your city</h3>
-                <button onClick={onClose}><HeaderIcon d="M18 6 6 18M6 6l12 12" /></button>
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={onClose}>
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 animate-fade-in-up" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-5">
+                <div>
+                    <h3 className="text-lg font-bold text-gray-800">Choose your city</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">Select to see labs & tests near you</p>
+                </div>
+                <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <HeaderIcon d="M18 6 6 18M6 6l12 12" />
+                </button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {CITIES.map(city => (
                     <button
                         key={city.id}
                         onClick={() => { onSelect(city.id); onClose(); }}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium border transition-all ${current === city.id ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-gray-200 text-gray-600 hover:border-teal-300'}`}
+                        className={`py-2.5 px-3 rounded-xl text-sm font-medium border-2 transition-all ${current === city.id ? 'border-teal-500 bg-teal-50 text-teal-700 shadow-sm' : 'border-gray-100 text-gray-600 hover:border-teal-300 hover:bg-teal-50/50'}`}
                     >
                         {city.name}
                     </button>
@@ -37,6 +42,7 @@ const CitySelector: React.FC<{ current: string; onSelect: (id: string) => void; 
         </div>
     </div>
 );
+
 
 // 2. Sidebar Component
 const Sidebar: React.FC<{ active: string; onSelect: (view: string) => void }> = ({ active, onSelect }) => (
@@ -235,9 +241,6 @@ const LabTestsPage: React.FC = () => {
 
 
 
-            <div className="hidden md:block">
-                <Navbar sectionRefs={dummyRefs as any} />
-            </div>
             <Navbar sectionRefs={dummyRefs as any} />
 
             {/* Sub-Header / Module Nav */}

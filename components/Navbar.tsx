@@ -24,16 +24,14 @@ import {
 } from 'lucide-react';
 
 interface NavbarProps {
-  sectionRefs?: {
-    [key: string]: RefObject<HTMLDivElement>;
-  };
+  sectionRefs?: any;
   isMobileMenuOpen?: boolean;
   setIsMobileMenuOpen?: (isOpen: boolean) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
+const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefObject<HTMLDivElement>>, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, setAuthModalView } = useAuth();
 
   const isMobileMenuOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsMobileMenuOpen = externalSetIsOpen || setInternalIsOpen;
@@ -134,13 +132,13 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
               ) : (
                 <>
                   <button
-                    onClick={() => navigate('/auth')}
+                    onClick={() => setAuthModalView('login')}
                     className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors"
                   >
                     Sign In
                   </button>
                   <button
-                    onClick={() => navigate('/auth?mode=signup')}
+                    onClick={() => setAuthModalView('signup')}
                     className="px-4 py-1.5 font-semibold text-white bg-brand-700 hover:bg-brand-800 rounded-md transition-all shadow-sm"
                   >
                     Signup
@@ -177,11 +175,10 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                 <button
                   key={link.name}
                   onClick={() => handleNavigation(link)}
-                  className={`px-4 py-2.5 rounded-lg transition-all text-base font-medium ${
-                    (location.pathname === link.path && link.path !== '/') || (link.name === 'Home' && isHomePage && link.path === '/')
-                      ? 'text-brand-700 bg-brand-50/80 font-bold'
-                      : 'text-slate-600 hover:text-brand-700 hover:bg-slate-50'
-                  }`}
+                  className={`px-4 py-2.5 rounded-lg transition-all text-base font-medium ${(location.pathname === link.path && link.path !== '/') || (link.name === 'Home' && isHomePage && link.path === '/')
+                    ? 'text-brand-700 bg-brand-50/80 font-bold'
+                    : 'text-slate-600 hover:text-brand-700 hover:bg-slate-50'
+                    }`}
                 >
                   {link.name}
                 </button>
@@ -350,7 +347,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                 <>
                   <button
                     onClick={() => {
-                      navigate('/auth');
+                      setAuthModalView('login');
                       setIsMobileMenuOpen(false);
                     }}
                     className="w-full flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl font-bold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
@@ -360,7 +357,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
                   </button>
                   <button
                     onClick={() => {
-                      navigate('/auth?mode=signup');
+                      setAuthModalView('signup');
                       setIsMobileMenuOpen(false);
                     }}
                     className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-600 to-primary text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:opacity-95 transition-all transform active:scale-[0.98]"
