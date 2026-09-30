@@ -16,7 +16,11 @@ import {
   ShoppingBag,
   User,
   LogOut,
-  Package
+  Package,
+  FileText,
+  Search,
+  Globe,
+  MapPin
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -79,92 +83,169 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || !isHomePage
-          ? 'bg-white/80 backdrop-blur-md shadow-sm py-2'
-          : 'bg-transparent py-4'
-          }`}
-      >
-        <div className="container mx-auto px-6 flex justify-between items-center text-gray-800">
-
-          {/* LOGO CLICKABLE */}
-          <div
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={() => navigate('/')}
-          >
-            <img
-              src="/images/logo.png"
-              alt="Drepto Biodevices Logo"
-              className="h-10 md:h-12 w-auto object-contain"
-            />
+      {/* ---- Utility Header ---- */}
+      <div className="border-b border-slate-200 bg-white text-sm font-medium text-slate-600 hidden sm:block">
+        <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between">
+          {/* Delivery Location */}
+          <div className="flex items-center space-x-2">
+            <MapPin className="w-4 h-4 text-brand-600" />
+            <span className="text-slate-400">Deliver to:</span>
+            <select className="bg-transparent text-slate-800 font-semibold focus:outline-none border-none py-0 pl-1 pr-4 text-sm cursor-pointer hover:text-brand-600 transition-colors">
+              <option>Mumbai (SINE IIT Bombay, 400076)</option>
+              <option>Delhi NCR</option>
+              <option>Bangalore</option>
+              <option>Pune</option>
+              <option>Hyderabad</option>
+            </select>
           </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => handleNavigation(link)}
-                className={`text-sm font-medium transition-all hover:text-primary relative group ${location.pathname === link.path && link.path !== '/'
-                  ? 'text-primary font-bold'
-                  : 'text-gray-600'
-                  }`}
-              >
-                {link.name}
-                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full ${location.pathname === link.path && link.path !== '/' ? 'w-full' : ''}`}></span>
-              </button>
-            ))}
-          </div>
-
-          {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center space-x-4">
-            {/* Cart Icon - Simple Link for now */}
-            <div
-              className="p-2 hover:bg-gray-100 rounded-full cursor-pointer transition-colors relative"
+          {/* Right utilities */}
+          <div className="flex items-center space-x-6">
+            <button className="flex items-center space-x-1.5 hover:text-brand-700 transition-colors" title="Change Language">
+              <Globe className="w-4 h-4 text-slate-500" />
+              <span>English</span>
+            </button>
+            {/* Cart */}
+            <button
+              className="flex items-center space-x-1.5 hover:text-brand-700 transition-colors relative py-1"
               onClick={() => navigate('/cart')}
             >
-              <ShoppingBag className="w-5 h-5 text-gray-700" />
-              {/* Count could be added here */}
+              <ShoppingBag className="w-5 h-5 text-slate-700" />
+              <span className="font-medium">Cart</span>
+              <span className="inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-bold leading-none text-white bg-brand-600 rounded-full">0</span>
+            </button>
+            {/* Auth */}
+            <div className="flex items-center space-x-3 pl-3 border-l border-slate-200">
+              {user ? (
+                <>
+                  <button
+                    onClick={() => navigate('/dashboard')}
+                    className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors flex items-center gap-1"
+                  >
+                    <User className="w-4 h-4" />
+                    {user.firstName}
+                  </button>
+                  <button
+                    onClick={logout}
+                    className="px-4 py-1.5 font-semibold text-white bg-red-500 hover:bg-red-600 rounded-md transition-all shadow-sm text-sm"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate('/auth')}
+                    className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => navigate('/auth?mode=signup')}
+                    className="px-4 py-1.5 font-semibold text-white bg-brand-700 hover:bg-brand-800 rounded-md transition-all shadow-sm"
+                  >
+                    Signup
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ---- Main Header ---- */}
+      <nav
+        className={`sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-shadow duration-300 ${isScrolled ? 'shadow-md' : 'shadow-sm'}`}
+      >
+        <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-24 gap-8">
+
+            {/* Brand Logo */}
+            <div
+              className="flex items-center cursor-pointer flex-shrink-0"
+              onClick={() => navigate('/')}
+            >
+              <img
+                src="/images/logo.png"
+                alt="Drepto Biodevices Logo"
+                className="h-12 w-auto object-contain"
+              />
             </div>
 
-            {user ? (
-              <div className="flex items-center gap-4">
-                <div
-                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded-full transition-all"
-                  onClick={() => navigate('/orders')}
+            {/* Desktop Nav Links */}
+            <nav className="hidden lg:flex items-center space-x-2 font-medium text-base flex-1 ml-4">
+              {navLinks.map((link) => (
+                <button
+                  key={link.name}
+                  onClick={() => handleNavigation(link)}
+                  className={`px-4 py-2.5 rounded-lg transition-all text-base font-medium ${
+                    (location.pathname === link.path && link.path !== '/') || (link.name === 'Home' && isHomePage && link.path === '/')
+                      ? 'text-brand-700 bg-brand-50/80 font-bold'
+                      : 'text-slate-600 hover:text-brand-700 hover:bg-slate-50'
+                  }`}
                 >
-                  <Package className="w-5 h-5 text-gray-700" />
-                  <span className="text-sm font-medium">My Orders</span>
-                </div>
-                <div
-                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-1.5 px-3 rounded-full transition-all"
-                  onClick={() => navigate('/dashboard')}
-                >
-                  <User className="w-5 h-5 text-gray-700" />
-                  <span className="text-sm font-medium">{user.firstName}</span>
-                </div>
-                <button onClick={logout} className="text-gray-500 hover:text-red-500">
-                  <LogOut className="w-5 h-5" />
+                  {link.name}
                 </button>
-              </div>
-            ) : (
-              <div
-                className="flex items-center gap-1 cursor-pointer font-medium hover:text-primary transition-colors"
-                onClick={() => navigate('/auth')}
+              ))}
+            </nav>
+
+            {/* Desktop Right: Upload Prescription + Cart + Auth */}
+            <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
+              <button
+                className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl border border-brand-600/30 text-brand-800 bg-brand-50/50 hover:bg-brand-50 hover:border-brand-600 font-bold text-sm tracking-wide transition-all shadow-sm group"
+                type="button"
               >
-                <LogIn className="w-4 h-4" />
-                <span>Login</span>
-              </div>
-            )}
+                <FileText className="w-5 h-5 text-brand-700 group-hover:scale-110 transition-transform" />
+                <span>Upload Prescription</span>
+              </button>
+
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <div
+                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-2 px-4 rounded-full transition-all"
+                    onClick={() => navigate('/orders')}
+                  >
+                    <Package className="w-5 h-5 text-gray-700" />
+                    <span className="text-base font-medium">My Orders</span>
+                  </div>
+                  <div
+                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-2 px-4 rounded-full transition-all"
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    <User className="w-5 h-5 text-gray-700" />
+                    <span className="text-base font-medium">{user.firstName}</span>
+                  </div>
+                  <button onClick={logout} className="text-gray-500 hover:text-red-500 ml-2">
+                    <LogOut className="w-6 h-6" />
+                  </button>
+                </div>
+              ) : null}
+            </div>
+
+            {/* Mobile Hamburger */}
+            <button
+              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu className="w-8 h-8" />
+            </button>
           </div>
 
-          {/* Mobile Hamburger */}
-          <button
-            className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
-            onClick={() => setIsMobileMenuOpen(true)}
-          >
-            <Menu className="w-7 h-7" />
-          </button>
+          {/* Search Bar Row */}
+          <div className="py-4 border-t border-slate-100 hidden sm:block">
+            <div className="relative max-w-4xl mx-auto">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-slate-400" />
+              </div>
+              <input
+                className="w-full pl-12 pr-32 py-3 text-sm sm:text-base bg-slate-100/70 border border-slate-200/90 rounded-full focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all placeholder:text-slate-400"
+                placeholder="Search medicines, diagnostic lab test packages, biodevices..."
+                type="text"
+              />
+              <button className="absolute right-2 top-2 bottom-2 px-6 bg-brand-700 hover:bg-brand-800 text-white rounded-full text-sm font-bold transition-colors flex items-center space-x-1">
+                <span>Find</span>
+              </button>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -314,4 +395,3 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
 };
 
 export default Navbar;
-
