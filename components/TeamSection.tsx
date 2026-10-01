@@ -24,13 +24,6 @@ const teamMembers: TeamMember[] = [
         linkedin: 'https://www.linkedin.com/in/rohit-srivastava-02bb2b16/'
     },
     {
-        name: 'Rupesh Kumar Gupta',
-        role: 'Business Head',
-        description: 'Director at DyCine Pharmaceuticals Ltd.',
-        image: '/images/rupesh_gupta.webp',
-        linkedin: 'https://www.linkedin.com/company/dycine-pharmaceuticals-ltd/'
-    },
-    {
         name: 'Dr. Chandan Yadav',
         role: 'Chief Medical Officer',
         description: 'Senior Radiologist, Medanta Hospital',
@@ -60,7 +53,7 @@ const TeamSection: React.FC = () => {
                     <p className="text-gray-600 max-w-2xl mx-auto text-lg">The brilliant minds driving innovation at Drepto Biodevices.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                     {teamMembers.map((member, index) => (
                         <TeamMemberCard key={index} member={member} />
                     ))}
