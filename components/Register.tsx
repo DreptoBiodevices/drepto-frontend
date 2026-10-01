@@ -8,9 +8,10 @@ import { UserRole } from '../types';
 
 interface RegisterProps {
   onToggleView: () => void;
+  hideBackButton?: boolean;
 }
 
-const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
+const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => {
   const [formData, setFormData] = useState({
     role: UserRole.PATIENT,
     firstName: '',
@@ -82,9 +83,11 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
 
   return (
     <div>
-      <div className="mb-4">
-        <BackButton />
-      </div>
+      {!hideBackButton && (
+        <div className="mb-4">
+          <BackButton />
+        </div>
+      )}
       <h2 className="text-2xl font-bold text-center text-dark-blue mb-6">Create Account</h2>
       <form onSubmit={handleSubmit} className="space-y-3">
 
