@@ -24,13 +24,6 @@ const teamMembers: TeamMember[] = [
         linkedin: 'https://www.linkedin.com/in/rohit-srivastava-02bb2b16/'
     },
     {
-        name: 'Dr. Rupesh Ghyar',
-        role: 'Technical Advisor',
-        description: 'Alumni, IIT Bombay',
-        image: '/images/dr_rupesh.jpg',
-        linkedin: 'https://www.linkedin.com/in/rupesh-ghyar-7510442b7/'
-    },
-    {
         name: 'Rupesh Kumar Gupta',
         role: 'Business Head',
         description: 'Director at DyCine Pharmaceuticals Ltd.',
@@ -68,15 +61,9 @@ const TeamSection: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
-                    {/* Render first 4 members */}
-                    {teamMembers.slice(0, 4).map((member, index) => (
+                    {teamMembers.map((member, index) => (
                         <TeamMemberCard key={index} member={member} />
                     ))}
-                </div>
-
-                {/* Render last member centered */}
-                <div className="flex justify-center mt-8">
-                    <TeamMemberCard member={teamMembers[4]} />
                 </div>
             </div>
         </section>
