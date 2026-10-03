@@ -1,7 +1,7 @@
 
 import axios, { AxiosResponse } from 'axios';
 
-const BASE_URL = 'http://34.14.180.50:6001';
+const BASE_URL = 'https://api.dreptobiodevices.com';
 
 // Create Axios Instance
 export const api = axios.create({
