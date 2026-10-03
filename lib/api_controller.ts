@@ -1,7 +1,7 @@
 
 import axios, { AxiosResponse } from 'axios';
 
-const BASE_URL = 'https://api.dreptobiodevices.com';
+const BASE_URL = 'http://34.14.180.50:6001';
 
 // Create Axios Instance
 export const api = axios.create({
@@ -146,6 +146,8 @@ export const UserService = {
   getUserById: (id: string) => api.get(`/user/${id}`),
   updateUser: (id: string, data: any) => api.patch(`/user/${id}`, data),
   deleteUser: (id: string) => api.delete(`/user/${id}`),
+  requestOtp: (data: any) => api.post('/user/request-otp', data),
+  verifyOtp: (data: any) => api.post('/user/verify-otp', data),
 };
 
 // Contact Controller
