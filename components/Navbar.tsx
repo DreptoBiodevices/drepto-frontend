@@ -101,6 +101,24 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
   const [prescriptionSuccess, setPrescriptionSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // ── Cart State ──
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      try {
+        const cart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
+        setCartCount(cart.length);
+      } catch {
+        setCartCount(0);
+      }
+    };
+
+    updateCartCount();
+    window.addEventListener('cart:updated', updateCartCount);
+    return () => window.removeEventListener('cart:updated', updateCartCount);
+  }, []);
+
   const navLinks = [
     { name: t('nav.home'), ref: sectionRefs.home, path: '/', icon: Home, key: 'Home' },
     { name: t('nav.medicines'), path: '/medicines', icon: Pill, key: 'Medicines' },
@@ -463,7 +481,9 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
             >
               <ShoppingBag className="w-5 h-5 text-slate-700" />
               <span className="font-medium">{t('util.cart')}</span>
-              <span className="inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-bold leading-none text-white bg-brand-600 rounded-full">0</span>
+              {cartCount > 0 && (
+                <span className="inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-bold leading-none text-white bg-brand-600 rounded-full">{cartCount}</span>
+              )}
             </button>
             {/* Auth */}
             <div className="flex items-center space-x-3 pl-3 border-l border-slate-200">

@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import ProductDetailModal, { Product } from '../components/ProductDetailModal';
 import { ProductService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
-import { X, CheckCircle, ExternalLink } from 'lucide-react';
+import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
 import { Order } from '../types';
 
 
@@ -26,11 +26,35 @@ const OurProductsPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        try {
-            const stored = localStorage.getItem('patient_cart');
-            if (stored) setCart(JSON.parse(stored));
-        } catch { }
+        const updateCart = () => {
+            try {
+                const stored = localStorage.getItem('patient_cart');
+                if (stored) setCart(JSON.parse(stored));
+                else setCart([]);
+            } catch { }
+        };
+        updateCart();
+        window.addEventListener('cart:updated', updateCart);
+        return () => window.removeEventListener('cart:updated', updateCart);
+    }, []);
 
+    const getProductCountInCart = (productName: string) => {
+        return cart.filter((item: any) => item.name === productName).length;
+    };
+
+    const decrementCart = (productName: string, e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
+        const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
+        const index = currentCart.findLastIndex((item: any) => item.name === productName);
+        if (index !== -1) {
+            currentCart.splice(index, 1);
+            localStorage.setItem('patient_cart', JSON.stringify(currentCart));
+            setCart(currentCart);
+            window.dispatchEvent(new Event('cart:updated'));
+        }
+    };
+
+    useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await ProductService.getAllProducts();
@@ -54,7 +78,7 @@ const OurProductsPage: React.FC = () => {
 
     const addToCart = (product: Product) => {
         if (!user) {
-            setNotification('Please login to get samples');
+            setNotification('Please login to purchase');
             setTimeout(() => {
                 setNotification('');
                 navigate('/auth', { state: { from: '/our-products' } });
@@ -63,17 +87,16 @@ const OurProductsPage: React.FC = () => {
         }
 
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const updatedCart = [...currentCart, { ...product, freeShipping: true }];
+        const updatedCart = [...currentCart, { ...product }];
         localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
         setCart(updatedCart);
 
         // Dispatch event to update Navbar count
         window.dispatchEvent(new Event('cart:updated'));
 
-        setNotification('Sample added to box!');
+        setNotification('Added to cart!');
         setTimeout(() => {
             setNotification('');
-            navigate('/cart');
         }, 1000);
     };
 
@@ -218,9 +241,6 @@ const OurProductsPage: React.FC = () => {
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Discover our curated selection of top-quality wellness and healthcare essentials.
                     </p>
-                    <p className="text-sm text-red-500 italic mt-2">
-                        *Get a sample product by just paying existing handling charges.
-                    </p>
                 </div>
 
                 {notification && (
@@ -286,13 +306,37 @@ const OurProductsPage: React.FC = () => {
                                                 )}
                                             </div>
 
-                                            <button
-                                                onClick={() => addToCart(product)}
-                                                className="w-full py-2.5 px-4 bg-gray-900 hover:bg-orange-500 text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
-                                            >
-                                                Add to Cart
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                            </button>
+                                            {getProductCountInCart(product.name) > 0 ? (
+                                                <div className="w-full flex items-center justify-between border-2 border-yellow-400 rounded-full h-[44px] overflow-hidden bg-white mb-2 shadow-sm">
+                                                    <button 
+                                                        onClick={(e) => decrementCart(product.name, e)}
+                                                        className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-red-600"
+                                                    >
+                                                        {getProductCountInCart(product.name) === 1 ? (
+                                                            <Trash2 className="w-5 h-5" />
+                                                        ) : (
+                                                            <Minus className="w-5 h-5" />
+                                                        )}
+                                                    </button>
+                                                    <span className="font-bold text-gray-900 text-sm flex-1 text-center">
+                                                        {getProductCountInCart(product.name)} in cart
+                                                    </span>
+                                                    <button 
+                                                        onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                                                        className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-l border-gray-300 text-gray-700"
+                                                    >
+                                                        <Plus className="w-5 h-5" />
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                                                    className="w-full py-2.5 px-4 bg-gray-900 hover:bg-orange-500 text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2 mb-2"
+                                                >
+                                                    Add to Cart
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                                </button>
+                                            )}
                                             <button
                                                 onClick={handleSubscription}
                                                 className="w-full mt-2 py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"

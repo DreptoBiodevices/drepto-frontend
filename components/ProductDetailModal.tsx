@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check, Truck, Building2, Box, Star, Upload, Video, Camera } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check, Truck, Building2, Box, Star, Upload, Video, Camera, Trash2, Plus, Minus } from 'lucide-react';
 
 export interface Product {
     name: string;
@@ -35,16 +35,40 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
     const [shippingSource, setShippingSource] = useState<'IIT Bombay' | 'Warehouse' | null>(null);
     const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
 
-    const handleAddToCartClick = () => {
-        // Bypass selection and use a default source
-        confirmAddToCart('Warehouse');
+    const [cartCount, setCartCount] = useState(0);
+
+    useEffect(() => {
+        const updateCart = () => {
+            try {
+                const stored = localStorage.getItem('patient_cart');
+                if (stored) {
+                    const cart = JSON.parse(stored);
+                    setCartCount(cart.filter((item: any) => item.name === product?.name).length);
+                } else {
+                    setCartCount(0);
+                }
+            } catch { }
+        };
+        updateCart();
+        window.addEventListener('cart:updated', updateCart);
+        return () => window.removeEventListener('cart:updated', updateCart);
+    }, [product]);
+
+    const handleDecrement = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
+        const index = currentCart.findLastIndex((item: any) => item.name === product?.name);
+        if (index !== -1) {
+            currentCart.splice(index, 1);
+            localStorage.setItem('patient_cart', JSON.stringify(currentCart));
+            window.dispatchEvent(new Event('cart:updated'));
+        }
     };
 
     const confirmAddToCart = (source: 'IIT Bombay' | 'Warehouse') => {
         const productWithSource = { ...product, shippingSource: source };
         onAddToCart(productWithSource);
         setShowSourceSelection(false);
-        onClose();
     };
 
     return (
@@ -312,18 +336,38 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                         </div>
                     </div>
 
-                    <div className="p-6 lg:p-10">
-                        <button
-                            onClick={handleAddToCartClick}
-                            className="w-full bg-gray-900 text-white py-4 rounded-xl hover:bg-orange-500 transition-all shadow-lg flex items-center justify-center gap-2 font-bold text-lg group active:scale-[0.98]"
-                        >
-                            <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                            Get Your Free Samples
-                        </button>
-                        <p className="text-gray-600 text-sm mt-3 text-center font-bold flex items-center justify-center gap-1">
-                            <Truck className="w-4 h-4" />
-                            *Only Shipping Charges Applies
-                        </p>
+                    <div className="p-6 lg:p-10 border-t border-gray-100 mt-auto">
+                        {cartCount > 0 ? (
+                            <div className="w-full flex items-center justify-between border-2 border-yellow-400 rounded-full h-[56px] overflow-hidden bg-white shadow-sm">
+                                <button 
+                                    onClick={handleDecrement}
+                                    className="h-full px-6 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-red-600"
+                                >
+                                    {cartCount === 1 ? (
+                                        <Trash2 className="w-6 h-6" />
+                                    ) : (
+                                        <Minus className="w-6 h-6" />
+                                    )}
+                                </button>
+                                <span className="font-bold text-gray-900 text-lg flex-1 text-center">
+                                    {cartCount} in cart
+                                </span>
+                                <button 
+                                    onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
+                                    className="h-full px-6 flex items-center justify-center hover:bg-gray-100 transition-colors border-l border-gray-300 text-gray-700"
+                                >
+                                    <Plus className="w-6 h-6" />
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
+                                className="w-full bg-gray-900 text-white py-4 rounded-full hover:bg-orange-500 transition-all shadow-lg flex items-center justify-center gap-2 font-bold text-lg group active:scale-[0.98]"
+                            >
+                                <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                Add to Cart
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
