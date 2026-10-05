@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check, Truck, Building2, Box, Star, Upload, Video, Camera, Trash2, Plus, Minus } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 export interface Product {
     name: string;
     description: string;
@@ -24,6 +24,7 @@ interface ProductDetailModalProps {
 
 
 const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen, onClose, onAddToCart }) => {
+    const navigate = useNavigate();
     if (!isOpen || !product) return null;
 
     const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -362,12 +363,25 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                         ) : (
                             <button
                                 onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
-                                className="w-full bg-gray-900 text-white py-4 rounded-full hover:bg-orange-500 transition-all shadow-lg flex items-center justify-center gap-2 font-bold text-lg group active:scale-[0.98]"
+                                className="w-full bg-gray-900 text-white py-4 rounded-full hover:bg-gray-800 transition-all shadow-lg flex items-center justify-center gap-2 font-bold text-lg group active:scale-[0.98] mb-2"
                             >
                                 <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
                                 Add to Cart
                             </button>
                         )}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (cartCount === 0) {
+                                    confirmAddToCart('Warehouse');
+                                }
+                                onClose();
+                                navigate('/cart');
+                            }}
+                            className="w-full bg-orange-500 text-white py-4 rounded-full hover:bg-orange-600 transition-all shadow-md flex items-center justify-center gap-2 font-bold text-lg"
+                        >
+                            Buy Now
+                        </button>
                     </div>
                 </div>
             </div>

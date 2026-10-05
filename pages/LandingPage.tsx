@@ -40,7 +40,7 @@ const LandingPage: React.FC = () => {
       {/* Main Content - Visible on all screens */}
       <main>
         <div ref={homeRef}><HeroSection /></div>
-        <div ref={productRef}><ProductSection /></div>
+        <div ref={productRef}></div>
         <FeaturedMedicines />
         <PopularLabTests />
         <div ref={aboutRef}><AboutSection /></div>

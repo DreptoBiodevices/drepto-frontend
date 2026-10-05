@@ -124,7 +124,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
     { name: t('nav.medicines'), path: '/medicines', icon: Pill, key: 'Medicines' },
     { name: t('nav.labTests'), path: '/lab-tests', icon: TestTube2, key: 'Lab Tests' },
     { name: t('nav.ourProducts'), path: '/our-products', icon: ShoppingBag, key: 'Our Products' },
-    { name: t('nav.features'), path: '/features', icon: Zap, key: 'Features' },
     { name: t('nav.aboutUs'), path: '/about-us', icon: Info, key: 'About Us' },
     { name: t('nav.contact'), path: '/contact', icon: Mail, key: 'Contact' },
   ];
