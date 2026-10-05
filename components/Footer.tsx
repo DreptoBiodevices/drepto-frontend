@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
 
 const Footer: React.FC = () => {
+  const { t } = useLanguage();
   return (
     <footer className="bg-[#001a2c] text-white border-t border-white/5">
       <div className="container mx-auto px-6 py-16">
@@ -38,7 +40,7 @@ const Footer: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <h3 className="font-bold text-xs uppercase tracking-[0.2em]">Our Locations</h3>
+              <h3 className="font-bold text-xs uppercase tracking-[0.2em]">{t('footer.ourLocations')}</h3>
             </div>
 
             <div className="space-y-4">
@@ -59,10 +61,10 @@ const Footer: React.FC = () => {
           {/* Column 3: Navigation Links */}
           <div className="grid grid-cols-2 gap-8 lg:col-span-2">
             <div className="flex flex-col gap-4">
-              <h4 className="font-bold text-white text-sm uppercase tracking-wider">Company</h4>
+              <h4 className="font-bold text-white text-sm uppercase tracking-wider">{t('footer.company')}</h4>
               <nav className="flex flex-col gap-2">
-                <Link to="/about-us" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">About Us</Link>
-                <Link to="/contact-section" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Contact</Link>
+                <Link to="/about-us" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.aboutUs')}</Link>
+                <Link to="/contact" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.contact')}</Link>
                 <Link to="/our-products" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Pharmacy</Link>
                 <Link to="/lab-tests" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Lab Tests</Link>
                 <Link to="/feedback" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Feedback</Link>
@@ -70,7 +72,7 @@ const Footer: React.FC = () => {
               </nav>
             </div>
             <div className="flex flex-col gap-4">
-              <h4 className="font-bold text-white text-sm uppercase tracking-wider">Legal</h4>
+              <h4 className="font-bold text-white text-sm uppercase tracking-wider">{t('footer.legal')}</h4>
               <nav className="flex flex-col gap-2">
                 <Link to="/privacy-policy" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Privacy Policy</Link>
                 <Link to="/terms" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Terms of Service</Link>

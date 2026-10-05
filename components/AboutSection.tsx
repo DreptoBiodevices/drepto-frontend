@@ -1,6 +1,8 @@
 import React from 'react';
+import { useLanguage } from '../hooks/useLanguage';
 
 const AboutSection: React.FC = () => {
+  const { t } = useLanguage();
   return (
     <section className="py-16 bg-slate-50" id="purpose">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,13 +14,13 @@ const AboutSection: React.FC = () => {
             <div className="absolute -right-16 -top-16 w-64 h-64 bg-teal-500/20 rounded-full blur-2xl pointer-events-none" />
 
             <div>
-              <span className="text-xs font-bold tracking-widest uppercase text-brand-200">Who We Are</span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mt-1 text-white">Our Purpose.</h2>
+              <span className="text-xs font-bold tracking-widest uppercase text-brand-200">{t('about.whoWeAre')}</span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mt-1 text-white">{t('about.ourPurpose')}</h2>
 
               <div className="mt-8 space-y-8">
                 {/* Mission Block */}
                 <div className="space-y-2">
-                  <div className="text-xs font-mono font-bold tracking-widest text-teal-300">01 — MISSION</div>
+                  <div className="text-xs font-mono font-bold tracking-widest text-teal-300">01 — {t('about.mission')}</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white">Redefining how patients receive treatment.</h3>
                   <p className="text-slate-100/90 text-sm sm:text-base leading-relaxed">
                     Our mission is to revolutionize the treatment of rheumatoid arthritis by providing an innovative, non-invasive, and patient-friendly transdermal methotrexate delivery solution. We aim to improve patient outcomes, safety, and compliance by reducing dosage requirements and side effects.
@@ -27,7 +29,7 @@ const AboutSection: React.FC = () => {
 
                 {/* Vision Block */}
                 <div className="space-y-2 pt-2 border-t border-brand-600/60">
-                  <div className="text-xs font-mono font-bold tracking-widest text-teal-300">02 — VISION</div>
+                  <div className="text-xs font-mono font-bold tracking-widest text-teal-300">02 — {t('about.vision')}</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white">A world without the burden of invasive care.</h3>
                   <p className="text-slate-100/90 text-sm sm:text-base leading-relaxed">
                     Our vision is to revolutionize the treatment of rheumatoid arthritis, transforming lives with our innovative drug delivery systems. We dream of a world where patients experience relief without the burden of invasive procedures or harsh side effects. Driven by compassion and a commitment to excellence, we aim to set new standards in healthcare.

@@ -23,6 +23,9 @@ import InvoicePage from './pages/InvoicePage';
 import FeedbackPage from './pages/FeedbackPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import SocialMediaBlogPage from './pages/SocialMediaBlogPage';
+import FeaturesPage from './pages/FeaturesPage';
+import ContactPage from './pages/ContactPage';
+import { LanguageProvider } from './hooks/useLanguage';
 
 
 const ScrollToTop = () => {
@@ -35,12 +38,14 @@ const ScrollToTop = () => {
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Main />
-      </BrowserRouter>
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <Main />
+        </BrowserRouter>
+      </AuthProvider>
+    </LanguageProvider>
   );
 };
 
@@ -81,6 +86,8 @@ const Main: React.FC = () => {
         <Route path="/medicines" element={<MedicinesPage />} />
         <Route path="/lab-tests" element={<LabTestsPage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
+        <Route path="/features" element={<FeaturesPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/our-products" element={<OurProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />

@@ -177,14 +177,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
       if (role === UserRole.NURSE) {
-        response = await NurseService.register(rest);
+        // Nurse role expects specific fields and forbids email/age
+        const { email, age, ...nurseRest } = rest;
+        const nursePayload = {
+          ...nurseRest,
+          licenseNumber: 'NURSE-001',
+          role: 'Nurse',
+          specification: 'General',
+          availiability: 'Full-time',
+          isAvailable: true,
+          experienceYears: 1,
+          serviceTypes: ['general']
+        };
+        response = await NurseService.register(nursePayload);
       } else if (role === UserRole.DOCTOR || role === UserRole.ADMIN) {
-        // Map to Authorized Register
-        // Authorized register needs 'roleTitle' maybe?
+        // Authorized register forbids email/age
+        const { email, age, ...authorizedRest } = rest;
         const authorizedPayload = {
-          ...rest,
-          role: role, // Pass the role string
-          roleTitle: role, // Maybe required?
+          ...authorizedRest,
+          role: role, 
+          roleTitle: role,
         };
         response = await AuthorizedService.register(authorizedPayload);
       } else {

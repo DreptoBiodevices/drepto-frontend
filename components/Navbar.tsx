@@ -1,6 +1,8 @@
-import React, { useState, useEffect, RefObject } from 'react';
+import React, { useState, useEffect, useRef, RefObject } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useLanguage } from '../hooks/useLanguage';
+import { LangCode } from '../lib/translations';
 import {
   Home,
   Pill,
@@ -20,7 +22,10 @@ import {
   FileText,
   Search,
   Globe,
-  MapPin
+  MapPin,
+  Upload,
+  Check,
+  AlertCircle,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -29,9 +34,40 @@ interface NavbarProps {
   setIsMobileMenuOpen?: (isOpen: boolean) => void;
 }
 
+// ── Supported languages ──
+const LANGUAGES = [
+  { code: 'en', name: 'English', nativeName: 'English' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
+  { code: 'mr', name: 'Marathi', nativeName: 'मराठी' },
+  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা' },
+  { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்' },
+  { code: 'te', name: 'Telugu', nativeName: 'తెలుగు' },
+  { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ' },
+  { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી' },
+];
+
+// ── Searchable items ──
+const SEARCHABLE_ITEMS = [
+  { label: 'Medicines', path: '/medicines', keywords: ['medicine', 'drug', 'pharmacy', 'pill', 'tablet', 'capsule', 'syrup'] },
+  { label: 'Lab Tests', path: '/lab-tests', keywords: ['lab', 'test', 'diagnostic', 'blood', 'urine', 'report', 'pathology', 'nabl'] },
+  { label: 'Our Products', path: '/our-products', keywords: ['product', 'device', 'biodevice', 'transdermal', 'iontophoretic', 'sample'] },
+  { label: 'Features', path: '/features', keywords: ['feature', 'service', 'video', 'consultation', 'delivery', 'nursing', 'ambulance', 'health record'] },
+  { label: 'About Us', path: '/about-us', keywords: ['about', 'company', 'team', 'mission', 'vision', 'drepto', 'iit bombay', 'sine'] },
+  { label: 'Contact Us', path: '/contact', keywords: ['contact', 'email', 'phone', 'address', 'support', 'help', 'reach'] },
+  { label: 'Cart', path: '/cart', keywords: ['cart', 'bag', 'checkout', 'order'] },
+  { label: 'My Orders', path: '/orders', keywords: ['order', 'history', 'tracking', 'delivery status'] },
+  { label: 'Feedback', path: '/feedback', keywords: ['feedback', 'review', 'rating', 'testimonial'] },
+  { label: 'Testimonials', path: '/testimonials', keywords: ['testimonial', 'review', 'customer', 'rating'] },
+  { label: 'Privacy Policy', path: '/privacy-policy', keywords: ['privacy', 'policy', 'data'] },
+  { label: 'Terms of Service', path: '/terms', keywords: ['terms', 'service', 'agreement', 'legal'] },
+  { label: 'Refund Policy', path: '/refund-policy', keywords: ['refund', 'return', 'cancel'] },
+  { label: 'Shipping Policy', path: '/shipping-policy', keywords: ['shipping', 'delivery', 'dispatch'] },
+];
+
 const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefObject<HTMLDivElement>>, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const { user, logout, setAuthModalView } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
 
   const isMobileMenuOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsMobileMenuOpen = externalSetIsOpen || setInternalIsOpen;
@@ -41,14 +77,32 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
+  // ── Search state ──
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<typeof SEARCHABLE_ITEMS>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // ── Language state ──
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const languageRef = useRef<HTMLDivElement>(null);
+
+  // ── Upload Prescription state ──
+  const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
+  const [prescriptionFile, setPrescriptionFile] = useState<File | null>(null);
+  const [prescriptionPreview, setPrescriptionPreview] = useState<string | null>(null);
+  const [prescriptionUploading, setPrescriptionUploading] = useState(false);
+  const [prescriptionSuccess, setPrescriptionSuccess] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const navLinks = [
-    { name: 'Home', ref: sectionRefs.home, path: '/', icon: Home },
-    { name: 'Medicines', path: '/medicines', icon: Pill },
-    { name: 'Lab Tests', path: '/lab-tests', icon: TestTube2 },
-    { name: 'Our Products', path: '/our-products', icon: ShoppingBag },
-    { name: 'Features', ref: sectionRefs.product, path: '/', icon: Zap },
-    { name: 'About Us', path: '/about-us', icon: Info },
-    { name: 'Contact', ref: sectionRefs.contact, path: '/', icon: Mail },
+    { name: t('nav.home'), ref: sectionRefs.home, path: '/', icon: Home, key: 'Home' },
+    { name: t('nav.medicines'), path: '/medicines', icon: Pill, key: 'Medicines' },
+    { name: t('nav.labTests'), path: '/lab-tests', icon: TestTube2, key: 'Lab Tests' },
+    { name: t('nav.ourProducts'), path: '/our-products', icon: ShoppingBag, key: 'Our Products' },
+    { name: t('nav.features'), path: '/features', icon: Zap, key: 'Features' },
+    { name: t('nav.aboutUs'), path: '/about-us', icon: Info, key: 'About Us' },
+    { name: t('nav.contact'), path: '/contact', icon: Mail, key: 'Contact' },
   ];
 
   const handleNavigation = (link: typeof navLinks[0]) => {
@@ -59,6 +113,15 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       return;
     }
 
+    if (link.name === 'Home') {
+      if (!isHomePage) {
+        navigate('/');
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
     if (!isHomePage) {
       navigate('/');
       return;
@@ -66,10 +129,137 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
 
     if (link.ref) {
       link.ref.current?.scrollIntoView({ behavior: 'smooth' });
-    } else if (link.name === 'Home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  // ── Search logic ──
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim().length === 0) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    const q = query.toLowerCase().trim();
+    const results = SEARCHABLE_ITEMS.filter(
+      (item) =>
+        item.label.toLowerCase().includes(q) ||
+        item.keywords.some((kw) => kw.includes(q))
+    );
+    setSearchResults(results);
+    setShowSearchResults(true);
+  };
+
+  const handleSearchSubmit = () => {
+    if (searchQuery.trim().length === 0) return;
+
+    const q = searchQuery.toLowerCase().trim();
+    const results = SEARCHABLE_ITEMS.filter(
+      (item) =>
+        item.label.toLowerCase().includes(q) ||
+        item.keywords.some((kw) => kw.includes(q))
+    );
+
+    if (results.length > 0) {
+      navigate(results[0].path);
+      setSearchQuery('');
+      setShowSearchResults(false);
+    } else {
+      // Default: navigate to medicines page with search query
+      navigate(`/medicines`);
+      setSearchQuery('');
+      setShowSearchResults(false);
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit();
+    }
+  };
+
+  const handleSearchResultClick = (path: string) => {
+    navigate(path);
+    setSearchQuery('');
+    setShowSearchResults(false);
+  };
+
+  // ── Language logic ──
+  const handleLanguageChange = (code: string) => {
+    setLanguage(code as LangCode);
+    setShowLanguageDropdown(false);
+
+    // Show a notification 
+    const langName = LANGUAGES.find((l) => l.code === code)?.name || code;
+    const notif = document.createElement('div');
+    notif.className = 'fixed top-24 right-4 bg-brand-700 text-white px-6 py-3 rounded-xl shadow-lg z-[100] animate-fade-in-up font-medium';
+    notif.textContent = `Language changed to ${langName}`;
+    document.body.appendChild(notif);
+    setTimeout(() => {
+      notif.style.opacity = '0';
+      notif.style.transition = 'opacity 0.3s';
+      setTimeout(() => notif.remove(), 300);
+    }, 2000);
+  };
+
+  const currentLanguage = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
+
+  // ── Prescription Upload logic ──
+  const handlePrescriptionClick = () => {
+    setShowPrescriptionModal(true);
+    setPrescriptionFile(null);
+    setPrescriptionPreview(null);
+    setPrescriptionSuccess(false);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPrescriptionFile(file);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setPrescriptionPreview(ev.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePrescriptionUpload = async () => {
+    if (!prescriptionFile) return;
+
+    setPrescriptionUploading(true);
+
+    // Simulate upload (replace with actual API call when backend supports it)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setPrescriptionUploading(false);
+    setPrescriptionSuccess(true);
+
+    // Auto-close after success
+    setTimeout(() => {
+      setShowPrescriptionModal(false);
+      setPrescriptionFile(null);
+      setPrescriptionPreview(null);
+      setPrescriptionSuccess(false);
+    }, 2500);
+  };
+
+  // ── Click outside handlers ──
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowSearchResults(false);
+      }
+      if (languageRef.current && !languageRef.current.contains(e.target as Node)) {
+        setShowLanguageDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,7 +277,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
           {/* Delivery Location */}
           <div className="flex items-center space-x-2">
             <MapPin className="w-4 h-4 text-brand-600" />
-            <span className="text-slate-400">Deliver to:</span>
+            <span className="text-slate-400">{t('util.deliverTo')}</span>
             <select className="bg-transparent text-slate-800 font-semibold focus:outline-none border-none py-0 pl-1 pr-4 text-sm cursor-pointer hover:text-brand-600 transition-colors">
               <option>Mumbai (SINE IIT Bombay, 400076)</option>
               <option>Delhi NCR</option>
@@ -98,17 +288,61 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
           </div>
           {/* Right utilities */}
           <div className="flex items-center space-x-6">
-            <button className="flex items-center space-x-1.5 hover:text-brand-700 transition-colors" title="Change Language">
-              <Globe className="w-4 h-4 text-slate-500" />
-              <span>English</span>
-            </button>
+            {/* Language Selector */}
+            <div className="relative" ref={languageRef}>
+              <button
+                className="flex items-center space-x-1.5 hover:text-brand-700 transition-colors"
+                title="Change Language"
+                onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+              >
+                <Globe className="w-4 h-4 text-slate-500" />
+                <span>{currentLanguage.name}</span>
+                <svg
+                  className={`w-3 h-3 text-slate-400 transition-transform ${showLanguageDropdown ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Language Dropdown */}
+              {showLanguageDropdown && (
+                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-[60] animate-fade-in-down">
+                  <div className="px-4 py-2 border-b border-slate-100">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('util.selectLanguage')}</p>
+                  </div>
+                  {LANGUAGES.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => handleLanguageChange(lang.code)}
+                      className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors ${
+                        language === lang.code
+                          ? 'bg-brand-50 text-brand-700 font-semibold'
+                          : 'text-slate-700 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-medium">{lang.name}</span>
+                        <span className="text-slate-400 text-xs">{lang.nativeName}</span>
+                      </div>
+                      {language === lang.code && (
+                        <Check className="w-4 h-4 text-brand-600" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Cart */}
             <button
               className="flex items-center space-x-1.5 hover:text-brand-700 transition-colors relative py-1"
               onClick={() => navigate('/cart')}
             >
               <ShoppingBag className="w-5 h-5 text-slate-700" />
-              <span className="font-medium">Cart</span>
+              <span className="font-medium">{t('util.cart')}</span>
               <span className="inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-bold leading-none text-white bg-brand-600 rounded-full">0</span>
             </button>
             {/* Auth */}
@@ -126,7 +360,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                     onClick={logout}
                     className="px-4 py-1.5 font-semibold text-white bg-red-500 hover:bg-red-600 rounded-md transition-all shadow-sm text-sm"
                   >
-                    Sign Out
+                    {t('util.signOut')}
                   </button>
                 </>
               ) : (
@@ -135,13 +369,13 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                     onClick={() => setAuthModalView('login')}
                     className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors"
                   >
-                    Sign In
+                    {t('util.signIn')}
                   </button>
                   <button
                     onClick={() => setAuthModalView('signup')}
                     className="px-4 py-1.5 font-semibold text-white bg-brand-700 hover:bg-brand-800 rounded-md transition-all shadow-sm"
                   >
-                    Signup
+                    {t('util.signUp')}
                   </button>
                 </>
               )}
@@ -190,9 +424,10 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
               <button
                 className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl border border-brand-600/30 text-brand-800 bg-brand-50/50 hover:bg-brand-50 hover:border-brand-600 font-bold text-sm tracking-wide transition-all shadow-sm group"
                 type="button"
+                onClick={handlePrescriptionClick}
               >
                 <FileText className="w-5 h-5 text-brand-700 group-hover:scale-110 transition-transform" />
-                <span>Upload Prescription</span>
+                <span>{t('util.uploadPrescription')}</span>
               </button>
 
               {user ? (
@@ -202,18 +437,8 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                     onClick={() => navigate('/orders')}
                   >
                     <Package className="w-5 h-5 text-gray-700" />
-                    <span className="text-base font-medium">My Orders</span>
+                    <span className="text-base font-medium">{t('util.myOrders')}</span>
                   </div>
-                  <div
-                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 py-2 px-4 rounded-full transition-all"
-                    onClick={() => navigate('/dashboard')}
-                  >
-                    <User className="w-5 h-5 text-gray-700" />
-                    <span className="text-base font-medium">{user.firstName}</span>
-                  </div>
-                  <button onClick={logout} className="text-gray-500 hover:text-red-500 ml-2">
-                    <LogOut className="w-6 h-6" />
-                  </button>
                 </div>
               ) : null}
             </div>
@@ -228,19 +453,65 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
           </div>
 
           {/* Search Bar Row */}
-          <div className="py-4 border-t border-slate-100 hidden sm:block">
+          <div className="py-4 border-t border-slate-100 hidden sm:block" ref={searchRef}>
             <div className="relative max-w-4xl mx-auto">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-slate-400" />
               </div>
               <input
                 className="w-full pl-12 pr-32 py-3 text-sm sm:text-base bg-slate-100/70 border border-slate-200/90 rounded-full focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all placeholder:text-slate-400"
-                placeholder="Search medicines, diagnostic lab test packages, biodevices..."
+                placeholder={t('search.placeholder')}
                 type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
+                onFocus={() => {
+                  if (searchQuery.trim().length > 0 && searchResults.length > 0) {
+                    setShowSearchResults(true);
+                  }
+                }}
               />
-              <button className="absolute right-2 top-2 bottom-2 px-6 bg-brand-700 hover:bg-brand-800 text-white rounded-full text-sm font-bold transition-colors flex items-center space-x-1">
-                <span>Find</span>
+              <button
+                className="absolute right-2 top-2 bottom-2 px-6 bg-brand-700 hover:bg-brand-800 text-white rounded-full text-sm font-bold transition-colors flex items-center space-x-1"
+                onClick={handleSearchSubmit}
+              >
+                <span>{t('search.find')}</span>
               </button>
+
+              {/* Search Results Dropdown */}
+              {showSearchResults && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden z-[60] animate-fade-in-down">
+                  {searchResults.length > 0 ? (
+                    <div className="py-2">
+                      <p className="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        {searchResults.length} {t('search.resultsFound')}
+                      </p>
+                      {searchResults.map((result) => (
+                        <button
+                          key={result.path}
+                          onClick={() => handleSearchResultClick(result.path)}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-brand-50 transition-colors"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-brand-100 flex items-center justify-center flex-shrink-0">
+                            <Search className="w-4 h-4 text-brand-700" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-slate-800">{result.label}</p>
+                            <p className="text-xs text-slate-400">{result.path}</p>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-slate-300 ml-auto" />
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center">
+                      <AlertCircle className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                      <p className="text-sm font-medium text-slate-500">{t('search.noResults')} "{searchQuery}"</p>
+                      <p className="text-xs text-slate-400 mt-1">{t('search.trySearching')}</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -298,6 +569,22 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                   </button>
                 ))}
 
+                {/* Upload Prescription (Mobile) */}
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handlePrescriptionClick();
+                  }}
+                  className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-brand-50 text-brand-600 transition-colors">
+                      <Upload className="w-5 h-5" />
+                    </div>
+                    <span className="text-base font-medium">{t('util.uploadPrescription')}</span>
+                  </div>
+                </button>
+
                 {/* Mobile User Links */}
                 {user && (
                   <>
@@ -310,7 +597,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                         <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
                           <ShoppingBag className="w-5 h-5" />
                         </div>
-                        <span className="text-base">My Cart</span>
+                        <span className="text-base">{t('util.myCart')}</span>
                       </div>
                     </button>
                     <button
@@ -321,7 +608,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                         <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
                           <Package className="w-5 h-5" />
                         </div>
-                        <span className="text-base">My Orders</span>
+                        <span className="text-base">{t('util.myOrders')}</span>
                       </div>
                     </button>
                     <button
@@ -332,7 +619,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                         <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
                           <User className="w-5 h-5" />
                         </div>
-                        <span className="text-base">Dashboard</span>
+                        <span className="text-base">{t('util.dashboard')}</span>
                       </div>
                     </button>
                   </>
@@ -353,7 +640,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                     className="w-full flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl font-bold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
                   >
                     <LogIn className="w-5 h-5" />
-                    Sign In
+                    {t('util.signIn')}
                   </button>
                   <button
                     onClick={() => {
@@ -363,7 +650,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                     className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-600 to-primary text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:opacity-95 transition-all transform active:scale-[0.98]"
                   >
                     <UserPlus className="w-5 h-5" />
-                    Sign Up Now
+                    {t('util.signUpNow')}
                   </button>
                 </>
               ) : (
@@ -384,6 +671,132 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
               </p>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* ── Upload Prescription Modal ── */}
+      {showPrescriptionModal && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-zoom-in">
+            {/* Header */}
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-brand-50/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center">
+                  <Upload className="w-5 h-5 text-brand-700" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">{t('prescription.title')}</h3>
+                  <p className="text-xs text-gray-500">{t('prescription.subtitle')}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowPrescriptionModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-6 space-y-5">
+              {prescriptionSuccess ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                    <Check className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">{t('prescription.uploadSuccess')}</h4>
+                  <p className="text-gray-500 text-sm">
+                    {t('prescription.successMessage')}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* Upload Area */}
+                  <div
+                    className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-all"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    {prescriptionPreview ? (
+                      <div className="space-y-3">
+                        <img
+                          src={prescriptionPreview}
+                          alt="Prescription preview"
+                          className="max-h-48 mx-auto rounded-xl object-contain"
+                        />
+                        <p className="text-sm font-medium text-brand-700">{prescriptionFile?.name}</p>
+                        <p className="text-xs text-slate-400">{t('prescription.changeFile')}</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-100 flex items-center justify-center">
+                          <Upload className="w-7 h-7 text-slate-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-700">
+                            {t('prescription.clickToUpload')}
+                          </p>
+                          <p className="text-xs text-slate-400 mt-1">
+                            {t('prescription.fileSupport')}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    className="hidden"
+                    accept="image/*,.pdf"
+                    onChange={handleFileChange}
+                  />
+
+                  {/* Info */}
+                  <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-blue-700 font-medium">
+                          Make sure the prescription is clearly visible and contains:
+                        </p>
+                        <ul className="text-xs text-blue-600 mt-1 space-y-0.5 list-disc list-inside">
+                          <li>Doctor's name and registration number</li>
+                          <li>Patient's name and medicine details</li>
+                          <li>Date of prescription (within 6 months)</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Upload Button */}
+                  <button
+                    onClick={handlePrescriptionUpload}
+                    disabled={!prescriptionFile || prescriptionUploading}
+                    className={`w-full py-4 rounded-xl font-bold text-base shadow-lg flex items-center justify-center gap-2 transition-all ${
+                      prescriptionFile && !prescriptionUploading
+                        ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white hover:shadow-xl hover:-translate-y-0.5'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    }`}
+                  >
+                    {prescriptionUploading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        {t('prescription.uploading')}
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-5 h-5" />
+                        {t('prescription.title')}
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
