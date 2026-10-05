@@ -22,7 +22,7 @@ const OurProductsPage: React.FC = () => {
     const [formFilled, setFormFilled] = useState(false);
     const isRazorpayLoaded = useRazorpay();
 
-    const { user } = useAuth();
+    const { user, setAuthModalView } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -78,11 +78,7 @@ const OurProductsPage: React.FC = () => {
 
     const addToCart = (product: Product) => {
         if (!user) {
-            setNotification('Please login to purchase');
-            setTimeout(() => {
-                setNotification('');
-                navigate('/auth', { state: { from: '/our-products' } });
-            }, 1500);
+            setAuthModalView('login');
             return;
         }
 

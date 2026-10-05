@@ -13,7 +13,7 @@ type CheckoutStep = 'cart' | 'address' | 'payment';
 
 const CartPage: React.FC = () => {
     const [cart, setCart] = useState<any[]>([]);
-    const { user } = useAuth();
+    const { user, setAuthModalView } = useAuth();
     const navigate = useNavigate();
     const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>('cart');
     const [shippingAddress, setShippingAddress] = useState<Address | null>(null);
@@ -106,7 +106,7 @@ const CartPage: React.FC = () => {
 
     const handleProceedToCheckout = () => {
         if (!user) {
-            navigate('/auth', { state: { from: '/cart' } });
+            setAuthModalView('login');
             return;
         }
         setCheckoutStep('address');
