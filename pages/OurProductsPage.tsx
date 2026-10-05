@@ -63,7 +63,7 @@ const OurProductsPage: React.FC = () => {
         }
 
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const updatedCart = [...currentCart, { ...product, price: 90, mrp: 190, freeShipping: true }];
+        const updatedCart = [...currentCart, { ...product, freeShipping: true }];
         localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
         setCart(updatedCart);
 
@@ -268,17 +268,29 @@ const OurProductsPage: React.FC = () => {
 
                                     <div className="mt-auto pt-4 border-t border-gray-50">
                                         <div className="flex flex-col">
-                                            <div className="flex flex-col items-start w-full mb-2">
-                                                <span className="text-sm text-gray-500 line-through">
-                                                    Actual MRP ₹190
-                                                </span>
+                                            <div className="flex flex-col items-start w-full mb-3">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xl font-black text-gray-900">
+                                                        ₹{product.price || 0}
+                                                    </span>
+                                                    {product.mrp && product.mrp > (product.price || 0) && (
+                                                        <span className="text-sm text-gray-400 line-through font-medium">
+                                                            ₹{product.mrp}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                {product.mrp && product.mrp > (product.price || 0) && (
+                                                    <span className="text-xs font-bold text-green-600 uppercase tracking-wide mt-1">
+                                                        Save {Math.round(((product.mrp - (product.price || 0)) / product.mrp) * 100)}%
+                                                    </span>
+                                                )}
                                             </div>
 
                                             <button
                                                 onClick={() => addToCart(product)}
-                                                className="w-full py-2.5 px-4 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                                                className="w-full py-2.5 px-4 bg-gray-900 hover:bg-orange-500 text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2"
                                             >
-                                                Only Handling Charges: ₹90
+                                                Add to Cart
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                             </button>
                                             <button
