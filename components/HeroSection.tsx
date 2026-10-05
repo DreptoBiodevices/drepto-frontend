@@ -2,23 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
-import { loadMedicines } from './admin/MedicineData';
-import { loadLabTests } from './admin/LabTestData';
-
 const HeroSection: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [stats, setStats] = useState({ medicines: 0, labTests: 0 });
 
-  // useEffect removed as per user request to disable API calling
-  // useEffect(() => {
-  //   const meds = loadMedicines();
-  //   const labs = loadLabTests();
-  //   setStats({
-  //     medicines: meds.length,
-  //     labTests: labs.length
-  //   });
-  // }, []);
+
 
   return (
     <section className="relative overflow-hidden pt-10 pb-16 lg:py-20 bg-gradient-to-b from-white via-brand-50/20 to-clinical-surface">
@@ -48,21 +36,7 @@ const HeroSection: React.FC = () => {
               </p>
             </div>
 
-            {/* Stats Badges */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-3xl pt-4">
-              <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-soft">
-                <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-brand-700">{stats.medicines}+</div>
-                <div className="text-sm lg:text-base font-bold text-slate-500 uppercase tracking-wider mt-2">{t('hero.medicines')}</div>
-              </div>
-              <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-soft">
-                <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-brand-700">{stats.labTests}+</div>
-                <div className="text-sm lg:text-base font-bold text-slate-500 uppercase tracking-wider mt-2">{t('hero.labTests')}</div>
-              </div>
-              <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-soft">
-                <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-brand-700">24/7</div>
-                <div className="text-sm lg:text-base font-bold text-slate-500 uppercase tracking-wider mt-2">{t('hero.support')}</div>
-              </div>
-            </div>
+
 
             {/* CTAs */}
             <div className="flex flex-wrap items-center gap-6 pt-6">

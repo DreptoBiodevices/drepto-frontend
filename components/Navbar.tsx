@@ -87,6 +87,12 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const languageRef = useRef<HTMLDivElement>(null);
 
+  // ── Location state ──
+  const [locationName, setLocationName] = useState(() => localStorage.getItem('drepto_location') || 'Select Location');
+  const [showLocationPrompt, setShowLocationPrompt] = useState(false);
+  const locationPromptRef = useRef<HTMLDivElement>(null);
+  const [isLocating, setIsLocating] = useState(false);
+
   // ── Upload Prescription state ──
   const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
   const [prescriptionFile, setPrescriptionFile] = useState<File | null>(null);
@@ -247,6 +253,74 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
     }, 2500);
   };
 
+  // ── Location logic ──
+  const requestLocation = (precise: boolean) => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+    setIsLocating(true);
+    setShowLocationPrompt(false);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          // Reverse geocoding using Nominatim (OpenStreetMap) - Free and open source
+          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const data = await response.json();
+          
+          let locationStr = "Unknown Location";
+          if (data && data.address) {
+             const addr = data.address;
+             
+             if (precise) {
+               // Build a detailed exact location string
+               const exactParts = [];
+               if (addr.house_number) exactParts.push(addr.house_number);
+               if (addr.road || addr.pedestrian || addr.street) exactParts.push(addr.road || addr.pedestrian || addr.street);
+               if (addr.neighbourhood || addr.suburb || addr.residential) exactParts.push(addr.neighbourhood || addr.suburb || addr.residential);
+               if (addr.city || addr.town || addr.village) exactParts.push(addr.city || addr.town || addr.village);
+               
+               locationStr = exactParts.filter(Boolean).join(", ");
+               
+               if (addr.postcode) {
+                 locationStr += ` - ${addr.postcode}`;
+               }
+               
+               // Truncate if it's too long for the navbar
+               if (locationStr.length > 45) {
+                 locationStr = locationStr.substring(0, 42) + '...';
+               }
+             } else {
+               // Approximate location (just city/town level)
+               locationStr = addr.city || addr.town || addr.village || addr.county || addr.state || "Detected Location";
+               if (addr.postcode) locationStr += ` (${addr.postcode})`;
+             }
+          }
+          
+          setLocationName(locationStr);
+          localStorage.setItem('drepto_location', locationStr);
+        } catch (error) {
+          console.error("Error fetching location details:", error);
+          setLocationName("Failed to get address");
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("Unable to retrieve your location. Please check your permissions.");
+        setIsLocating(false);
+      },
+      {
+        enableHighAccuracy: precise,
+        timeout: 10000,
+        maximumAge: precise ? 0 : 60000,
+      }
+    );
+  };
+
   // ── Click outside handlers ──
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -255,6 +329,9 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       }
       if (languageRef.current && !languageRef.current.contains(e.target as Node)) {
         setShowLanguageDropdown(false);
+      }
+      if (locationPromptRef.current && !locationPromptRef.current.contains(e.target as Node)) {
+        setShowLocationPrompt(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -275,16 +352,59 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       <div className="border-b border-slate-200 bg-white text-sm font-medium text-slate-600 hidden sm:block">
         <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between">
           {/* Delivery Location */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 relative" ref={locationPromptRef}>
             <MapPin className="w-4 h-4 text-brand-600" />
             <span className="text-slate-400">{t('util.deliverTo')}</span>
-            <select className="bg-transparent text-slate-800 font-semibold focus:outline-none border-none py-0 pl-1 pr-4 text-sm cursor-pointer hover:text-brand-600 transition-colors">
-              <option>Mumbai (SINE IIT Bombay, 400076)</option>
-              <option>Delhi NCR</option>
-              <option>Bangalore</option>
-              <option>Pune</option>
-              <option>Hyderabad</option>
-            </select>
+            <button
+              onClick={() => setShowLocationPrompt(!showLocationPrompt)}
+              className="bg-transparent text-slate-800 font-semibold focus:outline-none border-none py-0 pl-1 pr-4 text-sm cursor-pointer hover:text-brand-600 transition-colors flex items-center gap-1"
+            >
+              {isLocating ? (
+                <>
+                  <svg className="animate-spin h-3 w-3 text-brand-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Locating...
+                </>
+              ) : (
+                <>
+                  {locationName}
+                  <svg className={`w-3 h-3 text-slate-400 transition-transform ${showLocationPrompt ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </>
+              )}
+            </button>
+
+            {/* Location Prompt Dropdown */}
+            {showLocationPrompt && (
+              <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-[60] animate-fade-in-down">
+                <div className="px-4 py-2 border-b border-slate-100">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Choose Location Accuracy</p>
+                </div>
+                <button
+                  onClick={() => requestLocation(true)}
+                  className="w-full flex items-start text-left gap-3 px-4 py-3 text-sm transition-colors hover:bg-brand-50"
+                >
+                  <MapPin className="w-5 h-5 text-brand-600 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-slate-800">Precise Location</p>
+                    <p className="text-xs text-slate-500">Exact GPS coordinates</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => requestLocation(false)}
+                  className="w-full flex items-start text-left gap-3 px-4 py-3 text-sm transition-colors hover:bg-brand-50"
+                >
+                  <Globe className="w-5 h-5 text-brand-600 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-slate-800">Approximate Location</p>
+                    <p className="text-xs text-slate-500">Approx. 0-50m range (Wi-Fi/Cell)</p>
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
           {/* Right utilities */}
           <div className="flex items-center space-x-6">
