@@ -6,7 +6,6 @@ import LandingPage from './pages/LandingPage';
 import AuthModal from './components/AuthModal';
 // Removed AuthPage import as we use modal now
 import DashboardPage from './pages/DashboardPage';
-import MedicinesPage from './pages/MedicinesPage';
 import LabTestsPage from './pages/LabTestsPage';
 import AboutUsPage from './pages/AboutUsPage';
 import AdminLogin from './components/admin/AdminLogin';
@@ -82,7 +81,6 @@ const Main: React.FC = () => {
     <div className="bg-gray-50 min-h-screen font-sans pb-16 md:pb-0 overflow-x-hidden w-full">
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/medicines" element={<MedicinesPage />} />
         <Route path="/lab-tests" element={<LabTestsPage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
         <Route path="/contact" element={<ContactPage />} />
