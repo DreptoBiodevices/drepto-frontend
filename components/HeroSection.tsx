@@ -41,13 +41,13 @@ const HeroSection: React.FC = () => {
             </div>
 
             <div className="space-y-6">
-              <h1 className="text-6xl sm:text-7xl lg:text-[6.5rem] font-extrabold text-slate-900 tracking-tight leading-[1.05]">
+              <h1 className="text-4xl sm:text-6xl lg:text-[6.5rem] font-extrabold text-slate-900 tracking-tight leading-[1.1]">
                 {t('hero.title')}
               </h1>
-              <p className="text-4xl sm:text-5xl lg:text-5xl font-semibold text-brand-700 tracking-normal leading-tight">
+              <p className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-brand-700 tracking-normal leading-tight">
                 {t('hero.subtitle')}
               </p>
-              <p className="text-slate-600 text-xl sm:text-2xl lg:text-2xl max-w-5xl leading-relaxed pt-4">
+              <p className="text-slate-600 text-lg sm:text-xl lg:text-2xl max-w-5xl leading-relaxed pt-4">
                 {t('hero.description')}
               </p>
             </div>
@@ -77,7 +77,7 @@ const HeroSection: React.FC = () => {
           <div className="w-full lg:w-2/5 flex justify-center lg:justify-end relative z-10 mt-12 lg:mt-0">
              {/* Small Product Card */}
              {featuredProduct && (
-               <div className="bg-white rounded-[2rem] p-6 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-slate-100 max-w-[340px] w-full animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+               <div className="bg-white rounded-[2rem] p-6 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-slate-100 w-full sm:max-w-sm animate-fade-in-up mx-auto lg:mx-0" style={{ animationDelay: '0.4s' }}>
                   <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-brand-50 to-white mb-6 group cursor-pointer border border-brand-100" onClick={() => navigate('/our-products')}>
                       <div className="absolute top-3 left-3 bg-white/90 backdrop-blur text-brand-700 text-xs font-bold px-3 py-1 rounded-full shadow-sm z-10 flex items-center gap-1 border border-brand-200">
                           <span className="w-2 h-2 rounded-full bg-brand-600"></span> Featured

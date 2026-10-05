@@ -80,13 +80,43 @@ const CartPage: React.FC = () => {
         setEstimatedDays(days);
     }, [shippingMethod, distance]);
 
-    const removeFromCart = (index: number) => {
-        const newCart = [...cart];
-        newCart.splice(index, 1);
+    const addOneToCart = (item: any) => {
+        const newCart = [...cart, { ...item }];
         setCart(newCart);
         localStorage.setItem('patient_cart', JSON.stringify(newCart));
         window.dispatchEvent(new Event('cart:updated'));
     };
+
+    const removeOneFromCart = (name: string) => {
+        const newCart = [...cart];
+        const index = newCart.findIndex(item => (item.name || item.title) === name);
+        if (index > -1) {
+            newCart.splice(index, 1);
+            setCart(newCart);
+            localStorage.setItem('patient_cart', JSON.stringify(newCart));
+            window.dispatchEvent(new Event('cart:updated'));
+        }
+    };
+
+    const removeAllFromCart = (name: string) => {
+        const newCart = cart.filter(item => (item.name || item.title) !== name);
+        setCart(newCart);
+        localStorage.setItem('patient_cart', JSON.stringify(newCart));
+        window.dispatchEvent(new Event('cart:updated'));
+    };
+
+    const groupedCart = (() => {
+        const groups = new Map();
+        cart.forEach((item) => {
+            const key = item.name || item.title;
+            if (groups.has(key)) {
+                groups.get(key).quantity += 1;
+            } else {
+                groups.set(key, { ...item, quantity: 1 });
+            }
+        });
+        return Array.from(groups.values());
+    })();
 
     const calculateSubtotal = () => {
         return cart.reduce((total, item) => {
@@ -325,7 +355,7 @@ const CartPage: React.FC = () => {
                         {checkoutStep === 'cart' && (
                             <div className="grid md:grid-cols-3 gap-8 animate-fade-in">
                                 <div className="md:col-span-2 space-y-4">
-                                    {cart.map((item, idx) => (
+                                    {groupedCart.map((item: any, idx: number) => (
                                         <div key={idx} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm">
                                             <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
                                                 <img
@@ -343,13 +373,27 @@ const CartPage: React.FC = () => {
                                                         From: {item.shippingSource}
                                                     </div>
                                                 )}
-                                                <p className="text-primary font-bold mt-1">
-                                                    ₹{typeof item.price === 'number' ? item.price : item.price.replace('$', '')}
-                                                </p>
+                                                <div className="flex items-center gap-4 mt-2">
+                                                    <p className="text-primary font-bold">
+                                                        ₹{typeof item.price === 'number' ? item.price : item.price.replace('$', '')}
+                                                    </p>
+                                                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                                                        <button 
+                                                            onClick={() => removeOneFromCart(item.name || item.title)}
+                                                            className="px-3 py-1 text-gray-600 hover:bg-gray-200 hover:text-red-500 font-bold transition-colors"
+                                                        >-</button>
+                                                        <span className="px-3 py-1 font-bold text-sm bg-white border-x border-gray-200">{item.quantity}</span>
+                                                        <button 
+                                                            onClick={() => addOneToCart(item)}
+                                                            className="px-3 py-1 text-gray-600 hover:bg-gray-200 hover:text-green-600 font-bold transition-colors"
+                                                        >+</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <button
-                                                onClick={() => removeFromCart(idx)}
+                                                onClick={() => removeAllFromCart(item.name || item.title)}
                                                 className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Remove all"
                                             >
                                                 <X className="w-5 h-5" />
                                             </button>
