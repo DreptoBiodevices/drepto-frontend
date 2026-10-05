@@ -25,8 +25,6 @@ interface ProductDetailModalProps {
 
 const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen, onClose, onAddToCart }) => {
     const navigate = useNavigate();
-    if (!isOpen || !product) return null;
-
     const [activeImageIndex, setActiveImageIndex] = useState(0);
     const [reviews, setReviews] = useState<{id: number, name: string, rating: number, comment: string, media?: string}[]>([]);
     const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '', media: null as string | null });
@@ -34,7 +32,6 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
 
     const [showSourceSelection, setShowSourceSelection] = useState(false);
     const [shippingSource, setShippingSource] = useState<'IIT Bombay' | 'Warehouse' | null>(null);
-    const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
 
     const [cartCount, setCartCount] = useState(0);
 
@@ -54,6 +51,10 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
         window.addEventListener('cart:updated', updateCart);
         return () => window.removeEventListener('cart:updated', updateCart);
     }, [product]);
+
+    if (!isOpen || !product) return null;
+
+    const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
 
     const handleDecrement = (e: React.MouseEvent) => {
         e.stopPropagation();
