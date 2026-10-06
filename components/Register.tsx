@@ -216,7 +216,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
         <div className="flex flex-col space-y-3">
           <button
             type="button"
-            onClick={() => window.location.href = 'http://localhost:3000/auth/google'}
+            onClick={() => window.location.href = 'https://api.dreptobiodevices.com/auth/google'}
             className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 font-semibold py-3 px-4 rounded-xl border border-gray-300 hover:bg-gray-50 transition-all shadow-sm"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5">
@@ -230,7 +230,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
           
           <button
             type="button"
-            onClick={() => window.location.href = 'http://localhost:3000/auth/apple'}
+            onClick={() => window.location.href = 'https://api.dreptobiodevices.com/auth/apple'}
             className="w-full flex items-center justify-center gap-2 bg-black text-white font-semibold py-3 px-4 rounded-xl hover:bg-gray-900 transition-all shadow-sm"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
