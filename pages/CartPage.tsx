@@ -225,6 +225,7 @@ const CartPage: React.FC = () => {
                     city: shippingAddress!.city,
                     state: shippingAddress!.state,
                     pincode: shippingAddress!.pincode,
+                    country: 'India',
                     contactNumber: String(user?.mobileNumber || ''),
                     landmark: shippingAddress!.landmark || '',
                 },
