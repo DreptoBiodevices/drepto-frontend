@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check, Truck, Building2, Box, Star, Upload, Video, Camera, Trash2, Plus, Minus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../lib/api_controller';
+
 export interface Product {
+    _id?: string;
     name: string;
     description: string;
     detailedDescription?: string;
@@ -26,9 +29,10 @@ interface ProductDetailModalProps {
 const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen, onClose, onAddToCart }) => {
     const navigate = useNavigate();
     const [activeImageIndex, setActiveImageIndex] = useState(0);
-    const [reviews, setReviews] = useState<{id: number, name: string, rating: number, comment: string, media?: string}[]>([]);
-    const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '', media: null as string | null });
-    const [editingReviewId, setEditingReviewId] = useState<number | null>(null);
+    const [reviews, setReviews] = useState<any[]>([]);
+    const [reviewForm, setReviewForm] = useState({ rating: 5, reviewText: '', images: [], videos: [] } as any);
+    const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [showSourceSelection, setShowSourceSelection] = useState(false);
     const [shippingSource, setShippingSource] = useState<'IIT Bombay' | 'Warehouse' | null>(null);
@@ -50,6 +54,16 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
         updateCart();
         window.addEventListener('cart:updated', updateCart);
         return () => window.removeEventListener('cart:updated', updateCart);
+    }, [product]);
+
+    useEffect(() => {
+        if (product && product._id) {
+            api.get(`/reviews/product/${product._id}`)
+                .then(res => setReviews(res.data))
+                .catch(err => console.error('Failed to fetch reviews', err));
+        } else {
+            setReviews([]);
+        }
     }, [product]);
 
     if (!isOpen || !product) return null;
@@ -200,25 +214,10 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                             {/* Existing Reviews */}
                             <div className="space-y-4 mb-8">
                                 {reviews.map((r) => (
-                                    <div key={r.id} className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                    <div key={r._id} className="bg-gray-50 p-4 rounded-xl border border-gray-100">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="font-bold text-gray-900">{r.name}</span>
+                                            <span className="font-bold text-gray-900">{r.userId?.name || "Customer"}</span>
                                             <div className="flex items-center gap-3">
-                                                {r.name === "You" && (
-                                                    <div className="flex items-center gap-2 mr-2 border-r border-gray-300 pr-3">
-                                                        <button 
-                                                            className="text-xs text-brand-600 hover:underline font-semibold"
-                                                            onClick={() => {
-                                                                setEditingReviewId(r.id);
-                                                                setReviewForm({ rating: r.rating, comment: r.comment, media: r.media || null });
-                                                            }}
-                                                        >Edit</button>
-                                                        <button 
-                                                            className="text-xs text-red-500 hover:underline font-semibold"
-                                                            onClick={() => setReviews(reviews.filter(rev => rev.id !== r.id))}
-                                                        >Delete</button>
-                                                    </div>
-                                                )}
                                                 <div className="flex gap-0.5">
                                                     {[...Array(5)].map((_, idx) => (
                                                         <Star key={idx} className={`w-4 h-4 ${idx < r.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`} />
@@ -226,16 +225,15 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                                 </div>
                                             </div>
                                         </div>
-                                        <p className="text-gray-600 text-sm">{r.comment}</p>
-                                        {r.media && (
-                                            <div className="mt-3">
-                                                {r.media.startsWith('data:video') ? (
-                                                    <video src={r.media} controls className="h-24 rounded-lg border border-gray-200" />
-                                                ) : (
-                                                    <img src={r.media} className="h-24 rounded-lg object-cover border border-gray-200" />
-                                                )}
-                                            </div>
-                                        )}
+                                        <p className="text-gray-600 text-sm">{r.reviewText}</p>
+                                        <div className="mt-3 flex gap-2 overflow-x-auto">
+                                            {r.images?.map((img: string, idx: number) => (
+                                                <img key={idx} src={img} className="h-24 rounded-lg object-cover border border-gray-200 shrink-0" />
+                                            ))}
+                                            {r.videos?.map((vid: string, idx: number) => (
+                                                <video key={idx} src={vid} controls className="h-24 rounded-lg border border-gray-200 shrink-0" />
+                                            ))}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -263,8 +261,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 mb-3"
                                     placeholder="Share your experience with this product..."
                                     rows={3}
-                                    value={reviewForm.comment}
-                                    onChange={(e) => setReviewForm({...reviewForm, comment: e.target.value})}
+                                    value={reviewForm.reviewText}
+                                    onChange={(e) => setReviewForm({...reviewForm, reviewText: e.target.value})}
                                 ></textarea>
                                 
                                 <div className="flex items-center justify-between">
@@ -275,7 +273,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                                 const file = e.target.files?.[0];
                                                 if(file) {
                                                     const reader = new FileReader();
-                                                    reader.onload = (e) => setReviewForm({...reviewForm, media: e.target?.result as string});
+                                                    reader.onload = (e) => setReviewForm({...reviewForm, images: [...reviewForm.images, e.target?.result as string]});
                                                     reader.readAsDataURL(file);
                                                 }
                                             }} />
@@ -286,52 +284,60 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                                 const file = e.target.files?.[0];
                                                 if(file) {
                                                     const reader = new FileReader();
-                                                    reader.onload = (e) => setReviewForm({...reviewForm, media: e.target?.result as string});
+                                                    reader.onload = (e) => setReviewForm({...reviewForm, videos: [...reviewForm.videos, e.target?.result as string]});
                                                     reader.readAsDataURL(file);
                                                 }
                                             }} />
                                         </label>
                                     </div>
                                     <div className="flex items-center">
-                                        {editingReviewId !== null && (
-                                            <button 
-                                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1.5 px-4 rounded-lg text-sm transition-colors mr-2"
-                                                onClick={() => {
-                                                    setEditingReviewId(null);
-                                                    setReviewForm({rating: 5, comment: '', media: null});
-                                                }}
-                                            >
-                                                Cancel
-                                            </button>
-                                        )}
                                         <button 
-                                            className="bg-brand-600 hover:bg-brand-700 text-white font-bold py-1.5 px-4 rounded-lg text-sm transition-colors"
-                                            onClick={() => {
-                                                if(!reviewForm.comment.trim()) return;
-                                                
-                                                if (editingReviewId !== null) {
-                                                    setReviews(reviews.map(r => r.id === editingReviewId ? { ...r, ...reviewForm } : r));
-                                                    setEditingReviewId(null);
-                                                } else {
-                                                    setReviews([{ id: Date.now(), name: "You", ...reviewForm }, ...reviews]);
+                                            disabled={isSubmitting}
+                                            className="bg-brand-600 hover:bg-brand-700 text-white font-bold py-1.5 px-4 rounded-lg text-sm transition-colors disabled:opacity-50"
+                                            onClick={async () => {
+                                                if(!reviewForm.reviewText?.trim() || !product?._id) return;
+                                                setIsSubmitting(true);
+                                                try {
+                                                    const payload = {
+                                                        productId: product._id,
+                                                        rating: reviewForm.rating,
+                                                        reviewText: reviewForm.reviewText,
+                                                        images: reviewForm.images,
+                                                        videos: reviewForm.videos
+                                                    };
+                                                    const res = await api.post('/reviews', payload);
+                                                    setReviews([res.data, ...reviews]);
+                                                    setReviewForm({rating: 5, reviewText: '', images: [], videos: []});
+                                                } catch (err) {
+                                                    console.error("Failed to submit review", err);
+                                                    alert("Failed to submit review");
+                                                } finally {
+                                                    setIsSubmitting(false);
                                                 }
-                                                setReviewForm({rating: 5, comment: '', media: null});
                                             }}
                                         >
-                                            {editingReviewId !== null ? "Update" : "Submit"}
+                                            {isSubmitting ? "Submitting..." : "Submit"}
                                         </button>
                                     </div>
                                 </div>
-                                {reviewForm.media && (
-                                    <div className="mt-3 relative inline-block">
-                                        <div className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 cursor-pointer z-10" onClick={() => setReviewForm({...reviewForm, media: null})}>
-                                            <X className="w-3 h-3 text-white" />
-                                        </div>
-                                        {reviewForm.media.startsWith('data:video') ? (
-                                            <video src={reviewForm.media} className="h-16 rounded opacity-80" />
-                                        ) : (
-                                            <img src={reviewForm.media} className="h-16 rounded opacity-80" />
-                                        )}
+                                {(reviewForm.images.length > 0 || reviewForm.videos.length > 0) && (
+                                    <div className="mt-3 flex gap-2 flex-wrap">
+                                        {reviewForm.images.map((img: string, idx: number) => (
+                                            <div key={idx} className="relative inline-block">
+                                                <div className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 cursor-pointer z-10" onClick={() => setReviewForm({...reviewForm, images: reviewForm.images.filter((_: any, i: number) => i !== idx)})}>
+                                                    <X className="w-3 h-3 text-white" />
+                                                </div>
+                                                <img src={img} className="h-16 rounded opacity-80" />
+                                            </div>
+                                        ))}
+                                        {reviewForm.videos.map((vid: string, idx: number) => (
+                                            <div key={idx} className="relative inline-block">
+                                                <div className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 cursor-pointer z-10" onClick={() => setReviewForm({...reviewForm, videos: reviewForm.videos.filter((_: any, i: number) => i !== idx)})}>
+                                                    <X className="w-3 h-3 text-white" />
+                                                </div>
+                                                <video src={vid} className="h-16 rounded opacity-80" />
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                             </div>
