@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Drepto Biodevices | Next-Gen Transdermal Drug Delivery &amp; Healthcare Ecosystem</title>
+<!-- Tailwind CSS CDN with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+              950: '#042f2e',
+            },
+            clinical: {
+              card: '#ffffff',
+              surface: '#f8fafc',
+              border: '#e2e8f0',
+              muted: '#64748b',
+              navy: '#0f172a'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05)',
+            'elevated': '0 20px 30px -10px rgba(13, 148, 136, 0.08), 0 8px 12px -4px rgba(15, 23, 42, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Font styling via Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="custom-scrollbars-and-resets">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-clinical-surface text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+<!-- BEGIN: UtilityHeader -->
+<section class="border-b border-slate-200 bg-white text-xs font-medium text-slate-600">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between">
+<!-- Location Selector -->
+<div class="flex items-center space-x-2">
+<svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-slate-400">Deliver to:</span>
+<select class="bg-transparent text-slate-800 font-semibold focus:outline-none border-none py-0 pl-1 pr-6 text-xs cursor-pointer hover:text-brand-600 transition-colors">
+<option>Mumbai (SINE IIT Bombay, 400076)</option>
+<option>Delhi NCR</option>
+<option>Bangalore</option>
+<option>Pune</option>
+<option>Hyderabad</option>
+</select>
+</div>
+<!-- Quick Utilities & Auth -->
+<div class="flex items-center space-x-6">
+<!-- Language Switcher -->
+<button class="flex items-center space-x-1.5 hover:text-brand-700 transition-colors" title="Change Language">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>English</span>
+</button>
+<!-- Cart Preview -->
+<a class="flex items-center space-x-1.5 hover:text-brand-700 transition-colors relative py-1" href="#cart">
+<svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-medium">Cart</span>
+<span class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white bg-brand-600 rounded-full">0</span>
+</a>
+<!-- Sign In/Login Buttons -->
+<div class="flex items-center space-x-2 pl-2 border-l border-slate-200">
+<a class="px-3 py-1 font-semibold text-slate-700 hover:text-brand-700 transition-colors" href="#login">Sign In</a>
+<a class="px-3 py-1 font-semibold text-white bg-brand-700 hover:bg-brand-800 rounded-md transition-all shadow-sm" href="#register">Signup</a>
+</div>
+</div>
+</div>
+</section>
+<!-- END: UtilityHeader -->
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20 gap-8">
+<!-- Brand Identity / Logo -->
+<a class="flex items-center space-x-3 group flex-shrink-0" href="#">
+<div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-700 to-teal-500 flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform duration-200">
+<!-- Medical / Biotech Pulse Device Icon -->
+<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center space-x-1">
+<span class="text-xl font-extrabold tracking-tight text-slate-900 leading-none">Drepto</span>
+<span class="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-50 text-brand-700 border border-brand-200">Biodevices</span>
+</div>
+<p class="text-[10px] tracking-wider text-slate-500 uppercase mt-0.5 font-medium">Healthcare Innovation Lab</p>
+</div>
+</a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center space-x-1 font-medium text-sm">
+<a class="px-3.5 py-2 text-brand-700 bg-brand-50/80 rounded-lg font-semibold transition-all" href="#">Home</a>
+<a class="px-3.5 py-2 text-slate-600 hover:text-brand-700 hover:bg-slate-50 rounded-lg transition-all" href="#medicines">Medicines</a>
+<a class="px-3.5 py-2 text-slate-600 hover:text-brand-700 hover:bg-slate-50 rounded-lg transition-all" href="#lab-tests">Lab Tests</a>
+<a class="px-3.5 py-2 text-slate-600 hover:text-brand-700 hover:bg-slate-50 rounded-lg transition-all" href="#our-products">Our Products</a>
+<a class="px-3.5 py-2 text-slate-600 hover:text-brand-700 hover:bg-slate-50 rounded-lg transition-all" href="#about">About Us</a>
+<a class="px-3.5 py-2 text-slate-600 hover:text-brand-700 hover:bg-slate-50 rounded-lg transition-all" href="#contacts">Contacts</a>
+</nav>
+<!-- Prescription Fast-Track Button -->
+<div class="flex items-center space-x-3">
+<button class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-brand-600/30 text-brand-800 bg-brand-50/50 hover:bg-brand-50 hover:border-brand-600 font-semibold text-xs tracking-wide transition-all shadow-xs group" type="button">
+<svg class="w-4 h-4 text-brand-700 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Upload Prescription</span>
+</button>
+</div>
+</div>
+<!-- Quick Search Bar Row -->
+<div class="py-3 border-t border-slate-100 hidden sm:block">
+<div class="relative max-w-3xl mx-auto">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-10 pr-28 py-2 text-xs sm:text-sm bg-slate-100/70 border border-slate-200/90 rounded-full focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all placeholder:text-slate-400" placeholder="Search medicines, diagnostic lab test packages, biodevices..." type="text"/>
+<button class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-brand-700 hover:bg-brand-800 text-white rounded-full text-xs font-semibold transition-colors flex items-center space-x-1">
+<span>Find</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main>
+<!-- BEGIN: HeroSection -->
+<section class="relative overflow-hidden pt-10 pb-16 lg:py-20 bg-gradient-to-b from-white via-brand-50/20 to-clinical-surface">
+<!-- Background Ambient Glow -->
+<div class="absolute top-1/4 -right-20 w-96 h-96 bg-brand-200/30 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 -left-20 w-80 h-80 bg-teal-100/40 rounded-full blur-3xl pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Hero Left Content -->
+<div class="lg:col-span-7 space-y-6">
+<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-100/60 border border-brand-200 text-brand-800 text-xs font-semibold">
+<span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+<span>Next-Gen Transdermal Drug Delivery Platform</span>
+</div>
+<div class="space-y-3">
+<h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+                Drepto Biodevices
+              </h1>
+<p class="text-2xl sm:text-3xl font-semibold text-brand-700 tracking-normal">
+                Redefining Drug Delivery with Next-Gen Innovation
+              </p>
+<p class="text-slate-600 text-base sm:text-lg max-w-2xl leading-relaxed pt-2">
+                Pioneering non-invasive, targeted transdermal therapeutic devices engineered to minimize systemic side effects, optimize precision dosage, and restore effortless daily living.
+              </p>
+</div>
+<!-- Quantitative Stats Badges -->
+<div class="grid grid-cols-3 gap-3 sm:gap-4 max-w-lg pt-2">
+<div class="p-3.5 bg-white rounded-xl border border-slate-200 shadow-soft">
+<div class="text-2xl sm:text-3xl font-black text-brand-700">0+</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-wider mt-0.5">Medicines</div>
+</div>
+<div class="p-3.5 bg-white rounded-xl border border-slate-200 shadow-soft">
+<div class="text-2xl sm:text-3xl font-black text-brand-700">0+</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-wider mt-0.5">Lab Tests</div>
+</div>
+<div class="p-3.5 bg-white rounded-xl border border-slate-200 shadow-soft">
+<div class="text-2xl sm:text-3xl font-black text-brand-700">24/7</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-wider mt-0.5">Support</div>
+</div>
+</div>
+<!-- Call to Actions -->
+<div class="flex flex-wrap items-center gap-4 pt-3">
+<a class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm text-white bg-brand-700 hover:bg-brand-800 shadow-md shadow-brand-700/20 transition-all hover:translate-y-[-1px]" href="#our-products">
+<span>Get Started</span>
+<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</a>
+<a class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-soft transition-all" href="#about">
+                Learn More
+              </a>
+</div>
+</div>
+<!-- Hero Right: Proprietary Biodevice Showcase Card -->
+<div class="lg:col-span-5">
+<div class="relative mx-auto max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-elevated">
+<!-- Top Device Badge -->
+<div class="flex items-center justify-between pb-4 border-b border-slate-100">
+<div class="flex items-center space-x-2">
+<div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Clinical Prototype Mk-II</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-brand-50 text-brand-700 border border-brand-200">Patented</span>
+</div>
+<!-- Product Graphic Simulation / Modern Bio-Electronics Presentation -->
+<div class="my-6 relative flex flex-col items-center justify-center py-6 bg-slate-50 rounded-2xl border border-slate-100">
+<!-- Device Enclosure Shell -->
+<div class="w-48 h-60 bg-amber-50 rounded-3xl border-4 border-amber-200 shadow-inner flex flex-col items-center justify-between p-4 relative overflow-hidden">
+<!-- Device screen -->
+<div class="w-full h-24 bg-slate-900 rounded-xl p-2 border-2 border-slate-700 shadow-md flex flex-col justify-between">
+<div class="flex justify-between items-center text-[9px] text-teal-400 font-mono">
+<span>DREPTO v2.4</span>
+<span class="animate-pulse">● ACTIVE</span>
+</div>
+<div class="text-center font-mono text-xs text-white">
+                      DOSAGE: 7.5 mg/hr
+                    </div>
+<div class="w-full bg-slate-800 rounded-full h-1.5">
+<div class="bg-teal-400 h-1.5 rounded-full w-3/4"></div>
+</div>
+</div>
+<!-- Drepto Brand Stamp on Device -->
+<div class="text-center">
+<span class="text-base font-black tracking-tight text-slate-800">Drepto</span>
+<p class="text-[9px] text-slate-500 font-medium">Bio-Patch Interface</p>
+</div>
+<!-- Biocontact electrode port -->
+<div class="w-10 h-3 rounded-full bg-red-500/80 shadow-xs"></div>
+</div>
+<!-- Floating Clinical Callout -->
+<div class="mt-5 text-center px-4">
+<p class="text-base font-bold text-slate-900">Revolutionizing Rheumatoid Arthritis Treatment</p>
+<p class="text-xs text-slate-500 mt-1">Targeted transdermal delivery with bio-impedance feedback</p>
+</div>
+</div>
+<!-- Key Highlights Footer in Card -->
+<div class="pt-2 grid grid-cols-2 gap-2 text-center text-xs">
+<div class="p-2 bg-slate-50 rounded-lg text-slate-700 font-medium border border-slate-100">
+                  ⚡ Needle-Free Protocol
+                </div>
+<div class="p-2 bg-slate-50 rounded-lg text-slate-700 font-medium border border-slate-100">
+                  🛡️ Zero GI Tract Burden
+                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: CareServicesSection -->
+<section class="py-16 bg-white border-t border-slate-100" id="services">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Header & Nav Controls -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+<div>
+<div class="inline-block text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-1 rounded border border-brand-100 mb-2">
+              Healthcare Ecosystem
+            </div>
+<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Comprehensive Care Services
+            </h2>
+<p class="text-slate-500 text-sm sm:text-base mt-1">
+              We provide a complete ecosystem for all your healthcare and clinical needs.
+            </p>
+</div>
+<!-- Carousel Arrow Controls -->
+<div class="flex items-center space-x-2 self-end md:self-auto">
+<button class="p-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-brand-700 transition-colors shadow-xs" title="Previous services">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="p-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-brand-700 transition-colors shadow-xs" title="Next services">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Services Grid Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+<!-- Card 1: Video Consultations -->
+<div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-soft hover:shadow-elevated transition-all duration-300">
+<div class="h-64 overflow-hidden relative">
+<img alt="Doctor conducting video consultation" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-85" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9qfw7b9ZJc_m5tU-fJ_C8wfDwr-XdrBdhulsYA5chuTXc4J4RdXh9HwCdpj_ZTaAMBI3wOqNkTl6ewcO2yB-YuZgIThTqTBXTzBnWyjyh2sWMHg8TDnbPfuA8JaJo4rpSDe5QehFCvByeTiTRn9mGSVbuoo1NpH5Rmo3C-Tj5fgZ62WhTXQPgqSvUiLw5fVTvXVRkXQquKeb7WutGB3zKbzBJE0r3UkxJjs_gT96G4B5oMoLx39Q2"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+<div class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-800 uppercase tracking-wide">
+                Live Doctor
+              </div>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-4">
+<h3 class="text-base font-bold text-white group-hover:text-brand-200 transition-colors">Video Consultations</h3>
+<p class="text-xs text-slate-300 mt-1 line-clamp-1">Connect with verified rheumatologists in minutes</p>
+</div>
+</div>
+<!-- Card 2: Medicine Delivery -->
+<div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-soft hover:shadow-elevated transition-all duration-300">
+<div class="h-64 overflow-hidden relative">
+<img alt="Courier delivering medicine package" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-85" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_Xw2gQ1LFLcNmZ6jymi1d3YQPCeiUob6zY1a6mfgrcePMnc7FLhPEWQc38mfQxhqPLyAozQLbD-yODGrQM1Nl2ZB8kDRHgb32d17AZolk_HYKle8RH693hlVl1IuF95m6ms19DKfH9sDi-hbOb940t21dKYVULUy87dcKxzO2ns0gGtNqvn97ErmcUqvj5u6scXm6m1GF5ziSh_XidnWzOGqy8gIefRGcOwGlOSZ3niTkr0R30ys5"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+<div class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-800 uppercase tracking-wide">
+                Express Delivery
+              </div>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-4">
+<h3 class="text-base font-bold text-white group-hover:text-brand-200 transition-colors">Medicine Delivery</h3>
+<p class="text-xs text-slate-300 mt-1 line-clamp-1">Authentic therapeutics delivered to your doorstep</p>
+</div>
+</div>
+<!-- Card 3: Lab Tests -->
+<div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-soft hover:shadow-elevated transition-all duration-300">
+<div class="h-64 overflow-hidden relative">
+<img alt="Specialists performing laboratory diagnostic tests" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-85" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMTbwdOtQ_BOShiu-mgrA-CF-NCo2IM_UpF7RmzBJhmxlvLdDApgR4FAje3ZmVxkej7W1okd46ZnfR9UCVNsuR-QQ0vo0RiV0N61KoUjbCBlK9g9egc_L9QN28E7KZjq8wljmDQYIAKDfNIjdLOHPRv07VlNbTzS5mwanQXHj1XO9E0K2eia7c_4ul89Lk7KA8qzhz2ScOtAdUx8LnlS4VG6Z4q92CMuYCIXUN52eslAOeApN7Mo1l"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+<div class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-800 uppercase tracking-wide">
+                NABL Accredited
+              </div>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-4">
+<h3 class="text-base font-bold text-white group-hover:text-brand-200 transition-colors">Lab Tests</h3>
+<p class="text-xs text-slate-300 mt-1 line-clamp-1">Safe home sample collection &amp; digital reports</p>
+</div>
+</div>
+<!-- Card 4: Home Nursing -->
+<div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-soft hover:shadow-elevated transition-all duration-300">
+<div class="h-64 overflow-hidden relative">
+<img alt="Professional nurse caring for senior patient at home" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-85" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATHtQKcsH1SR4QLLYPP02Iykd0FcVCMO3JTaJqlw0v6QqmYEbTWPKztt0tawVLQ_IhqIsPhX8O_mbeeN8RnUnbNiKX6mxL84ZzGSFZ9otZuK_SQIL0RIb_VyZlVkrqKyf-OalomSDPwimTNng8mlnybMUKZR-7Wce8QQjgSBm27AMhLFNDLrbTD67-CtqSQiAizYW9WQsKdKgLiYaejfBhgCKccqOiM0IdOVXOuS_GH--ZaeimBEzw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+<div class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-800 uppercase tracking-wide">
+                Qualified Staff
+              </div>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-4">
+<h3 class="text-base font-bold text-white group-hover:text-brand-200 transition-colors">Home Nursing</h3>
+<p class="text-xs text-slate-300 mt-1 line-clamp-1">Compassionate, certified in-home clinical care</p>
+</div>
+</div>
+<!-- Card 5: Ambulance & Emergency -->
+<div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-soft hover:shadow-elevated transition-all duration-300">
+<div class="h-64 overflow-hidden relative">
+<img alt="Ambulance emergency response service" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-85" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCXHArEEsq36tVaxquCohLvcCumYwt7inZjxoiMFAWcaxbpRJ3KIXRjncjA9pZxS4yawwbt5o2QHhqgEuL6mjd2ISq77Ay2nOAu4izXNSx74UCX1Gn9tBgKgdZL-m5iC6vO_T9ey8kfTkLiNy8q_sASIUcFaxkzgXGPnSTV0QKcjRnAqYRnkVWDKgsGsGOWopMoBL66gFrUc0rvpaS4YReNpojM0lre4BD4rfQYtgtAOZL6qOVCY5h"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+<div class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-800 uppercase tracking-wide">
+                24/7 Response
+              </div>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-4">
+<h3 class="text-base font-bold text-white group-hover:text-brand-200 transition-colors">Ambulance Services</h3>
+<p class="text-xs text-slate-300 mt-1 line-clamp-1">Rapid emergency dispatch across metro hubs</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: CareServicesSection -->
+<!-- BEGIN: PurposeAndCareersSection -->
+<section class="py-16 bg-slate-50" id="purpose">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+<!-- Left Card: Our Purpose -->
+<div class="lg:col-span-7 bg-brand-700 text-white rounded-3xl p-8 sm:p-12 shadow-xl flex flex-col justify-between relative overflow-hidden">
+<!-- Background subtle pattern -->
+<div class="absolute -right-16 -top-16 w-64 h-64 bg-teal-500/20 rounded-full blur-2xl pointer-events-none"></div>
+<div>
+<span class="text-xs font-bold tracking-widest uppercase text-brand-200">Who We Are</span>
+<h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mt-1 text-white">Our Purpose.</h2>
+<div class="mt-8 space-y-8">
+<!-- Mission Block -->
+<div class="space-y-2">
+<div class="text-xs font-mono font-bold tracking-widest text-teal-300">01 — MISSION</div>
+<h3 class="text-xl sm:text-2xl font-bold text-white">Redefining how patients receive treatment.</h3>
+<p class="text-slate-100/90 text-sm sm:text-base leading-relaxed">
+                    We are building a non-invasive, transdermal methotrexate delivery system that reduces dosage requirements and eliminates the side effects of conventional rheumatoid arthritis therapy — improving outcomes, safety, and daily compliance.
+                  </p>
+</div>
+<!-- Vision Block -->
+<div class="space-y-2 pt-2 border-t border-brand-600/60">
+<div class="text-xs font-mono font-bold tracking-widest text-teal-300">02 — VISION</div>
+<h3 class="text-xl sm:text-2xl font-bold text-white">A world without the burden of invasive care.</h3>
+<p class="text-slate-100/90 text-sm sm:text-base leading-relaxed">
+                    We envision a future where patients with chronic conditions experience genuine relief — free from needles, hospitalisation, and harsh systemic effects. Driven by compassion and scientific rigour, we are setting new standards in drug delivery and patient-centred healthcare.
+                  </p>
+</div>
+</div>
+</div>
+<!-- Footer indicator -->
+<div class="pt-8 text-xs font-medium text-brand-200">
+              Drepto Research &amp; Development Initiative
+            </div>
+</div>
+<!-- Right Card: Careers -->
+<div class="lg:col-span-5 bg-gradient-to-br from-brand-900 via-teal-900 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl flex flex-col justify-between relative">
+<div>
+<span class="text-xs font-bold tracking-widest uppercase text-teal-400">Careers</span>
+<h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mt-1 text-white leading-tight">
+                Join our team.<br/>Shape medical technology.
+              </h2>
+<p class="text-slate-300 text-sm sm:text-base mt-4 leading-relaxed">
+                We're a small, ambitious team building diagnostic &amp; drug delivery tools that matter. If you're driven by impact and want to work on hard problems in healthcare, we want to hear from you.
+              </p>
+<!-- Highlights Badges -->
+<div class="mt-8 space-y-3">
+<div class="flex items-center space-x-3 text-sm text-slate-200">
+<span class="w-2 h-2 rounded-full bg-teal-400"></span>
+<span class="font-medium">Cutting-edge bio-MEMS &amp; biomedical research</span>
+</div>
+<div class="flex items-center space-x-3 text-sm text-slate-200">
+<span class="w-2 h-2 rounded-full bg-teal-400"></span>
+<span class="font-medium">Collaborative interdisciplinary culture</span>
+</div>
+<div class="flex items-center space-x-3 text-sm text-slate-200">
+<span class="w-2 h-2 rounded-full bg-teal-400"></span>
+<span class="font-medium">Real career growth &amp; equity incentives</span>
+</div>
+</div>
+</div>
+<!-- Career CTA -->
+<div class="pt-10">
+<a class="inline-flex items-center space-x-2 px-6 py-3.5 bg-white text-slate-900 hover:bg-brand-50 rounded-xl font-bold text-sm tracking-wide transition-all shadow-md" href="#careers">
+<span>Apply now</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: PurposeAndCareersSection -->
+<!-- BEGIN: GallerySection -->
+<section class="py-16 bg-white border-t border-slate-200/80" id="gallery">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Gallery Header -->
+<div class="flex items-end justify-between mb-8">
+<div>
+<span class="text-xs font-bold uppercase tracking-wider text-brand-700">Visual Journey</span>
+<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-1">Gallery</h2>
+</div>
+<!-- Page Indicator and Slider Controls -->
+<div class="flex items-center space-x-4">
+<span class="text-sm font-mono font-bold text-slate-500">09 <span class="text-slate-300">/</span> 09</span>
+<div class="flex items-center space-x-2">
+<button class="p-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors" title="Previous image">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="p-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors" title="Next image">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Featured Gallery Main Frame -->
+<div class="rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-slate-950 relative group">
+<div class="aspect-[16/9] md:aspect-[21/9] max-h-[520px] w-full overflow-hidden">
+<img alt="Drepto Biodevices R&amp;D Engineering Team at SINE IIT Bombay" class="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700 opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtIldbQdKvG4KimK0LFxSkhfyD9VHXUEqdRAtKBFjPYNFm-bFT4r_0_Err_f8bzrtodVQRP2rb2ntiK3fW1pGnmvNgfYRIDw7W7f5x540yMVdbTTd9i90kXzliymRa9NhrorVR4ty499RqR0El2IWlxZp1eEB8M5qhpGR2gMZp3barFEyN_QmcQ-ZPj3yY4-QsmcaNdbLhtyohHbQ4Y_GwCFfG70oqv1HpIhbpB-vAm1_pGH3hfIuF"/>
+</div>
+<!-- Image Overlay Caption -->
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 pointer-events-none">
+<div class="max-w-3xl">
+<div class="inline-block px-2.5 py-1 rounded bg-teal-500/20 backdrop-blur-md text-teal-300 text-xs font-semibold uppercase tracking-wider mb-2 border border-teal-500/30">
+                SINE IIT Bombay &amp; Clinical Partners
+              </div>
+<h3 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Advancing Biomedical Innovations Alongside Medical Experts
+              </h3>
+<p class="text-slate-300 text-xs sm:text-sm mt-1">
+                Collaborative research and development sessions conducting prototyping and compliance tests for transdermal systems.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: GallerySection -->
+<!-- BEGIN: AwardsSection -->
+<section class="py-16 bg-slate-50 border-t border-slate-200" id="awards">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="mb-10">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-700">Recognition</span>
+<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-1">Awards &amp; Distinction</h2>
+</div>
+<!-- Awards Spotlight Box -->
+<div class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-10 shadow-elevated">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+<!-- Left: Trophy and Certificate Presentation Visual -->
+<div class="lg:col-span-6">
+<div class="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md aspect-[4/3] bg-slate-900">
+<img alt="Award Trophy and Certificate of Honour won by Drepto Biodevices" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm2HfGP-iGYgBt8E-sMTTErRZfvdHJ_lQjbGYv5rR8sS5Ss-NCjwny6Dq6MR79z4v5SB26CJQ2vytQ61xDaH1auEfs-IHqYdpM7YDlPCgf8SvnlwZYxgAMsxVhG0_rlx380J7Cki7_1dRvGaCvZY9yy1vdbjOpFUnpjA3wHww1mG-ECFBAlLeKq0k8yeKGMz9fopWrJVEeid25YsyPy-wYaAP3g0Tp9gbKoUwbHNLAGfVtvcB_0QlI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 text-white">
+<div class="text-xs font-bold text-teal-300 uppercase tracking-widest">National Winner</div>
+<div class="text-sm font-semibold">India Pharma Award for Academic Research &amp; Device Innovation</div>
+</div>
+</div>
+</div>
+<!-- Right: Award Details & Spec Metadata -->
+<div class="lg:col-span-6 space-y-6">
+<div>
+<span class="text-xs font-bold tracking-widest uppercase text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
+                  Certified Achievement
+                </span>
+<h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+                  Celebrating excellence in medical innovation.
+                </h3>
+<p class="text-slate-600 text-sm sm:text-base leading-relaxed mt-3">
+                  Each award represents a milestone in our commitment to quality, rigorous research, and meaningful impact on healthcare outcomes for millions battling chronic autoimmune disorders.
+                </p>
+</div>
+<!-- Metadata Table -->
+<div class="border-t border-slate-100 pt-4 space-y-3 font-sans">
+<div class="flex items-center justify-between py-2 border-b border-slate-100 text-xs sm:text-sm">
+<span class="font-bold text-slate-500 uppercase tracking-wider text-[11px]">Category</span>
+<span class="font-semibold text-slate-800">Medical Technology</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-slate-100 text-xs sm:text-sm">
+<span class="font-bold text-slate-500 uppercase tracking-wider text-[11px]">Recognition</span>
+<span class="font-semibold text-slate-800">Excellence in Innovation</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-slate-100 text-xs sm:text-sm">
+<span class="font-bold text-slate-500 uppercase tracking-wider text-[11px]">Status</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                    Certified Achievement
+                  </span>
+</div>
+</div>
+<div class="pt-2">
+<a class="text-xs font-bold text-brand-700 hover:text-brand-800 inline-flex items-center space-x-1 group" href="#about">
+<span>View full patent portfolio and credentials</span>
+<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: AwardsSection -->
+</main>
+<!-- BEGIN: Footer -->
+<footer class="bg-white border-t border-slate-200 pt-16 pb-12 text-slate-600 text-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-200">
+<!-- Col 1 & 2: Brand Information -->
+<div class="lg:col-span-2 space-y-4">
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-lg bg-brand-700 flex items-center justify-center text-white font-bold text-sm">
+              D
+            </div>
+<span class="text-lg font-black tracking-tight text-slate-900">Drepto Biodevices</span>
+</div>
+<p class="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-sm">
+            Advancing healthcare through innovative biodevice solutions and diagnostic excellence. Incubated at Society for Innovation and Entrepreneurship (SINE), IIT Bombay.
+          </p>
+<!-- Legal Registration IDs -->
+<div class="pt-2 space-y-1.5 font-mono text-[11px] text-slate-500">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-slate-700 uppercase">GSTIN:</span>
+<span>27AALCD6030F1ZS</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-bold text-slate-700 uppercase">CIN:</span>
+<span>U21001MH2025PTC445595</span>
+</div>
+</div>
+</div>
+<!-- Col 3: Our Locations -->
+<div class="space-y-3">
+<h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Our Locations</h4>
+<div class="space-y-3 text-xs text-slate-600">
+<div>
+<p class="font-bold text-slate-800">Office Address</p>
+<p class="mt-0.5 leading-relaxed">SINE IIT Bombay, Powai, Mumbai 400076, Maharashtra, India</p>
+</div>
+<div class="pt-1">
+<p class="font-bold text-slate-800">Registered Address</p>
+<p class="mt-0.5 leading-relaxed">1001-11, Rustomjee Ozone, Co-op Hsg Behind Teleexch, Goregaon (Mumbai), Mumbai, Goregaon West, Maharashtra, India, 400104.</p>
+</div>
+</div>
+</div>
+<!-- Col 4: Company Links -->
+<div class="space-y-3">
+<h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Company</h4>
+<ul class="space-y-2 text-xs">
+<li><a class="hover:text-brand-700 transition-colors" href="#about">About Us</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#contacts">Contact</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#medicines">Pharmacy</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#lab-tests">Lab Tests</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#feedback">Feedback &amp; Inquiries</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#careers">Careers &amp; Research</a></li>
+</ul>
+</div>
+<!-- Col 5: Legal Links -->
+<div class="space-y-3">
+<h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Legal</h4>
+<ul class="space-y-2 text-xs">
+<li><a class="hover:text-brand-700 transition-colors" href="#privacy">Privacy Policy</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#terms">Terms of Service</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#refund">Refund Policy</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#shipping">Shipping Policy</a></li>
+<li><a class="hover:text-brand-700 transition-colors" href="#compliance">Clinical Compliance</a></li>
+</ul>
+</div>
+</div>
+<!-- Copyright Bar -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-medium">
+<p>© 2026 DREPTO BIODEVICES PVT. LTD. ALL RIGHTS RESERVED.</p>
+<p class="mt-2 sm:mt-0">Engineered with medical-grade precision.</p>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+</body></html>

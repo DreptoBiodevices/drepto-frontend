@@ -48,7 +48,7 @@ const CitySelector: React.FC<{ current: string; onSelect: (id: string) => void; 
 const Sidebar: React.FC<{ active: string; onSelect: (view: string) => void }> = ({ active, onSelect }) => (
     <div className="hidden lg:block w-64 bg-white rounded-xl border border-gray-200 shadow-sm p-4 h-fit sticky top-24 mt-20">
         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-2">Browse Labs</h3>
-        <div className="space-y-1">
+        <div className="space-y-2">
             {[{ id: 'tests', label: 'Individual Tests' }, { id: 'packages', label: 'Health Packages' }, { id: 'cities', label: 'Top Cities' }].map(item => (
                 <button
                     key={item.id}
@@ -193,12 +193,45 @@ const DetailView: React.FC<{ item: LabTestDetail | LabPackageDetail; type: 'test
 // --- Main Page Component ---
 
 const LabTestsPage: React.FC = () => {
-    const [selectedCity, setSelectedCity] = useState<string>('mumbai');
+    const [selectedCity, setSelectedCity] = useState<string>(() => {
+        const storedLoc = localStorage.getItem('drepto_location');
+        if (storedLoc) {
+            const lowerLoc = storedLoc.toLowerCase();
+            const matchedCity = CITIES.find(c => lowerLoc.includes(c.name.toLowerCase()));
+            if (matchedCity) return matchedCity.id;
+        }
+        return 'mumbai';
+    });
     const [showCitySelector, setShowCitySelector] = useState(false);
+
+    useEffect(() => {
+        if (!localStorage.getItem('drepto_location') && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const { latitude, longitude } = position.coords;
+                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                        const data = await response.json();
+                        if (data && data.address) {
+                            const cityStr = data.address.city || data.address.town || data.address.village || data.address.state || "";
+                            const matchedCity = CITIES.find(c => cityStr.toLowerCase().includes(c.name.toLowerCase()));
+                            if (matchedCity) {
+                                setSelectedCity(matchedCity.id);
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error auto-fetching city:", error);
+                    }
+                },
+                () => {}, // Silently fail if permission denied
+                { timeout: 5000 }
+            );
+        }
+    }, []);
     const [view, setView] = useState<'home' | 'individual' | 'packages' | 'detail'>('home');
     const [selectedItem, setSelectedItem] = useState<LabTestDetail | LabPackageDetail | null>(null);
     const [detailType, setDetailType] = useState<'test' | 'package'>('test');
-    const [tests, setTests] = useState<LabTestDetail[]>([]);
+    const [tests, setTests] = useState<LabTestDetail[]>(LAB_TESTS_DATA as LabTestDetail[]);
 
     // Dummy Refs for Navbar
     const dummyRefs = { home: { current: null }, product: { current: null }, about: { current: null }, contact: { current: null } };
@@ -265,7 +298,7 @@ const LabTestsPage: React.FC = () => {
             </div>
 
 
-            <main className="flex-grow container mx-auto px-4 lg:px-8 py-6">
+            <main className="flex-grow container mx-auto px-4 lg:px-8 py-6 pb-24 min-h-[70vh]">
                 <div className="mb-4">
                     <BackButton />
                 </div>

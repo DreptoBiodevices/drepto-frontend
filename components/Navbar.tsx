@@ -51,17 +51,6 @@ const SEARCHABLE_ITEMS = [
   { label: 'Medicines', path: '/medicines', keywords: ['medicine', 'drug', 'pharmacy', 'pill', 'tablet', 'capsule', 'syrup'] },
   { label: 'Lab Tests', path: '/lab-tests', keywords: ['lab', 'test', 'diagnostic', 'blood', 'urine', 'report', 'pathology', 'nabl'] },
   { label: 'Our Products', path: '/our-products', keywords: ['product', 'device', 'biodevice', 'transdermal', 'iontophoretic', 'sample'] },
-  { label: 'Features', path: '/features', keywords: ['feature', 'service', 'video', 'consultation', 'delivery', 'nursing', 'ambulance', 'health record'] },
-  { label: 'About Us', path: '/about-us', keywords: ['about', 'company', 'team', 'mission', 'vision', 'drepto', 'iit bombay', 'sine'] },
-  { label: 'Contact Us', path: '/contact', keywords: ['contact', 'email', 'phone', 'address', 'support', 'help', 'reach'] },
-  { label: 'Cart', path: '/cart', keywords: ['cart', 'bag', 'checkout', 'order'] },
-  { label: 'My Orders', path: '/orders', keywords: ['order', 'history', 'tracking', 'delivery status'] },
-  { label: 'Feedback', path: '/feedback', keywords: ['feedback', 'review', 'rating', 'testimonial'] },
-  { label: 'Testimonials', path: '/testimonials', keywords: ['testimonial', 'review', 'customer', 'rating'] },
-  { label: 'Privacy Policy', path: '/privacy-policy', keywords: ['privacy', 'policy', 'data'] },
-  { label: 'Terms of Service', path: '/terms', keywords: ['terms', 'service', 'agreement', 'legal'] },
-  { label: 'Refund Policy', path: '/refund-policy', keywords: ['refund', 'return', 'cancel'] },
-  { label: 'Shipping Policy', path: '/shipping-policy', keywords: ['shipping', 'delivery', 'dispatch'] },
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefObject<HTMLDivElement>>, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
@@ -366,7 +355,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
     <>
       {/* ---- Utility Header ---- */}
       <div className="border-b border-slate-200 bg-white text-sm font-medium text-slate-600 hidden sm:block">
-        <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between">
           {/* Delivery Location */}
           <div className="flex items-center space-x-2 relative" ref={locationPromptRef}>
             <MapPin className="w-4 h-4 text-brand-600" />
@@ -526,7 +515,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       <nav
         className={`sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-shadow duration-300 ${isScrolled ? 'shadow-md' : 'shadow-sm'}`}
       >
-        <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-24 gap-8">
 
             {/* Brand Logo */}
@@ -591,7 +580,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
           </div>
 
           {/* Search Bar Row */}
-          <div className="py-4 border-t border-slate-100 hidden sm:block" ref={searchRef}>
+          <div className="py-6 border-t border-slate-100 hidden sm:block" ref={searchRef}>
             <div className="relative max-w-4xl mx-auto">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-slate-400" />
@@ -635,7 +624,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                           </div>
                           <div>
                             <p className="text-sm font-semibold text-slate-800">{result.label}</p>
-                            <p className="text-xs text-slate-400">{result.path}</p>
                           </div>
                           <ChevronRight className="w-4 h-4 text-slate-300 ml-auto" />
                         </button>

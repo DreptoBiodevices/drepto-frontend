@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and auth pages
+Disallow: /admin/
+Disallow: /auth
+Disallow: /dashboard
+
+# Allow important pages
+Allow: /medicines
+Allow: /lab-tests
+Allow: /about-us
+Allow: /our-products
+Allow: /testimonials
+Allow: /feedback
+
+# Sitemap location
+Sitemap: https://www.dreptobiodevices.com/sitemap.xml
