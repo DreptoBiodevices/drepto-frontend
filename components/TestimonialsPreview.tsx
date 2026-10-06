@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, MessageSquarePlus, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { FeedbackService } from '../lib/api_controller';
 import { FeedbackSubmission } from '../types';
 
 const TestimonialsPreview: React.FC = () => {
@@ -28,15 +28,10 @@ const TestimonialsPreview: React.FC = () => {
 
     const fetchRecentTestimonials = async () => {
         try {
-            const { data, error } = await supabase
-                .from('feedback')
-                .select('*')
-                .eq('is_approved', true)
-                .order('created_at', { ascending: false })
-                .limit(6);
-
-            if (error) throw error;
-            setTestimonials(data || []);
+            const response = await FeedbackService.getAllApproved();
+            let data = response.data || [];
+            data = data.slice(0, 6);
+            setTestimonials(data);
         } catch (err) {
             console.error('Error fetching testimonials:', err);
         } finally {

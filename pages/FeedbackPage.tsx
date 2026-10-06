@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Send, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { FeedbackService } from '../lib/api_controller';
 
 const FeedbackPage: React.FC = () => {
     const [name, setName] = useState('');
@@ -23,14 +23,12 @@ const FeedbackPage: React.FC = () => {
         setErrorMessage('');
 
         try {
-            const { error } = await supabase.from('feedback').insert({
+            await FeedbackService.create({
                 name: name.trim(),
-                email: email.trim() || null,
+                email: email.trim() || undefined,
                 rating,
                 message: message.trim(),
             });
-
-            if (error) throw error;
 
             setSubmitState('success');
             setName('');

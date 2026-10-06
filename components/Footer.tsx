@@ -6,12 +6,12 @@ const Footer: React.FC = () => {
   const { t } = useLanguage();
   return (
     <footer className="bg-[#001a2c] text-white border-t border-white/5">
-      <div className="container mx-auto px-6 py-16">
+      <div className="container mx-auto px-6 py-8">
         {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
           {/* Column 1: Logo & Company Info */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             <img
               src="/images/logo.png"
               alt="Drepto Biodevices Logo"
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Column 2: Addresses */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-4">
             <div className="flex items-center gap-2 mb-4 text-teal-400">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -43,13 +43,12 @@ const Footer: React.FC = () => {
               <h3 className="font-bold text-xs uppercase tracking-[0.2em]">{t('footer.ourLocations')}</h3>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
                 <h4 className="text-white text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Office Address</h4>
-                <p className="text-teal-50 text-sm leading-relaxed">
+                <p className="text-teal-50 text-sm leading-relaxed mb-3">
                   SINE IIT Bombay, Mumbai 400076, India
                 </p>
-                <br />
                 <h4 className="text-white text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Registered Address</h4>
                 <p className="text-teal-50 text-sm leading-relaxed">
                   1001-11, Rustomjee Ozone, Co-op Hsg Behind Teleexch, Goregaon (Mumbai). Mumbai, Goregaon West, Maharashtra, India, 400104.
@@ -59,8 +58,8 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Column 3: Navigation Links */}
-          <div className="grid grid-cols-2 gap-8 lg:col-span-2">
-            <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-2 gap-6 lg:col-span-2">
+            <div className="flex flex-col gap-3">
               <h4 className="font-bold text-white text-sm uppercase tracking-wider">{t('footer.company')}</h4>
               <nav className="flex flex-col gap-2">
                 <Link to="/about-us" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.aboutUs')}</Link>
@@ -71,7 +70,7 @@ const Footer: React.FC = () => {
                 {/* <Link to="/social" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Blog</Link> */}
               </nav>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <h4 className="font-bold text-white text-sm uppercase tracking-wider">{t('footer.legal')}</h4>
               <nav className="flex flex-col gap-2">
                 <Link to="/privacy-policy" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Privacy Policy</Link>
@@ -84,7 +83,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/5 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-teal-200/40 text-[11px] font-medium tracking-widest uppercase">
+        <div className="border-t border-white/5 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-teal-200/40 text-[11px] font-medium tracking-widest uppercase">
           <p>&copy; {new Date().getFullYear()} Drepto Biodevices Pvt. Ltd.</p>
           <p>© Drepto Biodevices Pvt. Ltd. All Rights Reserved.</p>
         </div>

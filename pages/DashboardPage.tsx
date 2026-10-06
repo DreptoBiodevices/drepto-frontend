@@ -5,7 +5,6 @@ import { UserRole } from '../types';
 import PatientDashboard from '../components/dashboards/PatientDashboard';
 import DoctorDashboard from '../components/dashboards/DoctorDashboard';
 import NurseDashboard from '../components/dashboards/NurseDashboard';
-import AIAssistant from '../components/AIAssistant';
 import BackButton from '../components/BackButton';
 
 const DashboardPage: React.FC = () => {
@@ -37,7 +36,6 @@ const DashboardPage: React.FC = () => {
   return (
     <>
       {renderDashboard()}
-      <AIAssistant />
     </>
   );
 };

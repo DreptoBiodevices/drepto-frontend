@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, MessageSquarePlus, ArrowLeft, Filter } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { supabase } from '../lib/supabase';
+import { FeedbackService } from '../lib/api_controller';
 import { FeedbackSubmission } from '../types';
 
 const TestimonialsPage: React.FC = () => {
@@ -17,13 +17,8 @@ const TestimonialsPage: React.FC = () => {
 
     const fetchTestimonials = async () => {
         try {
-            const { data, error } = await supabase
-                .from('feedback')
-                .select('*')
-                .eq('is_approved', true)
-                .order('created_at', { ascending: false });
-
-            if (error) throw error;
+            const response = await FeedbackService.getAllApproved();
+            const data = response.data;
             setTestimonials(data || []);
         } catch (err) {
             console.error('Error fetching testimonials:', err);

@@ -20,15 +20,7 @@ interface PatientHomeProps {
 }
 
 const PatientHome: React.FC<PatientHomeProps> = ({ user, onNavigate }) => {
-  const modules = [
-    { id: "doctor", title: "Doctor Appointment", description: "Browse specialists, book slots & manage consultations.", icon: Stethoscope, color: "bg-blue-500", lightColor: "bg-blue-50 text-blue-600" },
-    { id: "nurse", title: "Nurse Appointment", description: "Home care, elderly support & professional nursing.", icon: UserPlus, color: "bg-emerald-500", lightColor: "bg-emerald-50 text-emerald-600" },
-    { id: "pharmacy", title: "Pharmacy", description: "Order medicines & upload prescriptions.", icon: Pill, color: "bg-purple-500", lightColor: "bg-purple-50 text-purple-600" },
-    { id: "lab", title: "Lab Tests", description: "Book diagnostics & view reports online.", icon: TestTube2, color: "bg-indigo-500", lightColor: "bg-indigo-50 text-indigo-600" },
-    { id: "products", title: "Drepto Pharmacy", description: "Healthcare devices & wellness products.", icon: ShoppingBag, color: "bg-orange-500", lightColor: "bg-orange-50 text-orange-600" },
-    { id: "ambulance", title: "Ambulance", description: "Emergency 24/7 road & air ambulance.", icon: Ambulance, color: "bg-red-500", lightColor: "bg-red-50 text-red-600" },
-    { id: "profile", title: "My Profile", description: "Medical records, history & settings.", icon: UserCog, color: "bg-slate-700", lightColor: "bg-slate-100 text-slate-700" },
-  ];
+  // Health services removed
 
   const getTimeBasedGreeting = () => {
     const hour = new Date().getHours();
@@ -76,36 +68,6 @@ const PatientHome: React.FC<PatientHomeProps> = ({ user, onNavigate }) => {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Services Grid */}
-      <div>
-        <div className="flex items-center gap-3 mb-6 px-1">
-          <div className="w-1.5 h-8 bg-blue-600 rounded-full"></div>
-          <h3 className="text-2xl font-bold text-slate-800">Health Services</h3>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {modules.map((m) => (
-            <div
-              key={m.id}
-              onClick={() => onNavigate(m.id)}
-              className="group bg-white p-6 rounded-[1.5rem] shadow-sm hover:shadow-2xl hover:shadow-blue-900/5 transition-all duration-300 cursor-pointer border border-slate-100 relative overflow-hidden"
-            >
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${m.lightColor} group-hover:scale-110 group-hover:-rotate-3 transition-all duration-300 shadow-sm`}>
-                <m.icon size={28} />
-              </div>
-
-              <h3 className="text-lg font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">{m.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed mb-6">{m.description}</p>
-
-              <div className="flex items-center text-sm font-bold text-blue-600 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                <span>Access Now</span>
-                <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

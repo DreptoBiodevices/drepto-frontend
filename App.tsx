@@ -24,6 +24,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import SocialMediaBlogPage from './pages/SocialMediaBlogPage';
 import ContactPage from './pages/ContactPage';
 import { LanguageProvider } from './hooks/useLanguage';
+import BottomNav from './components/BottomNav';
 
 
 const ScrollToTop = () => {
@@ -78,35 +79,38 @@ const Main: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
   return (
-    <div className="bg-gray-50 min-h-screen font-sans pb-16 md:pb-0 overflow-x-hidden w-full">
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/lab-tests" element={<LabTestsPage />} />
-        <Route path="/about-us" element={<AboutUsPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/our-products" element={<OurProductsPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
-        <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/" replace />} />
-        {/* Auth is now handled via modal, we map /auth to home as fallback if directly accessed */}
-        <Route path="/auth" element={<Navigate to="/" replace />} />
-        <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/" replace />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+    <div className="bg-gray-50 min-h-screen font-sans pb-[env(safe-area-inset-bottom)] md:pb-0 overflow-x-hidden w-full">
+      <div className="pb-16 md:pb-0 min-h-screen flex flex-col">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/lab-tests" element={<LabTestsPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/our-products" element={<OurProductsPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/" replace />} />
+          {/* Auth is now handled via modal, we map /auth to home as fallback if directly accessed */}
+          <Route path="/auth" element={<Navigate to="/" replace />} />
+          <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/" replace />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
 
-        {/* Feature Routes */}
-        <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/testimonials" element={<TestimonialsPage />} />
-        {/* <Route path="/social" element={<SocialMediaBlogPage />} /> */}
+          {/* Feature Routes */}
+          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
+          {/* <Route path="/social" element={<SocialMediaBlogPage />} /> */}
 
-        {/* Legal Routes */}
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<TermsOfService />} />
-        <Route path="/refund-policy" element={<RefundPolicy />} />
-        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          {/* Legal Routes */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
 
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
+      <BottomNav />
       <AuthModal />
     </div>
   );

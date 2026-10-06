@@ -7,7 +7,7 @@ import ShippingAddressForm from '../components/ShippingAddressForm';
 import { Address, Order } from '../types';
 import { Truck, MapPin, CreditCard, X, Check } from 'lucide-react';
 import useRazorpay from '../hooks/useRazorpay';
-import { supabase } from '../lib/supabase';
+import { PaymentService } from '../lib/api_controller';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -212,41 +212,30 @@ const CartPage: React.FC = () => {
         // Save to LocalStorage (Legacy/Backup)
         localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
 
-        // --- SAVE TO SUPABASE ---
+        // --- SAVE TO MONGODB VIA BACKEND API ---
         try {
-            const { error } = await supabase
-                .from('orders')
-                .insert({
-                    id: orderId,
-                    user_id: user?.id || 'guest',
-                    user_email: user?.email || '',
-                    total_amount: newOrder.total,
-                    status: 'Placed',
-                    shipping_address: {
-                        houseNo: shippingAddress!.houseNo,
-                        street: shippingAddress!.street,
-                        city: shippingAddress!.city,
-                        state: shippingAddress!.state,
-                        pincode: shippingAddress!.pincode,
-                        country: 'India',
-                        contactNumber: String(user?.mobileNumber || ''),
-                        landmark: shippingAddress!.landmark || '',
-                    },
-                    items: orderItems,
-                    payment_id: rzpPaymentId,
-                    shipping_method: shippingMethod,
-                    shipping_cost: shippingCost,
-                    created_at: new Date().toISOString(),
-                });
-
-            if (error) {
-                console.error("Supabase insert error:", error);
-                alert("Order placed but failed to sync with database. Your order is saved locally.");
-            } else {
-                console.log("Order saved to Supabase successfully!");
-            }
+            await PaymentService.createOrder({
+                orderId: orderId,
+                transactionId: rzpPaymentId,
+                amount: newOrder.total,
+                currency: "INR",
+                shippingAddress: {
+                    houseNo: shippingAddress!.houseNo,
+                    street: shippingAddress!.street,
+                    city: shippingAddress!.city,
+                    state: shippingAddress!.state,
+                    pincode: shippingAddress!.pincode,
+                    contactNumber: String(user?.mobileNumber || ''),
+                    landmark: shippingAddress!.landmark || '',
+                },
+                items: orderItems,
+                shippingMethod: shippingMethod,
+                shippingCost: shippingCost,
+            });
+            console.log("Order saved to MongoDB successfully!");
         } catch (err) {
-            console.error("Failed to save order to Supabase:", err);
+            console.error("Failed to save order to MongoDB:", err);
+            alert("Order placed but failed to sync with database. Your order is saved locally.");
         }
         // -------------------------
 

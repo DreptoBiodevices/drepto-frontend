@@ -167,3 +167,9 @@ export const ShippingAddressService = {
   create: (data: any) => api.post('/shipping-address', data),
   getById: (id: string) => api.get(`/shipping-address/${id}`),
 };
+
+// Feedback Controller
+export const FeedbackService = {
+  create: (data: any) => api.post('/feedback', data),
+  getAllApproved: () => api.get('/feedback'),
+};
