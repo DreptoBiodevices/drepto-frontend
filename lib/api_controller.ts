@@ -1,7 +1,9 @@
 
 import axios, { AxiosResponse } from 'axios';
 
-const BASE_URL = 'https://api.dreptobiodevices.com';
+// Use environment variable for API URL or default to production
+// In local development, VITE_API_URL should be set to http://localhost:6001
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://api.dreptobiodevices.com';
 
 // Create Axios Instance
 export const api = axios.create({
