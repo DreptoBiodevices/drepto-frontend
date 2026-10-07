@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check, Truck, Building2, Box, Star, Upload, Video, Camera, Trash2, Plus, Minus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api_controller';
+import { useAuth } from '../hooks/useAuth';
 
 export interface Product {
     _id?: string;
@@ -28,6 +29,7 @@ interface ProductDetailModalProps {
 
 const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen, onClose, onAddToCart }) => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [activeImageIndex, setActiveImageIndex] = useState(0);
     const [reviews, setReviews] = useState<any[]>([]);
     const [reviewForm, setReviewForm] = useState({ rating: 5, reviewText: '', images: [], videos: [] } as any);
@@ -223,6 +225,22 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                                         <Star key={idx} className={`w-4 h-4 ${idx < r.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`} />
                                                     ))}
                                                 </div>
+                                                {user && (r.userId?._id === user.id || r.userId === user.id) && (
+                                                    <div className="flex items-center gap-2 ml-2">
+                                                        <button onClick={() => {
+                                                            setEditingReviewId(r._id);
+                                                            setReviewForm({ rating: r.rating, reviewText: r.reviewText, images: r.images || [], videos: r.videos || [] });
+                                                        }} className="text-gray-400 hover:text-blue-500 transition-colors"><Edit className="w-4 h-4" /></button>
+                                                        <button onClick={async () => {
+                                                            if (window.confirm('Delete this review?')) {
+                                                                try {
+                                                                    await api.delete(`/reviews/${r._id}`);
+                                                                    setReviews(reviews.filter(rev => rev._id !== r._id));
+                                                                } catch(e) { alert('Failed to delete review'); }
+                                                            }
+                                                        }} className="text-gray-400 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                         <p className="text-gray-600 text-sm">{r.reviewText}</p>
@@ -298,16 +316,37 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                                 if(!reviewForm.reviewText?.trim() || !product?._id) return;
                                                 setIsSubmitting(true);
                                                 try {
+                                                    if (!user) {
+                                                        navigate('/login');
+                                                        return;
+                                                    }
                                                     const payload = {
                                                         productId: product._id,
+                                                        userId: user.id,
                                                         rating: reviewForm.rating,
                                                         reviewText: reviewForm.reviewText,
                                                         images: reviewForm.images,
                                                         videos: reviewForm.videos
                                                     };
-                                                    const res = await api.post('/reviews', payload);
-                                                    setReviews([res.data, ...reviews]);
+                                                    
+                                                    if (editingReviewId) {
+                                                        const res = await api.put(`/reviews/${editingReviewId}`, payload);
+                                                        setReviews(reviews.map(r => r._id === editingReviewId ? { ...r, ...res.data, userId: r.userId } : r));
+                                                    } else {
+                                                        const res = await api.post('/reviews', payload);
+                                                        const newReview = {
+                                                            ...res.data,
+                                                            userId: {
+                                                                _id: user.id,
+                                                                firstName: user.firstName,
+                                                                lastName: user.lastName
+                                                            }
+                                                        };
+                                                        setReviews([newReview, ...reviews]);
+                                                    }
+                                                    
                                                     setReviewForm({rating: 5, reviewText: '', images: [], videos: []});
+                                                    setEditingReviewId(null);
                                                 } catch (err) {
                                                     console.error("Failed to submit review", err);
                                                     alert("Failed to submit review");
@@ -316,8 +355,19 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                                 }
                                             }}
                                         >
-                                            {isSubmitting ? "Submitting..." : "Submit"}
+                                            {isSubmitting ? "Submitting..." : (editingReviewId ? "Update" : "Submit")}
                                         </button>
+                                        {editingReviewId && (
+                                            <button 
+                                                onClick={() => {
+                                                    setEditingReviewId(null);
+                                                    setReviewForm({rating: 5, reviewText: '', images: [], videos: []});
+                                                }}
+                                                className="ml-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1.5 px-4 rounded-lg text-sm transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                                 {(reviewForm.images.length > 0 || reviewForm.videos.length > 0) && (
