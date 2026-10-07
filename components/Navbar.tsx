@@ -290,21 +290,17 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                );
                locationStr = cityResult ? cityResult.formatted_address : data.results[0].formatted_address;
              }
-          } else {
-             console.error("Geocoding API Error:", data);
           }
           
           setLocationName(locationStr);
           localStorage.setItem('drepto_location', locationStr);
         } catch (error) {
-          console.error("Error fetching location details:", error);
           setLocationName("Failed to get address");
         } finally {
           setIsLocating(false);
         }
       },
       (error) => {
-        console.error("Geolocation error:", error);
         alert("Unable to retrieve your location. Please check your permissions.");
         setIsLocating(false);
       },

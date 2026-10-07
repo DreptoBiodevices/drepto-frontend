@@ -228,7 +228,7 @@ const LabTestsPage: React.FC = () => {
                             }
                         }
                     } catch (error) {
-                        console.error("Error auto-fetching city:", error);
+                        // Silently handle error
                     }
                 },
                 () => {}, // Silently fail if permission denied

@@ -27,6 +27,56 @@ api.interceptors.request.use(
   }
 );
 
+// Response Interceptor to handle errors globally and hide exact server errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    let customMessage = 'An unexpected error occurred. Please try again later.';
+
+    if (error.response) {
+      const status = error.response.status;
+      const originalMessage = error.response.data?.message;
+      
+      if (status >= 500) {
+        customMessage = 'Our servers are currently experiencing issues. Please try again later.';
+      } else if (status === 401) {
+        customMessage = 'Invalid credentials or session expired. Please log in again.';
+      } else if (status === 403) {
+        customMessage = 'You do not have permission to access this resource.';
+      } else if (status === 404) {
+        customMessage = 'The requested information could not be found.';
+      } else if (status >= 400 && status < 500) {
+        // For client errors (e.g. invalid login, bad data), we show the specific message if provided,
+        // otherwise a generic fallback.
+        customMessage = originalMessage || 'There was an issue with your request. Please verify your details.';
+        
+        // Handle NestJS validation error arrays
+        if (Array.isArray(customMessage)) {
+          customMessage = customMessage.join(', ');
+        } else if (typeof customMessage !== 'string') {
+          customMessage = 'There was an issue with your request. Please verify your details.';
+        }
+      }
+
+      // Overwrite the error properties to prevent leaking raw internal errors to UI
+      error.message = customMessage;
+      if (!error.response.data) {
+        error.response.data = {};
+      }
+      error.response.data.message = customMessage;
+      
+    } else if (error.request) {
+      // Request was made but no response was received (e.g., network error)
+      customMessage = 'Unable to connect to the server. Please check your internet connection.';
+      error.message = customMessage;
+    } else {
+      error.message = customMessage;
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 // --- API Methods ---
 
 // App Controller
