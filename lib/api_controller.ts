@@ -217,7 +217,10 @@ export const PaymentService = {
 
 export const ShippingAddressService = {
   create: (data: any) => api.post('/shipping-address', data),
+  getAll: () => api.get('/shipping-address'),
   getById: (id: string) => api.get(`/shipping-address/${id}`),
+  update: (id: string, data: any) => api.patch(`/shipping-address/${id}`, data),
+  delete: (id: string) => api.delete(`/shipping-address/${id}`),
 };
 
 // Feedback Controller
@@ -233,4 +236,12 @@ export const OrderService = {
   getById: (id: string) => api.get(`/order/${id}`),
   update: (id: string, data: any) => api.patch(`/order/${id}`, data),
   delete: (id: string) => api.delete(`/order/${id}`),
+};
+
+export const ReviewService = {
+  create: (data: any) => api.post('/reviews', data),
+  getByProduct: (productId: string) => api.get(`/reviews/product/${productId}`),
+  getByUser: (userId: string) => api.get(`/reviews/user/${userId}`),
+  update: (id: string, data: any) => api.put(`/reviews/${id}`, data),
+  delete: (id: string) => api.delete(`/reviews/${id}`),
 };

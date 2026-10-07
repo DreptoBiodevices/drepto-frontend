@@ -216,7 +216,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                                 {reviews.map((r) => (
                                     <div key={r._id} className="bg-gray-50 p-4 rounded-xl border border-gray-100">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="font-bold text-gray-900">{r.userId?.name || "Customer"}</span>
+                                            <span className="font-bold text-gray-900">{r.userId?.firstName ? `${r.userId.firstName} ${r.userId.lastName || ''}`.trim() : "Customer"}</span>
                                             <div className="flex items-center gap-3">
                                                 <div className="flex gap-0.5">
                                                     {[...Array(5)].map((_, idx) => (

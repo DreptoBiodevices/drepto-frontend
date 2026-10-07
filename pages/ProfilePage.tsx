@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import BackButton from '../components/BackButton';
 import { User } from '../types';
-import { User as UserIcon, Lock, MapPin, History, Star, Phone, Activity, Image as ImageIcon, Camera, CheckCircle, ShieldCheck } from 'lucide-react';
-import { OrderService, LabTestBookingService, DoctorAppointmentService, NurseAppointmentService, UserService } from '../lib/api_controller';
+import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { User as UserIcon, Lock, MapPin, History, Star, Phone, Activity, Image as ImageIcon, Camera, CheckCircle, ShieldCheck, Edit, Trash2 } from 'lucide-react';
+import { OrderService, LabTestBookingService, DoctorAppointmentService, NurseAppointmentService, UserService, ReviewService, ShippingAddressService } from '../lib/api_controller';
 
 type TabType = 'personal' | 'security' | 'address' | 'history' | 'reviews';
 
@@ -44,6 +46,17 @@ const ProfilePage: React.FC = () => {
     orders: 0, lab: 0, doctor: 0, nurse: 0
   });
 
+  // Reviews State
+  const [userReviews, setUserReviews] = useState<any[]>([]);
+  const [editingReview, setEditingReview] = useState<any | null>(null);
+
+  // Address State
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [newAddress, setNewAddress] = useState({
+    street: '', city: '', state: '', zipCode: '', country: ''
+  });
+
   useEffect(() => {
     if (user) {
         setFormData({
@@ -78,8 +91,24 @@ const ProfilePage: React.FC = () => {
             });
         } catch(e) {}
     };
+    const loadReviews = async () => {
+        if(user?.id) {
+            try {
+                const res = await ReviewService.getByUser(user.id);
+                setUserReviews(res.data);
+            } catch(e) {}
+        }
+    }
+    const loadAddresses = async () => {
+        try {
+            const res = await ShippingAddressService.getAll();
+            setAddresses(res.data);
+        } catch(e) {}
+    }
     if (activeTab === 'history') loadHistory();
-  }, [activeTab, user?.email]);
+    if (activeTab === 'reviews') loadReviews();
+    if (activeTab === 'address') loadAddresses();
+  }, [activeTab, user]);
 
   const handlePersonalChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -140,13 +169,56 @@ const ProfilePage: React.FC = () => {
     }
 
     try {
-        // Mock password change API call or handle via UserService if available
-        // await UserService.updateUser(user!.id, { password: passwords.new });
+        await UserService.updateUser(user!.id, { password: passwords.new });
         setPasswordSuccess('Password changed successfully!');
         setPasswords({ current: '', new: '', confirm: '' });
     } catch (e: any) {
         setPasswordError(e.response?.data?.message || 'Failed to change password');
     }
+  };
+
+  const handleSaveAddress = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+        const res = await ShippingAddressService.create({ ...newAddress, userId: user!.id });
+        setAddresses([...addresses, res.data]);
+        setShowAddressForm(false);
+        setNewAddress({ street: '', city: '', state: '', zipCode: '', country: '' });
+        alert("Address saved successfully!");
+    } catch(e) {
+        alert("Failed to save address");
+    }
+  };
+
+  const handleDeleteAddress = async (id: string) => {
+      try {
+          await ShippingAddressService.delete(id);
+          setAddresses(addresses.filter(a => a._id !== id));
+      } catch(e) {
+          alert("Failed to delete address");
+      }
+  };
+
+  const handleDeleteReview = async (id: string) => {
+      if(window.confirm("Are you sure you want to delete this review?")) {
+          try {
+              await ReviewService.delete(id);
+              setUserReviews(userReviews.filter(r => r._id !== id));
+          } catch(e) {
+              alert("Failed to delete review");
+          }
+      }
+  };
+
+  const handleUpdateReview = async () => {
+      if(!editingReview) return;
+      try {
+          await ReviewService.update(editingReview._id, { reviewText: editingReview.reviewText, rating: editingReview.rating });
+          setUserReviews(userReviews.map(r => r._id === editingReview._id ? editingReview : r));
+          setEditingReview(null);
+      } catch(e) {
+          alert("Failed to update review");
+      }
   };
 
   if (!user) {
@@ -362,29 +434,131 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <div className="pt-6">
-                        <a href="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-700 text-white font-bold rounded-xl hover:bg-brand-800 transition-colors">
+                        <Link to="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-700 text-white font-bold rounded-xl hover:bg-brand-800 transition-colors">
                             View Detailed History <Activity className="w-5 h-5" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             )}
 
             {/* ADDRESS TAB */}
             {activeTab === 'address' && (
-                <div className="animate-fade-in text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-                    <MapPin className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                    <h3 className="text-lg font-bold text-slate-700">No Saved Addresses</h3>
-                    <p className="text-slate-500 mt-1 mb-4">You have not saved any addresses yet.</p>
-                    <button className="px-4 py-2 bg-white border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-100">Add New Address</button>
+                <div className="animate-fade-in space-y-6">
+                    {addresses.length === 0 && !showAddressForm ? (
+                        <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                            <MapPin className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                            <h3 className="text-lg font-bold text-slate-700">No Saved Addresses</h3>
+                            <p className="text-slate-500 mt-1 mb-4">You have not saved any addresses yet.</p>
+                            <button onClick={() => setShowAddressForm(true)} className="px-4 py-2 bg-white border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-100">Add New Address</button>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="font-bold text-lg">Your Addresses</h3>
+                                {!showAddressForm && <button onClick={() => setShowAddressForm(true)} className="px-4 py-2 bg-brand-700 text-white rounded-lg text-sm font-medium hover:bg-brand-800">Add Address</button>}
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                {addresses.map((addr, idx) => (
+                                    <div key={idx} className="p-4 border border-slate-200 rounded-xl bg-white shadow-sm flex flex-col justify-between">
+                                        <div>
+                                            <div className="font-bold text-slate-800">{addr.street}</div>
+                                            <div className="text-slate-600 text-sm mt-1">{addr.city}, {addr.state} {addr.zipCode}</div>
+                                            <div className="text-slate-500 text-sm">{addr.country}</div>
+                                        </div>
+                                        <div className="mt-4 flex justify-end">
+                                            <button onClick={() => handleDeleteAddress(addr._id)} className="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1"><Trash2 className="w-4 h-4" /> Delete</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {showAddressForm && (
+                        <form onSubmit={handleSaveAddress} className="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <h4 className="font-bold mb-4">Add New Address</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Street Address</label>
+                                    <input required type="text" value={newAddress.street} onChange={e => setNewAddress({...newAddress, street: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">City</label>
+                                    <input required type="text" value={newAddress.city} onChange={e => setNewAddress({...newAddress, city: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">State</label>
+                                    <input required type="text" value={newAddress.state} onChange={e => setNewAddress({...newAddress, state: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Zip Code</label>
+                                    <input required type="text" value={newAddress.zipCode} onChange={e => setNewAddress({...newAddress, zipCode: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Country</label>
+                                    <input required type="text" value={newAddress.country} onChange={e => setNewAddress({...newAddress, country: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                </div>
+                            </div>
+                            <div className="mt-6 flex justify-end gap-3">
+                                <button type="button" onClick={() => setShowAddressForm(false)} className="px-4 py-2 border rounded-lg hover:bg-slate-100 font-medium">Cancel</button>
+                                <button type="submit" className="px-6 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 font-medium">Save Address</button>
+                            </div>
+                        </form>
+                    )}
                 </div>
             )}
 
             {/* REVIEWS TAB */}
             {activeTab === 'reviews' && (
-                <div className="animate-fade-in text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-                    <Star className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                    <h3 className="text-lg font-bold text-slate-700">No Reviews Yet</h3>
-                    <p className="text-slate-500 mt-1">You haven't left any reviews for our services.</p>
+                <div className="animate-fade-in space-y-6">
+                    {userReviews.length === 0 ? (
+                        <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                            <Star className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                            <h3 className="text-lg font-bold text-slate-700">No Reviews Yet</h3>
+                            <p className="text-slate-500 mt-1">You haven't left any reviews for our services.</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {userReviews.map(review => (
+                                <div key={review._id} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative">
+                                    {editingReview?._id === review._id ? (
+                                        <div className="space-y-4">
+                                            <div className="flex items-center gap-1">
+                                                {[1,2,3,4,5].map(star => (
+                                                    <button key={star} onClick={() => setEditingReview({...editingReview, rating: star})}>
+                                                        <Star className={`w-6 h-6 ${star <= editingReview.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'}`} />
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <textarea className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500" value={editingReview.reviewText} onChange={e => setEditingReview({...editingReview, reviewText: e.target.value})} rows={3} />
+                                            <div className="flex justify-end gap-2">
+                                                <button onClick={() => setEditingReview(null)} className="px-4 py-2 border rounded-lg hover:bg-slate-50">Cancel</button>
+                                                <button onClick={handleUpdateReview} className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800">Save Update</button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <div className="font-bold text-slate-900">{review.productId?.name || 'Unknown Product'}</div>
+                                                    <div className="flex items-center gap-1 mt-1">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-200'}`} />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <button onClick={() => setEditingReview(review)} className="p-2 text-slate-400 hover:text-blue-600 bg-slate-50 rounded-lg transition-colors"><Edit className="w-4 h-4" /></button>
+                                                    <button onClick={() => handleDeleteReview(review._id)} className="p-2 text-slate-400 hover:text-red-600 bg-slate-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                                </div>
+                                            </div>
+                                            <p className="text-slate-700 mt-3">{review.reviewText}</p>
+                                        </>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
 
