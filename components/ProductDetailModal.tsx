@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check, Truck, Building2, Box, Star, Upload, Video, Camera, Trash2, Plus, Minus } from 'lucide-react';
+import { X, ShoppingCart, Leaf, AlertCircle, BookOpen, Check, Truck, Building2, Box, Star, Upload, Video, Camera, Trash2, Plus, Minus, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api_controller';
 import { useAuth } from '../hooks/useAuth';
