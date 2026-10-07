@@ -210,8 +210,8 @@ const LabTestsPage: React.FC = () => {
                 async (position) => {
                     try {
                         const { latitude, longitude } = position.coords;
-                        const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-                        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`);
+                        const API_URL = import.meta.env.VITE_API_URL || 'https://api.dreptobiodevices.com';
+                        const response = await fetch(`${API_URL}/location/geocode?lat=${latitude}&lng=${longitude}`);
                         const data = await response.json();
                         if (data && data.status === "OK" && data.results && data.results.length > 0) {
                             let cityStr = "";
