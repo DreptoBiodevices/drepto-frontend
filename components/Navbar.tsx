@@ -271,36 +271,24 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
-          // Reverse geocoding using Nominatim (OpenStreetMap) - Free and open source
-          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          
+          const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+          const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`);
           const data = await response.json();
           
           let locationStr = "Unknown Location";
-          if (data && data.address) {
-             const addr = data.address;
-             
+          if (data && data.status === "OK" && data.results && data.results.length > 0) {
              if (precise) {
-               // Build a detailed exact location string
-               const exactParts = [];
-               if (addr.house_number) exactParts.push(addr.house_number);
-               if (addr.road || addr.pedestrian || addr.street) exactParts.push(addr.road || addr.pedestrian || addr.street);
-               if (addr.neighbourhood || addr.suburb || addr.residential) exactParts.push(addr.neighbourhood || addr.suburb || addr.residential);
-               if (addr.city || addr.town || addr.village) exactParts.push(addr.city || addr.town || addr.village);
+               locationStr = data.results[0].formatted_address;
                
-               locationStr = exactParts.filter(Boolean).join(", ");
-               
-               if (addr.postcode) {
-                 locationStr += ` - ${addr.postcode}`;
-               }
-               
-               // Truncate if it's too long for the navbar
                if (locationStr.length > 45) {
                  locationStr = locationStr.substring(0, 42) + '...';
                }
              } else {
-               // Approximate location (just city/town level)
-               locationStr = addr.city || addr.town || addr.village || addr.county || addr.state || "Detected Location";
-               if (addr.postcode) locationStr += ` (${addr.postcode})`;
+               const cityResult = data.results.find((result: any) => 
+                 result.types.includes("locality") || result.types.includes("administrative_area_level_2")
+               );
+               locationStr = cityResult ? cityResult.formatted_address : data.results[0].formatted_address;
              }
           }
           

@@ -210,10 +210,18 @@ const LabTestsPage: React.FC = () => {
                 async (position) => {
                     try {
                         const { latitude, longitude } = position.coords;
-                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                        const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+                        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`);
                         const data = await response.json();
-                        if (data && data.address) {
-                            const cityStr = data.address.city || data.address.town || data.address.village || data.address.state || "";
+                        if (data && data.status === "OK" && data.results && data.results.length > 0) {
+                            let cityStr = "";
+                            const addressComponents = data.results[0].address_components;
+                            const cityComponent = addressComponents.find((comp: any) => 
+                                comp.types.includes("locality") || comp.types.includes("administrative_area_level_2")
+                            );
+                            if (cityComponent) {
+                                cityStr = cityComponent.long_name;
+                            }
                             const matchedCity = CITIES.find(c => cityStr.toLowerCase().includes(c.name.toLowerCase()));
                             if (matchedCity) {
                                 setSelectedCity(matchedCity.id);
