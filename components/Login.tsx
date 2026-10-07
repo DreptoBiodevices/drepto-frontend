@@ -91,6 +91,7 @@ const Login: React.FC<LoginProps> = ({ onToggleView, hideBackButton }) => {
             Sign in with Google
           </button>
           
+          {/* 
           <button
             type="button"
             onClick={() => window.location.href = 'https://api.dreptobiodevices.com/auth/apple'}
@@ -101,6 +102,7 @@ const Login: React.FC<LoginProps> = ({ onToggleView, hideBackButton }) => {
             </svg>
             Sign in with Apple
           </button>
+          */}
         </div>
       </form>
       <p className="text-center text-sm text-gray-600 mt-6">

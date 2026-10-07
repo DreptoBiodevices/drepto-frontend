@@ -228,6 +228,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
             Sign up with Google
           </button>
           
+          {/* 
           <button
             type="button"
             onClick={() => window.location.href = 'https://api.dreptobiodevices.com/auth/apple'}
@@ -238,6 +239,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
             </svg>
             Sign up with Apple
           </button>
+          */}
         </div>
       </form>
       <p className="text-center text-sm text-gray-600 mt-4">
