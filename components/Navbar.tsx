@@ -290,6 +290,8 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                );
                locationStr = cityResult ? cityResult.formatted_address : data.results[0].formatted_address;
              }
+          } else {
+             console.error("Geocoding API Error:", data);
           }
           
           setLocationName(locationStr);
