@@ -24,7 +24,7 @@ const AdminLogin = () => {
     if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
       localStorage.setItem(ADMIN_AUTH_KEY, 'true');
       window.dispatchEvent(new Event('admin-auth-change'));
-      navigate('/admin/dashboard');
+      navigate('/drepto-admin/dashboard');
     } else {
       setError('Invalid admin credentials.');
     }

@@ -67,7 +67,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (!isAuthed) {
     console.log('Redirecting to login...');
-    return <Navigate to="/admin/login" />;
+    return <Navigate to="/drepto-admin" />;
   }
 
   return <>{children}</>;
@@ -90,8 +90,8 @@ const Main: React.FC = () => {
         <Route path="/login" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
         <Route path="/signup" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
         <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/login" replace />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+        <Route path="/drepto-admin" element={<AdminLogin />} />
+        <Route path="/drepto-admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
 
         {/* Feature Routes */}
         <Route path="/feedback" element={<FeedbackPage />} />
