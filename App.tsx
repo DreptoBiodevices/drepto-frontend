@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
@@ -23,6 +22,7 @@ import FeedbackPage from './pages/FeedbackPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import SocialMediaBlogPage from './pages/SocialMediaBlogPage';
 import ContactPage from './pages/ContactPage';
+import OAuthSuccess from './pages/OAuthSuccess';
 import { LanguageProvider } from './hooks/useLanguage';
 import BottomNav from './components/BottomNav';
 
@@ -92,6 +92,7 @@ const Main: React.FC = () => {
           <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/" replace />} />
           {/* Auth is now handled via modal, we map /auth to home as fallback if directly accessed */}
           <Route path="/auth" element={<Navigate to="/" replace />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/" replace />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
