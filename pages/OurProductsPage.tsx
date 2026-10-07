@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductDetailModal, { Product } from '../components/ProductDetailModal';
-import { ProductService } from '../lib/api_controller';
+import { ProductService, OrderService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
 import { Order } from '../types';
@@ -174,22 +174,10 @@ const OurProductsPage: React.FC = () => {
             gst: 0
         };
 
-        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
-
         // --- API INTEGRATION ---
         const saveSubscriptionToBackend = async () => {
             try {
-                await PaymentService.createOrder({
-                    orderId: orderId,
-                    transactionId: paymentId || 'SUB_FREE',
-                    amount: 1500,
-                    currency: 'INR',
-                    shippingAddress: newOrder.shippingAddress,
-                    items: newOrder.items,
-                    shippingMethod: 'Digital',
-                    shippingCost: 0,
-                    userId: user?.id || 'guest'
-                });
+                await OrderService.create(newOrder);
                 console.log("Subscription saved to Backend successfully");
             } catch (err) {
                 console.error("Failed to save subscription to Backend:", err);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductService, PaymentService } from '../../../lib/api_controller';
+import { ProductService, PaymentService, OrderService } from '../../../lib/api_controller';
 import { useAuth } from '../../../hooks/useAuth';
 import ProductDetailModal, { Product } from '../../ProductDetailModal';
 import { X, CheckCircle, ExternalLink } from 'lucide-react';
@@ -132,25 +132,10 @@ export default function DreptoProducts() {
             gst: 0
         };
 
-        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
-
         // --- API INTEGRATION ---
         const saveSubscriptionToBackend = async () => {
             try {
-                // Determine transaction ID
-                const txId = paymentId || 'SUB_FREE';
-
-                await PaymentService.createOrder({
-                    orderId: orderId,
-                    transactionId: txId,
-                    amount: 1500,
-                    currency: 'INR',
-                    shippingAddress: newOrder.shippingAddress,
-                    items: newOrder.items, // Contains subscription item
-                    shippingMethod: 'Digital',
-                    shippingCost: 0,
-                    userId: user?.id || 'guest'
-                });
+                await OrderService.create(newOrder);
                 console.log("Subscription saved to Backend successfully");
             } catch (err) {
                 console.error("Failed to save subscription to Backend:", err);

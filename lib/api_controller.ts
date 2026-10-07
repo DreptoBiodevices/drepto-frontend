@@ -225,3 +225,12 @@ export const FeedbackService = {
   create: (data: any) => api.post('/feedback', data),
   getAllApproved: () => api.get('/feedback'),
 };
+
+// Order Controller
+export const OrderService = {
+  create: (data: any) => api.post('/order', data),
+  getAll: (userEmail?: string) => api.get(`/order${userEmail ? `?userEmail=${encodeURIComponent(userEmail)}` : ''}`),
+  getById: (id: string) => api.get(`/order/${id}`),
+  update: (id: string, data: any) => api.patch(`/order/${id}`, data),
+  delete: (id: string) => api.delete(`/order/${id}`),
+};

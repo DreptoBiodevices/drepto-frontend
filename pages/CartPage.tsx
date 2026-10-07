@@ -7,7 +7,7 @@ import ShippingAddressForm from '../components/ShippingAddressForm';
 import { Address, Order } from '../types';
 import { Truck, MapPin, CreditCard, X, Check } from 'lucide-react';
 import useRazorpay from '../hooks/useRazorpay';
-import { PaymentService } from '../lib/api_controller';
+import { PaymentService, OrderService } from '../lib/api_controller';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -209,34 +209,13 @@ const CartPage: React.FC = () => {
             shippingCost: shippingCost,
         };
 
-        // Save to LocalStorage (Legacy/Backup)
-        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
-
-        // --- SAVE TO MONGODB VIA BACKEND API ---
+        // Save using new Order API
         try {
-            await PaymentService.createOrder({
-                orderId: orderId,
-                transactionId: rzpPaymentId,
-                amount: newOrder.total,
-                currency: "INR",
-                shippingAddress: {
-                    houseNo: shippingAddress!.houseNo,
-                    street: shippingAddress!.street,
-                    city: shippingAddress!.city,
-                    state: shippingAddress!.state,
-                    pincode: shippingAddress!.pincode,
-                    country: 'India',
-                    contactNumber: String(user?.mobileNumber || ''),
-                    landmark: shippingAddress!.landmark || '',
-                },
-                items: orderItems,
-                shippingMethod: shippingMethod,
-                shippingCost: shippingCost,
-            });
-            console.log("Order saved to MongoDB successfully!");
+            await OrderService.create(newOrder);
+            console.log("Order saved to database successfully via OrderService!");
         } catch (err) {
-            console.error("Failed to save order to MongoDB:", err);
-            alert("Order placed but failed to sync with database. Your order is saved locally.");
+            console.error("Failed to save order to database:", err);
+            alert("Order placed but failed to sync with database.");
         }
         // -------------------------
 
