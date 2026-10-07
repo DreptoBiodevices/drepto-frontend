@@ -5,6 +5,7 @@ import LandingPage from './pages/LandingPage';
 import AuthModal from './components/AuthModal';
 // Removed AuthPage import as we use modal now
 import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
 import LabTestsPage from './pages/LabTestsPage';
 import AboutUsPage from './pages/AboutUsPage';
 import AdminLogin from './components/admin/AdminLogin';
@@ -94,6 +95,7 @@ const Main: React.FC = () => {
           <Route path="/auth" element={<Navigate to="/" replace />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/" replace />} />
+          <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/" replace />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
 

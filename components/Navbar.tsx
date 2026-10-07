@@ -463,7 +463,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
               {user ? (
                 <>
                   <button
-                    onClick={() => navigate('/dashboard')}
+                    onClick={() => navigate('/profile')}
                     className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors flex items-center gap-1"
                   >
                     <User className="w-4 h-4" />
