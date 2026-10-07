@@ -80,8 +80,8 @@ const Main: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
   return (
-    <div className="bg-gray-50 min-h-screen font-sans pb-[env(safe-area-inset-bottom)] md:pb-0 overflow-x-hidden w-full">
-      <div className="pb-16 md:pb-0 min-h-screen flex flex-col">
+    <div className="bg-gray-50 min-h-screen font-sans overflow-x-hidden w-full">
+      <div className="min-h-screen flex flex-col pb-20 md:pb-0">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/lab-tests" element={<LabTestsPage />} />

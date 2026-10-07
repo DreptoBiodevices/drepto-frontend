@@ -90,8 +90,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm animate-fade-in overflow-hidden">
-            <div className="bg-white rounded-3xl w-full max-w-6xl h-full max-h-[90vh] shadow-2xl relative flex flex-col lg:flex-row overflow-hidden animate-scale-in border border-gray-100">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4 lg:p-6 bg-black/60 backdrop-blur-sm animate-fade-in overflow-hidden">
+            <div className="bg-white w-full sm:rounded-3xl sm:max-w-6xl sm:h-auto sm:max-h-[90vh] h-[95dvh] rounded-t-3xl shadow-2xl relative flex flex-col lg:flex-row overflow-hidden animate-slide-up-sheet sm:animate-scale-in border border-gray-100">
 
                 {/* Close Button - Floated */}
                 <button
@@ -102,7 +102,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen
                 </button>
 
                 {/* Left Column: Image Area */}
-                <div className="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center p-6 lg:p-12 relative overflow-hidden shrink-0 h-[35%] lg:h-auto border-b lg:border-b-0 lg:border-r border-gray-100">
+                <div className="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center p-4 lg:p-12 relative overflow-hidden shrink-0 h-[40%] sm:h-[35%] lg:h-auto border-b lg:border-b-0 lg:border-r border-gray-100">
                     {/* Decorative Elements */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-100/50 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />

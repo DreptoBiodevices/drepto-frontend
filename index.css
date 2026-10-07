@@ -1,3 +1,246 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ===== MOBILE-FIRST GLOBAL RESET & UTILITIES ===== */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ===== SCROLLBAR UTILITIES ===== */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+
+  /* Safe area utilities */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out forwards;
+  }
+  .animate-slide-in-up {
+    animation: slideInUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .animate-slide-up-sheet {
+    animation: slideUpSheet 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ===== MOBILE NAVBAR OVERRIDES ===== */
+/* On mobile: make the search bar visible inline and compact */
+@media (max-width: 639px) {
+  /* Compact the main nav header for mobile */
+  .navbar-mobile-compact {
+    height: 56px !important;
+  }
+
+  /* Utility bar hidden on mobile (handled by sm:block) */
+}
+
+/* ===== PRODUCT DETAIL MODAL MOBILE ===== */
+@media (max-width: 1023px) {
+  .modal-mobile-sheet {
+    position: fixed !important;
+    inset: 0 !important;
+    border-radius: 0 !important;
+    max-height: 100dvh !important;
+    height: 100dvh !important;
+    max-width: 100% !important;
+    flex-direction: column !important;
+  }
+
+  .modal-image-mobile {
+    height: 35vh !important;
+    min-height: 200px !important;
+    max-height: 300px !important;
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+
+  .modal-content-mobile {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav-item {
+  position: relative;
+}
+.bottom-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: #0f766e;
+  border-radius: 0 0 4px 4px;
+  transition: width 0.25s ease;
+}
+.bottom-nav-item.active::before {
+  width: 32px;
+}
+
+/* ===== TOUCH-FRIENDLY BUTTONS ===== */
+@media (max-width: 767px) {
+  button, a[role="button"] {
+    min-height: 44px;
+  }
+  
+  input, select, textarea {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+  }
+}
+
+/* ===== CART PAGE MOBILE ===== */
+@media (max-width: 767px) {
+  .cart-mobile-stack {
+    flex-direction: column !important;
+  }
+}
+
+/* ===== HERO SECTION MOBILE ===== */
+@media (max-width: 639px) {
+  .hero-title {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+  }
+  .hero-subtitle {
+    font-size: 1.25rem !important;
+    line-height: 1.35 !important;
+  }
+  .hero-description {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* ===== PROFILE PAGE MOBILE ===== */
+@media (max-width: 639px) {
+  .profile-header-mobile {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+}
+
+/* ===== SECTION HEADINGS MOBILE ===== */
+@media (max-width: 639px) {
+  .section-title {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+}
+
+/* ===== OVERFLOW PROTECTION ===== */
+.overflow-x-clip {
+  overflow-x: clip;
+}
+
+/* ===== CARD HOVER (disable heavy effects on touch) ===== */
+@media (hover: none) {
+  .hover\:shadow-xl:hover {
+    box-shadow: none;
+  }
+  .hover\:-translate-y-1:hover {
+    transform: none;
+  }
+}
+
+/* ===== LAB TESTS MOBILE ===== */
+@media (max-width: 767px) {
+  .lab-slot-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== GLASS MORPHISM ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}

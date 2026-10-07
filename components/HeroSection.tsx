@@ -25,40 +25,38 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative overflow-hidden pt-10 pb-16 lg:py-20 bg-gradient-to-b from-white via-brand-50/20 to-clinical-surface">
+    <section className="relative overflow-hidden pt-6 pb-10 sm:pt-10 sm:pb-16 lg:py-20 bg-gradient-to-b from-white via-brand-50/20 to-clinical-surface">
       {/* Background Ambient Glow */}
-      <div className="absolute top-1/4 -right-20 w-96 h-96 bg-brand-200/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 -left-20 w-80 h-80 bg-teal-100/40 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 -right-20 w-64 sm:w-96 h-64 sm:h-96 bg-brand-200/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 -left-20 w-56 sm:w-80 h-56 sm:h-80 bg-teal-100/40 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* ── Hero Content ── */}
-        <div className="w-full flex flex-col lg:flex-row gap-12 items-center">
-          <div className="w-full lg:w-3/5 space-y-10 relative z-10">
+        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+          <div className="w-full lg:w-3/5 space-y-5 sm:space-y-10 relative z-10">
             {/* Badge */}
-            <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-brand-100/60 border border-brand-200 text-brand-800 text-sm font-bold">
-              <span className="w-3 h-3 rounded-full bg-brand-600 animate-pulse" />
+            <div className="inline-flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-brand-100/60 border border-brand-200 text-brand-800 text-xs sm:text-sm font-bold">
+              <span className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-brand-600 animate-pulse" />
               <span>{t('hero.badge')}</span>
             </div>
 
-            <div className="space-y-6">
-              <h1 className="text-4xl sm:text-6xl lg:text-[6.5rem] font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+            <div className="space-y-3 sm:space-y-6">
+              <h1 className="hero-title text-3xl sm:text-5xl lg:text-[6.5rem] font-extrabold text-slate-900 tracking-tight leading-tight lg:leading-[1.1]">
                 {t('hero.title')}
               </h1>
-              <p className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-brand-700 tracking-normal leading-tight">
+              <p className="hero-subtitle text-lg sm:text-3xl lg:text-5xl font-semibold text-brand-700 tracking-normal leading-tight">
                 {t('hero.subtitle')}
               </p>
-              <p className="text-slate-600 text-lg sm:text-xl lg:text-2xl max-w-5xl leading-relaxed pt-4">
+              <p className="hero-description text-slate-600 text-sm sm:text-xl lg:text-2xl max-w-5xl leading-relaxed">
                 {t('hero.description')}
               </p>
             </div>
 
-
-
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-6 pt-6">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-6 pt-2 sm:pt-6">
               <button
                 onClick={() => navigate('/our-products')}
-                className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-bold text-lg text-white bg-brand-700 hover:bg-brand-800 shadow-md shadow-brand-700/20 transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg text-white bg-brand-700 hover:bg-brand-800 shadow-md shadow-brand-700/20 transition-all active:scale-95"
               >
                 <span>{t('hero.getStarted')}</span>
                 <svg className="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +65,7 @@ const HeroSection: React.FC = () => {
               </button>
               <button
                 onClick={() => navigate('/about-us')}
-                className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-bold text-lg text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-soft transition-all"
+                className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-soft transition-all active:scale-95"
               >
                 {t('hero.learnMore')}
               </button>

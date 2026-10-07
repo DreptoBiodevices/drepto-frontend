@@ -3,7 +3,6 @@ import { useAuth } from '../hooks/useAuth';
 import BackButton from '../components/BackButton';
 import { User } from '../types';
 import { Link } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { User as UserIcon, Lock, MapPin, History, Star, Phone, Activity, Image as ImageIcon, Camera, CheckCircle, ShieldCheck, Edit, Trash2 } from 'lucide-react';
 import { OrderService, LabTestBookingService, DoctorAppointmentService, NurseAppointmentService, UserService, ReviewService, ShippingAddressService } from '../lib/api_controller';
 

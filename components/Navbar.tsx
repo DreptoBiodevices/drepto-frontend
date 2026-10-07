@@ -501,8 +501,8 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       <nav
         className={`sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-shadow duration-300 ${isScrolled ? 'shadow-md' : 'shadow-sm'}`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24 gap-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-20 lg:h-24 gap-3 sm:gap-8">
 
             {/* Brand Logo */}
             <div
@@ -512,8 +512,48 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
               <img
                 src="/images/logo.png"
                 alt="Drepto Biodevices Logo"
-                className="h-12 w-auto object-contain"
+                className="h-8 sm:h-12 w-auto object-contain"
               />
+            </div>
+
+            {/* Mobile Search Bar (inline) */}
+            <div className="flex-1 lg:hidden" ref={searchRef}>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-4 w-4 text-slate-400" />
+                </div>
+                <input
+                  className="w-full pl-9 pr-12 py-2 text-sm bg-slate-100 border border-slate-200 rounded-full focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all placeholder:text-slate-400"
+                  placeholder="Search medicines, tests..."
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onKeyDown={handleSearchKeyDown}
+                />
+                {searchQuery && (
+                  <button
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-brand-700 text-white rounded-full"
+                    onClick={handleSearchSubmit}
+                  >
+                    <Search className="w-3 h-3" />
+                  </button>
+                )}
+                {/* Mobile Search Results */}
+                {showSearchResults && searchResults.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-[60]">
+                    {searchResults.map((result) => (
+                      <button
+                        key={result.path}
+                        onClick={() => handleSearchResultClick(result.path)}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-brand-50 transition-colors border-b last:border-0 border-slate-100"
+                      >
+                        <Search className="w-4 h-4 text-brand-600 flex-shrink-0" />
+                        <span className="text-sm font-semibold text-slate-800">{result.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Desktop Nav Links */}
@@ -558,15 +598,15 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
 
             {/* Mobile Hamburger */}
             <button
-              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
+              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none flex-shrink-0"
               onClick={() => setIsMobileMenuOpen(true)}
             >
-              <Menu className="w-8 h-8" />
+              <Menu className="w-6 h-6" />
             </button>
           </div>
 
-          {/* Search Bar Row */}
-          <div className="py-6 border-t border-slate-100 hidden sm:block" ref={searchRef}>
+          {/* Search Bar Row - Desktop Only */}
+          <div className="py-4 sm:py-6 border-t border-slate-100 hidden lg:block" ref={searchRef}>
             <div className="relative max-w-4xl mx-auto">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-slate-400" />
