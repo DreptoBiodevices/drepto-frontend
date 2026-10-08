@@ -220,13 +220,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const updateUser = (details: Partial<User>) => {
+  const updateUser = async (details: Partial<User>) => {
     if (user) {
       const updatedUser = { ...user, ...details };
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser)); // Keep sync
-      // Ideally call API to update user here too
-      // UserService.updateUser(user.id, details);
+      
+      try {
+        if (updatedUser.role === UserRole.NURSE) {
+          await NurseService.updateNurse(updatedUser.id, details);
+        } else if (updatedUser.role === UserRole.DOCTOR || updatedUser.role === UserRole.ADMIN) {
+          await AuthorizedService.updateAuthorized(updatedUser.id, details);
+        } else {
+          await UserService.updateUser(updatedUser.id, details);
+        }
+      } catch (error) {
+        console.error("Failed to update user on server:", error);
+      }
     }
   };
 

@@ -19,6 +19,7 @@ export interface User {
     bloodGroup?: string;
     weight?: number | string;
     profileImage?: string;
+    address?: string;
     // Nurse specific fields
     serviceTypes?: string[];
 }

@@ -38,7 +38,8 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                 age: user.age,
                 bloodGroup: user.bloodGroup,
                 weight: user.weight,
-                profileImage: user.profileImage
+                profileImage: user.profileImage,
+                address: user.address
             } as unknown as FormData);
             setActiveSection('profile');
         } else {
@@ -264,8 +265,13 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                                             <Input label="First Name" val={(formData as User).firstName} set={(v) => setFormData({ ...formData, firstName: v })} required />
                                             <Input label="Last Name" val={(formData as User).lastName} set={(v) => setFormData({ ...formData, lastName: v })} required />
                                         </div>
-                                        <Input label="Email Address" val={(formData as User).email} set={() => { }} disabled />
-                                        <Input label="Phone Number" val={(formData as User).mobileNumber} set={(v) => setFormData({ ...formData, mobileNumber: v })} placeholder="+91 99999 99999" />
+                                        <div className="grid grid-cols-2 gap-5">
+                                            <Input label="Email Address" val={(formData as User).email} set={() => { }} disabled />
+                                            <Input label="Phone Number" val={(formData as User).mobileNumber} set={(v) => setFormData({ ...formData, mobileNumber: v })} placeholder="+91 99999 99999" />
+                                        </div>
+                                        <div>
+                                            <Input label="Address" val={(formData as User).address} set={(v) => setFormData({ ...formData, address: v })} placeholder="Enter your full address" />
+                                        </div>
                                     </div>
 
                                     <div className="space-y-4">
