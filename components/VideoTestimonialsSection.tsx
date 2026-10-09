@@ -56,23 +56,23 @@ const VideoTestimonialsSection: React.FC = () => {
                         What our Users think about our product
                     </h2>
                     <p className="text-lg text-slate-600">
-                        Hear directly from the people who are using our biomedical systems to improve their lives.
+                        Hear from people using our products to improve their lives.
                     </p>
                 </div>
 
-                <div className="relative max-w-4xl mx-auto bg-black rounded-3xl shadow-2xl overflow-hidden aspect-video group">
+                <div className="relative max-w-sm mx-auto bg-slate-100 rounded-[2rem] shadow-2xl overflow-hidden aspect-[9/16] group border-4 border-white">
                     <video
                         ref={videoRef}
                         key={videoFiles[currentIndex]}
                         src={videoFiles[currentIndex]}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                         onEnded={handleVideoEnd}
                         onPlay={() => setIsPlaying(true)}
                         onPause={() => setIsPlaying(false)}
                         controls={false}
                         playsInline
                     />
-                    
+
                     {/* Overlay controls */}
                     <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none">
                         <div className="flex justify-end gap-2">
@@ -80,7 +80,7 @@ const VideoTestimonialsSection: React.FC = () => {
                                 {currentIndex + 1} / {videoFiles.length}
                             </div>
                         </div>
-                        
+
                         <div className="flex justify-center items-center h-full">
                             <button
                                 onClick={togglePlay}
