@@ -16,6 +16,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [awardIndex, setAwardIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(true);
 
     // Touch swipe state
     const touchStartX = useRef<number | null>(null);
@@ -25,7 +26,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
     useEffect(() => {
         if (isHovered) return;
         const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % galleryImagePaths.length);
+            setCurrentIndex((prev) => prev + 1);
             if (awardImagePaths.length > 1) {
                 setAwardIndex((prev) => (prev + 1) % awardImagePaths.length);
             }
@@ -33,8 +34,34 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
         return () => clearInterval(interval);
     }, [isHovered]);
 
-    const goNext = () => setCurrentIndex((prev) => (prev + 1) % galleryImagePaths.length);
-    const goPrev = () => setCurrentIndex((prev) => (prev === 0 ? galleryImagePaths.length - 1 : prev - 1));
+    const goNext = () => setCurrentIndex((prev) => prev + 1);
+    
+    const goPrev = () => {
+        if (currentIndex === 0) {
+            setIsTransitioning(false);
+            setCurrentIndex(galleryImagePaths.length);
+            setTimeout(() => {
+                setIsTransitioning(true);
+                setCurrentIndex(galleryImagePaths.length - 1);
+            }, 50);
+        } else {
+            setCurrentIndex((prev) => prev - 1);
+        }
+    };
+
+    const handleTransitionEnd = () => {
+        if (currentIndex >= galleryImagePaths.length) {
+            setIsTransitioning(false);
+            setCurrentIndex(0);
+        }
+    };
+
+    useEffect(() => {
+        if (!isTransitioning && currentIndex === 0) {
+            const timer = setTimeout(() => setIsTransitioning(true), 50);
+            return () => clearTimeout(timer);
+        }
+    }, [isTransitioning, currentIndex]);
 
     // Touch handlers — horizontal swipe only, no interference with vertical scroll
     const handleTouchStart = (e: React.TouchEvent) => {
