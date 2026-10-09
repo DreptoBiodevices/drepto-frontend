@@ -114,17 +114,19 @@ const ProfilePage: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlePersonalSave = () => {
-    updateUser(formData);
+  const handlePersonalSave = async () => {
+    await updateUser(formData);
     setIsEditing(false);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Create a local object URL for preview (in a real app, upload to server and save URL)
-      const imageUrl = URL.createObjectURL(file);
-      setFormData(prev => ({ ...prev, profileImage: imageUrl }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, profileImage: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -179,7 +181,17 @@ const ProfilePage: React.FC = () => {
   const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-        const res = await ShippingAddressService.create({ ...newAddress, userId: user!.id });
+        const payload = {
+            userId: user!.id,
+            houseNo: newAddress.street,
+            street: newAddress.street,
+            city: newAddress.city,
+            state: newAddress.state,
+            country: newAddress.country,
+            pincode: newAddress.zipCode,
+            contactNumber: user!.mobileNumber || "0000000000"
+        };
+        const res = await ShippingAddressService.create(payload);
         setAddresses([...addresses, res.data]);
         setShowAddressForm(false);
         setNewAddress({ street: '', city: '', state: '', zipCode: '', country: '' });

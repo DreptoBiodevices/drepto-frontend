@@ -5,6 +5,7 @@ import AboutSection from '../components/AboutSection';
 import TeamSection from '../components/TeamSection';
 import GallerySection from '../components/GallerySection';
 import ContactSection from '../components/ContactSection';
+import VideoTestimonialsSection from '../components/VideoTestimonialsSection';
 import { Award, Target, Lightbulb, Users } from 'lucide-react';
 
 const AboutUsPage: React.FC = () => {
@@ -85,6 +86,9 @@ const AboutUsPage: React.FC = () => {
 
                 {/* Team */}
                 <TeamSection />
+
+                {/* Video Testimonials */}
+                <VideoTestimonialsSection />
 
                 {/* Contact */}
                 <ContactSection />

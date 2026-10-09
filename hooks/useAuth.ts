@@ -8,7 +8,7 @@ interface AuthContextType {
   login: (identifier: string, password?: string, role?: string) => Promise<void>;
   logout: () => void;
   register: (details: any) => Promise<void>;
-  updateUser: (details: Partial<User>) => void;
+  updateUser: (details: Partial<User>) => void | Promise<void>;
   isLoading: boolean;
   checkPasswordStrength: (password: string) => { strong: boolean; message: string };
   authModalView: 'login' | 'signup' | null;
@@ -237,13 +237,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const updateUser = (details: Partial<User>) => {
+  const updateUser = async (details: Partial<User>) => {
     if (user) {
-      const updatedUser = { ...user, ...details };
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser)); // Keep sync
-      // Ideally call API to update user here too
-      // UserService.updateUser(user.id, details);
+      try {
+        // Call API to update user here
+        await UserService.updateUser(user.id, details);
+        
+        const updatedUser = { ...user, ...details };
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser)); // Keep sync
+      } catch (error) {
+        console.error("Failed to update user", error);
+        alert("Failed to update profile details.");
+      }
     }
   };
 
