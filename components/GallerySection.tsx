@@ -163,21 +163,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                                 </svg>
                             </button>
 
-                            {/* Pagination — small dots only, NOT a pill on mobile */}
-                            <div className="flex items-center justify-center gap-1.5 mt-4">
-                                {galleryImagePaths.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => setCurrentIndex(i)}
-                                        aria-label={`Go to slide ${i + 1}`}
-                                        className={`transition-all duration-300 rounded-full ${
-                                            i === currentIndex
-                                                ? 'bg-primary w-6 h-2 sm:w-8 sm:h-2'
-                                                : 'bg-slate-300 w-2 h-2 hover:bg-primary/50'
-                                        }`}
-                                    />
-                                ))}
-                            </div>
+
                         </div>
                     </div>
 
