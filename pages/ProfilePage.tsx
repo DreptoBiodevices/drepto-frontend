@@ -189,15 +189,15 @@ const ProfilePage: React.FC = () => {
             state: newAddress.state,
             country: newAddress.country,
             pincode: newAddress.zipCode,
-            contactNumber: user!.mobileNumber || "0000000000"
+            contactNumber: String(user!.mobileNumber || "0000000000")
         };
         const res = await ShippingAddressService.create(payload);
         setAddresses([...addresses, res.data]);
         setShowAddressForm(false);
         setNewAddress({ street: '', city: '', state: '', zipCode: '', country: '' });
         alert("Address saved successfully!");
-    } catch(e) {
-        alert("Failed to save address");
+    } catch(e: any) {
+        alert(e.response?.data?.message || e.message || "Failed to save address");
     }
   };
 
