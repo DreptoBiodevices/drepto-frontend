@@ -143,116 +143,70 @@ const ProductDetailPage: React.FC = () => {
             <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
                 <div className="bg-white w-full sm:rounded-3xl shadow-xl relative flex flex-col lg:flex-row overflow-hidden border border-gray-100 min-h-[600px]">
                     
-                    {/* Left Column: Image Area */}
-                    <div className="w-full lg:w-1/2 bg-gray-50 flex items-center justify-center p-4 lg:p-12 relative overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-r border-gray-100 min-h-[400px]">
-                        {/* Decorative Elements */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-100/50 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+                    {/* Left Column: Image & Additional Info */}
+                    <div className="w-full lg:w-1/2 bg-gray-50 flex flex-col shrink-0 border-b lg:border-b-0 lg:border-r border-gray-100 overflow-y-auto custom-scrollbar">
+                        {/* Image Area */}
+                        <div className="relative p-4 lg:p-12 flex flex-col items-center justify-center min-h-[400px]">
+                            {/* Decorative Elements */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-100/50 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
-                        {product.images && product.images.length > 0 ? (
-                            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-2">
-                                <div className="flex-1 flex items-center justify-center overflow-hidden w-full">
-                                    <img
-                                        src={product.images[activeImageIndex] || product.images[0]}
-                                        alt={product.name}
-                                        className="max-w-full max-h-full object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
-                                    />
-                                </div>
-                                {/* Thumbnails */}
-                                {product.images.length > 1 && (
-                                    <div className="flex gap-2 mt-4 overflow-x-auto p-2 max-w-full custom-scrollbar">
-                                        {product.images.map((img, idx) => (
-                                            <button 
-                                                key={idx} 
-                                                onClick={() => setActiveImageIndex(idx)}
-                                                className={`w-16 h-16 rounded-lg border-2 overflow-hidden shrink-0 transition-all ${activeImageIndex === idx ? 'border-brand-600 shadow-md' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                                            >
-                                                <img src={img} className="w-full h-full object-cover bg-white" />
-                                            </button>
-                                        ))}
+                            {product.images && product.images.length > 0 ? (
+                                <div className="relative z-10 w-full flex flex-col items-center justify-center p-2">
+                                    <div className="flex items-center justify-center overflow-hidden w-full h-[300px] lg:h-[400px]">
+                                        <img
+                                            src={product.images[activeImageIndex] || product.images[0]}
+                                            alt={product.name}
+                                            className="max-w-full max-h-full object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
+                                        />
                                     </div>
-                                )}
-                            </div>
-                        ) : (
-                            <div className="flex flex-col items-center justify-center text-gray-300 z-10 p-12">
-                                <Leaf className="w-24 h-24 mb-4 opacity-50" />
-                                <p className="font-medium">No Image Available</p>
-                            </div>
-                        )}
+                                    {/* Thumbnails */}
+                                    {product.images.length > 1 && (
+                                        <div className="flex gap-2 mt-4 overflow-x-auto p-2 max-w-full custom-scrollbar">
+                                            {product.images.map((img, idx) => (
+                                                <button 
+                                                    key={idx} 
+                                                    onClick={() => setActiveImageIndex(idx)}
+                                                    className={`w-16 h-16 rounded-lg border-2 overflow-hidden shrink-0 transition-all ${activeImageIndex === idx ? 'border-brand-600 shadow-md' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                                                >
+                                                    <img src={img} className="w-full h-full object-cover bg-white" />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center text-gray-300 z-10 p-12 h-[300px] lg:h-[400px]">
+                                    <Leaf className="w-24 h-24 mb-4 opacity-50" />
+                                    <p className="font-medium">No Image Available</p>
+                                </div>
+                            )}
 
-                        {/* Tags overlay for Image */}
-                        <div className="absolute top-4 left-4 lg:top-6 lg:left-6 flex flex-col gap-2 z-10">
-                            <span className="bg-white/90 backdrop-blur-md text-gray-800 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-wider shadow-sm border border-gray-100 self-start">
-                                {product.category}
-                            </span>
-                            {discount > 0 && (
-                                <span className="bg-red-500 text-white px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-wider shadow-sm self-start animate-pulse">
-                                    {discount}% OFF
+                            {/* Tags overlay for Image */}
+                            <div className="absolute top-4 left-4 lg:top-6 lg:left-6 flex flex-col gap-2 z-10">
+                                <span className="bg-white/90 backdrop-blur-md text-gray-800 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-wider shadow-sm border border-gray-100 self-start">
+                                    {product.category}
                                 </span>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Right Column: Product Details */}
-                    <div className="w-full lg:w-1/2 flex flex-col bg-white min-h-0 flex-1">
-                        {/* Header Section */}
-                        <div className="p-6 lg:p-10 border-b border-gray-100 bg-white shrink-0">
-                            <h2 className="text-2xl lg:text-4xl font-extrabold text-gray-900 mb-2 leading-tight">
-                                {product.name}
-                            </h2>
-                            <div className="flex items-center gap-3 mt-3">
-                                <span className="text-3xl font-black text-brand-700">₹{product.price || 0}</span>
-                                {product.mrp && product.mrp > (product.price || 0) && (
-                                    <span className="text-lg text-gray-400 line-through font-medium">₹{product.mrp}</span>
+                                {discount > 0 && (
+                                    <span className="bg-red-500 text-white px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-wider shadow-sm self-start animate-pulse">
+                                        {discount}% OFF
+                                    </span>
                                 )}
                             </div>
                         </div>
 
-                        {/* Scrollable Content */}
-                        <div className="flex-1 overflow-y-auto p-6 lg:p-10 space-y-10 custom-scrollbar overscroll-contain max-h-[60vh] lg:max-h-none">
-                            {/* Description */}
-                            <div className="prose prose-lg text-gray-600 max-w-none">
-                                <h3 className="text-gray-900 font-bold text-lg mb-3 flex items-center gap-2">
-                                    <BookOpen className="w-5 h-5 text-blue-600" />
-                                    Overview
-                                </h3>
-                                <p className="leading-relaxed">{product.description}</p>
-                            </div>
-
-                            {/* Detailed Description Highlight */}
-                            {product.detailedDescription && (
-                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                                        <BookOpen className="w-24 h-24 text-blue-900" />
-                                    </div>
-                                    <p className="text-blue-900 italic font-medium relative z-10 leading-relaxed">
-                                        "{product.detailedDescription}"
-                                    </p>
-                                </div>
-                            )}
-
-                            {/* Key Ingredients */}
-                            {product.ingredients && product.ingredients.length > 0 && (
-                                <div>
-                                    <h3 className="text-gray-900 font-bold text-lg mb-4 flex items-center gap-2"><Leaf className="w-5 h-5 text-emerald-600" /> Key Ingredients</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {product.ingredients.map((ing, idx) => (
-                                            <span key={idx} className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-sm font-semibold border border-emerald-100">{ing}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
+                        {/* Extra Content (Story & Reviews) */}
+                        <div className="px-6 lg:px-12 pb-12 flex flex-col gap-8 w-full z-10">
                             {/* Development Story */}
                             {product.developmentStory && (
-                                <div className="border-t border-gray-100 pt-8">
+                                <div className="border-t border-gray-200 pt-8">
                                     <h3 className="text-gray-900 font-bold text-lg mb-3">The Story</h3>
-                                    <p className="text-gray-500 italic text-sm leading-relaxed">{product.developmentStory}</p>
+                                    <p className="text-gray-600 italic text-sm leading-relaxed">{product.developmentStory}</p>
                                 </div>
                             )}
 
                             {/* Reviews Section */}
-                            <div className="border-t border-gray-100 pt-8 mt-8">
+                            <div className="border-t border-gray-200 pt-8">
                                 <h3 className="text-gray-900 font-bold text-lg mb-4 flex items-center gap-2">
                                     <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" /> 
                                     Customer Reviews
@@ -261,7 +215,7 @@ const ProductDetailPage: React.FC = () => {
                                 {/* Existing Reviews */}
                                 <div className="space-y-4 mb-8">
                                     {reviews.map((r) => (
-                                        <div key={r._id} className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                        <div key={r._id} className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="font-bold text-gray-900">{r.userId?.firstName ? `${r.userId.firstName} ${r.userId.lastName || ''}`.trim() : "Customer"}</span>
                                                 <div className="flex items-center gap-3">
@@ -437,6 +391,58 @@ const ProductDetailPage: React.FC = () => {
                                     )}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Product Details */}
+                    <div className="w-full lg:w-1/2 flex flex-col bg-white min-h-0 flex-1">
+                        {/* Header Section */}
+                        <div className="p-6 lg:p-10 border-b border-gray-100 bg-white shrink-0">
+                            <h2 className="text-2xl lg:text-4xl font-extrabold text-gray-900 mb-2 leading-tight">
+                                {product.name}
+                            </h2>
+                            <div className="flex items-center gap-3 mt-3">
+                                <span className="text-3xl font-black text-brand-700">₹{product.price || 0}</span>
+                                {product.mrp && product.mrp > (product.price || 0) && (
+                                    <span className="text-lg text-gray-400 line-through font-medium">₹{product.mrp}</span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Scrollable Content */}
+                        <div className="flex-1 overflow-y-auto p-6 lg:p-10 space-y-10 custom-scrollbar overscroll-contain max-h-[60vh] lg:max-h-none">
+                            {/* Description */}
+                            <div className="prose prose-lg text-gray-600 max-w-none">
+                                <h3 className="text-gray-900 font-bold text-lg mb-3 flex items-center gap-2">
+                                    <BookOpen className="w-5 h-5 text-blue-600" />
+                                    Overview
+                                </h3>
+                                <p className="leading-relaxed">{product.description}</p>
+                            </div>
+
+                            {/* Detailed Description Highlight */}
+                            {product.detailedDescription && (
+                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                                        <BookOpen className="w-24 h-24 text-blue-900" />
+                                    </div>
+                                    <p className="text-blue-900 italic font-medium relative z-10 leading-relaxed">
+                                        "{product.detailedDescription}"
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Key Ingredients */}
+                            {product.ingredients && product.ingredients.length > 0 && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4 flex items-center gap-2"><Leaf className="w-5 h-5 text-emerald-600" /> Key Ingredients</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {product.ingredients.map((ing, idx) => (
+                                            <span key={idx} className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-sm font-semibold border border-emerald-100">{ing}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="p-6 lg:p-10 border-t border-gray-100 mt-auto bg-white">
