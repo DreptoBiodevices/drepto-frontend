@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Order } from '../../types';
-import { PaymentService } from '../../lib/api_controller';
-import { supabase } from '../../lib/supabase';
+import { PaymentService, OrderService } from '../../lib/api_controller';
 import { Search, ChevronDown, ChevronLeft, ChevronRight, FileText, Download } from 'lucide-react';
 
 const TransactionHistory: React.FC = () => {
@@ -15,33 +14,12 @@ const TransactionHistory: React.FC = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                // Fetch from Supabase directly as requested
-                const { data, error } = await supabase
-                    .from('orders')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                if (data) {
-                    const mappedOrders: Order[] = data.map((order: any) => ({
-                        id: order.order_id || order.id, // Adjust based on Supabase column names
-                        userEmail: order.user_email || '',
-                        date: order.created_at,
-                        items: order.items || [],
-                        total: order.amount || order.total_amount,
-                        status: order.status,
-                        shippingAddress: order.shipping_address || {
-                            houseNo: '', buildingName: '', street: '', landmark: '', city: '', state: '', country: '', pincode: '', contactNumber: 'N/A'
-                        },
-                        shippingMethod: order.shipping_method || 'Standard',
-                        shippingCost: order.shipping_cost || 0,
-                        paymentId: order.transaction_id || order.payment_id,
-                    }));
-                    setTransactions(mappedOrders);
+                const response = await OrderService.getAll();
+                if (response.data) {
+                    setTransactions(response.data);
                 }
             } catch (error) {
-                console.error("Failed to load transactions from Supabase", error);
+                console.error("Failed to load transactions", error);
             } finally {
                 setLoading(false);
             }

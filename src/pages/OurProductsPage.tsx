@@ -5,7 +5,7 @@ import SEOHead from '../components/SEOHead';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ProductDetailModal, { Product } from '../components/ProductDetailModal';
+import { Product } from './ProductDetailPage';
 import { ProductService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, ArrowRight } from 'lucide-react';
@@ -185,7 +185,7 @@ const Toast: React.FC<{ message: string }> = ({ message }) => (
 const OurProductsPage: React.FC = () => {
   const [cart, setCart] = useState<any[]>([]);
   const [notification, setNotification] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
@@ -337,7 +337,7 @@ const OurProductsPage: React.FC = () => {
                   key={i}
                   product={product}
                   index={i}
-                  onView={() => setSelectedProduct(product)}
+                  onView={() => navigate(`/product/${product._id}`)}
                   onSample={() => addToCart(product)}
                   onSubscribe={handleSubscription}
                 />
@@ -349,12 +349,7 @@ const OurProductsPage: React.FC = () => {
 
       <Footer />
 
-      <ProductDetailModal
-        product={selectedProduct}
-        isOpen={!!selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-        onAddToCart={addToCart}
-      />
+
 
       {showSubscriptionModal && (
         <SubscriptionModal

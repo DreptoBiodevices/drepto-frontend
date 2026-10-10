@@ -6,7 +6,7 @@ import ShippingAddressForm from '../components/ShippingAddressForm';
 import { Address, Order } from '../types';
 import { Truck, X, Check, ArrowLeft, ArrowRight } from 'lucide-react';
 import useRazorpay from '../hooks/useRazorpay';
-import { supabase } from '../lib/supabase';
+import { PaymentService, OrderService } from '../lib/api_controller';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -153,16 +153,30 @@ const CartPage: React.FC = () => {
     localStorage.setItem('orders', JSON.stringify([newOrder, ...existing]));
 
     try {
-      const { error } = await supabase.from('orders').insert({
-        id: orderId, user_id: user?.id || 'guest', user_email: user?.email || '',
-        total_amount: newOrder.total, status: 'Placed',
-        shipping_address: { ...shippingAddress, country: 'India', contactNumber: String(user?.mobileNumber || '') },
-        items, payment_id: rzpPaymentId, shipping_method: shippingMethod,
-        shipping_cost: shippingCost, created_at: new Date().toISOString(),
-      });
-      if (error) console.error('Supabase error:', error);
+        await OrderService.create({
+            ...newOrder,
+            userEmail: user?.email || '',
+        });
+        console.log("Order saved to database successfully via OrderService!");
     } catch (err) {
-      console.error('Supabase save failed:', err);
+        console.error("Failed to save order to database:", err);
+    }
+
+    try {
+        await PaymentService.createOrder({
+            orderId: orderId,
+            transactionId: rzpPaymentId || `TXN_${Date.now()}`,
+            amount: newOrder.total,
+            currency: 'INR',
+            shippingAddress: newOrder.shippingAddress,
+            items: newOrder.items,
+            shippingMethod: shippingMethod,
+            shippingCost: shippingCost,
+            userId: user?.id || 'guest'
+        });
+        console.log("Payment saved to database successfully via PaymentService!");
+    } catch (err) {
+        console.error("Failed to save payment to database:", err);
     }
 
     setCart([]);

@@ -16,6 +16,7 @@ import TermsOfService from './pages/legal/TermsOfService';
 import RefundPolicy from './pages/legal/RefundPolicy';
 import ShippingPolicy from './pages/legal/ShippingPolicy';
 import OurProductsPage from './pages/OurProductsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import InvoicePage from './pages/InvoicePage';
@@ -88,6 +89,7 @@ const Main: React.FC = () => {
           <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/our-products" element={<OurProductsPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
           <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/" replace />} />

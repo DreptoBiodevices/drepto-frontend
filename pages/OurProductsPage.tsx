@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ProductDetailModal, { Product } from '../components/ProductDetailModal';
+import { Product } from '../pages/ProductDetailPage';
 import { ProductService, OrderService, PaymentService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
@@ -13,7 +13,7 @@ import { Order } from '../types';
 const OurProductsPage: React.FC = () => {
     const [cart, setCart] = useState<any[]>([]);
     const [notification, setNotification] = useState('');
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -280,7 +280,7 @@ const OurProductsPage: React.FC = () => {
                             <div key={index} className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden border border-gray-100 flex flex-col">
                                 <div
                                     className="relative h-64 overflow-hidden bg-gray-100 cursor-pointer"
-                                    onClick={() => setSelectedProduct(product)}
+                                    onClick={() => navigate(`/product/${product._id}`)}
                                 >
                                     <img
                                         src={product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.png'}
@@ -293,7 +293,9 @@ const OurProductsPage: React.FC = () => {
 
                                     {/* Overlay with view details button */}
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <button className="bg-white text-gray-900 px-6 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                                        <button 
+                                            onClick={() => navigate(`/product/${product._id}`)}
+                                            className="bg-white text-gray-900 px-6 py-2 rounded-full font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
                                             View Details
                                         </button>
                                     </div>
@@ -301,7 +303,7 @@ const OurProductsPage: React.FC = () => {
                                 <div className="p-6 flex-1 flex flex-col">
                                     <h3
                                         className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-primary transition-colors"
-                                        onClick={() => setSelectedProduct(product)}
+                                        onClick={() => navigate(`/product/${product._id}`)}
                                     >
                                         {product.name}
                                     </h3>
@@ -387,12 +389,6 @@ const OurProductsPage: React.FC = () => {
                 </div>
             </footer>
 
-            <ProductDetailModal
-                product={selectedProduct}
-                isOpen={!!selectedProduct}
-                onClose={() => setSelectedProduct(null)}
-                onAddToCart={addToCart}
-            />
 
             {/* Subscription Modal */}
             {showSubscriptionModal && (

@@ -1,7 +1,9 @@
 
 import axios, { AxiosResponse } from 'axios';
 
-const BASE_URL = 'https://api.dreptobiodevices.com';
+// Use environment variable for API URL or default to production
+// In local development, VITE_API_URL should be set to http://localhost:6001
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://api.dreptobiodevices.com';
 
 // Create Axios Instance
 export const api = axios.create({
@@ -21,6 +23,56 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response Interceptor to handle errors globally and hide exact server errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    let customMessage = 'An unexpected error occurred. Please try again later.';
+
+    if (error.response) {
+      const status = error.response.status;
+      const originalMessage = error.response.data?.message;
+      
+      if (status >= 500) {
+        customMessage = 'Our servers are currently experiencing issues. Please try again later.';
+      } else if (status === 401) {
+        customMessage = 'Invalid credentials or session expired. Please log in again.';
+      } else if (status === 403) {
+        customMessage = 'You do not have permission to access this resource.';
+      } else if (status === 404) {
+        customMessage = 'The requested information could not be found.';
+      } else if (status >= 400 && status < 500) {
+        // For client errors (e.g. invalid login, bad data), we show the specific message if provided,
+        // otherwise a generic fallback.
+        customMessage = originalMessage || 'There was an issue with your request. Please verify your details.';
+        
+        // Handle NestJS validation error arrays
+        if (Array.isArray(customMessage)) {
+          customMessage = customMessage.join(', ');
+        } else if (typeof customMessage !== 'string') {
+          customMessage = 'There was an issue with your request. Please verify your details.';
+        }
+      }
+
+      // Overwrite the error properties to prevent leaking raw internal errors to UI
+      error.message = customMessage;
+      if (!error.response.data) {
+        error.response.data = {};
+      }
+      error.response.data.message = customMessage;
+      
+    } else if (error.request) {
+      // Request was made but no response was received (e.g., network error)
+      customMessage = 'Unable to connect to the server. Please check your internet connection.';
+      error.message = customMessage;
+    } else {
+      error.message = customMessage;
+    }
+
     return Promise.reject(error);
   }
 );
@@ -146,6 +198,8 @@ export const UserService = {
   getUserById: (id: string) => api.get(`/user/${id}`),
   updateUser: (id: string, data: any) => api.patch(`/user/${id}`, data),
   deleteUser: (id: string) => api.delete(`/user/${id}`),
+  requestOtp: (data: any) => api.post('/user/request-otp', data),
+  verifyOtp: (data: any) => api.post('/user/verify-otp', data),
 };
 
 // Contact Controller
@@ -163,5 +217,31 @@ export const PaymentService = {
 
 export const ShippingAddressService = {
   create: (data: any) => api.post('/shipping-address', data),
+  getAll: () => api.get('/shipping-address'),
   getById: (id: string) => api.get(`/shipping-address/${id}`),
+  update: (id: string, data: any) => api.patch(`/shipping-address/${id}`, data),
+  delete: (id: string) => api.delete(`/shipping-address/${id}`),
+};
+
+// Feedback Controller
+export const FeedbackService = {
+  create: (data: any) => api.post('/feedback', data),
+  getAllApproved: () => api.get('/feedback'),
+};
+
+// Order Controller
+export const OrderService = {
+  create: (data: any) => api.post('/order', data),
+  getAll: (userEmail?: string) => api.get(`/order${userEmail ? `?userEmail=${encodeURIComponent(userEmail)}` : ''}`),
+  getById: (id: string) => api.get(`/order/${id}`),
+  update: (id: string, data: any) => api.patch(`/order/${id}`, data),
+  delete: (id: string) => api.delete(`/order/${id}`),
+};
+
+export const ReviewService = {
+  create: (data: any) => api.post('/reviews', data),
+  getByProduct: (productId: string) => api.get(`/reviews/product/${productId}`),
+  getByUser: (userId: string) => api.get(`/reviews/user/${userId}`),
+  update: (id: string, data: any) => api.put(`/reviews/${id}`, data),
+  delete: (id: string) => api.delete(`/reviews/${id}`),
 };

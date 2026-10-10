@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { ProductService } from '../lib/api_controller';
-import { Product } from './ProductDetailModal';
+import { Product } from '../pages/ProductDetailPage';
 
 const HeroSection: React.FC = () => {
   const navigate = useNavigate();

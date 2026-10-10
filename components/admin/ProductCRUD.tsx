@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProductService } from '../../lib/api_controller';
 import { Plus, Edit2, Trash2, X, Save, Search, Image as ImageIcon, Loader2 } from 'lucide-react';
-import { Product } from '../ProductDetailModal';
+import { Product } from '../../pages/ProductDetailPage';
 
 // Extended interface to include ID for management
 interface AdminProduct extends Product {
