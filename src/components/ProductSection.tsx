@@ -75,13 +75,6 @@ const ProductSection: React.FC = () => {
       bgImage: '/images/features/medicine.webp'
     },
     {
-      icon: <LabIcon />,
-      title: 'Lab Tests',
-      description: 'Book diagnostic tests and sample collections from certified labs near you.',
-      delay: '0.3s',
-      bgImage: '/images/features/tests.webp'
-    },
-    {
       icon: <NurseIcon />,
       title: 'Home Nursing',
       description: 'Professional nursing care services available at your home for post-op recovery & elderly care.',

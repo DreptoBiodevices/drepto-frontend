@@ -10,7 +10,6 @@ const ShieldIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" heig
 const serviceImages: Record<string, string> = {
   'Video Consultations': 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
   'Medicine Delivery': 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=80',
-  'Lab Tests': 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80',
   'Home Nursing': 'https://images.unsplash.com/photo-1579154341098-e4e158cc7f55?w=600&q=80',
   'Ambulance Service': 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80',
   'Secure Health Records': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80',
@@ -19,7 +18,6 @@ const serviceImages: Record<string, string> = {
 const serviceBadges: Record<string, string> = {
   'Video Consultations': 'Live Doctor',
   'Medicine Delivery': 'Express Delivery',
-  'Lab Tests': 'NABL Accredited',
   'Home Nursing': 'Qualified Staff',
   'Ambulance Service': '24/7 Response',
   'Secure Health Records': 'Encrypted & Safe',
@@ -28,7 +26,6 @@ const serviceBadges: Record<string, string> = {
 const serviceSubtitles: Record<string, string> = {
   'Video Consultations': 'Connect with verified rheumatologists in minutes',
   'Medicine Delivery': 'Authentic therapeutics delivered to your doorstep',
-  'Lab Tests': 'Safe home sample collection & digital reports',
   'Home Nursing': 'Compassionate, certified in-home clinical care',
   'Ambulance Service': 'Rapid emergency dispatch across metro hubs',
   'Secure Health Records': 'End-to-end encrypted health record management',
@@ -47,12 +44,6 @@ const ProductSection: React.FC = () => {
       title: 'Medicine Delivery',
       description: 'Order your prescribed medicines online and get them delivered to your doorstep.',
       delay: '0.2s'
-    },
-    {
-      icon: <LabIcon />,
-      title: 'Lab Tests',
-      description: 'Book diagnostic tests and sample collections from certified labs near you.',
-      delay: '0.3s'
     },
     {
       icon: <NurseIcon />,

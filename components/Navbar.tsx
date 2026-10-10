@@ -49,7 +49,6 @@ const LANGUAGES = [
 // ── Searchable items ──
 const SEARCHABLE_ITEMS = [
   { label: 'Medicines', path: '/medicines', keywords: ['medicine', 'drug', 'pharmacy', 'pill', 'tablet', 'capsule', 'syrup'] },
-  { label: 'Lab Tests', path: '/lab-tests', keywords: ['lab', 'test', 'diagnostic', 'blood', 'urine', 'report', 'pathology', 'nabl'] },
   { label: 'Our Products', path: '/our-products', keywords: ['product', 'device', 'biodevice', 'transdermal', 'iontophoretic', 'sample'] },
 ];
 
@@ -110,7 +109,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
 
   const navLinks = [
     { name: t('nav.home'), ref: sectionRefs.home, path: '/', icon: Home, key: 'Home' },
-    { name: t('nav.labTests'), path: '/lab-tests', icon: TestTube2, key: 'Lab Tests' },
     { name: t('nav.ourProducts'), path: '/our-products', icon: ShoppingBag, key: 'Our Products' },
     { name: t('nav.aboutUs'), path: '/about-us', icon: Info, key: 'About Us' },
     { name: t('nav.contact'), path: '/contact', icon: Mail, key: 'Contact' },

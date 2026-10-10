@@ -46,7 +46,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
   const navLinks = [
     { name: 'Home',  path: '/', icon: Home },
     { name: 'Medicines', path: '/medicines', icon: Pill },
-    { name: 'Lab Tests', path: '/lab-tests', icon: TestTube2 },
     { name: 'Our Products', path: '/our-products', icon: ShoppingBag },
     // { name: 'Features', ref: sectionRefs.product, path: '/', icon: Zap },
     { name: 'About Us', path: '/about-us', icon: Info },

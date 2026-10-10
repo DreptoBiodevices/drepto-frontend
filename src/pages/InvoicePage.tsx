@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Order } from '../types';
 import { Printer, ArrowLeft, Download } from 'lucide-react';
+import { OrderService } from '../lib/api_controller';
 
 const InvoicePage: React.FC = () => {
     const { orderId } = useParams<{ orderId: string }>();
@@ -10,12 +11,32 @@ const InvoicePage: React.FC = () => {
     const [order, setOrder] = useState<Order | null>(null);
 
     useEffect(() => {
-        const storedOrders = localStorage.getItem('orders');
-        if (storedOrders) {
-            const orders: Order[] = JSON.parse(storedOrders);
-            const foundOrder = orders.find(o => o.id === orderId);
-            setOrder(foundOrder || null);
-        }
+        const fetchOrder = async () => {
+            if (!orderId) return;
+            
+            // Try localStorage first
+            const storedOrders = localStorage.getItem('orders');
+            let foundOrder = null;
+            if (storedOrders) {
+                const orders: Order[] = JSON.parse(storedOrders);
+                foundOrder = orders.find(o => o.id === orderId);
+            }
+            
+            if (foundOrder) {
+                setOrder(foundOrder);
+            } else {
+                // Try API
+                try {
+                    const response = await OrderService.getById(orderId);
+                    if (response.data) {
+                        setOrder(response.data);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch order from API", error);
+                }
+            }
+        };
+        fetchOrder();
     }, [orderId]);
 
     const handlePrint = () => {

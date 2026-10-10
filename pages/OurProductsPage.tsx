@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductDetailModal, { Product } from '../components/ProductDetailModal';
-import { ProductService, OrderService } from '../lib/api_controller';
+import { ProductService, OrderService, PaymentService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
 import { Order } from '../types';
@@ -146,6 +146,7 @@ const OurProductsPage: React.FC = () => {
 
         const newOrder: Order = {
             id: orderId,
+            userEmail: user?.email,
             date: new Date().toISOString(),
             items: [{
                 name: "Drepto Premium Subscription",
@@ -182,8 +183,27 @@ const OurProductsPage: React.FC = () => {
             } catch (err) {
                 console.error("Failed to save subscription to Backend:", err);
             }
+            
+            try {
+                await PaymentService.createOrder({
+                    orderId: orderId,
+                    transactionId: paymentId || `SUB_${Date.now()}`,
+                    amount: 1500,
+                    currency: 'INR',
+                    shippingAddress: newOrder.shippingAddress,
+                    items: newOrder.items,
+                    shippingMethod: 'Digital',
+                    shippingCost: 0,
+                    userId: user?.id || 'guest'
+                });
+                console.log("Subscription Payment saved successfully");
+            } catch (err) {
+                console.error("Failed to save subscription payment:", err);
+            }
         };
         saveSubscriptionToBackend();
+        
+        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
         // -----------------------------
         // -----------------------------
 

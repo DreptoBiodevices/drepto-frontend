@@ -10,7 +10,6 @@ import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 
 import FeaturedMedicines from '../components/FeaturedMedicines';
-import PopularLabTests from '../components/PopularLabTests';
 import GallerySection from '../components/GallerySection';
 import TestimonialsPreview from '../components/TestimonialsPreview';
 
@@ -49,8 +48,8 @@ const LandingPage: React.FC = () => {
     <div className="relative bg-white">
       <SEOHead
         title="Modern Telemedicine Platform"
-        description="Book doctor consultations online, order medicines, book lab tests at home, and get expert healthcare from the comfort of your home with Drepto."
-        keywords="telemedicine, online doctor consultation, order medicines online, lab tests at home, healthcare, online pharmacy, health checkup"
+        description="Book doctor consultations online, order medicines, and get expert healthcare from the comfort of your home with Drepto."
+        keywords="telemedicine, online doctor consultation, order medicines online, healthcare, online pharmacy, health checkup"
         url="/"
       />
       <Navbar
@@ -64,7 +63,6 @@ const LandingPage: React.FC = () => {
         <div ref={homeRef}><HeroSection /></div>
         <div ref={productRef}><ProductSection /></div>
         <FeaturedMedicines />
-        <PopularLabTests />
         <div ref={aboutRef}><AboutSection /></div>
 
         {/* Gallery Section with Mobile Nav Support */}

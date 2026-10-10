@@ -4,21 +4,52 @@ import Navbar from '../components/Navbar';
 import OrderTracking from '../components/OrderTracking';
 import { Order } from '../types';
 import { Package, Calendar, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
+import { OrderService } from '../lib/api_controller';
+import { useAuth } from '../hooks/useAuth';
 
 const OrderHistoryPage: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
+    const { user } = useAuth();
 
     useEffect(() => {
-        try {
-            const storedOrders = localStorage.getItem('orders');
-            if (storedOrders) {
-                setOrders(JSON.parse(storedOrders));
+        const fetchOrders = async () => {
+            let localOrders: Order[] = [];
+            try {
+                const storedOrders = localStorage.getItem('orders');
+                if (storedOrders) {
+                    localOrders = JSON.parse(storedOrders);
+                }
+            } catch (error) {
+                console.error("Failed to load orders from local storage", error);
             }
-        } catch (error) {
-            console.error("Failed to load orders", error);
-        }
-    }, []);
+            
+            if (user?.email) {
+                try {
+                    const response = await OrderService.getAll(user.email);
+                    const apiOrders = response.data;
+                    
+                    // Merge based on ID
+                    const merged = [...apiOrders];
+                    localOrders.forEach(lo => {
+                        if (!merged.find(ao => ao.id === lo.id)) {
+                            merged.push(lo);
+                        }
+                    });
+                    
+                    // Sort descending by date
+                    merged.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                    setOrders(merged);
+                } catch (error) {
+                    console.error("Failed to fetch orders from API", error);
+                    setOrders(localOrders);
+                }
+            } else {
+                setOrders(localOrders);
+            }
+        };
+        fetchOrders();
+    }, [user]);
 
     const toggleExpand = (orderId: string) => {
         setExpandedOrderId(prev => prev === orderId ? null : orderId);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductService, PaymentService } from '../../../lib/api_controller';
+import { ProductService, PaymentService, OrderService } from '../../../lib/api_controller';
 import { useAuth } from '../../../hooks/useAuth';
 import ProductDetailModal, { Product } from '../../ProductDetailModal';
 import { X, CheckCircle, ExternalLink } from 'lucide-react';
@@ -108,6 +108,7 @@ export default function DreptoProducts() {
 
         const newOrder: Order = {
             id: orderId,
+            userEmail: user?.email,
             date: new Date().toISOString(),
             items: [{
                 name: "Drepto Premium Subscription",
@@ -140,6 +141,13 @@ export default function DreptoProducts() {
 
         // --- API INTEGRATION ---
         const saveSubscriptionToBackend = async () => {
+            try {
+                await OrderService.create(newOrder);
+                console.log("Subscription saved to Order DB successfully");
+            } catch (err) {
+                console.error("Failed to save subscription to Order DB:", err);
+            }
+            
             try {
                 // Determine transaction ID
                 const txId = paymentId || 'SUB_FREE';

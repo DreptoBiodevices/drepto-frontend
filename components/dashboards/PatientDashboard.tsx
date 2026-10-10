@@ -33,7 +33,6 @@ interface PatientDashboardProps {
 const NAV_ITEMS = [
   { id: 'home', label: 'Overview', icon: LayoutDashboard },
   { id: 'doctor', label: 'Find Doctors', icon: Stethoscope, disabled: true, badge: 'Coming Soon' },
-  { id: 'lab', label: 'Lab Tests', icon: TestTube2, disabled: true, badge: 'Coming Soon' },
   { id: 'pharmacy', label: 'Pharmacy', icon: Pill, disabled: true, badge: 'Coming Soon' },
   { id: 'nurse', label: 'Nurse Visit', icon: UserPlus, disabled: true, badge: 'Coming Soon' },
   { id: 'products', label: 'Drepto Store', icon: ShoppingBag },

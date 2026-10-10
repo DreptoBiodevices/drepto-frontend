@@ -59,23 +59,6 @@ const features: FeatureItem[] = [
     image: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=80',
     color: 'from-emerald-500 to-teal-600',
   },
-  {
-    icon: <TestTube2 className="w-7 h-7" />,
-    title: 'Lab Tests',
-    subtitle: 'Safe home sample collection & digital reports',
-    description:
-      'Book diagnostic tests and sample collections from NABL-accredited labs. Get digital reports delivered to your inbox within hours.',
-    badge: 'NABL Accredited',
-    highlights: [
-      'Home sample collection',
-      'NABL-certified labs',
-      'Digital reports in hours',
-      'Wide test catalogue',
-    ],
-    image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80',
-    color: 'from-purple-500 to-violet-600',
-  },
-  {
     icon: <HeartPulse className="w-7 h-7" />,
     title: 'Home Nursing',
     subtitle: 'Compassionate, certified in-home clinical care',

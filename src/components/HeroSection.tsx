@@ -33,14 +33,10 @@ const HeroSection: React.FC = () => {
               </p>
 
               {/* Dynamic Stats */}
-              <div className="mb-10 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
+              <div className="mb-10 grid grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
                 <div className="bg-gray-50 p-4 rounded-md border border-gray-100">
                   <h3 className="text-2xl font-bold text-primary mb-1">{stats.medicines}+</h3>
                   <p className="text-xs text-gray-600 font-medium">Medicines</p>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-md border border-gray-100">
-                  <h3 className="text-2xl font-bold text-green-600 mb-1">{stats.labTests}+</h3>
-                  <p className="text-xs text-gray-600 font-medium">Lab Tests</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-md border border-gray-100">
                   <h3 className="text-2xl font-bold text-purple-600 mb-1">24/7</h3>

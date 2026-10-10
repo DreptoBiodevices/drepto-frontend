@@ -197,6 +197,7 @@ const CartPage: React.FC = () => {
 
         const newOrder: Order = {
             id: orderId,
+            userEmail: user?.email,
             date: new Date().toISOString(),
             items: orderItems,
             paymentId: rzpPaymentId,
@@ -217,6 +218,27 @@ const CartPage: React.FC = () => {
             console.error("Failed to save order to database:", err);
             alert("Order placed but failed to sync with database.");
         }
+        
+        // Save to Payment database
+        try {
+            await PaymentService.createOrder({
+                orderId: orderId,
+                transactionId: rzpPaymentId || `TXN_${Date.now()}`,
+                amount: calculateTotal(),
+                currency: 'INR',
+                shippingAddress: newOrder.shippingAddress,
+                items: newOrder.items,
+                shippingMethod: shippingMethod,
+                shippingCost: shippingCost,
+                userId: user?.id || 'guest'
+            });
+            console.log("Payment saved to database successfully via PaymentService!");
+        } catch (err) {
+            console.error("Failed to save payment to database:", err);
+        }
+
+        // Save to localStorage for InvoicePage and History
+        localStorage.setItem('orders', JSON.stringify([newOrder, ...existingOrders]));
         // -------------------------
 
         setCart([]);

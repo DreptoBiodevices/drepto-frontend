@@ -4,8 +4,9 @@ import OrderTracking from '../components/OrderTracking';
 import { Order } from '../types';
 import { Package, Calendar, MapPin, ChevronDown, ChevronUp, Stethoscope, Activity, FileText } from 'lucide-react';
 import { LabTestBookingService, DoctorAppointmentService, NurseAppointmentService, OrderService } from '../lib/api_controller';
+import { useAuth } from '../hooks/useAuth';
 
-type TabType = 'products' | 'lab' | 'doctor' | 'nurse';
+type TabType = 'products' | 'doctor' | 'nurse';
 
 const OrderHistoryPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<TabType>('products');
@@ -19,14 +20,35 @@ const OrderHistoryPage: React.FC = () => {
     const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const { user } = useAuth();
+
     useEffect(() => {
         const fetchAllData = async () => {
             setIsLoading(true);
             try {
-                // 1. Fetch Orders from API
+                // 1. Fetch Orders from API and merge with localStorage
                 try {
-                    const orderRes = await OrderService.getAll();
-                    setOrders(orderRes.data || []);
+                    let localOrders: Order[] = [];
+                    const storedOrders = localStorage.getItem('orders');
+                    if (storedOrders) {
+                        localOrders = JSON.parse(storedOrders);
+                    }
+
+                    if (user?.email) {
+                        const orderRes = await OrderService.getAll(user.email);
+                        const apiOrders = orderRes.data || [];
+                        
+                        const merged = [...apiOrders];
+                        localOrders.forEach(lo => {
+                            if (!merged.find(ao => ao.id === lo.id)) {
+                                merged.push(lo);
+                            }
+                        });
+                        merged.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                        setOrders(merged);
+                    } else {
+                        setOrders(localOrders);
+                    }
                 } catch (e) {
                     console.error("Failed to load orders", e);
                 }
@@ -76,12 +98,6 @@ const OrderHistoryPage: React.FC = () => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'products' ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-100'}`}
             >
                 <Package className="w-4 h-4" /> Product Orders
-            </button>
-            <button
-                onClick={() => setActiveTab('lab')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'lab' ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-100'}`}
-            >
-                <Activity className="w-4 h-4" /> Lab Tests
             </button>
             <button
                 onClick={() => setActiveTab('doctor')}
@@ -301,7 +317,6 @@ const OrderHistoryPage: React.FC = () => {
                 ) : (
                     <>
                         {activeTab === 'products' && renderProductOrders()}
-                        {activeTab === 'lab' && renderLabBookings()}
                         {activeTab === 'doctor' && renderDoctorAppts()}
                         {activeTab === 'nurse' && renderNurseAppts()}
                     </>
