@@ -9,23 +9,32 @@ const InvoicePage: React.FC = () => {
     const { orderId } = useParams<{ orderId: string }>();
     const navigate = useNavigate();
     const [order, setOrder] = useState<Order | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchOrder = async () => {
-            if (!orderId) return;
+            if (!orderId) {
+                setLoading(false);
+                return;
+            }
             
-            // Try localStorage first
-            const storedOrders = localStorage.getItem('orders');
-            let foundOrder = null;
-            if (storedOrders) {
-                const orders: Order[] = JSON.parse(storedOrders);
-                foundOrder = orders.find(o => o.id === orderId);
+            // 1. Try localStorage first
+            let foundOrder: Order | null = null;
+            try {
+                const storedOrders = localStorage.getItem('orders');
+                if (storedOrders) {
+                    const orders: Order[] = JSON.parse(storedOrders);
+                    foundOrder = orders.find(o => String(o.id) === String(orderId)) || null;
+                }
+            } catch (err) {
+                console.error("Failed to parse localStorage orders", err);
             }
             
             if (foundOrder) {
                 setOrder(foundOrder);
+                setLoading(false);
             } else {
-                // Try API
+                // 2. Try API
                 try {
                     const response = await OrderService.getById(orderId);
                     if (response.data) {
@@ -33,6 +42,8 @@ const InvoicePage: React.FC = () => {
                     }
                 } catch (error) {
                     console.error("Failed to fetch order from API", error);
+                } finally {
+                    setLoading(false);
                 }
             }
         };
@@ -43,13 +54,24 @@ const InvoicePage: React.FC = () => {
         window.print();
     };
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="flex flex-col items-center">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
+                    <p className="text-gray-500 font-medium">Loading invoice...</p>
+                </div>
+            </div>
+        );
+    }
+
     if (!order) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-800">Order Not Found</h2>
                     <p className="text-gray-500 mt-2">The requested invoice could not be retrieved.</p>
-                    <button onClick={() => navigate('/orders')} className="mt-4 text-primary hover:underline">
+                    <button onClick={() => navigate('/orders')} className="mt-4 text-primary hover:underline font-medium">
                         Return to Orders
                     </button>
                 </div>
@@ -57,7 +79,10 @@ const InvoicePage: React.FC = () => {
         );
     }
 
-    const subtotal = order.total - 50; // Assuming 50 is fixed delivery charge
+    // Safely calculate subtotal and delivery charge
+    const deliveryCharge = typeof order.shippingCost === 'number' ? order.shippingCost : (order.total > 50 ? 50 : 0);
+    const calculatedItemsTotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
+    const subtotal = calculatedItemsTotal > 0 ? calculatedItemsTotal : Math.max(0, order.total - deliveryCharge);
     // Note: If we change delivery charge logic, we should store subtotal/delivery charge in the Order object separately.
     // For now, reverse calculating based on the requirement.
 
@@ -97,15 +122,14 @@ const InvoicePage: React.FC = () => {
                     <div className="grid md:grid-cols-2 gap-8 mb-12 pb-12 border-b border-gray-100">
                         <div>
                             <h3 className="text-xs font-bold uppercase text-gray-400 tracking-wider mb-3">Billed To</h3>
-                            <div className="text-gray-900 font-medium">{order.shippingAddress.contactNumber}</div>
+                            <div className="text-gray-900 font-medium">{order.shippingAddress?.contactNumber || order.userEmail || 'Customer'}</div>
                             <div className="text-gray-600 text-sm mt-1">
-                                {order.shippingAddress.houseNo}, {order.shippingAddress.buildingName && `${order.shippingAddress.buildingName}, `}
-                                {order.shippingAddress.street}
+                                {[order.shippingAddress?.houseNo, order.shippingAddress?.buildingName, order.shippingAddress?.street].filter(Boolean).join(', ') || 'N/A'}
                             </div>
                             <div className="text-gray-600 text-sm">
-                                {order.shippingAddress.city}, {order.shippingAddress.state} - {order.shippingAddress.pincode}
+                                {[order.shippingAddress?.city, order.shippingAddress?.state].filter(Boolean).join(', ')}{order.shippingAddress?.pincode ? ` - ${order.shippingAddress.pincode}` : ''}
                             </div>
-                            <div className="text-gray-600 text-sm">{order.shippingAddress.country}</div>
+                            <div className="text-gray-600 text-sm">{order.shippingAddress?.country || 'India'}</div>
                         </div>
                         <div className="md:text-right">
                             <h3 className="text-xs font-bold uppercase text-gray-400 tracking-wider mb-3">Details</h3>
@@ -131,7 +155,7 @@ const InvoicePage: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                                {order.items.map((item, idx) => (
+                                {(order.items || []).map((item, idx) => (
                                     <tr key={idx}>
                                         <td className="py-4">
                                             <div className="font-medium text-gray-900">{item.name}</div>
@@ -140,8 +164,8 @@ const InvoicePage: React.FC = () => {
                                             )}
                                         </td>
                                         <td className="py-4 text-center text-gray-600">{item.quantity}</td>
-                                        <td className="py-4 text-right text-gray-600">₹{item.price.toFixed(2)}</td>
-                                        <td className="py-4 text-right font-medium text-gray-900">₹{(item.price * item.quantity).toFixed(2)}</td>
+                                        <td className="py-4 text-right text-gray-600">₹{(item.price || 0).toFixed(2)}</td>
+                                        <td className="py-4 text-right font-medium text-gray-900">₹{((item.price || 0) * (item.quantity || 1)).toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -157,11 +181,11 @@ const InvoicePage: React.FC = () => {
                             </div>
                             <div className="flex justify-between text-gray-600 text-sm">
                                 <span>Delivery Charge</span>
-                                <span>₹50.00</span>
+                                <span>₹{deliveryCharge.toFixed(2)}</span>
                             </div>
                             <div className="border-t border-gray-200 pt-3 flex justify-between font-bold text-lg text-gray-900">
                                 <span>Total</span>
-                                <span>₹{order.total.toFixed(2)}</span>
+                                <span>₹{(order.total || 0).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import OrderTracking from '../components/OrderTracking';
 import { Order } from '../types';
@@ -21,6 +22,7 @@ const OrderHistoryPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAllData = async () => {
@@ -164,7 +166,7 @@ const OrderHistoryPage: React.FC = () => {
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        window.location.href = `/invoice/${order.id}`;
+                                        navigate(`/invoice/${order.id}`);
                                     }}
                                     className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
                                 >
