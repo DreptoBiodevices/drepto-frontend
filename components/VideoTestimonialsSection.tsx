@@ -49,18 +49,18 @@ const VideoTestimonialsSection: React.FC = () => {
     if (videoFiles.length === 0) return null;
 
     return (
-        <section className="py-24 bg-white overflow-hidden border-t border-slate-100">
+        <section className="py-12 md:py-16 bg-transparent overflow-hidden border-t border-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+                <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
                         What our Users think about our product
                     </h2>
-                    <p className="text-lg text-slate-600">
+                    <p className="text-sm md:text-base text-slate-600">
                         Hear from people using our products to improve their lives.
                     </p>
                 </div>
 
-                <div className="relative max-w-sm mx-auto bg-slate-100 rounded-[2rem] shadow-2xl overflow-hidden aspect-[9/16] group border-4 border-white">
+                <div className="relative max-w-sm mx-auto bg-slate-100 rounded-[2rem] shadow-xl overflow-hidden aspect-[9/16] group border-4 border-white">
                     <video
                         ref={videoRef}
                         key={videoFiles[currentIndex]}

@@ -8,6 +8,7 @@ import { ProductService, OrderService, PaymentService } from '../lib/api_control
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
 import { Order } from '../types';
+import VideoTestimonialsSection from '../components/VideoTestimonialsSection';
 
 
 const OurProductsPage: React.FC = () => {
@@ -381,6 +382,11 @@ const OurProductsPage: React.FC = () => {
                         ))}
                     </div>
                 )}
+
+                {/* Video Reviews / Testimonials */}
+                <div className="mt-16">
+                    <VideoTestimonialsSection />
+                </div>
             </main>
 
             <footer className="bg-white border-t py-12">

@@ -10,6 +10,7 @@ import { ProductService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, ArrowRight } from 'lucide-react';
 import { Order } from '../types';
+import VideoTestimonialsSection from '../../components/VideoTestimonialsSection';
 
 /* ── Spinner ──────────────────────────────────────────────── */
 const Spinner = () => (
@@ -344,6 +345,11 @@ const OurProductsPage: React.FC = () => {
               ))}
             </div>
           )}
+
+          {/* Video Reviews / Testimonials */}
+          <div className="mt-16">
+            <VideoTestimonialsSection />
+          </div>
         </div>
       </main>
 
