@@ -17,6 +17,9 @@ export const translations: Record<string, Record<LangCode, string>> = {
   'nav.ourProducts': {
     en: 'Our Products', hi: 'हमारे उत्पाद', mr: 'आमची उत्पादने', bn: 'আমাদের পণ্য', ta: 'எங்கள் தயாரிப்புகள்', te: 'మా ఉత్పత్తులు', kn: 'ನಮ್ಮ ಉತ್ಪನ್ನಗಳು', gu: 'અમારા ઉત્પાદનો',
   },
+  'nav.ourResearch': {
+    en: 'Our Research', hi: 'हमारा शोध', mr: 'आमचे संशोधन', bn: 'আমাদের গবেষণা', ta: 'எங்கள் ஆராய்ச்சி', te: 'మా పరిశోధన', kn: 'ನಮ್ಮ ಸಂಶೋಧನೆ', gu: 'અમારું સંશોધન',
+  },
   'nav.features': {
     en: 'Features', hi: 'सुविधाएँ', mr: 'वैशिष्ट्ये', bn: 'বৈশিষ্ট্য', ta: 'அம்சங்கள்', te: 'ఫీచర్లు', kn: 'ವೈಶಿಷ್ಟ್ಯಗಳು', gu: 'વિશેષતાઓ',
   },

@@ -26,6 +26,7 @@ import {
   Upload,
   Check,
   AlertCircle,
+  BookOpen,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -50,6 +51,7 @@ const LANGUAGES = [
 const SEARCHABLE_ITEMS = [
   { label: 'Medicines', path: '/medicines', keywords: ['medicine', 'drug', 'pharmacy', 'pill', 'tablet', 'capsule', 'syrup'] },
   { label: 'Our Products', path: '/our-products', keywords: ['product', 'device', 'biodevice', 'transdermal', 'iontophoretic', 'sample'] },
+  { label: 'Our Research', path: '/our-research', keywords: ['research', 'paper', 'menstroherb', 'jaims', 'clinical', 'safety', 'study', 'patent', 'biodevice', 'iit bombay'] },
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefObject<HTMLDivElement>>, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
@@ -110,6 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
   const navLinks = [
     { name: t('nav.home'), ref: sectionRefs.home, path: '/', icon: Home, key: 'Home' },
     { name: t('nav.ourProducts'), path: '/our-products', icon: ShoppingBag, key: 'Our Products' },
+    { name: t('nav.ourResearch') || 'Our Research', path: '/our-research', icon: BookOpen, key: 'Our Research' },
     { name: t('nav.aboutUs'), path: '/about-us', icon: Info, key: 'About Us' },
     { name: t('nav.contact'), path: '/contact', icon: Mail, key: 'Contact' },
   ];

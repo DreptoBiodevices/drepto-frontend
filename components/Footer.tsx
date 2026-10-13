@@ -63,6 +63,7 @@ const Footer: React.FC = () => {
               <h4 className="font-bold text-white text-sm uppercase tracking-wider">{t('footer.company')}</h4>
               <nav className="flex flex-col gap-2">
                 <Link to="/about-us" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.aboutUs')}</Link>
+                <Link to="/our-research" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Our Research</Link>
                 <Link to="/contact" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.contact')}</Link>
                 <Link to="/our-products" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Pharmacy</Link>
                 <Link to="/feedback" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Feedback</Link>

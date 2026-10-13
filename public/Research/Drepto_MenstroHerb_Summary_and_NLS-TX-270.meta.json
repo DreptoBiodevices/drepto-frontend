@@ -1,0 +1,53 @@
+{
+  "id": "menstroherb-safety",
+  "title": "Drepto MenstroHerb Sheet Summary & Preclinical Safety Report",
+  "subtitle": "Polyherbal Transdermal Patch Formulation & ISO 10993 Preclinical Skin Irritation Evaluation",
+  "type": "Preclinical Safety & Regulatory Report",
+  "category": "safety",
+  "institution": "Drepto Biodevices in association with IIT Bombay",
+  "publication": "Study No. NLS-TX-270/26 • Certified Laboratory Study",
+  "date": "2026",
+  "badges": [
+    "ISO 10993-23:2021 Certified",
+    "IIT Bombay Association",
+    "Patent Applied",
+    "0 Irritation Score"
+  ],
+  "overview": "Drepto MenstroHerb Sheet is a polyherbal transdermal patch developed by Drepto Biodevices Private Limited to deliver targeted, localized relief from menstrual cramps and pelvic inflammation. Developed with technology marketed in association with IIT Bombay, the formulation combines herbal actives including Curcuma longa (Haridra satva), Mentha piperita (Peppermint satva), Boswellia serrata (Shalaki Guggul), Eucalyptus globulus (Taila Parni), and cinnamon oil to relax uterine smooth muscles and inhibit inflammatory pathways without systemic oral side effects.",
+  "keyOutcomes": [
+    {
+      "label": "Primary Irritation Index (PII)",
+      "value": "0.00",
+      "description": "Zero erythema or edema observed. Classifies patch as completely non-irritant."
+    },
+    {
+      "label": "Standard Biological Evaluation",
+      "value": "ISO 10993",
+      "description": "ISO 10993-23:2021 medical device biocompatibility tests successfully verified."
+    },
+    {
+      "label": "Localized Target Delivery",
+      "value": "Direct Relief",
+      "description": "Bypasses GI absorption to avoid systemic stomach upset and NSAID-induced ulcers."
+    }
+  ],
+  "ipDetails": {
+    "patentApp": "IN202521129798",
+    "trademarkApp": "7344054",
+    "details": "Proprietary polyherbal transdermal matrix and formulation architecture filed under Indian Patent Application IN202521129798 and registered Trademark Application 7344054."
+  },
+  "safetyDetails": {
+    "standard": "ISO 10993-23:2021",
+    "studyNumber": "NLS-TX-270/26",
+    "piiScore": "0 (Zero Irritation)",
+    "classification": "Completely Non-Irritant",
+    "details": "Certified under ISO 10993-23:2021 (Medical Device Biological Evaluation). In-vivo preclinical skin irritation testing (Study No. NLS-TX-270/26) demonstrated a Primary Irritation Index (PII) of 0, classifying the patch as completely non-irritant with zero erythema or edema."
+  },
+  "actives": [
+    "Curcuma longa (Haridra satva)",
+    "Mentha piperita (Peppermint satva)",
+    "Boswellia serrata (Shalaki Guggul)",
+    "Eucalyptus globulus (Taila Parni)",
+    "Cinnamon oil"
+  ]
+}

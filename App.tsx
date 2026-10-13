@@ -24,6 +24,7 @@ import FeedbackPage from './pages/FeedbackPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import SocialMediaBlogPage from './pages/SocialMediaBlogPage';
 import ContactPage from './pages/ContactPage';
+import OurResearchPage from './pages/OurResearchPage';
 import OAuthSuccess from './pages/OAuthSuccess';
 import { LanguageProvider } from './hooks/useLanguage';
 import BottomNav from './components/BottomNav';
@@ -104,6 +105,7 @@ const Main: React.FC = () => {
           {/* Feature Routes */}
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/our-research" element={<OurResearchPage />} />
           {/* <Route path="/social" element={<SocialMediaBlogPage />} /> */}
 
           {/* Legal Routes */}

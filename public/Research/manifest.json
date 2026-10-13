@@ -1,0 +1,108 @@
+[
+  {
+    "filename": "Drepto_MenstroHerb_Summary_and_NLS-TX-270.pdf",
+    "url": "/Research/Drepto_MenstroHerb_Summary_and_NLS-TX-270.pdf",
+    "sizeBytes": 6381702,
+    "title": "Drepto MenstroHerb Sheet Summary & Preclinical Safety Report",
+    "id": "menstroherb-safety",
+    "subtitle": "Polyherbal Transdermal Patch Formulation & ISO 10993 Preclinical Skin Irritation Evaluation",
+    "type": "Preclinical Safety & Regulatory Report",
+    "category": "safety",
+    "institution": "Drepto Biodevices in association with IIT Bombay",
+    "publication": "Study No. NLS-TX-270/26 • Certified Laboratory Study",
+    "date": "2026",
+    "badges": [
+      "ISO 10993-23:2021 Certified",
+      "IIT Bombay Association",
+      "Patent Applied",
+      "0 Irritation Score"
+    ],
+    "overview": "Drepto MenstroHerb Sheet is a polyherbal transdermal patch developed by Drepto Biodevices Private Limited to deliver targeted, localized relief from menstrual cramps and pelvic inflammation. Developed with technology marketed in association with IIT Bombay, the formulation combines herbal actives including Curcuma longa (Haridra satva), Mentha piperita (Peppermint satva), Boswellia serrata (Shalaki Guggul), Eucalyptus globulus (Taila Parni), and cinnamon oil to relax uterine smooth muscles and inhibit inflammatory pathways without systemic oral side effects.",
+    "keyOutcomes": [
+      {
+        "label": "Primary Irritation Index (PII)",
+        "value": "0.00",
+        "description": "Zero erythema or edema observed. Classifies patch as completely non-irritant."
+      },
+      {
+        "label": "Standard Biological Evaluation",
+        "value": "ISO 10993",
+        "description": "ISO 10993-23:2021 medical device biocompatibility tests successfully verified."
+      },
+      {
+        "label": "Localized Target Delivery",
+        "value": "Direct Relief",
+        "description": "Bypasses GI absorption to avoid systemic stomach upset and NSAID-induced ulcers."
+      }
+    ],
+    "ipDetails": {
+      "patentApp": "IN202521129798",
+      "trademarkApp": "7344054",
+      "details": "Proprietary polyherbal transdermal matrix and formulation architecture filed under Indian Patent Application IN202521129798 and registered Trademark Application 7344054."
+    },
+    "safetyDetails": {
+      "standard": "ISO 10993-23:2021",
+      "studyNumber": "NLS-TX-270/26",
+      "piiScore": "0 (Zero Irritation)",
+      "classification": "Completely Non-Irritant",
+      "details": "Certified under ISO 10993-23:2021 (Medical Device Biological Evaluation). In-vivo preclinical skin irritation testing (Study No. NLS-TX-270/26) demonstrated a Primary Irritation Index (PII) of 0, classifying the patch as completely non-irritant with zero erythema or edema."
+    },
+    "actives": [
+      "Curcuma longa (Haridra satva)",
+      "Mentha piperita (Peppermint satva)",
+      "Boswellia serrata (Shalaki Guggul)",
+      "Eucalyptus globulus (Taila Parni)",
+      "Cinnamon oil"
+    ]
+  },
+  {
+    "filename": "jaims-6678.pdf",
+    "url": "/Research/jaims-6678.pdf",
+    "sizeBytes": 677485,
+    "title": "JAIMS Research Article (Clinical & Formulation Study)",
+    "id": "jaims-study",
+    "subtitle": "Peer-Reviewed Transdermal Drug Delivery Engineering, Permeation & Human Clinical Trial",
+    "type": "Peer-Reviewed Journal Publication",
+    "category": "clinical",
+    "institution": "Journal of Ayurveda and Integrated Medical Sciences (JAIMS)",
+    "publication": "JAIMS 2026; 11(7): 107–117 • Peer-Reviewed Original Research",
+    "date": "2026",
+    "badges": [
+      "Peer-Reviewed Journal",
+      "96% Rapid Relief",
+      "91.23% Drug Release",
+      "12h Biphasic Delivery"
+    ],
+    "overview": "Published in the Journal of Ayurveda and Integrated Medical Sciences (JAIMS 2026; 11(7): 107–117), this peer-reviewed study details the engineering, drug release performance, and clinical evaluation of the transdermal patch formulation.",
+    "keyOutcomes": [
+      {
+        "label": "Clinical Relief Speed",
+        "value": "96% <30m",
+        "description": "96% of participants reported noticeable relief from menstrual cramps within 30 minutes."
+      },
+      {
+        "label": "Cumulative Drug Release",
+        "value": "91.23%",
+        "description": "Controlled biphasic permeation profile achieving 91.23% release over 12+ continuous hours."
+      },
+      {
+        "label": "Gastro-Sparing Advantage",
+        "value": "100% GI Safe",
+        "description": "Bypasses hepatic first-pass and gastric mucosa, presenting an optimal alternative to oral NSAIDs."
+      }
+    ],
+    "clinicalDetails": {
+      "journal": "Journal of Ayurveda and Integrated Medical Sciences (JAIMS)",
+      "citation": "JAIMS 2026; 11(7): 107–117",
+      "onsetSpeed": "Noticeable relief within 30 minutes in 96% of cohort",
+      "cumulativeRelease": "91.23% over 12 hours via ex-vivo skin permeation testing",
+      "advantage": "Provides an effective, non-invasive, gastro-sparing alternative to conventional oral NSAIDs (such as naproxen sodium) by bypassing systemic GI absorption."
+    },
+    "actives": [
+      "Standardized Herbal Phyto-extracts",
+      "Bio-permeation Enhancers",
+      "Dual-Phase Pressure Sensitive Adhesive",
+      "Hydrophobic Protective Backing"
+    ]
+  }
+]
