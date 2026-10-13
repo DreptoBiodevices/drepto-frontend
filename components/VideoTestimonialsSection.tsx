@@ -8,28 +8,109 @@ const videoFiles = Object.keys(videoModules).map(path => path.replace('/public',
 
 const VideoTestimonialsSection: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isInView, setIsInView] = useState(false);
+
+    const sectionRef = useRef<HTMLElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const userPausedRef = useRef(false);
 
     const handleNext = () => {
+        userPausedRef.current = false;
         setCurrentIndex((prev) => (prev + 1) % videoFiles.length);
     };
 
     const handlePrev = () => {
+        userPausedRef.current = false;
         setCurrentIndex((prev) => (prev - 1 + videoFiles.length) % videoFiles.length);
     };
 
+    // Observe when the section enters or leaves the user's viewport
     useEffect(() => {
-        if (videoRef.current) {
-            // When index changes, try to auto-play the next video.
-            // On initial load, browsers might block autoplay without user interaction, 
-            // so we handle the promise carefully.
-            videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+        const sectionElement = sectionRef.current;
+        if (!sectionElement) return;
+
+        if (typeof IntersectionObserver === 'undefined') {
+            setIsInView(true);
+            return;
         }
-    }, [currentIndex]);
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
+                    setIsInView((prev) => {
+                        // When entering the section, reset manual pause so video plays
+                        if (!prev) {
+                            userPausedRef.current = false;
+                        }
+                        return true;
+                    });
+                } else {
+                    setIsInView(false);
+                }
+            },
+            {
+                threshold: [0, 0.2],
+            }
+        );
+
+        observer.observe(sectionElement);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    // Only play video when the section is in the user's viewpoint
+    useEffect(() => {
+        if (!isInView) {
+            if (videoRef.current && !videoRef.current.paused) {
+                videoRef.current.pause();
+            }
+            setIsPlaying(false);
+            return;
+        }
+
+        if (videoRef.current && !userPausedRef.current) {
+            const playPromise = videoRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => setIsPlaying(true))
+                    .catch(() => setIsPlaying(false));
+            }
+        }
+    }, [currentIndex, isInView]);
+
+    // Pause video if user switches browser tab or minimizes window
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (videoRef.current && !videoRef.current.paused) {
+                    videoRef.current.pause();
+                    setIsPlaying(false);
+                }
+            } else {
+                if (isInView && !userPausedRef.current && videoRef.current) {
+                    const playPromise = videoRef.current.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => setIsPlaying(true))
+                            .catch(() => setIsPlaying(false));
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [isInView]);
 
     const handleVideoEnd = () => {
         // Automatically play the next video when the current one finishes
+        userPausedRef.current = false;
         handleNext();
     };
 
@@ -38,9 +119,15 @@ const VideoTestimonialsSection: React.FC = () => {
             if (isPlaying) {
                 videoRef.current.pause();
                 setIsPlaying(false);
+                userPausedRef.current = true;
             } else {
-                videoRef.current.play();
-                setIsPlaying(true);
+                userPausedRef.current = false;
+                const playPromise = videoRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => setIsPlaying(true))
+                        .catch(() => setIsPlaying(false));
+                }
             }
         }
     };
@@ -49,7 +136,7 @@ const VideoTestimonialsSection: React.FC = () => {
     if (videoFiles.length === 0) return null;
 
     return (
-        <section className="py-12 md:py-16 bg-transparent overflow-hidden border-t border-slate-100">
+        <section ref={sectionRef} className="py-12 md:py-16 bg-transparent overflow-hidden border-t border-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
                     <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
@@ -65,12 +152,14 @@ const VideoTestimonialsSection: React.FC = () => {
                         ref={videoRef}
                         key={videoFiles[currentIndex]}
                         src={videoFiles[currentIndex]}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover cursor-pointer"
+                        onClick={togglePlay}
                         onEnded={handleVideoEnd}
                         onPlay={() => setIsPlaying(true)}
                         onPause={() => setIsPlaying(false)}
                         controls={false}
                         playsInline
+                        preload="metadata"
                     />
 
                     {/* Overlay controls */}
