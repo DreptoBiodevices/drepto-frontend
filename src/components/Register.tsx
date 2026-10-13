@@ -73,19 +73,6 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
 
-        {/* role */}
-        <Field label="I am a" required>
-          <div className="relative">
-            <select name="role" value={formData.role} onChange={handleChange}
-              style={{ borderRadius: '0.25rem' }} className={selectCls}>
-              <option value={UserRole.PATIENT}>Patient</option>
-              <option value={UserRole.DOCTOR}>Doctor</option>
-              <option value={UserRole.NURSE}>Nurse</option>
-            </select>
-            <ChevronDown />
-          </div>
-        </Field>
-
         {/* name */}
         <div className="grid grid-cols-2 gap-3">
           <Field label="First name" required>

@@ -20,6 +20,9 @@ const DashboardPage: React.FC = () => {
   const renderDashboard = () => {
     switch (user?.role) {
       case UserRole.PATIENT:
+      case 'user':
+      case 'User':
+      case 'Patient':
         return <PatientDashboard user={user} />;
       case UserRole.DOCTOR:
         return <DoctorDashboard user={user} />;

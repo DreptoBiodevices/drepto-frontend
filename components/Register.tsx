@@ -91,21 +91,6 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
       <h2 className="text-2xl font-bold text-center text-dark-blue mb-6">Create Account</h2>
       <form onSubmit={handleSubmit} className="space-y-3">
 
-        {/* Role Selection */}
-        <div className="relative">
-          <label className="text-xs font-semibold text-gray-500 ml-1 mb-1 block">I am a</label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary bg-white text-gray-700 font-medium"
-          >
-            <option value={UserRole.PATIENT}>Patient</option>
-            <option value={UserRole.DOCTOR}>Doctor</option>
-            <option value={UserRole.NURSE}>Nurse</option>
-          </select>
-        </div>
-
         <div className="grid grid-cols-2 gap-3">
           <input
             type="text"
