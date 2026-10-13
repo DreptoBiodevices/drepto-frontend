@@ -235,6 +235,7 @@ export const OrderService = {
   getAll: (userEmail?: string) => api.get(`/order${userEmail ? `?userEmail=${encodeURIComponent(userEmail)}` : ''}`),
   getById: (id: string) => api.get(`/order/${id}`),
   update: (id: string, data: any) => api.patch(`/order/${id}`, data),
+  cancel: (id: string) => api.post(`/order/${id}/cancel`),
   delete: (id: string) => api.delete(`/order/${id}`),
 };
 

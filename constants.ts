@@ -3,11 +3,18 @@ import { Medicine, FAQItem, Testimonial, LabTestDetail, LabPackageDetail, LabRev
 
 export const MEDICINES: Medicine[] = [];
 
+// --- Shared Order / Refund / Account Policy (keep in sync with backend order.service.ts) ---
+export const ORDER_CANCELLATION_WINDOW_DAYS = 2;
+export const REFUND_PROCESSING_TIME = '5–7 working days';
+export const CANCELLATION_POLICY_TEXT = `You may cancel an order within ${ORDER_CANCELLATION_WINDOW_DAYS} days of placing it, as long as it has not been dispatched. If you have already paid, the full amount will be refunded to your original payment method within ${REFUND_PROCESSING_TIME}.`;
+export const ACCOUNT_DELETION_TEXT = 'You can permanently delete your account at any time from Profile → Security → Delete My Account. This removes your personal information, saved addresses, order history and reviews and cannot be undone. Refunds already in progress will still be completed.';
+
 export const PHARMACY_FAQS: FAQItem[] = [
     { question: 'Is it safe to buy medicines online?', answer: 'Yes, we ensure all medicines are sourced from licensed pharmacies and are 100% genuine.' },
     { question: 'Do I need a prescription?', answer: 'For certain scheduled drugs (Schedule H & H1), a valid prescription is mandatory. OTC products do not require one.' },
     { question: 'How can I track my order?', answer: 'You can track your order status in the "My Orders" section of the app or website.' },
-    { question: 'What is the return policy?', answer: 'We have a 7-day return policy for damaged or incorrect items. Please check our return policy page for more details.' },
+    { question: 'Can I cancel my order?', answer: 'Yes. Orders can be cancelled from "My Orders" within 2 days of placing them, as long as they have not been dispatched. Paid amounts are refunded to your original payment method within 5–7 working days.' },
+    { question: 'What is the return policy?', answer: 'Returns are accepted for damaged, incorrect or expired items if reported within 48 hours of delivery. Approved refunds are processed within 5–7 working days. Please check our refund policy page for more details.' },
 ];
 
 export const PHARMACY_TESTIMONIALS: Testimonial[] = [

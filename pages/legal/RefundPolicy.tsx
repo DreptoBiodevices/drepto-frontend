@@ -1,5 +1,6 @@
 import React from 'react';
 import LegalPageLayout from './LegalPageLayout';
+import { ORDER_CANCELLATION_WINDOW_DAYS, REFUND_PROCESSING_TIME, ACCOUNT_DELETION_TEXT } from '../../constants';
 
 const RefundPolicy: React.FC = () => {
     return (
@@ -35,8 +36,22 @@ const RefundPolicy: React.FC = () => {
                 <ul className="list-disc pl-5 space-y-2">
                     <li><strong>Notification:</strong> You must notify us within 48 hours of delivery by emailing <a href="mailto:support@dreptobiodevices.com" className="text-primary hover:underline">support@dreptobiodevices.com</a> with your Order ID and clear photographs of the damaged/wrong product.</li>
                     <li><strong>Verification:</strong> Our team will review the claim. Once approved, we will initiate a reverse pickup or ask you to dispose of the item safely.</li>
-                    <li><strong>Refund Processing:</strong> Refunds will be processed to the original payment method within 7-10 business days after claim approval.</li>
+                    <li><strong>Refund Processing:</strong> Refunds will be processed to the original payment method within {REFUND_PROCESSING_TIME} after claim approval.</li>
                 </ul>
+            </section>
+
+            <section className="mb-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Order Cancellation</h3>
+                <ul className="list-disc pl-5 space-y-2">
+                    <li><strong>Cancellation Window:</strong> Orders can be cancelled within {ORDER_CANCELLATION_WINDOW_DAYS} days of placing them, provided they have not yet been dispatched.</li>
+                    <li><strong>How to Cancel:</strong> Go to <em>My Orders</em> on the website or app and tap <em>Cancel Order</em> next to the eligible order.</li>
+                    <li><strong>Refund on Cancellation:</strong> If you have already paid, the full amount will be refunded to your original payment method within {REFUND_PROCESSING_TIME}.</li>
+                </ul>
+            </section>
+
+            <section className="mb-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Account Deletion</h3>
+                <p>{ACCOUNT_DELETION_TEXT}</p>
             </section>
         </LegalPageLayout>
     );

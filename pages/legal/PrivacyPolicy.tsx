@@ -1,5 +1,6 @@
 import React from 'react';
 import LegalPageLayout from './LegalPageLayout';
+import { ACCOUNT_DELETION_TEXT } from '../../constants';
 
 const PrivacyPolicy: React.FC = () => {
     return (
@@ -41,6 +42,11 @@ const PrivacyPolicy: React.FC = () => {
                 <p>
                     We do not sell, trade, or transfer your personally identifiable information to outside parties, except for trusted third parties who assist us in operating our website and conducting our business (e.g., logistics partners), so long as those parties agree to keep this information confidential.
                 </p>
+            </section>
+
+            <section className="mb-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Your Data &amp; Account Deletion</h3>
+                <p>{ACCOUNT_DELETION_TEXT}</p>
             </section>
         </LegalPageLayout>
     );

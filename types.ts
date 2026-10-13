@@ -139,7 +139,8 @@ export interface Address {
 
 export type ShippingSource = 'IIT Bombay' | 'Warehouse' | 'Digital';
 
-export type OrderStatus = 'Placed' | 'Packaging' | 'Dispatched' | 'Delivered' | 'Active';
+export type OrderStatus = 'Placed' | 'Packaging' | 'Dispatched' | 'Delivered' | 'Active' | 'Cancelled';
+export type RefundStatus = 'Not Applicable' | 'Pending' | 'Processed';
 
 export interface OrderItem {
     name: string;
@@ -163,6 +164,9 @@ export interface Order {
     shippingCost?: number;
     gst?: number;
     paymentId?: string;
+    cancelledAt?: string;
+    refundStatus?: RefundStatus;
+    createdAt?: string;
 }
 
 // --- Feedback & Social Media Types ---
