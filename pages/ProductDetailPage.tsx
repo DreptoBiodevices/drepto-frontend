@@ -407,6 +407,12 @@ const ProductDetailPage: React.FC = () => {
                                     <span className="text-lg text-gray-400 line-through font-medium">₹{product.mrp}</span>
                                 )}
                             </div>
+                            {/* BOGO Badge */}
+                            <div className="mt-3">
+                                <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg animate-pulse">
+                                    🎁 Buy 1 Get 1 Free — Pay for 1, Receive 2!
+                                </span>
+                            </div>
                         </div>
 
                         {/* Scrollable Content */}
@@ -447,27 +453,45 @@ const ProductDetailPage: React.FC = () => {
 
                         <div className="p-6 lg:p-10 border-t border-gray-100 mt-auto bg-white">
                             {cartCount > 0 ? (
-                                <div className="w-full flex items-center justify-between border-2 border-yellow-400 rounded-full h-[56px] overflow-hidden bg-white shadow-sm mb-4">
-                                    <button 
-                                        onClick={handleDecrement}
-                                        className="h-full px-6 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-red-600"
-                                    >
-                                        {cartCount === 1 ? (
-                                            <Trash2 className="w-6 h-6" />
-                                        ) : (
-                                            <Minus className="w-6 h-6" />
-                                        )}
-                                    </button>
-                                    <span className="font-bold text-gray-900 text-lg flex-1 text-center">
-                                        {cartCount} in cart
-                                    </span>
-                                    <button 
-                                        onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
-                                        className="h-full px-6 flex items-center justify-center hover:bg-gray-100 transition-colors border-l border-gray-300 text-gray-700"
-                                    >
-                                        <Plus className="w-6 h-6" />
-                                    </button>
-                                </div>
+                                <>
+                                    <div className="w-full flex items-center justify-between border-2 border-yellow-400 rounded-full h-[56px] overflow-hidden bg-white shadow-sm mb-1">
+                                        <button 
+                                            onClick={handleDecrement}
+                                            className="h-full px-6 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-red-600"
+                                        >
+                                            {cartCount === 1 ? (
+                                                <Trash2 className="w-6 h-6" />
+                                            ) : (
+                                                <Minus className="w-6 h-6" />
+                                            )}
+                                        </button>
+                                        <span className="font-bold text-gray-900 text-lg flex-1 text-center">
+                                            {(() => {
+                                                const paid = Math.ceil(cartCount / 2);
+                                                const free = Math.floor(cartCount / 2);
+                                                return free > 0
+                                                    ? `${paid} buying + ${free} FREE 🎁`
+                                                    : `${cartCount} in cart`;
+                                            })()}
+                                        </span>
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
+                                            className="h-full px-6 flex items-center justify-center hover:bg-gray-100 transition-colors border-l border-gray-300 text-gray-700"
+                                        >
+                                            <Plus className="w-6 h-6" />
+                                        </button>
+                                    </div>
+                                    {Math.floor(cartCount / 2) === 0 && (
+                                        <p className="text-xs text-center text-green-600 font-semibold mb-3">
+                                            Add 1 more to get a FREE unit! 🎁
+                                        </p>
+                                    )}
+                                    {Math.floor(cartCount / 2) > 0 && (
+                                        <p className="text-xs text-center text-green-600 font-semibold mb-3">
+                                            You're getting {Math.floor(cartCount / 2)} unit{Math.floor(cartCount / 2) > 1 ? 's' : ''} for FREE! 🎁
+                                        </p>
+                                    )}
+                                </>
                             ) : (
                                 <button
                                     onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
@@ -487,7 +511,15 @@ const ProductDetailPage: React.FC = () => {
                                 }}
                                 className="w-full bg-orange-500 text-white py-4 rounded-full hover:bg-orange-600 transition-all shadow-md flex items-center justify-center gap-2 font-bold text-lg"
                             >
-                                Buy Now
+                                {(() => {
+                                    const qty = cartCount === 0 ? 1 : cartCount;
+                                    const paid = Math.ceil(qty / 2);
+                                    const free = Math.floor(qty / 2);
+                                    if (cartCount === 0) return 'Buy Now – Add 2 for BOGO! 🎁';
+                                    return free > 0
+                                        ? `Buy ${paid} → Get ${free} FREE 🎁`
+                                        : `Buy ${qty} → Add 1 for FREE!`;
+                                })()}
                             </button>
                         </div>
                     </div>

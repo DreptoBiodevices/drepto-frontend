@@ -119,12 +119,47 @@ const CartPage: React.FC = () => {
     })();
 
     const calculateSubtotal = () => {
-        return cart.reduce((total, item) => {
+        // BOGO logic: group by product, for each group pay only ceil(qty/2)
+        const groups = new Map<string, { price: number; quantity: number }>();
+        cart.forEach((item: any) => {
+            const key = item.name || item.title;
             const price = typeof item.price === 'string'
                 ? parseFloat(item.price.replace(/[^0-9.]/g, ''))
                 : item.price;
-            return total + (isNaN(price) ? 0 : price);
-        }, 0);
+            if (groups.has(key)) {
+                groups.get(key)!.quantity += 1;
+            } else {
+                groups.set(key, { price: isNaN(price) ? 0 : price, quantity: 1 });
+            }
+        });
+        let total = 0;
+        groups.forEach(({ price, quantity }) => {
+            const paidUnits = Math.ceil(quantity / 2);
+            total += price * paidUnits;
+        });
+        return total;
+    };
+
+    const calculateBogoSavings = () => {
+        // Savings = free units * unit price
+        const groups = new Map<string, { price: number; quantity: number }>();
+        cart.forEach((item: any) => {
+            const key = item.name || item.title;
+            const price = typeof item.price === 'string'
+                ? parseFloat(item.price.replace(/[^0-9.]/g, ''))
+                : item.price;
+            if (groups.has(key)) {
+                groups.get(key)!.quantity += 1;
+            } else {
+                groups.set(key, { price: isNaN(price) ? 0 : price, quantity: 1 });
+            }
+        });
+        let savings = 0;
+        groups.forEach(({ price, quantity }) => {
+            const freeUnits = Math.floor(quantity / 2);
+            savings += price * freeUnits;
+        });
+        return savings;
     };
 
     // const gstRate = 0.18;
@@ -346,7 +381,11 @@ const CartPage: React.FC = () => {
                         {checkoutStep === 'cart' && (
                             <div className="grid md:grid-cols-3 gap-8 animate-fade-in">
                                 <div className="md:col-span-2 space-y-4">
-                                    {groupedCart.map((item: any, idx: number) => (
+                                    {groupedCart.map((item: any, idx: number) => {
+                                        const qty = item.quantity;
+                                        const paidUnits = Math.ceil(qty / 2);
+                                        const freeUnits = Math.floor(qty / 2);
+                                        return (
                                         <div key={idx} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm">
                                             <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
                                                 <img
@@ -364,10 +403,28 @@ const CartPage: React.FC = () => {
                                                         From: {item.shippingSource}
                                                     </div>
                                                 )}
+                                                {/* BOGO info row */}
+                                                {freeUnits > 0 && (
+                                                    <div className="flex items-center gap-2 mt-1.5">
+                                                        <span className="text-xs font-bold text-orange-600 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">
+                                                            {paidUnits} paid
+                                                        </span>
+                                                        <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full animate-pulse">
+                                                            + {freeUnits} FREE 🎁
+                                                        </span>
+                                                    </div>
+                                                )}
                                                 <div className="flex items-center gap-4 mt-2">
-                                                    <p className="text-primary font-bold">
-                                                        ₹{typeof item.price === 'number' ? item.price : item.price.replace('$', '')}
-                                                    </p>
+                                                    <div className="flex flex-col">
+                                                        <p className="text-primary font-bold">
+                                                            ₹{typeof item.price === 'number' ? item.price : item.price.replace('$', '')} × {paidUnits}
+                                                        </p>
+                                                        {freeUnits > 0 && (
+                                                            <p className="text-green-600 text-xs font-semibold">
+                                                                Saving ₹{(typeof item.price === 'number' ? item.price : parseFloat(item.price.replace(/[^0-9.]/g, ''))) * freeUnits} on free units
+                                                            </p>
+                                                        )}
+                                                    </div>
                                                     <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
                                                         <button 
                                                             onClick={() => removeOneFromCart(item.name || item.title)}
@@ -389,20 +446,34 @@ const CartPage: React.FC = () => {
                                                 <X className="w-5 h-5" />
                                             </button>
                                         </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
 
                                 <div className="md:col-span-1">
                                     <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
                                         <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
+                                        {/* BOGO Banner */}
+                                        {calculateBogoSavings() > 0 && (
+                                            <div className="bg-gradient-to-r from-orange-50 to-pink-50 border border-orange-200 rounded-xl p-3 mb-4 text-center">
+                                                <p className="text-xs font-extrabold text-orange-700 uppercase tracking-wide">🎁 Buy 1 Get 1 Free Active!</p>
+                                                <p className="text-sm font-bold text-green-700 mt-0.5">You save ₹{calculateBogoSavings().toFixed(2)}</p>
+                                            </div>
+                                        )}
                                         <div className="flex justify-between mb-2 text-gray-600">
-                                            <span>Subtotal</span>
-                                            <span>₹{calculateSubtotal().toFixed(2)}</span>
+                                            <span>Items ({cart.length} units)</span>
+                                            <span className="line-through text-gray-400">₹{(calculateSubtotal() + calculateBogoSavings()).toFixed(2)}</span>
                                         </div>
-                                        {/* <div className="flex justify-between mb-4 text-gray-600 text-sm italic">
-                                            <span>Shipping & GST</span>
-                                            <span>Calculated at checkout</span>
-                                        </div> */}
+                                        {calculateBogoSavings() > 0 && (
+                                            <div className="flex justify-between mb-2 text-green-600 font-semibold">
+                                                <span>BOGO Discount 🎁</span>
+                                                <span>-₹{calculateBogoSavings().toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                        <div className="flex justify-between mb-2 text-gray-600">
+                                            <span>You Pay</span>
+                                            <span className="font-bold text-gray-900">₹{calculateSubtotal().toFixed(2)}</span>
+                                        </div>
                                         <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6">
                                             <span>Est. Total</span>
                                             <span>₹{calculateSubtotal().toFixed(2)}</span>
@@ -501,17 +572,23 @@ const CartPage: React.FC = () => {
 
                                         <div className="pt-4 mt-4 border-t space-y-2">
                                             <div className="flex justify-between text-sm text-gray-600">
-                                                <span>Subtotal</span>
-                                                <span>₹{calculateSubtotal().toFixed(2)}</span>
+                                                <span>Items ({cart.length} units)</span>
+                                                <span className="line-through text-gray-400">₹{(calculateSubtotal() + calculateBogoSavings()).toFixed(2)}</span>
+                                            </div>
+                                            {calculateBogoSavings() > 0 && (
+                                                <div className="flex justify-between text-sm text-green-600 font-semibold">
+                                                    <span>🎁 BOGO Savings</span>
+                                                    <span>-₹{calculateBogoSavings().toFixed(2)}</span>
+                                                </div>
+                                            )}
+                                            <div className="flex justify-between text-sm text-gray-600">
+                                                <span>You Pay</span>
+                                                <span className="font-bold">₹{calculateSubtotal().toFixed(2)}</span>
                                             </div>
                                             <div className="flex justify-between text-sm text-gray-600">
                                                 <span>Shipping ({shippingMethod})</span>
                                                 <span>₹{shippingCost.toFixed(2)}</span>
                                             </div>
-                                            {/* <div className="flex justify-between text-sm text-gray-600">
-                                                <span>GST (18%)</span>
-                                                <span>₹{calculateGST().toFixed(2)}</span>
-                                            </div> */}
                                             <div className="flex justify-between text-lg font-bold text-gray-900 mt-2 pt-2 border-t border-dashed">
                                                 <span>Total Amount</span>
                                                 <span>₹{calculateTotal().toFixed(2)}</span>

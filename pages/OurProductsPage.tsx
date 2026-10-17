@@ -328,30 +328,46 @@ const OurProductsPage: React.FC = () => {
                                                         Save {Math.round(((product.mrp - (product.price || 0)) / product.mrp) * 100)}%
                                                     </span>
                                                 )}
+                                                {/* BOGO Badge */}
+                                                <span className="mt-2 inline-flex items-center gap-1 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full shadow animate-pulse">
+                                                    🎁 Buy 1 Get 1 Free
+                                                </span>
                                             </div>
 
                                             {getProductCountInCart(product.name) > 0 ? (
-                                                <div className="w-full flex items-center justify-between border-2 border-yellow-400 rounded-full h-[44px] overflow-hidden bg-white mb-2 shadow-sm">
-                                                    <button 
-                                                        onClick={(e) => decrementCart(product.name, e)}
-                                                        className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-red-600"
-                                                    >
-                                                        {getProductCountInCart(product.name) === 1 ? (
-                                                            <Trash2 className="w-5 h-5" />
-                                                        ) : (
-                                                            <Minus className="w-5 h-5" />
-                                                        )}
-                                                    </button>
-                                                    <span className="font-bold text-gray-900 text-sm flex-1 text-center">
-                                                        {getProductCountInCart(product.name)} in cart
-                                                    </span>
-                                                    <button 
-                                                        onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                                                        className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-l border-gray-300 text-gray-700"
-                                                    >
-                                                        <Plus className="w-5 h-5" />
-                                                    </button>
-                                                </div>
+                                                <>
+                                                    <div className="w-full flex items-center justify-between border-2 border-yellow-400 rounded-full h-[44px] overflow-hidden bg-white mb-1.5 shadow-sm">
+                                                        <button 
+                                                            onClick={(e) => decrementCart(product.name, e)}
+                                                            className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-red-600"
+                                                        >
+                                                            {getProductCountInCart(product.name) === 1 ? (
+                                                                <Trash2 className="w-5 h-5" />
+                                                            ) : (
+                                                                <Minus className="w-5 h-5" />
+                                                            )}
+                                                        </button>
+                                                        <span className="font-bold text-gray-900 text-sm flex-1 text-center">
+                                                            {(() => {
+                                                                const qty = getProductCountInCart(product.name);
+                                                                const paid = Math.ceil(qty / 2);
+                                                                const free = Math.floor(qty / 2);
+                                                                return free > 0
+                                                                    ? `${paid} buying + ${free} FREE 🎁`
+                                                                    : `${qty} in cart`;
+                                                            })()}
+                                                        </span>
+                                                        <button 
+                                                            onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                                                            className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-l border-gray-300 text-gray-700"
+                                                        >
+                                                            <Plus className="w-5 h-5" />
+                                                        </button>
+                                                    </div>
+                                                    <p className="text-[10px] text-center text-green-600 font-semibold mb-2">
+                                                        Add 1 more to unlock a FREE unit!
+                                                    </p>
+                                                </>
                                             ) : (
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
@@ -366,7 +382,15 @@ const OurProductsPage: React.FC = () => {
                                                 onClick={(e) => buyNow(product, e)}
                                                 className="w-full py-2.5 px-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
                                             >
-                                                Buy Now
+                                                {(() => {
+                                                    const qty = getProductCountInCart(product.name);
+                                                    const totalAfterBogo = qty === 0 ? 1 : qty + Math.floor(qty / 2) - Math.floor(qty / 2);
+                                                    const paid = qty === 0 ? 1 : Math.ceil(qty / 2);
+                                                    const free = qty === 0 ? 0 : Math.floor(qty / 2);
+                                                    return free > 0
+                                                        ? `Buy ${paid} → Get ${free} FREE 🎁`
+                                                        : qty > 0 ? `Buy ${qty} → Add 1 for FREE!` : 'Buy Now – Add 2 for BOGO!';
+                                                })()}
                                             </button>
                                         </div>
                                         {/* <button
