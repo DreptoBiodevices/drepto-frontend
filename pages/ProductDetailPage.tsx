@@ -407,7 +407,7 @@ const ProductDetailPage: React.FC = () => {
                                     <span className="text-lg text-gray-400 line-through font-medium">₹{product.mrp}</span>
                                 )}
                             </div>
-                            {/* BOGO Badge */}
+                            {/* Buy 1 Get 1 Free Badge */}
                             <div className="mt-3">
                                 <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg animate-pulse">
                                     🎁 Buy 1 Get 1 Free — Pay for 1, Receive 2!
@@ -515,7 +515,7 @@ const ProductDetailPage: React.FC = () => {
                                     const qty = cartCount === 0 ? 1 : cartCount;
                                     const paid = Math.ceil(qty / 2);
                                     const free = Math.floor(qty / 2);
-                                    if (cartCount === 0) return 'Buy Now – Add 2 for BOGO! 🎁';
+                                    if (cartCount === 0) return 'Buy Now – Add 2 for Buy 1 Get 1 Free! 🎁';
                                     return free > 0
                                         ? `Buy ${paid} → Get ${free} FREE 🎁`
                                         : `Buy ${qty} → Add 1 for FREE!`;

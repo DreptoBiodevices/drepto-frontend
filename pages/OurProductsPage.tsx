@@ -328,7 +328,7 @@ const OurProductsPage: React.FC = () => {
                                                         Save {Math.round(((product.mrp - (product.price || 0)) / product.mrp) * 100)}%
                                                     </span>
                                                 )}
-                                                {/* BOGO Badge */}
+                                                {/* Buy 1 Get 1 Free Badge */}
                                                 <span className="mt-2 inline-flex items-center gap-1 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full shadow animate-pulse">
                                                     🎁 Buy 1 Get 1 Free
                                                 </span>
@@ -389,7 +389,7 @@ const OurProductsPage: React.FC = () => {
                                                     const free = qty === 0 ? 0 : Math.floor(qty / 2);
                                                     return free > 0
                                                         ? `Buy ${paid} → Get ${free} FREE 🎁`
-                                                        : qty > 0 ? `Buy ${qty} → Add 1 for FREE!` : 'Buy Now – Add 2 for BOGO!';
+                                                        : qty > 0 ? `Buy ${qty} → Add 1 for FREE!` : 'Buy Now – Add 2 for Buy 1 Get 1 Free!';
                                                 })()}
                                             </button>
                                         </div>

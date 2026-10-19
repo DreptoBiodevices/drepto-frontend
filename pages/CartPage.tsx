@@ -119,7 +119,7 @@ const CartPage: React.FC = () => {
     })();
 
     const calculateSubtotal = () => {
-        // BOGO logic: group by product, for each group pay only ceil(qty/2)
+        // Buy 1 Get 1 Free logic: group by product, for each group pay only ceil(qty/2)
         const groups = new Map<string, { price: number; quantity: number }>();
         cart.forEach((item: any) => {
             const key = item.name || item.title;
@@ -403,7 +403,7 @@ const CartPage: React.FC = () => {
                                                         From: {item.shippingSource}
                                                     </div>
                                                 )}
-                                                {/* BOGO info row */}
+                                                {/* Buy 1 Get 1 Free info row */}
                                                 {freeUnits > 0 && (
                                                     <div className="flex items-center gap-2 mt-1.5">
                                                         <span className="text-xs font-bold text-orange-600 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">
@@ -453,7 +453,7 @@ const CartPage: React.FC = () => {
                                 <div className="md:col-span-1">
                                     <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
                                         <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
-                                        {/* BOGO Banner */}
+                                        {/* Buy 1 Get 1 Free Banner */}
                                         {calculateBogoSavings() > 0 && (
                                             <div className="bg-gradient-to-r from-orange-50 to-pink-50 border border-orange-200 rounded-xl p-3 mb-4 text-center">
                                                 <p className="text-xs font-extrabold text-orange-700 uppercase tracking-wide">🎁 Buy 1 Get 1 Free Active!</p>
@@ -466,7 +466,7 @@ const CartPage: React.FC = () => {
                                         </div>
                                         {calculateBogoSavings() > 0 && (
                                             <div className="flex justify-between mb-2 text-green-600 font-semibold">
-                                                <span>BOGO Discount 🎁</span>
+                                                <span>Buy 1 Get 1 Free Discount 🎁</span>
                                                 <span>-₹{calculateBogoSavings().toFixed(2)}</span>
                                             </div>
                                         )}
@@ -577,7 +577,7 @@ const CartPage: React.FC = () => {
                                             </div>
                                             {calculateBogoSavings() > 0 && (
                                                 <div className="flex justify-between text-sm text-green-600 font-semibold">
-                                                    <span>🎁 BOGO Savings</span>
+                                                    <span>🎁 Buy 1 Get 1 Free Savings</span>
                                                     <span>-₹{calculateBogoSavings().toFixed(2)}</span>
                                                 </div>
                                             )}
