@@ -455,9 +455,12 @@ const CartPage: React.FC = () => {
                                         <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
                                         {/* Buy 1 Get 1 Free Banner */}
                                         {calculateBogoSavings() > 0 && (
-                                            <div className="bg-gradient-to-r from-orange-50 to-pink-50 border border-orange-200 rounded-xl p-3 mb-4 text-center">
-                                                <p className="text-xs font-extrabold text-orange-700 uppercase tracking-wide">🎁 Buy 1 Get 1 Free Active!</p>
-                                                <p className="text-sm font-bold text-green-700 mt-0.5">You save ₹{calculateBogoSavings().toFixed(2)}</p>
+                                            <div className="flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 mb-4">
+                                                <svg className="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                                                <div>
+                                                    <p className="text-xs font-semibold text-emerald-800">Buy 1 Get 1 Free applied</p>
+                                                    <p className="text-xs text-emerald-600 mt-0.5">You save ₹{calculateBogoSavings().toFixed(2)}</p>
+                                                </div>
                                             </div>
                                         )}
                                         <div className="flex justify-between mb-2 text-gray-600">
@@ -466,7 +469,7 @@ const CartPage: React.FC = () => {
                                         </div>
                                         {calculateBogoSavings() > 0 && (
                                             <div className="flex justify-between mb-2 text-green-600 font-semibold">
-                                                <span>Buy 1 Get 1 Free Discount 🎁</span>
+                                                <span className="text-emerald-700 font-medium">Buy 1 Get 1 Free</span>
                                                 <span>-₹{calculateBogoSavings().toFixed(2)}</span>
                                             </div>
                                         )}
@@ -577,7 +580,7 @@ const CartPage: React.FC = () => {
                                             </div>
                                             {calculateBogoSavings() > 0 && (
                                                 <div className="flex justify-between text-sm text-green-600 font-semibold">
-                                                    <span>🎁 Buy 1 Get 1 Free Savings</span>
+                                                    <span className="text-emerald-700 font-medium">Buy 1 Get 1 Free</span>
                                                     <span>-₹{calculateBogoSavings().toFixed(2)}</span>
                                                 </div>
                                             )}

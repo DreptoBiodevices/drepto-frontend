@@ -28,21 +28,9 @@ const HeroSection: React.FC = () => {
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
                 <span className="text-primary tracking-tighter">Drepto Biodevices</span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-600 mb-6">
+              <p className="text-xl md:text-2xl text-gray-600 mb-8">
                 Redefining Drug Delivery with Next-Gen Innovation
               </p>
-
-              {/* Buy 1 Get 1 Free Promo Banner */}
-              <div className="mb-8 flex justify-center lg:justify-start">
-                <div className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-5 py-3 rounded-2xl shadow-lg shadow-orange-200 animate-pulse">
-                  <span className="text-2xl">🎁</span>
-                  <div className="text-left">
-                    <p className="text-xs font-bold uppercase tracking-widest opacity-90">Limited Time Offer</p>
-                    <p className="text-base font-extrabold leading-tight">Buy 1 Get 1 Free</p>
-                  </div>
-                  <span className="text-xl">🎁</span>
-                </div>
-              </div>
 
               {/* Dynamic Stats */}
               <div className="mb-10 grid grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
