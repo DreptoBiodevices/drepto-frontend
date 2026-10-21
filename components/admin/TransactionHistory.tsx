@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Order } from '../../types';
-import { PaymentService } from '../../lib/api_controller';
+import { PaymentService, OrderService } from '../../lib/api_controller';
 import { Search, ChevronDown, ChevronLeft, ChevronRight, FileText, Download } from 'lucide-react';
 
 const TransactionHistory: React.FC = () => {
@@ -14,28 +14,72 @@ const TransactionHistory: React.FC = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await PaymentService.getAllTransactions();
-                const data = response.data;
-                
-                if (data) {
-                    const mappedOrders: Order[] = data.map((order: any) => ({
-                        id: order.orderId || order._id,
-                        userEmail: '',
-                        date: order.created_at || order.createdAt,
-                        items: order.items || [],
-                        total: order.amount,
-                        status: order.status,
-                        shippingAddress: order.shippingAddress || {
-                            houseNo: '', buildingName: '', street: '', landmark: '', city: '', state: '', country: '', pincode: '', contactNumber: 'N/A'
-                        },
-                        shippingMethod: order.shippingMethod || 'Standard',
-                        shippingCost: order.shippingCost || 0,
-                        paymentId: order.transactionId,
-                    }));
-                    // Sort descending by date
-                    mappedOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-                    setTransactions(mappedOrders);
+                const ordersMap = new Map<string, Order>();
+
+                // 1. Try PaymentService transactions
+                try {
+                    const response = await PaymentService.getAllTransactions();
+                    const data = Array.isArray(response.data) ? response.data : (response.data?.data || []);
+                    data.forEach((order: any) => {
+                        const id = order.orderId || order._id || order.id;
+                        if (!id) return;
+                        ordersMap.set(String(id), {
+                            id: String(id),
+                            userEmail: order.userEmail || order.email || '',
+                            date: order.created_at || order.createdAt || new Date().toISOString(),
+                            items: order.items || [],
+                            total: Number(order.amount || order.total || 0),
+                            status: order.status || 'Placed',
+                            shippingAddress: order.shippingAddress || {
+                                houseNo: '', buildingName: '', street: '', landmark: '', city: '', state: '', country: '', pincode: '', contactNumber: 'N/A'
+                            },
+                            shippingMethod: order.shippingMethod || 'Standard',
+                            shippingCost: order.shippingCost || 0,
+                            paymentId: order.transactionId || order.paymentId || 'COD',
+                        });
+                    });
+                } catch (err) {
+                    console.warn("PaymentService.getAllTransactions warning:", err);
                 }
+
+                // 2. Also fetch OrderService to ensure all live MongoDB orders & payments are included
+                try {
+                    const orderRes = await OrderService.getAll();
+                    const liveOrders = Array.isArray(orderRes.data) ? orderRes.data : (orderRes.data?.data || []);
+                    liveOrders.forEach((o: any) => {
+                        const id = String(o._id || o.id || o.orderId || '');
+                        if (!id) return;
+                        const existing = ordersMap.get(id);
+                        const items = Array.isArray(o.items) ? o.items.map((it: any) => ({
+                            productId: it.productId || it._id || '',
+                            name: it.name || it.title || 'Drepto Product',
+                            price: Number(it.price || 0),
+                            quantity: Number(it.quantity || 1)
+                        })) : [];
+                        const total = Number(o.total || o.amount || 0);
+
+                        ordersMap.set(id, {
+                            id,
+                            userEmail: o.userEmail || o.email || existing?.userEmail || '',
+                            date: o.createdAt || o.date || existing?.date || new Date().toISOString(),
+                            items: items.length > 0 ? items : (existing?.items || []),
+                            total: total || existing?.total || 0,
+                            status: o.status || existing?.status || 'Placed',
+                            shippingAddress: o.shippingAddress || existing?.shippingAddress || {
+                                houseNo: '', buildingName: '', street: '', landmark: '', city: '', state: '', country: '', pincode: '', contactNumber: 'N/A'
+                            },
+                            shippingMethod: o.shippingMethod || existing?.shippingMethod || 'Standard',
+                            shippingCost: o.shippingCost || existing?.shippingCost || 0,
+                            paymentId: o.razorpay_payment_id || o.paymentId || existing?.paymentId || (o.paymentMethod || 'COD'),
+                        });
+                    });
+                } catch (err) {
+                    console.warn("OrderService.getAll warning:", err);
+                }
+
+                const mappedOrders = Array.from(ordersMap.values());
+                mappedOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                setTransactions(mappedOrders);
             } catch (error) {
                 console.error("Failed to load transactions", error);
             } finally {
@@ -49,8 +93,10 @@ const TransactionHistory: React.FC = () => {
     // Filter logic
     const filteredTransactions = transactions.filter(t =>
         t.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.shippingAddress.contactNumber.includes(searchTerm) ||
-        t.status.toLowerCase().includes(searchTerm.toLowerCase())
+        (t.userEmail && t.userEmail.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (t.shippingAddress?.contactNumber && t.shippingAddress.contactNumber.includes(searchTerm)) ||
+        (t.shippingAddress?.city && t.shippingAddress.city.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (t.status && t.status.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     // Pagination logic
@@ -175,12 +221,15 @@ const TransactionHistory: React.FC = () => {
 
                                         {/* Status */}
                                         <td className="px-6 py-6 align-top">
-                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${t.status === 'Delivered' ? 'bg-green-50 text-green-700 border border-green-100' :
-                                                t.status === 'Dispatched' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
-                                                    t.status === 'Packaging' ? 'bg-yellow-50 text-yellow-700 border border-yellow-100' :
-                                                        'bg-gray-100 text-gray-700 border border-gray-200'
-                                                }`}>
-                                                {t.status}
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${
+                                                t.status?.toLowerCase() === 'delivered' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                                                t.status?.toLowerCase() === 'dispatched' || t.status?.toLowerCase() === 'shipped' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                                                t.status?.toLowerCase() === 'packaging' || t.status?.toLowerCase() === 'processing' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                                                t.status?.toLowerCase() === 'placed' || t.status?.toLowerCase() === 'confirmed' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' :
+                                                t.status?.toLowerCase() === 'cancelled' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                                                'bg-gray-100 text-gray-700 border border-gray-200'
+                                            }`}>
+                                                {t.status || 'Placed'}
                                             </span>
                                         </td>
 

@@ -1,6 +1,5 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { ShippingAddressService } from '../../lib/api_controller';
+import { ShippingAddressService, OrderService } from '../../lib/api_controller';
 import { Search, RefreshCw, MapPin, Eye } from 'lucide-react';
 
 const AdminShipping: React.FC = () => {
@@ -14,9 +13,44 @@ const AdminShipping: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await ShippingAddressService.getAll();
-      const data = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-      setAddresses(data);
+      const addressMap = new Map<string, any>();
+
+      // 1. Fetch from ShippingAddressService
+      try {
+        const res = await ShippingAddressService.getAll();
+        const data = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+        data.forEach((a: any) => {
+          const key = `${a.houseNo || ''}_${a.street || ''}_${a.pincode || ''}_${a.contactNumber || ''}`.toLowerCase();
+          addressMap.set(key, { ...a, source: 'Saved Address' });
+        });
+      } catch (e) {
+        console.warn('ShippingAddressService.getAll warning:', e);
+      }
+
+      // 2. Fetch from OrderService to include all live order delivery addresses
+      try {
+        const orderRes = await OrderService.getAll();
+        const orders = Array.isArray(orderRes.data) ? orderRes.data : (orderRes.data?.data || []);
+        orders.forEach((o: any) => {
+          const addr = o.shippingAddress;
+          if (addr && (addr.city || addr.street || addr.pincode)) {
+            const key = `${addr.houseNo || ''}_${addr.street || ''}_${addr.pincode || ''}_${addr.contactNumber || ''}`.toLowerCase();
+            if (!addressMap.has(key)) {
+              addressMap.set(key, {
+                ...addr,
+                _id: o._id || o.id,
+                userEmail: o.userEmail || o.email || '',
+                source: `Order #${String(o._id || o.id).slice(-6)}`,
+                orderStatus: o.status,
+              });
+            }
+          }
+        });
+      } catch (e) {
+        console.warn('OrderService.getAll shipping extract warning:', e);
+      }
+
+      setAddresses(Array.from(addressMap.values()));
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -76,9 +110,24 @@ const AdminShipping: React.FC = () => {
                 {paginated.map((a: any) => (
                   <tr key={a._id || a.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-gray-300 shrink-0" />
-                        <span className="text-gray-700">{a.houseNo || ''} {a.street || ''}</span>
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-brand-500 shrink-0 mt-0.5" />
+                        <div>
+                          <div className="text-gray-900 font-medium">{a.houseNo || ''} {a.street || ''}</div>
+                          {a.buildingName && <div className="text-xs text-gray-500">{a.buildingName}</div>}
+                          <div className="flex items-center gap-2 mt-1">
+                            {a.source && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand-50 text-brand-700 font-medium">
+                                {a.source}
+                              </span>
+                            )}
+                            {a.userEmail && (
+                              <span className="text-[11px] text-gray-400">
+                                {a.userEmail}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-gray-600">{a.city || '—'}, {a.state || '—'}</td>

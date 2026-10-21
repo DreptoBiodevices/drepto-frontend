@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ADMIN_CREDENTIALS, ADMIN_AUTH_KEY } from './adminData';
+import { UserService } from '../../lib/api_controller';
 import { ShieldCheck, Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const AdminLogin: React.FC = () => {
@@ -11,7 +12,7 @@ const AdminLogin: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -23,6 +24,17 @@ const AdminLogin: React.FC = () => {
 
     if (inputEmail === targetEmail && inputPass === targetPass) {
       localStorage.setItem(ADMIN_AUTH_KEY, 'true');
+
+      let authToken = 'admin_session_token';
+      try {
+        const apiLoginRes = await UserService.login({ email: targetEmail, password: targetPass });
+        if (apiLoginRes?.data?.token) {
+          authToken = apiLoginRes.data.token;
+        }
+      } catch (err) {
+        console.warn('Backend admin login fallback', err);
+      }
+
       const adminUser = {
         id: 'admin_master',
         firstName: 'Drepto',
@@ -31,7 +43,7 @@ const AdminLogin: React.FC = () => {
         role: 'Admin',
       };
       localStorage.setItem('user', JSON.stringify(adminUser));
-      localStorage.setItem('token', 'admin_session_token');
+      localStorage.setItem('token', authToken);
       window.dispatchEvent(new Event('admin-auth-change'));
       navigate('/admin/dashboard');
     } else {

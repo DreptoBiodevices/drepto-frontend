@@ -4,6 +4,7 @@ import { OrderService } from '../../lib/api_controller';
 import { Search, RefreshCw, ChevronDown, Package, Truck, CheckCircle, XCircle, Clock, Eye } from 'lucide-react';
 
 const statusConfig = {
+  placed:     { label: 'Placed',     color: 'bg-teal-50 text-teal-700 border-teal-200',       icon: <Package className="w-3 h-3" /> },
   pending:    { label: 'Pending',    color: 'bg-amber-50 text-amber-700 border-amber-200',   icon: <Clock className="w-3 h-3" /> },
   processing: { label: 'Processing', color: 'bg-blue-50 text-blue-700 border-blue-200',     icon: <Package className="w-3 h-3" /> },
   shipped:    { label: 'Shipped',    color: 'bg-indigo-50 text-indigo-700 border-indigo-200', icon: <Truck className="w-3 h-3" /> },

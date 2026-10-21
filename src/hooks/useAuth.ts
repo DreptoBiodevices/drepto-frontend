@@ -80,6 +80,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // Check for Admin credentials to automatically open the admin portal
       if (identifier.trim().toLowerCase() === adminEmail && password.trim() === adminPassword) {
         localStorage.setItem('adminAuth', 'true');
+
+        let authToken = 'admin_session_token';
+        try {
+          const apiLoginRes = await UserService.login({ email: adminEmail, password: adminPassword });
+          if (apiLoginRes?.data?.token) {
+            authToken = apiLoginRes.data.token;
+          }
+        } catch (apiErr) {
+          console.warn('Backend admin token generation fallback', apiErr);
+        }
+
         const adminUser: User = {
           id: 'admin_master',
           firstName: 'Drepto',
@@ -88,7 +99,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           role: UserRole.ADMIN,
         };
         localStorage.setItem('user', JSON.stringify(adminUser));
-        localStorage.setItem('token', 'admin_session_token');
+        localStorage.setItem('token', authToken);
         setUser(adminUser);
         window.dispatchEvent(new Event('admin-auth-change'));
         window.location.href = '/admin/dashboard';
