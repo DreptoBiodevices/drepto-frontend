@@ -99,6 +99,7 @@ const Main: React.FC = () => {
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/" replace />} />
           <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/" replace />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
 

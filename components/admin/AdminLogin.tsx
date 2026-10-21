@@ -2,64 +2,112 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ADMIN_CREDENTIALS, ADMIN_AUTH_KEY } from './adminData';
+import { ShieldCheck, Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
 
-const AdminLogin = () => {
+const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    console.log('Attempting admin login with:', { email, password });
-    console.log('Expected:', ADMIN_CREDENTIALS);
+    setLoading(true);
 
-    if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-      console.log('Credentials match! Setting localStorage and navigating...');
+    const inputEmail = email.trim().toLowerCase();
+    const targetEmail = (ADMIN_CREDENTIALS.email || 'Dreptoadmin@gmail.com').trim().toLowerCase();
+    const inputPass = password.trim();
+    const targetPass = (ADMIN_CREDENTIALS.password || 'Drepto2025').trim();
+
+    if (inputEmail === targetEmail && inputPass === targetPass) {
       localStorage.setItem(ADMIN_AUTH_KEY, 'true');
-      // Dispatch custom event for same-tab updates
+      const adminUser = {
+        id: 'admin_master',
+        firstName: 'Drepto',
+        lastName: 'Admin',
+        email: ADMIN_CREDENTIALS.email,
+        role: 'Admin',
+      };
+      localStorage.setItem('user', JSON.stringify(adminUser));
+      localStorage.setItem('token', 'admin_session_token');
       window.dispatchEvent(new Event('admin-auth-change'));
       navigate('/admin/dashboard');
     } else {
-      console.log('Credentials mismatch');
-      setError('Invalid admin credentials');
+      setError('Invalid admin credentials. Please verify your email and password.');
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-light-blue flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-        <h1 className="text-2xl font-bold text-primary mb-6 text-center">Admin Login</h1>
-        {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <div className="flex flex-col items-center text-center mb-8">
+          <div className="w-12 h-12 rounded-xl bg-teal-600 flex items-center justify-center text-white mb-3 shadow-md shadow-teal-600/20">
+            <ShieldCheck className="w-6 h-6" />
+          </div>
+          <h1 className="text-xl font-bold text-gray-900">Admin Portal</h1>
+          <p className="text-xs text-gray-500 mt-1">Sign in with authorized Drepto administrator credentials</p>
+        </div>
+
+        {error && (
+          <div className="mb-5 p-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="admin@gmail.com"
-              required
-            />
+            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+              Admin Email
+            </label>
+            <div className="relative">
+              <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition-all"
+                placeholder="Dreptoadmin@gmail.com"
+                required
+              />
+            </div>
           </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="********"
-              required
-            />
+            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+              Password
+            </label>
+            <div className="relative">
+              <Lock className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition-all"
+                placeholder="••••••••"
+                required
+              />
+            </div>
           </div>
-          <button type="submit" className="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-teal-700 transition-colors">
-            Login
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full mt-2 bg-teal-600 text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-teal-700 active:scale-[0.99] transition-all shadow-md shadow-teal-600/20 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+          >
+            {loading ? 'Authenticating…' : 'Enter Admin Portal'}
+            <ArrowRight className="w-4 h-4" />
           </button>
-          <button type="button" onClick={() => navigate('/auth')} className="w-full text-primary mt-2 hover:underline">
-            Back to user login
+
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="w-full py-2 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors flex items-center justify-center gap-1.5"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Return to store
           </button>
         </form>
       </div>

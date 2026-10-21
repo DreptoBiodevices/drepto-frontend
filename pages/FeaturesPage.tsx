@@ -59,6 +59,7 @@ const features: FeatureItem[] = [
     image: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=80',
     color: 'from-emerald-500 to-teal-600',
   },
+  {
     icon: <HeartPulse className="w-7 h-7" />,
     title: 'Home Nursing',
     subtitle: 'Compassionate, certified in-home clinical care',

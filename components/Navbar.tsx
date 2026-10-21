@@ -27,6 +27,7 @@ import {
   Check,
   AlertCircle,
   BookOpen,
+  Shield,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -463,8 +464,17 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
             <div className="flex items-center space-x-3 pl-3 border-l border-slate-200">
               {user ? (
                 <>
+                  {(user.role === 'Admin' || localStorage.getItem('adminAuth') === 'true') && (
+                    <button
+                      onClick={() => navigate('/admin/dashboard')}
+                      className="px-3 py-1 font-semibold text-xs text-brand-700 bg-brand-50 border border-brand-200 rounded-md hover:bg-brand-100 transition-colors flex items-center gap-1.5 shadow-xs"
+                    >
+                      <Shield className="w-3.5 h-3.5" />
+                      Admin Portal
+                    </button>
+                  )}
                   <button
-                    onClick={() => navigate('/profile')}
+                    onClick={() => navigate(user.role === 'Admin' ? '/admin/dashboard' : '/profile')}
                     className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors flex items-center gap-1"
                   >
                     <User className="w-4 h-4" />
@@ -775,6 +785,20 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                         <span className="text-base">{t('util.dashboard')}</span>
                       </div>
                     </button>
+                    {(user.role === 'Admin' || localStorage.getItem('adminAuth') === 'true') && (
+                      <button
+                        onClick={() => { navigate('/admin/dashboard'); setIsMobileMenuOpen(false); }}
+                        className="w-full flex items-center justify-between p-3 rounded-xl transition-all group bg-brand-50 text-brand-800 font-semibold border border-brand-200"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-brand-700 text-white">
+                            <Shield className="w-5 h-5" />
+                          </div>
+                          <span className="text-base">Admin Portal</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-brand-600" />
+                      </button>
+                    )}
                   </>
                 )}
 

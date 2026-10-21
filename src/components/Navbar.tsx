@@ -49,7 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {}, isMobileMenuOpen: ext
     { name: 'Our Products', path: '/our-products', icon: ShoppingBag },
     // { name: 'Features', ref: sectionRefs.product, path: '/', icon: Zap },
     { name: 'About Us', path: '/about-us', icon: Info },
-    { name: 'Contact', ref: sectionRefs.contact, path: '/', icon: Mail },
+    { name: 'Contact', ref: (sectionRefs as any)?.contact, path: '/', icon: Mail },
   ];
 
   const handleNavigation = (link: typeof navLinks[0]) => {

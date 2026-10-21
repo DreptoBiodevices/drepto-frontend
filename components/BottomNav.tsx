@@ -1,18 +1,20 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, TestTube2, ShoppingBag, User, Package } from 'lucide-react';
+import { Home, TestTube2, ShoppingBag, User, Package, Shield } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const BottomNav: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, setAuthModalView } = useAuth();
+  const isAdmin = user?.role === 'Admin' || localStorage.getItem('adminAuth') === 'true';
 
   const navItems = [
     { name: 'Home',      icon: Home,       path: '/' },
     { name: 'Cart',      icon: ShoppingBag, path: '/cart' },
     { name: 'Orders',    icon: Package,     path: '/orders', authRequired: true },
-    { name: 'Profile',   icon: User,        path: user ? '/profile' : '/auth' },
+    ...(isAdmin ? [{ name: 'Admin', icon: Shield, path: '/admin/dashboard' }] : []),
+    { name: 'Profile',   icon: User,        path: user ? (isAdmin ? '/admin/dashboard' : '/profile') : '/auth' },
   ];
 
   const handleNavClick = (item: typeof navItems[0]) => {

@@ -36,7 +36,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             if (parsedUser.role === UserRole.NURSE) {
               response = await NurseService.getNurseById(parsedUser.id);
             } else if (parsedUser.role === UserRole.DOCTOR || parsedUser.role === UserRole.ADMIN) {
-              response = await AuthorizedService.getAuthorizedById(parsedUser.id);
+              if (parsedUser.id !== 'admin_master') {
+                response = await AuthorizedService.getAuthorizedById(parsedUser.id);
+              }
             } else {
               // Default Patient
               response = await UserService.getUserById(parsedUser.id);
@@ -72,6 +74,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       if (!password) throw new Error("Password is required");
 
+      const adminEmail = (import.meta.env.VITE_ADMIN_EMAIL || 'Dreptoadmin@gmail.com').trim().toLowerCase();
+      const adminPassword = (import.meta.env.VITE_ADMIN_PASSWORD || 'Drepto2025').trim();
+
+      // Check for Admin credentials to automatically open the admin portal
+      if (identifier.trim().toLowerCase() === adminEmail && password.trim() === adminPassword) {
+        localStorage.setItem('adminAuth', 'true');
+        const adminUser: User = {
+          id: 'admin_master',
+          firstName: 'Drepto',
+          lastName: 'Admin',
+          email: adminEmail,
+          role: UserRole.ADMIN,
+        };
+        localStorage.setItem('user', JSON.stringify(adminUser));
+        localStorage.setItem('token', 'admin_session_token');
+        setUser(adminUser);
+        window.dispatchEvent(new Event('admin-auth-change'));
+        window.location.href = '/admin/dashboard';
+        return;
+      }
+
       let response;
       // If identifier looks like an email, it MUST be a User/Patient or Admin email login (if supported)
       // But endpoint docs say 'mobileNumber' for Nurse/Authorized. User supports 'email' OR 'mobileNumber'
@@ -81,8 +104,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         mobileNumber: isEmail ? undefined : Number(identifier),
         password,
       };
-
-
 
       if (role === 'Nurse') {
         if (isEmail) throw new Error("Nurses must login with a mobile number.");
@@ -98,13 +119,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         response = await UserService.login(userPayload);
       }
 
-      const { token, ...userData } = response.data; // Adjust based on actual API response structure
-      // If the response structure is different (e.g. data.token, data.user), we might need to adjust.
-      // Assuming response.data contains the token and user fields directly or nested.
-
-      // Let's assume standard JWT response: { accessToken: "...", user: { ... } } or similar.
-      // Since I don't have the response example, I'll log it and try to adapt.
-
+      const { token, ...userData } = response.data;
 
       const authToken = response.data.accessToken || response.data.token;
       const userObj = response.data.user || response.data.data || userData;
@@ -123,7 +138,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         mobileNumber: userObj.mobileNumber,
         gender: userObj.gender,
         age: userObj.age,
-        // Add other fields as needed
         ...userObj
       };
 
@@ -131,8 +145,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(appUser);
 
     } catch (error: any) {
-      console.error("Login failed full error:", error); // Enhanced Logging
-      console.error("Login response data:", error.response?.data); // Log response data
+      console.error("Login failed full error:", error);
+      console.error("Login response data:", error.response?.data);
       throw new Error(error.response?.data?.message || error.message || "Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
@@ -142,6 +156,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('adminAuth');
+    window.dispatchEvent(new Event('admin-auth-change'));
     setUser(null);
   };
 
