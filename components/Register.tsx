@@ -1,6 +1,7 @@
 
 
 import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import BackButton from './BackButton';
@@ -23,6 +24,8 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
     password: '',
     confirmPassword: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState('');
   const [passwordStrength, setPasswordStrength] = useState<{ strong: boolean; message: string }>({ strong: false, message: '' });
@@ -148,15 +151,25 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
         </div>
 
         <div className="space-y-1">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary ${formData.password && !passwordStrength.strong ? 'border-red-500' : 'border-gray-300'
-              }`}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-primary focus:border-primary ${formData.password && !passwordStrength.strong ? 'border-red-500' : 'border-gray-300'
+                }`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
           {formData.password && (
             <p className={`text-xs ${passwordStrength.strong ? 'text-green-600' : 'text-red-500'}`}>
               {passwordStrength.message}
@@ -164,14 +177,24 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
           )}
         </div>
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
-        />
+        <div className="relative">
+          <input
+            type={showConfirmPassword ? 'text' : 'password'}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary"
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+            aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+          >
+            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+          </button>
+        </div>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
