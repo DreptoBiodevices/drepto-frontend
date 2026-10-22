@@ -6,19 +6,47 @@ import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+export interface PackageDetail {
+    length?: number;   // cm
+    breadth?: number;  // cm
+    height?: number;   // cm
+    weight?: number;   // grams
+}
+
 export interface Product {
     _id?: string;
+    /* ── Core Info ── */
     name: string;
     description: string;
     detailedDescription?: string;
+    /* ── Pricing ── */
     price: number;
     mrp: number;
+    offerDescription?: string;      // e.g. "Buy 2 Get 1 Free"
+    /* ── Media ── */
     images: string[];
+    /* ── Classification ── */
     category: string;
-    ingredients?: string[];
+    quantity?: string;              // e.g. "500ml", "100 tablets"
+    form?: string;                  // e.g. "Tablet", "Liquid", "Cream"
+    containerType?: string;         // e.g. "Bottle", "Blister Pack", "Tube"
+    applicationArea?: string;       // e.g. "Face", "Body", "Scalp"
+    packOf?: number;                // e.g. 1, 3, 6
+    idealsFor?: string;             // e.g. "Men", "Women", "All Skin Types"
+    licenseNumber?: string;         // Drug / FSSAI / manufacturing licence
+    itemIncluded?: string[];        // e.g. ["1 Bottle", "1 Dropper"]
+    /* ── Product Details ── */
+    keyFeatures?: string[];         // Bullet-point feature highlights
+    keySpecs?: string[];            // Technical specs, e.g. ["SPF 50", "pH 5.5"]
+    composition?: string[];         // Active ingredients / formula breakdown
+    ingredients?: string[];         // Full ingredient list
     benefits?: string[];
     sideEffects?: string[];
     developmentStory?: string;
+    /* ── Shelf Life ── */
+    maximumShelfLife?: string;      // e.g. "24 months from manufacture date"
+    /* ── Package Details ── */
+    packageDetail?: PackageDetail;
 }
 
 const ProductDetailPage: React.FC = () => {
@@ -407,13 +435,15 @@ const ProductDetailPage: React.FC = () => {
                                     <span className="text-lg text-gray-400 line-through font-medium">₹{product.mrp}</span>
                                 )}
                             </div>
-                            {/* Buy 1 Get 1 Free Badge */}
-                            <div className="mt-3">
-                                <span className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold tracking-wide px-3 py-1.5 rounded-lg">
-                                    <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-                                    Buy 1 Get 1 Free — Pay for 1, Receive 2
-                                </span>
-                            </div>
+                            {/* Offer Description Badge */}
+                            {product.offerDescription && (
+                                <div className="mt-3">
+                                    <span className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold tracking-wide px-3 py-1.5 rounded-lg">
+                                        <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                                        {product.offerDescription}
+                                    </span>
+                                </div>
+                            )}
                         </div>
 
                         {/* Scrollable Content */}
@@ -446,6 +476,162 @@ const ProductDetailPage: React.FC = () => {
                                     <div className="flex flex-wrap gap-2">
                                         {product.ingredients.map((ing, idx) => (
                                             <span key={idx} className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-sm font-semibold border border-emerald-100">{ing}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Composition */}
+                            {product.composition && product.composition.length > 0 && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4 flex items-center gap-2"><Leaf className="w-5 h-5 text-teal-600" /> Composition</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {product.composition.map((comp, idx) => (
+                                            <span key={idx} className="bg-teal-50 text-teal-700 px-4 py-2 rounded-xl text-sm font-semibold border border-teal-100">{comp}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Key Features */}
+                            {product.keyFeatures && product.keyFeatures.length > 0 && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4 flex items-center gap-2"><BookOpen className="w-5 h-5 text-blue-600" /> Key Features</h3>
+                                    <ul className="space-y-2">
+                                        {product.keyFeatures.map((feat, idx) => (
+                                            <li key={idx} className="flex items-start gap-2 text-gray-700 text-sm">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0" />
+                                                {feat}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {/* Key Specs */}
+                            {product.keySpecs && product.keySpecs.length > 0 && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4">Key Specifications</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {product.keySpecs.map((spec, idx) => (
+                                            <span key={idx} className="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200">{spec}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Benefits */}
+                            {product.benefits && product.benefits.length > 0 && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4">Benefits</h3>
+                                    <ul className="space-y-2">
+                                        {product.benefits.map((ben, idx) => (
+                                            <li key={idx} className="flex items-start gap-2 text-gray-700 text-sm">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 shrink-0" />
+                                                {ben}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {/* Side Effects */}
+                            {product.sideEffects && product.sideEffects.length > 0 && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4">Side Effects</h3>
+                                    <ul className="space-y-2">
+                                        {product.sideEffects.map((se, idx) => (
+                                            <li key={idx} className="flex items-start gap-2 text-amber-700 text-sm">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
+                                                {se}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {/* Product Quick-Info Table */}
+                            {(product.quantity || product.form || product.containerType || product.applicationArea || product.packOf || product.idealsFor || product.maximumShelfLife || product.licenseNumber) && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4">Product Information</h3>
+                                    <div className="bg-gray-50 rounded-2xl border border-gray-100 divide-y divide-gray-100">
+                                        {product.quantity && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">Quantity</span>
+                                                <span className="text-gray-900 font-semibold">{product.quantity}</span>
+                                            </div>
+                                        )}
+                                        {product.form && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">Form</span>
+                                                <span className="text-gray-900 font-semibold">{product.form}</span>
+                                            </div>
+                                        )}
+                                        {product.containerType && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">Container Type</span>
+                                                <span className="text-gray-900 font-semibold">{product.containerType}</span>
+                                            </div>
+                                        )}
+                                        {product.applicationArea && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">Application Area</span>
+                                                <span className="text-gray-900 font-semibold">{product.applicationArea}</span>
+                                            </div>
+                                        )}
+                                        {product.packOf && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">Pack of</span>
+                                                <span className="text-gray-900 font-semibold">{product.packOf}</span>
+                                            </div>
+                                        )}
+                                        {product.idealsFor && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">Ideal For</span>
+                                                <span className="text-gray-900 font-semibold">{product.idealsFor}</span>
+                                            </div>
+                                        )}
+                                        {product.maximumShelfLife && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">Shelf Life</span>
+                                                <span className="text-gray-900 font-semibold">{product.maximumShelfLife}</span>
+                                            </div>
+                                        )}
+                                        {product.licenseNumber && (
+                                            <div className="flex justify-between px-4 py-3 text-sm">
+                                                <span className="text-gray-500 font-medium">License No.</span>
+                                                <span className="text-gray-900 font-semibold">{product.licenseNumber}</span>
+                                            </div>
+                                        )}
+                                        {product.packageDetail && (product.packageDetail.length || product.packageDetail.breadth || product.packageDetail.height || product.packageDetail.weight) && (
+                                            <>
+                                                {(product.packageDetail.length || product.packageDetail.breadth || product.packageDetail.height) && (
+                                                    <div className="flex justify-between px-4 py-3 text-sm">
+                                                        <span className="text-gray-500 font-medium">Dimensions (L × B × H)</span>
+                                                        <span className="text-gray-900 font-semibold">
+                                                            {[product.packageDetail.length, product.packageDetail.breadth, product.packageDetail.height].filter(v => v !== undefined && v !== null).join(' × ')} cm
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                {product.packageDetail.weight && (
+                                                    <div className="flex justify-between px-4 py-3 text-sm">
+                                                        <span className="text-gray-500 font-medium">Package Weight</span>
+                                                        <span className="text-gray-900 font-semibold">{product.packageDetail.weight} g</span>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Items Included */}
+                            {product.itemIncluded && product.itemIncluded.length > 0 && (
+                                <div>
+                                    <h3 className="text-gray-900 font-bold text-lg mb-4">Items Included</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {product.itemIncluded.map((item, idx) => (
+                                            <span key={idx} className="bg-purple-50 text-purple-700 px-4 py-2 rounded-xl text-sm font-semibold border border-purple-100">{item}</span>
                                         ))}
                                     </div>
                                 </div>

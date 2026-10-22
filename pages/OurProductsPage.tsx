@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { Product } from '../pages/ProductDetailPage';
+import { Product, Order } from '../types';
 import { ProductService, OrderService, PaymentService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
-import { Order } from '../types';
 import VideoTestimonialsSection from '../components/VideoTestimonialsSection';
 
 
@@ -302,6 +300,25 @@ const OurProductsPage: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="p-6 flex-1 flex flex-col">
+                                    {(product.quantity || product.form || (product.packOf && product.packOf > 1)) && (
+                                        <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                                            {product.quantity && (
+                                                <span className="text-[11px] font-medium bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md">
+                                                    {product.quantity}
+                                                </span>
+                                            )}
+                                            {product.form && (
+                                                <span className="text-[11px] font-medium bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md">
+                                                    {product.form}
+                                                </span>
+                                            )}
+                                            {product.packOf && product.packOf > 1 && (
+                                                <span className="text-[11px] font-medium bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md">
+                                                    Pack of {product.packOf}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
                                     <h3
                                         className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-primary transition-colors"
                                         onClick={() => navigate(`/product/${product._id}`)}
@@ -328,10 +345,10 @@ const OurProductsPage: React.FC = () => {
                                                         Save {Math.round(((product.mrp - (product.price || 0)) / product.mrp) * 100)}%
                                                     </span>
                                                 )}
-                                                {/* Buy 1 Get 1 Free Badge */}
+                                                {/* Dynamic Offer Badge */}
                                                 <span className="mt-2 inline-flex items-center gap-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-semibold tracking-wide px-2.5 py-0.5 rounded-md">
                                                     <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-                                                    Buy 1 Get 1 Free
+                                                    {product.offerDescription || 'Buy 1 Get 1 Free'}
                                                 </span>
                                             </div>
 

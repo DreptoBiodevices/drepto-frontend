@@ -50,7 +50,7 @@ const LANGUAGES = [
 
 // ── Searchable items ──
 const SEARCHABLE_ITEMS = [
-  { label: 'Medicines', path: '/medicines', keywords: ['medicine', 'drug', 'pharmacy', 'pill', 'tablet', 'capsule', 'syrup'] },
+  { label: 'Our Products & Medicines', path: '/our-products', keywords: ['medicine', 'drug', 'pharmacy', 'pill', 'tablet', 'capsule', 'syrup', 'relief', 'patch', 'products'] },
   { label: 'Our Products', path: '/our-products', keywords: ['product', 'device', 'biodevice', 'transdermal', 'iontophoretic', 'sample'] },
   { label: 'Our Research', path: '/our-research', keywords: ['research', 'paper', 'menstroherb', 'jaims', 'clinical', 'safety', 'study', 'patent', 'biodevice', 'iit bombay'] },
 ];

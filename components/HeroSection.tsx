@@ -79,7 +79,7 @@ const HeroSection: React.FC = () => {
                  {/* Buy 1 Get 1 Free Banner */}
                  <div className="flex items-center justify-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold tracking-wide px-4 py-2 rounded-xl mb-3">
                    <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-                   <span>Buy 1 Get 1 Free</span>
+                   <span>{featuredProduct.offerDescription || 'Buy 1 Get 1 Free'}</span>
                  </div>
                <div className="bg-white rounded-[2rem] p-6 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-slate-100">
                   <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-brand-50 to-white mb-6 group cursor-pointer border border-brand-100" onClick={() => navigate('/our-products')}>

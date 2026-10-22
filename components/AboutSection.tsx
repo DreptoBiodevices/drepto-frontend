@@ -75,7 +75,7 @@ const AboutSection: React.FC = () => {
             {/* Career CTA */}
             <div className="pt-10">
               <a
-                href="mailto:careers@drepto.in"
+                href="mailto:careers@dreptobiodevices.com"
                 className="inline-flex items-center space-x-2 px-6 py-3.5 bg-white text-slate-900 hover:bg-brand-50 rounded-xl font-bold text-sm tracking-wide transition-all shadow-md"
               >
                 <span>Apply now</span>

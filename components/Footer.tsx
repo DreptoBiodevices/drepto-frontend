@@ -65,7 +65,7 @@ const Footer: React.FC = () => {
                 <Link to="/about-us" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.aboutUs')}</Link>
                 <Link to="/our-research" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Our Research</Link>
                 <Link to="/contact" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.contact')}</Link>
-                <Link to="/our-products" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Pharmacy</Link>
+                <Link to="/our-products" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.ourProducts') || 'Our Products'}</Link>
                 <Link to="/feedback" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Feedback</Link>
                 {/* <Link to="/social" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Blog</Link> */}
               </nav>
@@ -84,8 +84,8 @@ const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/5 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-teal-200/40 text-[11px] font-medium tracking-widest uppercase">
-          <p>&copy; {new Date().getFullYear()} Drepto Biodevices Pvt. Ltd.</p>
-          <p>© Drepto Biodevices Pvt. Ltd. All Rights Reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Drepto Biodevices Pvt. Ltd. All Rights Reserved.</p>
+          <p>Innovating Healthcare & Diagnostics</p>
         </div>
       </div>
     </footer>

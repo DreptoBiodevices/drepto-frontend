@@ -38,6 +38,50 @@ export interface Dosage {
     missedDose: string;
 }
 
+export interface PackageDetail {
+    length?: number;          // cm
+    breadth?: number;         // cm
+    height?: number;          // cm
+    weight?: number;          // grams
+}
+
+export interface Product {
+    _id?: string;
+    id?: string;
+    /* ── Core Info ── */
+    name: string;
+    description: string;
+    detailedDescription?: string;
+    /* ── Pricing ── */
+    price: number;
+    mrp: number;
+    offerDescription?: string;      // e.g. "Buy 2 Get 1 Free"
+    /* ── Media ── */
+    images: string[];
+    /* ── Classification ── */
+    category: string;
+    quantity?: string;              // e.g. "500ml", "100 tablets"
+    form?: string;                  // e.g. "Tablet", "Liquid", "Cream"
+    containerType?: string;         // e.g. "Bottle", "Blister Pack", "Tube"
+    applicationArea?: string;       // e.g. "Face", "Body", "Scalp"
+    packOf?: number;                // e.g. 1, 3, 6
+    idealsFor?: string;             // e.g. "Men", "Women", "All Skin Types"
+    licenseNumber?: string;         // Drug / FSSAI / manufacturing licence
+    itemIncluded?: string[];        // e.g. ["1 Bottle", "1 Dropper"]
+    /* ── Product Details ── */
+    keyFeatures?: string[];         // Bullet-point feature highlights
+    keySpecs?: string[];            // Technical specs, e.g. ["SPF 50", "pH 5.5"]
+    composition?: string[];         // Active ingredients / formula breakdown
+    ingredients?: string[];         // Full ingredient list
+    benefits?: string[];
+    sideEffects?: string[];
+    developmentStory?: string;
+    /* ── Shelf Life ── */
+    maximumShelfLife?: string;      // e.g. "24 months from manufacture date"
+    /* ── Package Details ── */
+    packageDetail?: PackageDetail;
+}
+
 export interface Medicine {
     id: string;
     name: string;

@@ -190,10 +190,9 @@ const InvoicePage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Footer */}
                     <div className="mt-16 pt-8 border-t border-gray-100 text-center text-gray-500 text-sm">
                         <p>Thank you for your business!</p>
-                        <p className="mt-1">For any queries, please contact support@drepto.com or call +91-1234567890</p>
+                        <p className="mt-1">For any queries, please contact office@dreptobiodevices.com or call +91 84518 22256</p>
                     </div>
                 </div>
             </div>
