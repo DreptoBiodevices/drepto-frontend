@@ -5,9 +5,10 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import ShippingAddressForm from '../components/ShippingAddressForm';
 import { Address, Order } from '../types';
-import { Truck, MapPin, CreditCard, X, Check } from 'lucide-react';
+import { Truck, MapPin, CreditCard, X, Check, Tag } from 'lucide-react';
 import useRazorpay from '../hooks/useRazorpay';
 import { PaymentService, OrderService } from '../lib/api_controller';
+import { calculateItemOfferPricing } from '../lib/offerCalculator';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -118,56 +119,30 @@ const CartPage: React.FC = () => {
         return Array.from(groups.values());
     })();
 
-    const calculateSubtotal = () => {
-        // Buy 1 Get 1 Free logic: group by product, for each group pay only ceil(qty/2)
-        const groups = new Map<string, { price: number; quantity: number }>();
-        cart.forEach((item: any) => {
-            const key = item.name || item.title;
-            const price = typeof item.price === 'string'
-                ? parseFloat(item.price.replace(/[^0-9.]/g, ''))
-                : item.price;
-            if (groups.has(key)) {
-                groups.get(key)!.quantity += 1;
-            } else {
-                groups.set(key, { price: isNaN(price) ? 0 : price, quantity: 1 });
-            }
+    const calculateCartTotals = () => {
+        let originalSubtotal = 0;
+        let totalDiscount = 0;
+        let finalSubtotal = 0;
+
+        groupedCart.forEach((item: any) => {
+            const pricing = calculateItemOfferPricing(item, item.quantity);
+            originalSubtotal += pricing.originalTotal;
+            totalDiscount += pricing.discount;
+            finalSubtotal += pricing.finalTotal;
         });
-        let total = 0;
-        groups.forEach(({ price, quantity }) => {
-            const paidUnits = Math.ceil(quantity / 2);
-            total += price * paidUnits;
-        });
-        return total;
+
+        return {
+            originalSubtotal,
+            totalDiscount,
+            finalSubtotal,
+            totalWithShipping: finalSubtotal + shippingCost,
+        };
     };
 
-    const calculateBogoSavings = () => {
-        // Savings = free units * unit price
-        const groups = new Map<string, { price: number; quantity: number }>();
-        cart.forEach((item: any) => {
-            const key = item.name || item.title;
-            const price = typeof item.price === 'string'
-                ? parseFloat(item.price.replace(/[^0-9.]/g, ''))
-                : item.price;
-            if (groups.has(key)) {
-                groups.get(key)!.quantity += 1;
-            } else {
-                groups.set(key, { price: isNaN(price) ? 0 : price, quantity: 1 });
-            }
-        });
-        let savings = 0;
-        groups.forEach(({ price, quantity }) => {
-            const freeUnits = Math.floor(quantity / 2);
-            savings += price * freeUnits;
-        });
-        return savings;
-    };
-
-    // const gstRate = 0.18;
-    // const calculateGST = () => (calculateSubtotal() + shippingCost) * gstRate;
-    // const gstRate = 0.18;
-    // const calculateGST = () => (calculateSubtotal() + shippingCost) * gstRate;
-    // const calculateTotal = () => calculateSubtotal() + shippingCost + calculateGST();
-    const calculateTotal = () => calculateSubtotal() + shippingCost;
+    const calculateSubtotal = () => calculateCartTotals().finalSubtotal;
+    const calculateOfferSavings = () => calculateCartTotals().totalDiscount;
+    const calculateOriginalSubtotal = () => calculateCartTotals().originalSubtotal;
+    const calculateTotal = () => calculateCartTotals().totalWithShipping;
 
     const handleProceedToCheckout = () => {
         if (!user) {
@@ -383,49 +358,74 @@ const CartPage: React.FC = () => {
                                 <div className="md:col-span-2 space-y-4">
                                     {groupedCart.map((item: any, idx: number) => {
                                         const qty = item.quantity;
-                                        const paidUnits = Math.ceil(qty / 2);
-                                        const freeUnits = Math.floor(qty / 2);
+                                        const pricing = calculateItemOfferPricing(item, qty);
+
                                         return (
-                                        <div key={idx} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm">
+                                        <div key={idx} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm hover:border-gray-200 transition-all">
                                             <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
                                                 <img
-                                                    src={Array.isArray(item.images) ? item.images[0] : item.image}
+                                                    src={Array.isArray(item.images) ? item.images[0] : (item.imageUrl || item.image)}
                                                     alt={item.name || item.title}
                                                     className="w-full h-full object-cover"
                                                 />
                                             </div>
                                             <div className="flex-1">
-                                                <h3 className="font-bold text-gray-900">{item.name || item.title}</h3>
-                                                <p className="text-gray-500 text-sm">{item.category}</p>
+                                                <div className="flex flex-wrap items-center gap-2">
+                                                    <h3 className="font-bold text-gray-900">{item.name || item.title}</h3>
+                                                    {pricing.hasOffer && (
+                                                        <span className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-2xs">
+                                                            <Tag className="w-3 h-3 text-emerald-700 shrink-0" />
+                                                            {pricing.offerTitle}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <p className="text-gray-500 text-sm mt-0.5">{item.category}</p>
                                                 {item.shippingSource && (
                                                     <div className="flex items-center gap-1 mt-1 text-xs font-semibold text-blue-600 bg-blue-50 w-fit px-2 py-0.5 rounded-full">
                                                         <Truck className="w-3 h-3" />
                                                         From: {item.shippingSource}
                                                     </div>
                                                 )}
-                                                {/* Buy 1 Get 1 Free info row */}
-                                                {freeUnits > 0 && (
+
+                                                {/* Offer status badge & breakdown */}
+                                                {pricing.freeUnits > 0 && (
                                                     <div className="flex items-center gap-2 mt-1.5">
                                                         <span className="text-xs font-bold text-orange-600 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">
-                                                            {paidUnits} paid
+                                                            {pricing.paidUnits} paid
                                                         </span>
-                                                        <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full animate-pulse">
-                                                            + {freeUnits} FREE 🎁
+                                                        <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                                                            + {pricing.freeUnits} FREE 🎁
                                                         </span>
                                                     </div>
                                                 )}
+
+                                                {pricing.hint && (
+                                                    <div className="mt-1">
+                                                        <span className="text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-md inline-block">
+                                                            💡 {pricing.hint}
+                                                        </span>
+                                                    </div>
+                                                )}
+
                                                 <div className="flex items-center gap-4 mt-2">
                                                     <div className="flex flex-col">
-                                                        <p className="text-primary font-bold">
-                                                            ₹{typeof item.price === 'number' ? item.price : item.price.replace('$', '')} × {paidUnits}
-                                                        </p>
-                                                        {freeUnits > 0 && (
-                                                            <p className="text-green-600 text-xs font-semibold">
-                                                                Saving ₹{(typeof item.price === 'number' ? item.price : parseFloat(item.price.replace(/[^0-9.]/g, ''))) * freeUnits} on free units
+                                                        <div className="flex items-baseline gap-2">
+                                                            <p className="text-primary font-bold text-base">
+                                                                ₹{pricing.finalTotal}
+                                                            </p>
+                                                            {pricing.discount > 0 && (
+                                                                <span className="text-xs text-gray-400 line-through">
+                                                                    ₹{pricing.originalTotal}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        {pricing.discount > 0 && (
+                                                            <p className="text-emerald-700 text-xs font-semibold">
+                                                                Offer savings: ₹{pricing.discount}
                                                             </p>
                                                         )}
                                                     </div>
-                                                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                                                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50 ml-auto sm:ml-0">
                                                         <button 
                                                             onClick={() => removeOneFromCart(item.name || item.title)}
                                                             className="px-3 py-1 text-gray-600 hover:bg-gray-200 hover:text-red-500 font-bold transition-colors"
@@ -453,33 +453,35 @@ const CartPage: React.FC = () => {
                                 <div className="md:col-span-1">
                                     <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
                                         <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
-                                        {/* Buy 1 Get 1 Free Banner */}
-                                        {calculateBogoSavings() > 0 && (
-                                            <div className="flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 mb-4">
-                                                <svg className="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                                        {/* Dynamic Offer Banner */}
+                                        {calculateOfferSavings() > 0 && (
+                                            <div className="flex items-center gap-2.5 bg-emerald-50 border border-emerald-300 rounded-xl px-4 py-3 mb-4 shadow-2xs">
+                                                <Tag className="w-4 h-4 text-emerald-700 shrink-0" />
                                                 <div>
-                                                    <p className="text-xs font-semibold text-emerald-800">Buy 1 Get 1 Free applied</p>
-                                                    <p className="text-xs text-emerald-600 mt-0.5">You save ₹{calculateBogoSavings().toFixed(2)}</p>
+                                                    <p className="text-xs font-semibold text-emerald-900">Direct Product Offers Applied</p>
+                                                    <p className="text-xs text-emerald-700 mt-0.5">You save ₹{calculateOfferSavings().toFixed(2)} on this order!</p>
                                                 </div>
                                             </div>
                                         )}
                                         <div className="flex justify-between mb-2 text-gray-600">
-                                            <span>Items ({cart.length} units)</span>
-                                            <span className="line-through text-gray-400">₹{(calculateSubtotal() + calculateBogoSavings()).toFixed(2)}</span>
+                                            <span>Original Total ({cart.length} units)</span>
+                                            <span className={calculateOfferSavings() > 0 ? "line-through text-gray-400" : "text-gray-900 font-semibold"}>
+                                                ₹{calculateOriginalSubtotal().toFixed(2)}
+                                            </span>
                                         </div>
-                                        {calculateBogoSavings() > 0 && (
-                                            <div className="flex justify-between mb-2 text-green-600 font-semibold">
-                                                <span className="text-emerald-700 font-medium">Buy 1 Get 1 Free</span>
-                                                <span>-₹{calculateBogoSavings().toFixed(2)}</span>
+                                        {calculateOfferSavings() > 0 && (
+                                            <div className="flex justify-between mb-2 text-emerald-700 font-semibold text-sm">
+                                                <span>Offer Discount</span>
+                                                <span>-₹{calculateOfferSavings().toFixed(2)}</span>
                                             </div>
                                         )}
                                         <div className="flex justify-between mb-2 text-gray-600">
-                                            <span>You Pay</span>
+                                            <span>Subtotal</span>
                                             <span className="font-bold text-gray-900">₹{calculateSubtotal().toFixed(2)}</span>
                                         </div>
                                         <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6">
                                             <span>Est. Total</span>
-                                            <span>₹{calculateSubtotal().toFixed(2)}</span>
+                                            <span className="text-primary">₹{calculateSubtotal().toFixed(2)}</span>
                                         </div>
                                         <button
                                             onClick={handleProceedToCheckout}
@@ -575,18 +577,20 @@ const CartPage: React.FC = () => {
 
                                         <div className="pt-4 mt-4 border-t space-y-2">
                                             <div className="flex justify-between text-sm text-gray-600">
-                                                <span>Items ({cart.length} units)</span>
-                                                <span className="line-through text-gray-400">₹{(calculateSubtotal() + calculateBogoSavings()).toFixed(2)}</span>
+                                                <span>Original Total ({cart.length} units)</span>
+                                                <span className={calculateOfferSavings() > 0 ? "line-through text-gray-400" : "font-semibold text-gray-800"}>
+                                                    ₹{calculateOriginalSubtotal().toFixed(2)}
+                                                </span>
                                             </div>
-                                            {calculateBogoSavings() > 0 && (
-                                                <div className="flex justify-between text-sm text-green-600 font-semibold">
-                                                    <span className="text-emerald-700 font-medium">Buy 1 Get 1 Free</span>
-                                                    <span>-₹{calculateBogoSavings().toFixed(2)}</span>
+                                            {calculateOfferSavings() > 0 && (
+                                                <div className="flex justify-between text-sm text-emerald-700 font-semibold">
+                                                    <span>Offer Discount</span>
+                                                    <span>-₹{calculateOfferSavings().toFixed(2)}</span>
                                                 </div>
                                             )}
                                             <div className="flex justify-between text-sm text-gray-600">
-                                                <span>You Pay</span>
-                                                <span className="font-bold">₹{calculateSubtotal().toFixed(2)}</span>
+                                                <span>Subtotal</span>
+                                                <span className="font-bold text-gray-900">₹{calculateSubtotal().toFixed(2)}</span>
                                             </div>
                                             <div className="flex justify-between text-sm text-gray-600">
                                                 <span>Shipping ({shippingMethod})</span>
@@ -594,7 +598,7 @@ const CartPage: React.FC = () => {
                                             </div>
                                             <div className="flex justify-between text-lg font-bold text-gray-900 mt-2 pt-2 border-t border-dashed">
                                                 <span>Total Amount</span>
-                                                <span>₹{calculateTotal().toFixed(2)}</span>
+                                                <span className="text-primary">₹{calculateTotal().toFixed(2)}</span>
                                             </div>
 
                                             <p className="text-xs text-center text-gray-500 mt-4">

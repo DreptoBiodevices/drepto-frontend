@@ -19,6 +19,7 @@ export interface User {
     bloodGroup?: string;
     weight?: number | string;
     profileImage?: string;
+    address?: string;
     // Nurse specific fields
     serviceTypes?: string[];
 }
@@ -45,6 +46,20 @@ export interface PackageDetail {
     weight?: number;          // grams
 }
 
+export type OfferType = 'BOGO' | 'PERCENTAGE' | 'FLAT';
+
+export interface ProductOffer {
+    title?: string;               // e.g. "Buy 2 Get 1 Free", "20% OFF"
+    description?: string;         // Explanatory note
+    type?: OfferType;             // 'BOGO' | 'PERCENTAGE' | 'FLAT'
+    buyQuantity?: number;         // e.g. 2 for Buy 2
+    getFreeQuantity?: number;     // e.g. 1 for Get 1 Free
+    discountPercentage?: number;  // e.g. 20 for 20% off
+    flatDiscount?: number;        // e.g. 100 for ₹100 off
+    minQuantity?: number;         // Minimum quantity to activate, default 1
+    isActive?: boolean;
+}
+
 export interface Product {
     _id?: string;
     id?: string;
@@ -56,6 +71,7 @@ export interface Product {
     price: number;
     mrp: number;
     offerDescription?: string;      // e.g. "Buy 2 Get 1 Free"
+    offer?: ProductOffer;           // Structured Offer DTO
     /* ── Media ── */
     images: string[];
     /* ── Classification ── */

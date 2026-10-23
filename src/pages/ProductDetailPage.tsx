@@ -9,12 +9,27 @@ import { api, ProductService } from '../lib/api_controller';
 import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { calculateItemOfferPricing } from '../lib/offerCalculator';
 
 export interface PackageDetail {
     length?: number;   // cm
     breadth?: number;  // cm
     height?: number;   // cm
     weight?: number;   // grams
+}
+
+export type OfferType = 'BOGO' | 'PERCENTAGE' | 'FLAT';
+
+export interface ProductOffer {
+    title?: string;
+    description?: string;
+    type?: OfferType;
+    buyQuantity?: number;
+    getFreeQuantity?: number;
+    discountPercentage?: number;
+    flatDiscount?: number;
+    minQuantity?: number;
+    isActive?: boolean;
 }
 
 export interface Product {
@@ -27,6 +42,7 @@ export interface Product {
     price: number;
     mrp: number;
     offerDescription?: string;      // e.g. "Buy 2 Get 1 Free"
+    offer?: ProductOffer;
     /* ── Media ── */
     images: string[];
     /* ── Classification ── */
@@ -176,8 +192,9 @@ const ProductDetailPage: React.FC = () => {
         reviewsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const paidUnits = Math.ceil(cartCount / 2);
-    const freeUnits = Math.floor(cartCount / 2);
+    const offerPricing = calculateItemOfferPricing(product, cartCount || 1);
+    const paidUnits = offerPricing.paidUnits;
+    const freeUnits = offerPricing.freeUnits;
 
     return (
         <div className="min-h-screen bg-slate-50/60 flex flex-col font-sans">
@@ -359,10 +376,12 @@ const ProductDetailPage: React.FC = () => {
                                 </div>
 
                                 {/* Dynamic Offer Badge (Design 2: Mint pill with Tag icon) */}
-                                <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full shadow-2xs shrink-0">
-                                    <Tag className="w-4 h-4 text-emerald-700 shrink-0" />
-                                    <span>{product.offerDescription || 'Buy 2 Get 1 Free'}</span>
-                                </div>
+                                {(product.offer?.isActive !== false && (product.offer?.title || product.offerDescription)) && (
+                                    <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full shadow-2xs shrink-0">
+                                        <Tag className="w-4 h-4 text-emerald-700 shrink-0" />
+                                        <span>{product.offer?.title || product.offerDescription || 'Buy 2 Get 1 Free'}</span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* ── Direct Purchase Action Bar (Right below price, zero scrolling needed!) ── */}
@@ -382,11 +401,15 @@ const ProductDetailPage: React.FC = () => {
                                                 </button>
                                                 <div className="text-center">
                                                     <span className="font-extrabold text-gray-900 text-base">{cartCount} in Cart</span>
-                                                    {freeUnits > 0 && (
+                                                    {freeUnits > 0 ? (
                                                         <span className="block text-[10px] font-bold text-emerald-600 leading-none">
                                                             {paidUnits} paid + {freeUnits} FREE
                                                         </span>
-                                                    )}
+                                                    ) : (cartCount > 0 && offerPricing.discount > 0) ? (
+                                                        <span className="block text-[10px] font-bold text-emerald-600 leading-none">
+                                                            Save ₹{offerPricing.discount}
+                                                        </span>
+                                                    ) : null}
                                                 </div>
                                                 <button 
                                                     onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
@@ -419,8 +442,8 @@ const ProductDetailPage: React.FC = () => {
                                         >
                                             <span>
                                                 {cartCount === 0 
-                                                    ? 'Buy Now · Add 2 for BOGO Free' 
-                                                    : `Proceed to Checkout (${cartCount} items)`}
+                                                    ? (product.offer?.title ? `Buy Now · ${product.offer.title}` : (product.offerDescription ? `Buy Now · ${product.offerDescription}` : 'Buy Now')) 
+                                                    : `Proceed to Checkout (${cartCount} item${cartCount > 1 ? 's' : ''} · ₹${calculateItemOfferPricing(product, cartCount).finalTotal})`}
                                             </span>
                                             <ArrowRight className="w-4 h-4" />
                                         </button>
