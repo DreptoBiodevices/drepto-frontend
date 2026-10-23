@@ -31,66 +31,48 @@ const OrderHistoryPage: React.FC = () => {
         const fetchAllData = async () => {
             setIsLoading(true);
             try {
-                // 1. Fetch Orders from API and merge with localStorage
+                let localOrders: Order[] = [];
                 try {
-                    let localOrders: Order[] = [];
                     const storedOrders = localStorage.getItem('orders');
-                    if (storedOrders) {
-                        localOrders = JSON.parse(storedOrders);
-                    }
+                    if (storedOrders) localOrders = JSON.parse(storedOrders);
+                } catch (e) {
+                    console.error("Failed to parse local orders", e);
+                }
 
-                    if (user?.email) {
-                        const orderRes = await OrderService.getAll(user.email);
-                        const apiOrders = orderRes.data || [];
-                        
+                if (user?.email) {
+                    // Single aggregated backend call offloading database searching, filtering & sorting from client
+                    try {
+                        const activityRes = await OrderService.getUserActivity(user.email);
+                        const data = activityRes.data || {};
+                        const apiOrders: Order[] = data.orders || [];
+
                         const merged = [...apiOrders];
                         localOrders.forEach(lo => {
                             if (!merged.find(ao => ao.id === lo.id)) {
                                 merged.push(lo);
                             }
                         });
-                        merged.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
                         setOrders(merged);
-                    } else {
+                        setDoctorAppts(data.doctorAppointments || []);
+                        setNurseAppts(data.nurseAppointments || []);
+                        setLabBookings(data.labBookings || []);
+                    } catch (apiErr) {
+                        console.error("Backend activity fetch fallback to individual services", apiErr);
+                        // Fallback to local
                         setOrders(localOrders);
                     }
-                } catch (e) {
-                    console.error("Failed to load orders", e);
+                } else {
+                    setOrders(localOrders);
                 }
-
-                // 2. Fetch Lab Bookings
-                try {
-                    const labRes = await LabTestBookingService.getAll();
-                    setLabBookings(labRes.data || []);
-                } catch (e) {
-                    console.error("Failed to load lab bookings", e);
-                }
-
-                // 3. Fetch Doctor Appointments
-                try {
-                    const docRes = await DoctorAppointmentService.getAll();
-                    setDoctorAppts(docRes.data || []);
-                } catch (e) {
-                    console.error("Failed to load doctor appointments", e);
-                }
-
-                // 4. Fetch Nurse Appointments
-                try {
-                    const nurseRes = await NurseAppointmentService.getAll();
-                    setNurseAppts(nurseRes.data || []);
-                } catch (e) {
-                    console.error("Failed to load nurse appointments", e);
-                }
-
             } catch (error) {
-                console.error("Failed to load data", error);
+                console.error("Failed to load user activity data", error);
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchAllData();
-    }, []);
+    }, [user?.email]);
 
     const toggleExpand = (orderId: string) => {
         setExpandedOrderId(prev => prev === orderId ? null : orderId);

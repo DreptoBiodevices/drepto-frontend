@@ -232,9 +232,12 @@ export const FeedbackService = {
 // Order Controller
 export const OrderService = {
   create: (data: any) => api.post('/order', data),
+  calculatePricing: (data: { items: any[]; shippingMethod?: string; pincode?: string }) => api.post('/order/calculate-pricing', data),
+  getUserActivity: (userEmail: string) => api.get(`/order/user-activity?userEmail=${encodeURIComponent(userEmail)}`),
   getAll: (userEmail?: string) => api.get(`/order${userEmail ? `?userEmail=${encodeURIComponent(userEmail)}` : ''}`),
   getById: (id: string) => api.get(`/order/${id}`),
   update: (id: string, data: any) => api.patch(`/order/${id}`, data),
+  cancel: (id: string) => api.post(`/order/${id}/cancel`),
   delete: (id: string) => api.delete(`/order/${id}`),
 };
 

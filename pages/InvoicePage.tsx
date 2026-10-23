@@ -79,10 +79,14 @@ const InvoicePage: React.FC = () => {
         );
     }
 
-    // Safely calculate subtotal and delivery charge
-    const deliveryCharge = typeof order.shippingCost === 'number' ? order.shippingCost : (order.total > 50 ? 50 : 0);
-    const calculatedItemsTotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
-    const subtotal = calculatedItemsTotal > 0 ? calculatedItemsTotal : Math.max(0, order.total - deliveryCharge);
+    // Consume server-calculated figures directly, avoiding client-side array reduction
+    const deliveryCharge = typeof (order as any).deliveryCharge === 'number'
+        ? (order as any).deliveryCharge
+        : (typeof order.shippingCost === 'number' ? order.shippingCost : (order.total > 50 ? 50 : 0));
+
+    const subtotal = typeof (order as any).subtotal === 'number'
+        ? (order as any).subtotal
+        : ((order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0) || Math.max(0, order.total - deliveryCharge));
 
     return (
         <div className="min-h-screen bg-gray-100 py-8 px-4 print:bg-white print:p-0">

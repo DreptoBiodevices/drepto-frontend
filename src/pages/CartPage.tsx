@@ -41,45 +41,72 @@ const CartPage: React.FC = () => {
         return () => window.removeEventListener('cart:updated', loadCart);
     }, []);
 
-    // Mock distance calculation based on pincode
-    useEffect(() => {
-        if (shippingAddress?.pincode) {
-            // Simple mock: take first 3 digits mod 10 * 100 + random base
-            const pinVal = parseInt(shippingAddress.pincode.substring(0, 3) || "100");
-            const mockDistance = (pinVal % 9) * 150 + 50; // Range: 50km - 1250km
-            setDistance(mockDistance);
-        }
-    }, [shippingAddress]);
+    // Server-side calculation offloading:
+    const [serverPricing, setServerPricing] = useState<any>(null);
+    const [isCalculatingPricing, setIsCalculatingPricing] = useState(false);
 
-    // Recalculate shipping cost and time when method or distance changes
-    useEffect(() => {
-        let cost = 0;
-        let days = 7;
-
-        // Check if any item in cart has free shipping (Handling charge model)
-        const hasFreeShipping = cart.length > 0 && cart.every(item => item.freeShipping);
-
-        if (hasFreeShipping) {
-            cost = 0;
-            // Days calculation remains same
-            if (shippingMethod === 'India Post') {
-                days = 5 + Math.floor(distance / 200);
+    const groupedCart = (() => {
+        const groups = new Map();
+        cart.forEach((item) => {
+            const key = item.name || item.title;
+            if (groups.has(key)) {
+                groups.get(key).quantity += 1;
             } else {
-                days = 2 + Math.floor(distance / 400);
+                groups.set(key, { ...item, quantity: 1 });
             }
-        } else if (shippingMethod === 'India Post') {
-            // Updated pricing for 20g product: 19 to 30 range
-            // cost = distance <= 200 ? 19 : 30;
-            cost = 19;
-            days = 5 + Math.floor(distance / 200); // Base 5 days + 1 day per 200km
-        } else {
-            cost = 90 + (distance * 0.25); // Base 90 + 0.25 per km
-            days = 2 + Math.floor(distance / 400); // Faster: Base 2 days
+        });
+        return Array.from(groups.values());
+    })();
+
+    // Offload calculations to backend API
+    useEffect(() => {
+        if (cart.length === 0) {
+            setServerPricing(null);
+            setShippingCost(0);
+            return;
         }
 
-        setShippingCost(Math.round(cost));
-        setEstimatedDays(days);
-    }, [shippingMethod, distance]);
+        let isMounted = true;
+        const timer = setTimeout(async () => {
+            setIsCalculatingPricing(true);
+            try {
+                const res = await OrderService.calculatePricing({
+                    items: groupedCart,
+                    shippingMethod,
+                    pincode: shippingAddress?.pincode,
+                });
+                if (isMounted && res.data) {
+                    setServerPricing(res.data);
+                    if (typeof res.data.shippingCost === 'number') {
+                        setShippingCost(res.data.shippingCost);
+                    }
+                    if (typeof res.data.estimatedDays === 'number') {
+                        setEstimatedDays(res.data.estimatedDays);
+                    }
+                    if (typeof res.data.distance === 'number') {
+                        setDistance(res.data.distance);
+                    }
+                }
+            } catch (err) {
+                console.warn('Backend pricing calculation fallback to local:', err);
+                // Fallback local shipping calculation if network offline
+                if (shippingAddress?.pincode) {
+                    const pinVal = parseInt(shippingAddress.pincode.substring(0, 3) || "100");
+                    const mockDistance = (pinVal % 9) * 150 + 50;
+                    setDistance(mockDistance);
+                    const cost = shippingMethod === 'India Post' ? 19 : Math.round(90 + (mockDistance * 0.25));
+                    setShippingCost(cost);
+                }
+            } finally {
+                if (isMounted) setIsCalculatingPricing(false);
+            }
+        }, 100);
+
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+        };
+    }, [cart, shippingMethod, shippingAddress?.pincode]);
 
     const addOneToCart = (item: any) => {
         const newCart = [...cart, { ...item }];
@@ -106,20 +133,24 @@ const CartPage: React.FC = () => {
         window.dispatchEvent(new Event('cart:updated'));
     };
 
-    const groupedCart = (() => {
-        const groups = new Map();
-        cart.forEach((item) => {
+    const getItemPricing = (item: any, qty: number) => {
+        if (serverPricing?.items) {
             const key = item.name || item.title;
-            if (groups.has(key)) {
-                groups.get(key).quantity += 1;
-            } else {
-                groups.set(key, { ...item, quantity: 1 });
-            }
-        });
-        return Array.from(groups.values());
-    })();
+            const found = serverPricing.items.find((si: any) => (si.name || si.title) === key);
+            if (found) return found;
+        }
+        return calculateItemOfferPricing(item, qty);
+    };
 
     const calculateCartTotals = () => {
+        if (serverPricing) {
+            return {
+                originalSubtotal: serverPricing.originalSubtotal,
+                totalDiscount: serverPricing.totalDiscount,
+                finalSubtotal: serverPricing.finalSubtotal,
+                totalWithShipping: serverPricing.totalWithShipping,
+            };
+        }
         let originalSubtotal = 0;
         let totalDiscount = 0;
         let finalSubtotal = 0;
@@ -358,7 +389,7 @@ const CartPage: React.FC = () => {
                                 <div className="md:col-span-2 space-y-4">
                                     {groupedCart.map((item: any, idx: number) => {
                                         const qty = item.quantity;
-                                        const pricing = calculateItemOfferPricing(item, qty);
+                                        const pricing = getItemPricing(item, qty);
 
                                         return (
                                         <div key={idx} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm hover:border-gray-200 transition-all">
