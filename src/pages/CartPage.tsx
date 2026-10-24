@@ -75,7 +75,7 @@ const CartPage: React.FC = () => {
                     shippingMethod,
                     pincode: shippingAddress?.pincode,
                 });
-                if (isMounted && res.data) {
+                if (isMounted && res.data && (res.data.finalSubtotal > 0 || groupedCart.length === 0)) {
                     setServerPricing(res.data);
                     if (typeof res.data.shippingCost === 'number') {
                         setShippingCost(res.data.shippingCost);
@@ -134,16 +134,29 @@ const CartPage: React.FC = () => {
     };
 
     const getItemPricing = (item: any, qty: number) => {
-        if (serverPricing?.items) {
+        if (serverPricing?.items && serverPricing.items.length > 0) {
             const key = item.name || item.title;
             const found = serverPricing.items.find((si: any) => (si.name || si.title) === key);
-            if (found) return found;
+            if (found && found.finalTotal !== undefined && (found.finalTotal > 0 || qty === 0)) return found;
         }
         return calculateItemOfferPricing(item, qty);
     };
 
     const calculateCartTotals = () => {
-        if (serverPricing) {
+        // Compute resilient local totals immediately
+        let localOriginalSubtotal = 0;
+        let localTotalDiscount = 0;
+        let localFinalSubtotal = 0;
+
+        groupedCart.forEach((item: any) => {
+            const pricing = calculateItemOfferPricing(item, item.quantity);
+            localOriginalSubtotal += pricing.originalTotal;
+            localTotalDiscount += pricing.discount;
+            localFinalSubtotal += pricing.finalTotal;
+        });
+
+        // Use server figures if valid and non-zero
+        if (serverPricing && (serverPricing.finalSubtotal > 0 || groupedCart.length === 0)) {
             return {
                 originalSubtotal: serverPricing.originalSubtotal,
                 totalDiscount: serverPricing.totalDiscount,
@@ -151,22 +164,12 @@ const CartPage: React.FC = () => {
                 totalWithShipping: serverPricing.totalWithShipping,
             };
         }
-        let originalSubtotal = 0;
-        let totalDiscount = 0;
-        let finalSubtotal = 0;
-
-        groupedCart.forEach((item: any) => {
-            const pricing = calculateItemOfferPricing(item, item.quantity);
-            originalSubtotal += pricing.originalTotal;
-            totalDiscount += pricing.discount;
-            finalSubtotal += pricing.finalTotal;
-        });
 
         return {
-            originalSubtotal,
-            totalDiscount,
-            finalSubtotal,
-            totalWithShipping: finalSubtotal + shippingCost,
+            originalSubtotal: localOriginalSubtotal,
+            totalDiscount: localTotalDiscount,
+            finalSubtotal: localFinalSubtotal,
+            totalWithShipping: localFinalSubtotal + shippingCost,
         };
     };
 
