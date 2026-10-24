@@ -9,7 +9,7 @@ import { api, ProductService } from '../lib/api_controller';
 import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { calculateItemOfferPricing } from '../lib/offerCalculator';
+import { calculateItemOfferPricing, resolveItemOffer, getAutoFreeUnitsToAdd } from '../lib/offerCalculator';
 
 export interface PackageDetail {
     length?: number;   // cm
@@ -85,6 +85,7 @@ const ProductDetailPage: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [cartCount, setCartCount] = useState(0);
     const [notification, setNotification] = useState('');
+    const [selectedPack, setSelectedPack] = useState<number>(1);
 
     const reviewsSectionRef = useRef<HTMLDivElement>(null);
 
@@ -93,6 +94,9 @@ const ProductDetailPage: React.FC = () => {
             ProductService.getProductById(id)
                 .then(res => {
                     setProduct(res.data);
+                    if (res.data?.packOf && [1, 2, 3, 4].includes(res.data.packOf)) {
+                        setSelectedPack(res.data.packOf);
+                    }
                 })
                 .catch(err => console.error("Failed to fetch product", err))
                 .finally(() => setLoading(false));
@@ -165,26 +169,65 @@ const ProductDetailPage: React.FC = () => {
     const handleDecrement = (e: React.MouseEvent) => {
         e.stopPropagation();
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const index = currentCart.findLastIndex((item: any) => item.name === product.name);
-        if (index !== -1) {
-            currentCart.splice(index, 1);
-            localStorage.setItem('patient_cart', JSON.stringify(currentCart));
-            window.dispatchEvent(new Event('cart:updated'));
+        const offer = resolveItemOffer(product);
+        let countToRemove = 1;
+        if (offer && offer.type === 'BOGO') {
+            const buyQty = Math.max(1, Number(offer.buyQuantity) || 2);
+            const freeQty = Math.max(1, Number(offer.getFreeQuantity) || 1);
+            const bundle = buyQty + freeQty;
+            if (cartCount % bundle === 0) {
+                countToRemove = bundle;
+            } else {
+                countToRemove = cartCount % bundle;
+            }
         }
+
+        for (let i = 0; i < countToRemove; i++) {
+            const index = currentCart.findLastIndex((item: any) => item.name === product.name);
+            if (index !== -1) {
+                currentCart.splice(index, 1);
+            }
+        }
+        localStorage.setItem('patient_cart', JSON.stringify(currentCart));
+        window.dispatchEvent(new Event('cart:updated'));
     };
 
-    const confirmAddToCart = (source: 'IIT Bombay' | 'Warehouse' = 'Warehouse') => {
+    const confirmAddToCart = (source: 'IIT Bombay' | 'Warehouse' = 'Warehouse', count: number = (cartCount === 0 ? selectedPack : 1)) => {
         if (!user) {
             setAuthModalView('login');
             return;
         }
-        const productWithSource = { ...product, shippingSource: source };
+        const productWithSource = { ...product, shippingSource: source, packOf: selectedPack };
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const updatedCart = [...currentCart, productWithSource];
+
+        const offer = resolveItemOffer(product);
+        let itemsToAdd = count;
+        if (offer && offer.type === 'BOGO') {
+            const buyQty = Math.max(1, Number(offer.buyQuantity) || 2);
+            const freeQty = Math.max(1, Number(offer.getFreeQuantity) || 1);
+            if (cartCount === 0) {
+                const bundles = Math.floor(count / buyQty);
+                itemsToAdd = count + (bundles * freeQty);
+            } else {
+                itemsToAdd = buyQty + freeQty;
+            }
+        }
+
+        const newItems = Array.from({ length: itemsToAdd }, (_, i) => ({
+            ...productWithSource,
+            isFreeProduct: offer && offer.type === 'BOGO' && i >= (offer.buyQuantity || 1)
+        }));
+        const updatedCart = [...currentCart, ...newItems];
         localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
         window.dispatchEvent(new Event('cart:updated'));
         
-        setNotification('Added to cart!');
+        if (itemsToAdd > count) {
+            setNotification(`Added to cart + ${itemsToAdd - count} FREE product auto-added! 🎁`);
+        } else if (count > 1) {
+            setNotification(`Added Pack of ${count} to cart!`);
+        } else {
+            setNotification('Added to cart!');
+        }
         setTimeout(() => setNotification(''), 1500);
     };
 
@@ -195,6 +238,7 @@ const ProductDetailPage: React.FC = () => {
     const offerPricing = calculateItemOfferPricing(product, cartCount || 1);
     const paidUnits = offerPricing.paidUnits;
     const freeUnits = offerPricing.freeUnits;
+    const packPricing = calculateItemOfferPricing(product, selectedPack);
 
     return (
         <div className="min-h-screen bg-slate-50/60 flex flex-col font-sans">
@@ -282,7 +326,7 @@ const ProductDetailPage: React.FC = () => {
                                 <div className="bg-white p-2.5 rounded-xl border border-gray-100 shadow-2xs">
                                     <span className="text-[10px] text-gray-400 block font-medium">Quantity / Pack</span>
                                     <span className="text-xs font-bold text-gray-800 truncate block">
-                                        {product.quantity || (product.packOf ? `Pack of ${product.packOf}` : 'Standard')}
+                                        {product.quantity ? `${product.quantity} · Pack of ${selectedPack}` : `Pack of ${selectedPack}`}
                                     </span>
                                 </div>
                                 <div className="bg-white p-2.5 rounded-xl border border-gray-100 shadow-2xs">
@@ -384,7 +428,57 @@ const ProductDetailPage: React.FC = () => {
                                 )}
                             </div>
 
-                            {/* ── Direct Purchase Action Bar (Right below price, zero scrolling needed!) ── */}
+                            {/* ── Pack Selection Selector (Selected Pack of: X) ── */}
+                            <div className="mt-4 pt-3 border-t border-gray-100">
+                                <div className="flex flex-wrap items-center justify-between gap-1 mb-2.5">
+                                    <div className="flex items-center gap-2">
+                                        <div className="text-sm font-bold text-gray-800">
+                                            Selected Pack of: <span className="font-semibold text-gray-900 ml-1">{selectedPack}</span>
+                                        </div>
+                                        {(() => {
+                                            const autoFree = getAutoFreeUnitsToAdd(product, 0, selectedPack);
+                                            if (autoFree > 0) {
+                                                return (
+                                                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs">
+                                                        🎁 +{autoFree} FREE product auto-added
+                                                    </span>
+                                                );
+                                            }
+                                            return null;
+                                        })()}
+                                    </div>
+                                    {selectedPack > 1 && (
+                                        <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                                            ₹{(product.price * selectedPack)} (₹{product.price}/unit)
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                    {[1, 2, 3, 4].map((pack) => {
+                                        const isSelected = selectedPack === pack;
+                                        return (
+                                            <button
+                                                key={pack}
+                                                type="button"
+                                                onClick={() => setSelectedPack(pack)}
+                                                className={`relative w-14 h-11 rounded-2xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
+                                                    isSelected
+                                                        ? 'bg-[#1e1e20] text-white font-bold text-base shadow-md ring-1 ring-black/5'
+                                                        : 'bg-[#f3f4f6] hover:bg-[#eceef1] text-[#6b7280] font-medium text-sm border border-dashed border-gray-300 hover:border-gray-400'
+                                                }`}
+                                            >
+                                                {!isSelected && (
+                                                    <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 h-[1px] bg-gray-300/70 pointer-events-none" />
+                                                )}
+                                                <span className="relative z-10 select-none">{pack}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* ── Direct Purchase Action Bar (Right below price & pack selection, zero scrolling needed!) ── */}
                             <div className="mt-4 pt-4 border-t border-gray-100">
                                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                                     
@@ -412,7 +506,7 @@ const ProductDetailPage: React.FC = () => {
                                                     ) : null}
                                                 </div>
                                                 <button 
-                                                    onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
+                                                    onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse', 1); }}
                                                     className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 text-gray-700 transition-colors"
                                                     title="Increase"
                                                 >
@@ -421,11 +515,14 @@ const ProductDetailPage: React.FC = () => {
                                             </div>
                                         ) : (
                                             <button
-                                                onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse'); }}
+                                                onClick={(e) => { e.stopPropagation(); confirmAddToCart('Warehouse', selectedPack); }}
                                                 className="w-full h-[48px] bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 group active:scale-[0.98]"
                                             >
                                                 <ShoppingCart className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                                                Add to Cart
+                                                {(() => {
+                                                    const autoFree = getAutoFreeUnitsToAdd(product, 0, selectedPack);
+                                                    return `Add Pack of ${selectedPack}${autoFree > 0 ? ` (+${autoFree} FREE 🎁)` : ''} to Cart`;
+                                                })()}
                                             </button>
                                         )}
                                     </div>
@@ -435,14 +532,17 @@ const ProductDetailPage: React.FC = () => {
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                if (cartCount === 0) confirmAddToCart('Warehouse');
+                                                if (cartCount === 0) confirmAddToCart('Warehouse', selectedPack);
                                                 navigate('/cart');
                                             }}
                                             className="w-full h-[48px] bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl font-bold text-sm transition-all shadow-md shadow-orange-500/20 flex items-center justify-center gap-2"
                                         >
                                             <span>
                                                 {cartCount === 0 
-                                                    ? (product.offer?.title ? `Buy Now · ${product.offer.title}` : (product.offerDescription ? `Buy Now · ${product.offerDescription}` : 'Buy Now')) 
+                                                    ? (() => {
+                                                        const autoFree = getAutoFreeUnitsToAdd(product, 0, selectedPack);
+                                                        return `Buy Now · Pack of ${selectedPack}${autoFree > 0 ? ` (+${autoFree} FREE 🎁)` : ''} (₹${packPricing.finalTotal})`;
+                                                      })()
                                                     : `Proceed to Checkout (${cartCount} item${cartCount > 1 ? 's' : ''} · ₹${calculateItemOfferPricing(product, cartCount).finalTotal})`}
                                             </span>
                                             <ArrowRight className="w-4 h-4" />

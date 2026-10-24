@@ -7,6 +7,7 @@ import { ProductService, OrderService, PaymentService } from '../lib/api_control
 import useRazorpay from '../hooks/useRazorpay';
 import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
 import VideoTestimonialsSection from '../components/VideoTestimonialsSection';
+import { resolveItemOffer, getAutoFreeUnitsToAdd } from '../lib/offerCalculator';
 
 
 const OurProductsPage: React.FC = () => {
@@ -44,13 +45,30 @@ const OurProductsPage: React.FC = () => {
     const decrementCart = (productName: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const index = currentCart.findLastIndex((item: any) => item.name === productName);
-        if (index !== -1) {
-            currentCart.splice(index, 1);
-            localStorage.setItem('patient_cart', JSON.stringify(currentCart));
-            setCart(currentCart);
-            window.dispatchEvent(new Event('cart:updated'));
+        const targetProduct = products.find(p => p.name === productName);
+        const offer = targetProduct ? resolveItemOffer(targetProduct) : null;
+        let countToRemove = 1;
+        if (offer && offer.type === 'BOGO') {
+            const buyQty = Math.max(1, Number(offer.buyQuantity) || 2);
+            const freeQty = Math.max(1, Number(offer.getFreeQuantity) || 1);
+            const bundle = buyQty + freeQty;
+            const currentQty = currentCart.filter((item: any) => item.name === productName).length;
+            if (currentQty % bundle === 0) {
+                countToRemove = bundle;
+            } else {
+                countToRemove = currentQty % bundle;
+            }
         }
+
+        for (let i = 0; i < countToRemove; i++) {
+            const index = currentCart.findLastIndex((item: any) => item.name === productName);
+            if (index !== -1) {
+                currentCart.splice(index, 1);
+            }
+        }
+        localStorage.setItem('patient_cart', JSON.stringify(currentCart));
+        setCart(currentCart);
+        window.dispatchEvent(new Event('cart:updated'));
     };
 
     useEffect(() => {
@@ -82,17 +100,27 @@ const OurProductsPage: React.FC = () => {
         }
 
         const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-        const updatedCart = [...currentCart, { ...product }];
+        const currentQty = currentCart.filter((item: any) => item.name === product.name).length;
+        const autoFree = getAutoFreeUnitsToAdd(product, currentQty, 1);
+        const toAdd = Array.from({ length: 1 + autoFree }, (_, i) => ({
+            ...product,
+            isFreeProduct: i >= 1
+        }));
+        const updatedCart = [...currentCart, ...toAdd];
         localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
         setCart(updatedCart);
 
         // Dispatch event to update Navbar count
         window.dispatchEvent(new Event('cart:updated'));
 
-        setNotification('Added to cart!');
+        if (autoFree > 0) {
+            setNotification(`Added to cart + ${autoFree} FREE product auto-added! 🎁`);
+        } else {
+            setNotification('Added to cart!');
+        }
         setTimeout(() => {
             setNotification('');
-        }, 1000);
+        }, 1500);
     };
 
     const buyNow = (product: Product, e: React.MouseEvent) => {
@@ -103,8 +131,17 @@ const OurProductsPage: React.FC = () => {
         }
 
         if (getProductCountInCart(product.name) === 0) {
+            const offer = resolveItemOffer(product);
+            const buyQty = (offer && offer.type === 'BOGO') ? Math.max(1, Number(offer.buyQuantity) || 2) : 1;
+            const freeQty = (offer && offer.type === 'BOGO') ? Math.max(1, Number(offer.getFreeQuantity) || 1) : 0;
+            const totalToAdd = buyQty + freeQty;
+
             const currentCart = JSON.parse(localStorage.getItem('patient_cart') || '[]');
-            const updatedCart = [...currentCart, { ...product }];
+            const toAdd = Array.from({ length: totalToAdd }, (_, i) => ({
+                ...product,
+                isFreeProduct: i >= buyQty
+            }));
+            const updatedCart = [...currentCart, ...toAdd];
             localStorage.setItem('patient_cart', JSON.stringify(updatedCart));
             setCart(updatedCart);
             window.dispatchEvent(new Event('cart:updated'));
@@ -384,9 +421,23 @@ const OurProductsPage: React.FC = () => {
                                                             <Plus className="w-5 h-5" />
                                                         </button>
                                                     </div>
-                                                    <p className="text-[10px] text-center text-green-600 font-semibold mb-2">
-                                                        Add 1 more to unlock a FREE unit!
-                                                    </p>
+                                                    {(() => {
+                                                        const qty = getProductCountInCart(product.name);
+                                                        const offer = resolveItemOffer(product);
+                                                        if (!offer || offer.type !== 'BOGO') return null;
+                                                        const buyQty = Math.max(1, Number(offer.buyQuantity) || 2);
+                                                        const freeQty = Math.max(1, Number(offer.getFreeQuantity) || 1);
+                                                        const bundle = buyQty + freeQty;
+                                                        const free = Math.floor(qty / bundle) * freeQty;
+                                                        if (free > 0) {
+                                                            return (
+                                                                <p className="text-[10px] text-center text-emerald-600 font-semibold mb-2">
+                                                                    🎁 {free} FREE unit{free > 1 ? 's' : ''} auto-added!
+                                                                </p>
+                                                            );
+                                                        }
+                                                        return null;
+                                                    })()}
                                                 </>
                                             ) : (
                                                 <button
@@ -404,12 +455,15 @@ const OurProductsPage: React.FC = () => {
                                             >
                                                 {(() => {
                                                     const qty = getProductCountInCart(product.name);
-                                                    const totalAfterBogo = qty === 0 ? 1 : qty + Math.floor(qty / 2) - Math.floor(qty / 2);
-                                                    const paid = qty === 0 ? 1 : Math.ceil(qty / 2);
-                                                    const free = qty === 0 ? 0 : Math.floor(qty / 2);
+                                                    const offer = resolveItemOffer(product);
+                                                    const buyQty = (offer && offer.type === 'BOGO') ? Math.max(1, Number(offer.buyQuantity) || 2) : 2;
+                                                    const freeQty = (offer && offer.type === 'BOGO') ? Math.max(1, Number(offer.getFreeQuantity) || 1) : 1;
+                                                    const bundle = buyQty + freeQty;
+                                                    const free = Math.floor(qty / bundle) * freeQty;
+                                                    const paid = qty - free;
                                                     return free > 0
-                                                        ? `Buy ${paid} → Get ${free} FREE 🎁`
-                                                        : qty > 0 ? `Buy ${qty} → Add 1 for FREE!` : 'Buy Now – Add 2 for Buy 1 Get 1 Free!';
+                                                        ? `Buy ${paid} → Got ${free} FREE 🎁`
+                                                        : qty > 0 ? `In Cart (${qty}) · Proceed to Checkout` : (offer?.type === 'BOGO' ? `Buy ${buyQty} Get ${freeQty} Free (Auto-Added)` : 'Buy Now');
                                                 })()}
                                             </button>
                                         </div>

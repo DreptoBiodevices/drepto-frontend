@@ -8,7 +8,7 @@ import { Address, Order } from '../types';
 import { Truck, MapPin, CreditCard, X, Check, Tag } from 'lucide-react';
 import useRazorpay from '../hooks/useRazorpay';
 import { PaymentService, OrderService } from '../lib/api_controller';
-import { calculateItemOfferPricing } from '../lib/offerCalculator';
+import { calculateItemOfferPricing, resolveItemOffer, getAutoFreeUnitsToAdd } from '../lib/offerCalculator';
 
 type CheckoutStep = 'cart' | 'address' | 'payment';
 
@@ -109,21 +109,50 @@ const CartPage: React.FC = () => {
     }, [cart, shippingMethod, shippingAddress?.pincode]);
 
     const addOneToCart = (item: any) => {
-        const newCart = [...cart, { ...item }];
+        const offer = resolveItemOffer(item);
+        let countToAdd = 1;
+        if (offer && offer.type === 'BOGO') {
+            const buyQty = Math.max(1, Number(offer.buyQuantity) || 2);
+            const freeQty = Math.max(1, Number(offer.getFreeQuantity) || 1);
+            countToAdd = buyQty + freeQty;
+        }
+
+        const toAdd = Array.from({ length: countToAdd }, (_, i) => ({
+            ...item,
+            isFreeProduct: offer && offer.type === 'BOGO' && i >= (offer.buyQuantity || 1)
+        }));
+        const newCart = [...cart, ...toAdd];
         setCart(newCart);
         localStorage.setItem('patient_cart', JSON.stringify(newCart));
         window.dispatchEvent(new Event('cart:updated'));
     };
 
     const removeOneFromCart = (name: string) => {
-        const newCart = [...cart];
-        const index = newCart.findIndex(item => (item.name || item.title) === name);
-        if (index > -1) {
-            newCart.splice(index, 1);
-            setCart(newCart);
-            localStorage.setItem('patient_cart', JSON.stringify(newCart));
-            window.dispatchEvent(new Event('cart:updated'));
+        const item = groupedCart.find((g: any) => (g.name || g.title) === name);
+        const offer = item ? resolveItemOffer(item) : null;
+        let countToRemove = 1;
+        if (offer && offer.type === 'BOGO') {
+            const buyQty = Math.max(1, Number(offer.buyQuantity) || 2);
+            const freeQty = Math.max(1, Number(offer.getFreeQuantity) || 1);
+            const bundle = buyQty + freeQty;
+            const currentQty = item?.quantity || 1;
+            if (currentQty % bundle === 0) {
+                countToRemove = bundle;
+            } else {
+                countToRemove = currentQty % bundle;
+            }
         }
+
+        const newCart = [...cart];
+        for (let i = 0; i < countToRemove; i++) {
+            const index = newCart.findLastIndex(ci => (ci.name || ci.title) === name);
+            if (index > -1) {
+                newCart.splice(index, 1);
+            }
+        }
+        setCart(newCart);
+        localStorage.setItem('patient_cart', JSON.stringify(newCart));
+        window.dispatchEvent(new Event('cart:updated'));
     };
 
     const removeAllFromCart = (name: string) => {

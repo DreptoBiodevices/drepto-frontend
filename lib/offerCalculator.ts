@@ -111,11 +111,11 @@ export function calculateItemOfferPricing(
         const effectiveUnitPrice = safeQty > 0 ? finalTotal / safeQty : unitPrice;
 
         let hint: string | undefined;
-        if (remainder === buyQty) {
-            hint = `Add ${freeQty} more to get ${freeQty > 1 ? `${freeQty} items` : '1'} FREE! 🎁`;
+        if (freeUnits > 0) {
+            hint = `🎁 ${freeUnits} FREE product${freeUnits > 1 ? 's' : ''} automatically included in your order!`;
         } else if (remainder > 0 && remainder < buyQty) {
             const need = buyQty - remainder;
-            hint = `Add ${need} more item${need > 1 ? 's' : ''} for ${offer.title || `Buy ${buyQty} Get ${freeQty} Free`}`;
+            hint = `Add ${need} more item${need > 1 ? 's' : ''} to get ${freeQty} FREE automatically! 🎁`;
         }
 
         return {
@@ -207,4 +207,27 @@ export function calculateItemOfferPricing(
         offerTitle: '',
         hasOffer: false,
     };
+}
+
+/**
+ * Calculates how many automatic free units should be added when adding items to cart
+ */
+export function getAutoFreeUnitsToAdd(
+    item: { offer?: ProductOffer; offerDescription?: string },
+    currentQty: number,
+    addingQty: number
+): number {
+    const offer = resolveItemOffer(item);
+    if (!offer || offer.type !== 'BOGO') return 0;
+    const buyQty = Math.max(1, Number(offer.buyQuantity) || 2);
+    const freeQty = Math.max(1, Number(offer.getFreeQuantity) || 1);
+    const bundle = buyQty + freeQty;
+
+    const previousBundles = Math.floor(currentQty / bundle);
+    const currentPaid = previousBundles * buyQty + Math.min(buyQty, currentQty % bundle);
+    const newPaid = currentPaid + addingQty;
+    const newBundles = Math.floor(newPaid / buyQty);
+    const freeEarnedTotal = newBundles * freeQty;
+    const currentFree = currentQty - currentPaid;
+    return Math.max(0, freeEarnedTotal - currentFree);
 }
