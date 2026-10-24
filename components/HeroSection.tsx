@@ -33,7 +33,7 @@ const HeroSection: React.FC = () => {
       <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* ── Hero Content ── */}
         <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
-          <div className="w-full lg:w-3/5 space-y-5 sm:space-y-10 relative z-10">
+          <div className="w-full lg:w-3/5 space-y-5 sm:space-y-10 relative z-10 order-2 lg:order-1">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-brand-100/60 border border-brand-200 text-brand-800 text-xs sm:text-sm font-bold">
               <span className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-brand-600 animate-pulse" />
@@ -72,7 +72,7 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
           
-          <div className="w-full lg:w-2/5 flex justify-center lg:justify-end relative z-10 mt-12 lg:mt-0">
+          <div className="w-full lg:w-2/5 flex justify-center lg:justify-end relative z-10 order-1 lg:order-2 mt-2 lg:mt-0">
              {/* Small Product Card */}
              {featuredProduct && (
                <div className="w-full sm:max-w-sm mx-auto lg:mx-0 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
