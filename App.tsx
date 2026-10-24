@@ -93,7 +93,7 @@ const Main: React.FC = () => {
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/" replace />} />
+          <Route path="/invoice/:orderId" element={<InvoicePage />} />
           {/* Auth is now handled via modal, we map /auth to home as fallback if directly accessed */}
           <Route path="/auth" element={<Navigate to="/" replace />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />

@@ -1,12 +1,11 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import LandingPage from './pages/LandingPage';
-import AuthPage from './pages/AuthPage';
+import AuthModal from './components/AuthModal';
+// Removed AuthPage import as we use modal now
 import DashboardPage from './pages/DashboardPage';
-import MedicinesPage from './pages/MedicinesPage';
+import ProfilePage from './pages/ProfilePage';
 import LabTestsPage from './pages/LabTestsPage';
 import AboutUsPage from './pages/AboutUsPage';
 import AdminLogin from './components/admin/AdminLogin';
@@ -24,6 +23,11 @@ import InvoicePage from './pages/InvoicePage';
 import FeedbackPage from './pages/FeedbackPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import SocialMediaBlogPage from './pages/SocialMediaBlogPage';
+import ContactPage from './pages/ContactPage';
+import OurResearchPage from './pages/OurResearchPage';
+import OAuthSuccess from './pages/OAuthSuccess';
+import { LanguageProvider } from './hooks/useLanguage';
+import BottomNav from './components/BottomNav';
 
 
 const ScrollToTop = () => {
@@ -36,14 +40,14 @@ const ScrollToTop = () => {
 
 const App: React.FC = () => {
   return (
-    <HelmetProvider>
-    <AuthProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Main />
-      </BrowserRouter>
-    </AuthProvider>
-    </HelmetProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <Main />
+        </BrowserRouter>
+      </AuthProvider>
+    </LanguageProvider>
   );
 };
 
@@ -68,7 +72,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (!isAuthed) {
     console.log('Redirecting to login...');
-    return <Navigate to="/drepto-admin" />;
+    return <Navigate to="/admin/login" />;
   }
 
   return <>{children}</>;
@@ -78,37 +82,44 @@ const Main: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
   return (
-    <div className="bg-white min-h-screen font-sans">
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/medicines" element={<MedicinesPage />} />
-        <Route path="/lab-tests" element={<LabTestsPage />} />
-        <Route path="/about-us" element={<AboutUsPage />} />
-        <Route path="/our-products" element={<OurProductsPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/login" replace />} />
-        <Route path="/invoice/:orderId" element={user ? <InvoicePage /> : <Navigate to="/login" replace />} />
-        <Route path="/login" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
-        <Route path="/signup" element={user ? <Navigate to={(location.state as any)?.from || "/dashboard"} replace /> : <AuthPage />} />
-        <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/login" replace />} />
-        <Route path="/drepto-admin" element={<AdminLogin />} />
-        <Route path="/drepto-admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+    <div className="bg-gray-50 min-h-screen font-sans overflow-x-hidden w-full">
+      <div className="min-h-screen flex flex-col pb-20 md:pb-0">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/lab-tests" element={<LabTestsPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/our-products" element={<OurProductsPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/orders" element={user ? <OrderHistoryPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/invoice/:orderId" element={<InvoicePage />} />
+          {/* Auth is now handled via modal, we map /auth to home as fallback if directly accessed */}
+          <Route path="/auth" element={<Navigate to="/" replace />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
+          <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/" replace />} />
+          <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/" replace />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
 
-        {/* Feature Routes */}
-        <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/testimonials" element={<TestimonialsPage />} />
-        {/* <Route path="/social" element={<SocialMediaBlogPage />} /> */}
+          {/* Feature Routes */}
+          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/our-research" element={<OurResearchPage />} />
+          {/* <Route path="/social" element={<SocialMediaBlogPage />} /> */}
 
-        {/* Legal Routes */}
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<TermsOfService />} />
-        <Route path="/refund-policy" element={<RefundPolicy />} />
-        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          {/* Legal Routes */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
 
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
+      <BottomNav />
+      <AuthModal />
     </div>
   );
 }

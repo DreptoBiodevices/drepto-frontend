@@ -24,21 +24,28 @@ const InvoicePage: React.FC = () => {
                 const storedOrders = localStorage.getItem('orders');
                 if (storedOrders) {
                     const orders: Order[] = JSON.parse(storedOrders);
-                    foundOrder = orders.find(o => String(o.id) === String(orderId)) || null;
+                    foundOrder = orders.find(o => String(o.id) === String(orderId) || String((o as any)._id) === String(orderId)) || null;
                 }
             } catch (err) {
                 console.error("Failed to parse localStorage orders", err);
             }
             
             if (foundOrder) {
-                setOrder(foundOrder);
+                setOrder({
+                    ...foundOrder,
+                    id: foundOrder.id || (foundOrder as any).orderId || String((foundOrder as any)._id)
+                });
                 setLoading(false);
             } else {
                 // 2. Try API
                 try {
                     const response = await OrderService.getById(orderId);
                     if (response.data) {
-                        setOrder(response.data);
+                        const ord = response.data;
+                        setOrder({
+                            ...ord,
+                            id: ord.id || ord.orderId || String(ord._id)
+                        });
                     }
                 } catch (error) {
                     console.error("Failed to fetch order from API", error);
@@ -52,6 +59,14 @@ const InvoicePage: React.FC = () => {
 
     const handlePrint = () => {
         window.print();
+    };
+
+    const handleBack = () => {
+        if (localStorage.getItem('adminAuth') === 'true') {
+            navigate('/admin/dashboard');
+        } else {
+            navigate('/orders');
+        }
     };
 
     if (loading) {
@@ -71,8 +86,8 @@ const InvoicePage: React.FC = () => {
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-800">Order Not Found</h2>
                     <p className="text-gray-500 mt-2">The requested invoice could not be retrieved.</p>
-                    <button onClick={() => navigate('/orders')} className="mt-4 text-primary hover:underline font-medium">
-                        Return to Orders
+                    <button onClick={handleBack} className="mt-4 text-primary hover:underline font-medium">
+                        Return {localStorage.getItem('adminAuth') === 'true' ? 'to Admin Portal' : 'to Orders'}
                     </button>
                 </div>
             </div>
@@ -93,8 +108,8 @@ const InvoicePage: React.FC = () => {
             <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm overflow-hidden print:shadow-none">
                 {/* Toolbar */}
                 <div className="bg-gray-800 text-white p-4 flex justify-between items-center print:hidden">
-                    <button onClick={() => navigate('/orders')} className="flex items-center gap-2 text-sm hover:text-gray-300">
-                        <ArrowLeft className="w-4 h-4" /> Back to Orders
+                    <button onClick={handleBack} className="flex items-center gap-2 text-sm hover:text-gray-300">
+                        <ArrowLeft className="w-4 h-4" /> Back {localStorage.getItem('adminAuth') === 'true' ? 'to Admin Portal' : 'to Orders'}
                     </button>
                     <div className="flex gap-3">
                         <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-primary rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">
