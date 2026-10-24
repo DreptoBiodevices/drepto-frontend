@@ -22,7 +22,7 @@ const AuthModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 print:hidden">
       <div className="w-full max-w-md relative z-10 max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl flex flex-col hide-scrollbar">
         {/* Header Section */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 border-b border-gray-100 p-4 rounded-t-3xl flex items-center justify-between">

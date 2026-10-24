@@ -244,3 +244,46 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
+
+/* ===== PRINT ISOLATION ===== */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Hide entire website by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Only make invoice-content and its children visible */
+  #invoice-content,
+  #invoice-content * {
+    visibility: visible;
+  }
+
+  #invoice-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+  }
+
+  /* Suppress headers, footers, navbars, and floating overlays */
+  header, footer, nav, aside, .print\:hidden {
+    display: none !important;
+  }
+}
+

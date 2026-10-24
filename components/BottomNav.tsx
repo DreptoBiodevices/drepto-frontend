@@ -34,8 +34,13 @@ const BottomNav: React.FC = () => {
     return location.pathname.startsWith(path);
   };
 
+  // Do not render BottomNav on invoice pages or during printing
+  if (location.pathname.startsWith('/invoice')) {
+    return null;
+  }
+
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]"
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] print:hidden"
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 4px)' }}>
       <div className="flex items-center justify-around px-1 pt-2 pb-1">
         {navItems.map((item) => {
