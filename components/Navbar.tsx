@@ -343,7 +343,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
     <>
       {/* ---- Utility Header ---- */}
       <div className="border-b border-slate-200 bg-white text-sm font-medium text-slate-600 hidden sm:block">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between">
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 h-12 flex items-center justify-between">
           {/* Delivery Location */}
           <div className="flex items-center space-x-2 relative" ref={locationPromptRef}>
             <MapPin className="w-4 h-4 text-brand-600" />
@@ -512,7 +512,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       <nav
         className={`sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-shadow duration-300 ${isScrolled ? 'shadow-md' : 'shadow-sm'}`}
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
           <div className="flex items-center justify-between h-14 sm:h-20 lg:h-24 gap-3 sm:gap-8">
 
             {/* Brand Logo */}
@@ -568,7 +568,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
             </div>
 
             {/* Desktop Nav Links */}
-            <nav className="hidden lg:flex items-center space-x-2 font-medium text-base flex-1 ml-4">
+            <nav className="hidden lg:flex items-center justify-center space-x-1 xl:space-x-3 font-medium text-base flex-1 mx-4">
               {navLinks.map((link) => (
                 <button
                   key={link.name}
