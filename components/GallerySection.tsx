@@ -202,16 +202,38 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
                                     <div className="order-2 md:order-1 space-y-4 sm:space-y-6">
                                         <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-bold tracking-widest uppercase">
-                                            Recognition of Excellence
+                                            Institutional Validation &amp; Certifications
                                         </div>
-                                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white">Awards &amp; Distinction</h2>
+                                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white">Backed by Academic &amp; Clinical Rigor</h2>
                                         <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-                                            Celebrating the milestones that define our commitment to quality,
-                                            innovation, and excellence in every project we undertake.
+                                            Incubated at IIT Bombay&apos;s premier deeptech incubator, certified under international biocompatibility standards, and validated through peer-reviewed clinical research.
                                         </p>
-                                        <div className="flex items-center gap-4 pt-2 sm:pt-4">
-                                            <div className="h-[2px] w-12 bg-amber-500"></div>
-                                            <span className="text-white font-medium uppercase tracking-widest text-sm">Certified Achievement</span>
+                                        <div className="space-y-3 pt-2 text-sm text-slate-300">
+                                            <div className="flex items-center gap-3">
+                                                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                                                <span><strong>SINE, IIT Bombay:</strong> Deeptech Biomedical Incubation</span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                                                <span><strong>ISO 10993-23:2021:</strong> Study NLS-TX-270/26 (0.00 PII Non-Irritant)</span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                                                <span><strong>Peer-Reviewed:</strong> Published in JAIMS 2026; 11(7): 107–117</span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                                                <span><strong>Intellectual Property:</strong> Patent Application IN202521129798</span>
+                                            </div>
+                                        </div>
+                                        <div className="pt-2">
+                                            <a
+                                                href="/our-research"
+                                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-md"
+                                            >
+                                                <span>Inspect Study Reports &amp; Papers</span>
+                                                <span>→</span>
+                                            </a>
                                         </div>
                                     </div>
 

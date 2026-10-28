@@ -70,6 +70,26 @@ const HeroSection: React.FC = () => {
                 {t('hero.learnMore')}
               </button>
             </div>
+
+            {/* Scientific Credentials Badges */}
+            <div className="pt-6 sm:pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl border-t border-slate-200/80">
+              <div className="p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-slate-200/80 shadow-xs">
+                <div className="text-xs font-bold text-brand-800 uppercase tracking-wider">Patent Filed</div>
+                <div className="text-xs font-mono font-medium text-slate-600 mt-0.5">IN202521129798</div>
+              </div>
+              <div className="p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-slate-200/80 shadow-xs">
+                <div className="text-xs font-bold text-brand-800 uppercase tracking-wider">ISO 10993-23</div>
+                <div className="text-xs font-medium text-slate-600 mt-0.5">0.00 Non-Irritant</div>
+              </div>
+              <div className="p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-slate-200/80 shadow-xs">
+                <div className="text-xs font-bold text-brand-800 uppercase tracking-wider">Peer-Reviewed</div>
+                <div className="text-xs font-medium text-slate-600 mt-0.5">JAIMS Published</div>
+              </div>
+              <div className="p-3 bg-white/80 backdrop-blur-sm rounded-xl border border-slate-200/80 shadow-xs">
+                <div className="text-xs font-bold text-brand-800 uppercase tracking-wider">Incubation</div>
+                <div className="text-xs font-medium text-slate-600 mt-0.5">SINE, IIT Bombay</div>
+              </div>
+            </div>
           </div>
           
           <div className="w-full lg:w-2/5 flex justify-center lg:justify-end relative z-10 order-1 lg:order-2 mt-2 lg:mt-0">

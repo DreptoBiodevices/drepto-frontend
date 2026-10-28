@@ -11,17 +11,24 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
     {
         name: 'Rahul Kumar Gupta',
-        role: 'Founder & Director',
+        role: 'Founder & CEO',
         description: 'IIT Bombay',
         image: '/images/rahulsir.jpeg',
         linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/'
     },
     {
         name: 'Prof. Rohit Srivastava',
-        role: 'Scientific Advisor, Mentor',
-        description: 'Prof. IIT Bombay',
+        role: 'Scientific Advisor & Mentor',
+        description: 'Prof. Dept of Biosciences & Bioengineering, IIT Bombay (Shanti Swarup Bhatnagar Awardee)',
         image: '/images/rohitsir.jpeg',
         linkedin: 'https://www.linkedin.com/in/rohit-srivastava-02bb2b16/'
+    },
+    {
+        name: 'Dr. Rupesh Ghyar',
+        role: 'Technical Advisor',
+        description: 'Alumni, IIT Bombay • Medical Technology & Biomedical Innovation',
+        image: '/images/dr_rupesh.jpg',
+        linkedin: 'https://www.linkedin.com/in/dr-rupesh-ghyar-67b4b12/'
     },
     {
         name: 'Dr. Chandan Yadav',
@@ -29,6 +36,13 @@ const teamMembers: TeamMember[] = [
         description: 'Senior Radiologist, Medanta Hospital',
         image: '/images/dr_chandan.jpg',
         linkedin: 'https://www.dreptobiodevices.com/'
+    },
+    {
+        name: 'Rupesh Kumar Gupta',
+        role: 'Business Head',
+        description: 'Director, DyCine Pharmaceuticals Ltd.',
+        image: '/images/rupesh_gupta.webp',
+        linkedin: 'https://www.linkedin.com/in/rupesh-kumar-gupta-95669b25/'
     }
 ];
 

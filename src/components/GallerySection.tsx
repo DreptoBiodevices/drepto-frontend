@@ -155,29 +155,39 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
               {/* right — text */}
               <div className="flex flex-col justify-center px-10 py-14 md:px-14 border border-l-0 border-gray-100">
-                <p className="text-xs font-semibold tracking-widest uppercase text-amber-600 mb-6">
-                  Certified Achievement
+                <p className="text-xs font-semibold tracking-widest uppercase text-amber-600 mb-4">
+                  Institutional Validation &amp; Certifications
                 </p>
-                <h3 className="text-3xl font-bold text-gray-900 leading-tight mb-6">
-                  Celebrating excellence in medical innovation.
+                <h3 className="text-3xl font-bold text-gray-900 leading-tight mb-4">
+                  Backed by academic &amp; clinical rigor.
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-10 max-w-sm">
-                  Each award represents a milestone in our commitment to quality, 
-                  rigorous research, and meaningful impact on healthcare outcomes.
+                <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-sm">
+                  Incubated at SINE IIT Bombay, validated through international biocompatibility testing, and published in peer-reviewed scientific journals.
                 </p>
 
                 {/* ruled stat rows */}
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-gray-100 mb-6">
                   {[
-                    { label: 'Category', value: 'Medical Technology' },
-                    { label: 'Recognition', value: 'Excellence in Innovation' },
-                    { label: 'Status', value: 'Certified Achievement' },
+                    { label: 'Incubation', value: 'SINE, IIT Bombay' },
+                    { label: 'Safety Standard', value: 'ISO 10993-23:2021 (0.00 PII Non-Irritant)' },
+                    { label: 'Publication', value: 'JAIMS 2026; 11(7): 107–117' },
+                    { label: 'Patent App', value: 'IN202521129798' },
                   ].map(({ label, value }) => (
-                    <div key={label} className="flex justify-between items-center py-3.5">
+                    <div key={label} className="flex justify-between items-center py-3">
                       <span className="text-xs font-semibold tracking-widest uppercase text-gray-400">{label}</span>
-                      <span className="text-sm text-gray-700 font-medium">{value}</span>
+                      <span className="text-xs sm:text-sm text-gray-800 font-semibold text-right pl-2">{value}</span>
                     </div>
                   ))}
+                </div>
+
+                <div>
+                  <a
+                    href="/our-research"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-md"
+                  >
+                    <span>Inspect Study Reports &amp; Papers</span>
+                    <span>→</span>
+                  </a>
                 </div>
               </div>
 

@@ -54,16 +54,16 @@ const CTASection: React.FC = () => {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">50K+</div>
-              <div className="text-white/80">Happy Patients</div>
+              <div className="text-3xl md:text-4xl font-black mb-2">ISO 10993-23</div>
+              <div className="text-white/80 text-sm font-medium">Preclinical Biocompatibility Certified</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">24/7</div>
-              <div className="text-white/80">Support Available</div>
+              <div className="text-3xl md:text-4xl font-black mb-2">91.23%</div>
+              <div className="text-white/80 text-sm font-medium">Sustained 12h Permeation Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">99%</div>
-              <div className="text-white/80">Satisfaction Rate</div>
+              <div className="text-3xl md:text-4xl font-black mb-2">SINE IITB</div>
+              <div className="text-white/80 text-sm font-medium">Deeptech Incubation &amp; Mentorship</div>
             </div>
           </div>
 

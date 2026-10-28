@@ -1,14 +1,13 @@
-
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import SEOHead from '../components/SEOHead';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
+import ScienceSection from '../components/ScienceSection';
 import ProductSection from '../components/ProductSection';
 import AboutSection from '../components/AboutSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
-
-import FeaturedMedicines from '../components/FeaturedMedicines';
-import PopularLabTests from '../components/PopularLabTests';
 import GallerySection from '../components/GallerySection';
 import TestimonialsPreview from '../components/TestimonialsPreview';
 
@@ -17,6 +16,7 @@ const LandingPage: React.FC = () => {
   const productRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   const sectionRefs = {
     home: homeRef,
@@ -25,12 +25,29 @@ const LandingPage: React.FC = () => {
     contact: contactRef,
   };
 
-  // ...
+  // Handle scrolling when navigated from another page
+  useEffect(() => {
+    const state = location.state as { scrollTo?: string };
+    if (state?.scrollTo) {
+      const targetRef = sectionRefs[state.scrollTo as keyof typeof sectionRefs];
+      if (targetRef?.current) {
+        setTimeout(() => {
+          targetRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.state]);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative bg-white">
+      <SEOHead
+        title="Drepto Biodevices"
+        description="Drepto Biodevices is a deep-tech biomedical device company developing targeted, non-invasive transdermal therapeutic delivery systems to overcome oral dosage limitations. Incubated at SINE, IIT Bombay."
+        keywords="transdermal drug delivery, biodevices, biomedical engineering, SINE IIT Bombay, non-invasive therapeutics, rheumatoid arthritis drug delivery, ISO 10993, JAIMS"
+        url="/"
+      />
       <Navbar
         sectionRefs={sectionRefs}
         isMobileMenuOpen={isMobileMenuOpen}
@@ -40,9 +57,8 @@ const LandingPage: React.FC = () => {
       {/* Main Content - Visible on all screens */}
       <main>
         <div ref={homeRef}><HeroSection /></div>
-        <div ref={productRef}></div>
-        <FeaturedMedicines />
-        <PopularLabTests />
+        <ScienceSection />
+        <div ref={productRef}><ProductSection /></div>
         <div ref={aboutRef}><AboutSection /></div>
 
         {/* Gallery Section with Mobile Nav Support */}

@@ -21,7 +21,12 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   image = DEFAULT_IMAGE,
   type = 'website',
 }) => {
-  const fullTitle = `${title} | Drepto`;
+  const fullTitle =
+    title.trim() === 'Drepto Biodevices'
+      ? 'Drepto Biodevices'
+      : title.includes('Drepto Biodevices')
+      ? title
+      : `Drepto Biodevices | ${title}`;
   const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
 
   return (

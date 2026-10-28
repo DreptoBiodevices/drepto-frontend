@@ -36,6 +36,13 @@ const teamMembers: TeamMember[] = [
     description: 'Senior Radiologist, Medanta Hospital',
     image: '/images/dr_chandan.jpg',
     linkedin: 'https://www.dreptobiodevices.com/'
+  },
+  {
+    name: 'Rupesh Kumar Gupta',
+    role: 'Business Head',
+    description: 'Director, DyCine Pharmaceuticals Ltd.',
+    image: '/images/rupesh_gupta.webp',
+    linkedin: 'https://www.linkedin.com/in/rupesh-kumar-gupta-95669b25/'
   }
 ];
 

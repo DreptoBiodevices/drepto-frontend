@@ -1,130 +1,169 @@
 import React from 'react';
-
-const VideoIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z" /><rect width="14" height="12" x="2" y="6" rx="2" ry="2" /></svg>;
-const PharmacyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.5 20.5 10 22l-4-2.5V9l4-2.5L10.5 8" /><path d="M13.5 3.5 14 2l4 2.5V15l-4 2.5-3.5-1.5" /><path d="m14 2-4 2.5V15l4 2.5V2" /><path d="M10 22v-6.5l-4-2.5" /><path d="M2 9.5 6 12" /><path d="M20 14.5 14 12" /><path d="M10 8l4-2.5" /><path d="M10 15.5l4-2.5" /></svg>;
-const LabIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3v5h6V3" /><path d="M10 14.5a6 6 0 0 0-3.3 5H3" /><path d="M21 19.5a6 6 0 0 0-3.3-5" /><path d="M14 19.5a6 6 0 0 0-3.3-5" /><path d="M12 8v6" /><circle cx="12" cy="17" r="3" /></svg>;
-const NurseIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 0-4 4v9a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V6a4 4 0 0 0-4-4Z" /><path d="M8 22v-5h8v5" /><path d="M12 7v4" /><path d="M10 9h4" /></svg>;
-const AmbulanceIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 10h4" /><path d="M12 8v4" /><rect width="16" height="12" x="4" y="5" rx="2" /><path d="M2 9h2" /><path d="M20 9h2" /><path d="M15 17v2" /><path d="M9 17v2" /></svg>;
-const ShieldIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>;
-
-const serviceImages: Record<string, string> = {
-  'Video Consultations': 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
-  'Medicine Delivery': 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=80',
-  'Home Nursing': 'https://images.unsplash.com/photo-1579154341098-e4e158cc7f55?w=600&q=80',
-  'Ambulance Service': 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80',
-  'Secure Health Records': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80',
-};
-
-const serviceBadges: Record<string, string> = {
-  'Video Consultations': 'Live Doctor',
-  'Medicine Delivery': 'Express Delivery',
-  'Home Nursing': 'Qualified Staff',
-  'Ambulance Service': '24/7 Response',
-  'Secure Health Records': 'Encrypted & Safe',
-};
-
-const serviceSubtitles: Record<string, string> = {
-  'Video Consultations': 'Connect with verified rheumatologists in minutes',
-  'Medicine Delivery': 'Authentic therapeutics delivered to your doorstep',
-  'Home Nursing': 'Compassionate, certified in-home clinical care',
-  'Ambulance Service': 'Rapid emergency dispatch across metro hubs',
-  'Secure Health Records': 'End-to-end encrypted health record management',
-};
+import { useNavigate } from 'react-router-dom';
+import {
+  Layers,
+  Activity,
+  ShieldCheck,
+  Zap,
+  Microscope,
+  ArrowRight,
+  Sparkles,
+  Award,
+  Clock,
+  HeartPulse,
+} from 'lucide-react';
 
 const ProductSection: React.FC = () => {
-  const features = [
+  const navigate = useNavigate();
+
+  const platforms = [
     {
-      icon: <VideoIcon />,
-      title: 'Video Consultations',
-      description: 'High-quality, secure video calls with doctors from the comfort of your home.',
-      delay: '0.1s'
+      icon: <Layers className="w-7 h-7 text-brand-600" />,
+      badge: 'Patent Filed Matrix',
+      title: 'Polymer Transdermal Matrix',
+      subtitle: 'Bio-compatible permeation engineering',
+      description:
+        'Engineered polymeric carrier architecture that reversibly enhances stratum corneum permeation, delivering active molecules directly to local sub-dermal capillary beds.',
+      stat: 'IN202521129798',
+      statLabel: 'Patent Application',
+      gradient: 'from-brand-50 to-teal-50/30',
     },
     {
-      icon: <PharmacyIcon />,
-      title: 'Medicine Delivery',
-      description: 'Order your prescribed medicines online and get them delivered to your doorstep.',
-      delay: '0.2s'
+      icon: <Clock className="w-7 h-7 text-brand-600" />,
+      badge: 'Pharmacokinetics',
+      title: 'Biphasic 12-Hour Sustained Release',
+      subtitle: 'Zero-order steady-state diffusion',
+      description:
+        'Combines rapid initial onset (relief within 30 minutes) with sustained zero-order kinetic release over 12 continuous hours, avoiding peak-and-trough plasma oscillations.',
+      stat: '91.23%',
+      statLabel: 'Ex-Vivo Drug Release',
+      gradient: 'from-teal-50 to-emerald-50/30',
     },
     {
-      icon: <NurseIcon />,
-      title: 'Home Nursing',
-      description: 'Professional nursing care services available at your home for post-op recovery & elderly care.',
-      delay: '0.4s'
+      icon: <ShieldCheck className="w-7 h-7 text-brand-600" />,
+      badge: 'Gastro-Sparing',
+      title: 'First-Pass Metabolism Bypass',
+      subtitle: 'Zero direct GI contact',
+      description:
+        'Circumvents gastrointestinal absorption and hepatic degradation, preventing the gastric irritation, ulcers, and hepatotoxicity typical of conventional oral NSAIDs and immunosuppressants.',
+      stat: '100% Non-Oral',
+      statLabel: 'GI Mucosa Safe',
+      gradient: 'from-emerald-50 to-brand-50/30',
     },
     {
-      icon: <AmbulanceIcon />,
-      title: 'Ambulance Service',
-      description: 'Quick and reliable emergency ambulance services just a tap away.',
-      delay: '0.5s'
+      icon: <Award className="w-7 h-7 text-brand-600" />,
+      badge: 'ISO Certified',
+      title: 'Biocompatibility & Preclinical Safety',
+      subtitle: 'ISO 10993-23:2021 Biological Testing',
+      description:
+        'Rigorously tested under international medical device biological evaluation standards. Proven completely non-irritant with zero erythema and zero edema across evaluated cohorts.',
+      stat: '0.00 PII',
+      statLabel: 'Zero Irritation Score',
+      gradient: 'from-blue-50 to-brand-50/30',
     },
     {
-      icon: <ShieldIcon />,
-      title: 'Secure Health Records',
-      description: 'Your medical history and records are encrypted and stored securely, accessible only to you.',
-      delay: '0.6s'
-    }
+      icon: <Microscope className="w-7 h-7 text-brand-600" />,
+      badge: 'R&D Pipeline',
+      title: 'Targeted Methotrexate System',
+      subtitle: 'Rheumatoid Arthritis Therapeutic Platform',
+      description:
+        'Investigational non-invasive delivery system in development to optimize localized delivery, potentially reduce systemic exposure, and improve long-term adherence for chronic arthritis.',
+      stat: 'Preclinical',
+      statLabel: 'Development Stage',
+      gradient: 'from-amber-50 to-orange-50/30',
+    },
+    {
+      icon: <HeartPulse className="w-7 h-7 text-brand-600" />,
+      badge: 'Academic Backing',
+      title: 'IIT Bombay & Clinical Ecosystem',
+      subtitle: 'SINE Incubation & Specialized Advisory',
+      description:
+        'Developed in association with faculty researchers at IIT Bombay, guided by clinical advisors from Medanta Hospital and pharmaceutical industry leaders.',
+      stat: 'SINE IITB',
+      statLabel: 'Deeptech Incubation',
+      gradient: 'from-purple-50 to-brand-50/30',
+    },
   ];
 
   return (
-    <section className="py-16 bg-white border-t border-slate-100" id="services">
+    <section className="py-20 bg-white border-t border-slate-100" id="platforms">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-          <div>
-            <div className="inline-block text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-1 rounded border border-brand-100 mb-2">
-              Healthcare Ecosystem
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-3 py-1.5 rounded-full border border-brand-200 mb-3">
+              <Zap className="w-3.5 h-3.5" />
+              <span>Biomedical Innovation &amp; Delivery Architecture</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Comprehensive Care Services
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              Proprietary Transdermal Platforms
             </h2>
-            <p className="text-slate-500 text-sm sm:text-base mt-1">
-              We provide a complete ecosystem for all your healthcare and clinical needs.
+            <p className="text-slate-600 text-base sm:text-lg mt-3 leading-relaxed">
+              Engineered to replace systemic side-effect burdens with localized, high-bioavailability transdermal therapeutics.
             </p>
           </div>
-          {/* Arrow controls (decorative) */}
-          <div className="flex items-center space-x-2 self-end md:self-auto">
-            <button className="p-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-brand-700 transition-colors shadow-soft" title="Previous">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-            </button>
-            <button className="p-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-brand-700 transition-colors shadow-soft" title="Next">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
+
+          <div className="shrink-0">
+            <button
+              onClick={() => navigate('/our-research')}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 transition-all shadow-sm"
+            >
+              <span>Explore Clinical Evidence</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Services Grid Cards — Dark image card style */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-          {features.map((feature, index) => (
+        {/* Platforms Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {platforms.map((platform, idx) => (
             <div
-              key={index}
-              className="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-soft hover:shadow-elevated transition-all duration-300 animate-fade-in-up"
-              style={{ animationDelay: feature.delay }}
+              key={idx}
+              className={`rounded-3xl p-6 sm:p-8 bg-gradient-to-br ${platform.gradient} border border-slate-200/80 shadow-soft hover:shadow-elevated transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1`}
             >
-              {/* Image */}
-              <div className="h-52 overflow-hidden relative">
-                <img
-                  alt={feature.title}
-                  src={serviceImages[feature.title] || ''}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-85"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent" />
-                {/* Badge */}
-                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-bold text-slate-800 uppercase tracking-wide">
-                  {serviceBadges[feature.title]}
+              <div>
+                {/* Top Badge & Icon */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100 group-hover:scale-110 transition-transform">
+                    {platform.icon}
+                  </div>
+                  <span className="text-xs font-bold text-brand-800 bg-white/90 border border-brand-200/80 px-3 py-1 rounded-full shadow-xs">
+                    {platform.badge}
+                  </span>
                 </div>
+
+                <h3 className="text-xl font-extrabold text-slate-900 mb-1 leading-snug">
+                  {platform.title}
+                </h3>
+                <p className="text-xs font-semibold text-brand-700 uppercase tracking-wider mb-3">
+                  {platform.subtitle}
+                </p>
+                <p className="text-sm text-slate-600 leading-relaxed mb-6 font-normal">
+                  {platform.description}
+                </p>
               </div>
-              {/* Content */}
-              <div className="absolute bottom-0 inset-x-0 p-4">
-                <h3 className="text-base font-bold text-white group-hover:text-brand-200 transition-colors">{feature.title}</h3>
-                <p className="text-xs text-slate-300 mt-1 line-clamp-1">{serviceSubtitles[feature.title]}</p>
+
+              {/* Bottom Stat Ribbon */}
+              <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
+                <div>
+                  <div className="text-xl font-black text-slate-900">{platform.stat}</div>
+                  <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">
+                    {platform.statLabel}
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate('/our-research')}
+                  className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 group-hover:text-brand-700 group-hover:border-brand-300 transition-colors"
+                  aria-label="View research details"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
