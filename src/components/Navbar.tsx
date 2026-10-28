@@ -20,7 +20,6 @@ import {
   LogOut,
   Package,
   FileText,
-  Search,
   Globe,
   MapPin,
   Upload,
@@ -48,12 +47,6 @@ const LANGUAGES = [
   { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી' },
 ];
 
-// ── Searchable items ──
-const SEARCHABLE_ITEMS = [
-  { label: 'Our Products & Medicines', path: '/our-products', keywords: ['medicine', 'drug', 'pharmacy', 'pill', 'tablet', 'capsule', 'syrup', 'relief', 'patch', 'products'] },
-  { label: 'Our Products', path: '/our-products', keywords: ['product', 'device', 'biodevice', 'transdermal', 'iontophoretic', 'sample'] },
-  { label: 'Our Research', path: '/our-research', keywords: ['research', 'paper', 'menstroherb', 'jaims', 'clinical', 'safety', 'study', 'patent', 'biodevice', 'iit bombay'] },
-];
 
 const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefObject<HTMLDivElement>>, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
@@ -68,11 +61,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
-  // ── Search state ──
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<typeof SEARCHABLE_ITEMS>([]);
-  const [showSearchResults, setShowSearchResults] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
 
   // ── Language state ──
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
@@ -145,60 +133,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
     }
   };
 
-  // ── Search logic ──
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-
-    if (query.trim().length === 0) {
-      setSearchResults([]);
-      setShowSearchResults(false);
-      return;
-    }
-
-    const q = query.toLowerCase().trim();
-    const results = SEARCHABLE_ITEMS.filter(
-      (item) =>
-        item.label.toLowerCase().includes(q) ||
-        item.keywords.some((kw) => kw.includes(q))
-    );
-    setSearchResults(results);
-    setShowSearchResults(true);
-  };
-
-  const handleSearchSubmit = () => {
-    if (searchQuery.trim().length === 0) return;
-
-    const q = searchQuery.toLowerCase().trim();
-    const results = SEARCHABLE_ITEMS.filter(
-      (item) =>
-        item.label.toLowerCase().includes(q) ||
-        item.keywords.some((kw) => kw.includes(q))
-    );
-
-    if (results.length > 0) {
-      navigate(results[0].path);
-      setSearchQuery('');
-      setShowSearchResults(false);
-    } else {
-      // Default: navigate to medicines page with search query
-      navigate(`/medicines`);
-      setSearchQuery('');
-      setShowSearchResults(false);
-    }
-  };
-
-  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearchSubmit();
-    }
-  };
-
-  const handleSearchResultClick = (path: string) => {
-    navigate(path);
-    setSearchQuery('');
-    setShowSearchResults(false);
-  };
 
   // ── Language logic ──
   const handleLanguageChange = (code: string) => {
@@ -317,9 +251,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
   // ── Click outside handlers ──
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setShowSearchResults(false);
-      }
       if (languageRef.current && !languageRef.current.contains(e.target as Node)) {
         setShowLanguageDropdown(false);
       }
@@ -527,45 +458,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
               />
             </div>
 
-            {/* Mobile Search Bar (inline) */}
-            <div className="flex-1 lg:hidden" ref={searchRef}>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-4 w-4 text-slate-400" />
-                </div>
-                <input
-                  className="w-full pl-9 pr-12 py-2 text-sm bg-slate-100 border border-slate-200 rounded-full focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all placeholder:text-slate-400"
-                  placeholder="Search medicines, tests..."
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  onKeyDown={handleSearchKeyDown}
-                />
-                {searchQuery && (
-                  <button
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-brand-700 text-white rounded-full"
-                    onClick={handleSearchSubmit}
-                  >
-                    <Search className="w-3 h-3" />
-                  </button>
-                )}
-                {/* Mobile Search Results */}
-                {showSearchResults && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-[60]">
-                    {searchResults.map((result) => (
-                      <button
-                        key={result.path}
-                        onClick={() => handleSearchResultClick(result.path)}
-                        className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-brand-50 transition-colors border-b last:border-0 border-slate-100"
-                      >
-                        <Search className="w-4 h-4 text-brand-600 flex-shrink-0" />
-                        <span className="text-sm font-semibold text-slate-800">{result.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
 
             {/* Desktop Nav Links */}
             <nav className="hidden lg:flex items-center justify-center space-x-1 xl:space-x-3 font-medium text-base flex-1 mx-4">
@@ -616,67 +508,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
             </button>
           </div>
 
-          {/* Search Bar Row - Desktop Only */}
-          <div className="py-4 sm:py-6 border-t border-slate-100 hidden lg:block" ref={searchRef}>
-            <div className="relative max-w-4xl mx-auto">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-slate-400" />
-              </div>
-              <input
-                className="w-full pl-12 pr-32 py-3 text-sm sm:text-base bg-slate-100/70 border border-slate-200/90 rounded-full focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all placeholder:text-slate-400"
-                placeholder={t('search.placeholder')}
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                onKeyDown={handleSearchKeyDown}
-                onFocus={() => {
-                  if (searchQuery.trim().length > 0 && searchResults.length > 0) {
-                    setShowSearchResults(true);
-                  }
-                }}
-              />
-              <button
-                className="absolute right-2 top-2 bottom-2 px-6 bg-brand-700 hover:bg-brand-800 text-white rounded-full text-sm font-bold transition-colors flex items-center space-x-1"
-                onClick={handleSearchSubmit}
-              >
-                <span>{t('search.find')}</span>
-              </button>
-
-              {/* Search Results Dropdown */}
-              {showSearchResults && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden z-[60] animate-fade-in-down">
-                  {searchResults.length > 0 ? (
-                    <div className="py-2">
-                      <p className="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                        {searchResults.length} {t('search.resultsFound')}
-                      </p>
-                      {searchResults.map((result) => (
-                        <button
-                          key={result.path}
-                          onClick={() => handleSearchResultClick(result.path)}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-brand-50 transition-colors"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-brand-100 flex items-center justify-center flex-shrink-0">
-                            <Search className="w-4 h-4 text-brand-700" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-slate-800">{result.label}</p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-slate-300 ml-auto" />
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="p-6 text-center">
-                      <AlertCircle className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                      <p className="text-sm font-medium text-slate-500">{t('search.noResults')} "{searchQuery}"</p>
-                      <p className="text-xs text-slate-400 mt-1">{t('search.trySearching')}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </nav>
 
