@@ -37,6 +37,30 @@ const AboutSection: React.FC = () => {
           </p>
         </div>
 
+        {/* ── Key Clinical Metrics Strip ── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+          <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-2xs text-center">
+            <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">12+ Hrs</div>
+            <div className="text-xs font-bold text-brand-800 uppercase tracking-wider mt-1">Sustained Steady-State</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Zero-Order Release Profile</div>
+          </div>
+          <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-2xs text-center">
+            <div className="text-3xl sm:text-4xl font-black text-emerald-700 tracking-tight">100%</div>
+            <div className="text-xs font-bold text-emerald-800 uppercase tracking-wider mt-1">Gastrointestinal Bypass</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Zero Gastric Irritation</div>
+          </div>
+          <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-2xs text-center">
+            <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">0.00 PII</div>
+            <div className="text-xs font-bold text-brand-800 uppercase tracking-wider mt-1">ISO 10993-23 Certified</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Non-Irritant Biocompatibility</div>
+          </div>
+          <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-2xs text-center">
+            <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">SINE</div>
+            <div className="text-xs font-bold text-brand-800 uppercase tracking-wider mt-1">IIT Bombay Incubation</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Deeptech Translation Lab</div>
+          </div>
+        </div>
+
         {/* ── Mission & Vision Cards (2 Columns) ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
 

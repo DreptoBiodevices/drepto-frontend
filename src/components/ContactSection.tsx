@@ -1,226 +1,279 @@
 import React, { useState } from 'react';
 import { ContactService } from '../lib/api_controller';
-import { Phone, Linkedin, Mail, Send, CheckCircle, ArrowRight, Users } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
-/* ─── tiny helpers ─────────────────────────────────────────── */
-
-const Field: React.FC<{
-  id: string; label: string; required?: boolean;
-  children: React.ReactNode;
-}> = ({ id, label, required, children }) => (
-  <div className="flex flex-col gap-1.5">
-    <label htmlFor={id} className="text-xs font-semibold tracking-widest uppercase text-gray-400">
-      {label}{required && <span className="text-primary ml-0.5">*</span>}
-    </label>
-    {children}
-  </div>
-);
-
-const inputCls =
-  'w-full px-0 py-2.5 bg-transparent border-0 border-b border-gray-200 text-gray-900 text-sm placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors duration-200';
-
-/* ─── main component ───────────────────────────────────────── */
+import { Phone, Linkedin, Mail, Clock, MapPin, Send, Building2, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
 
 const ContactSection: React.FC = () => {
-  const navigate = useNavigate();
+  const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    name: '', email: '', contactNumber: '', subject: '', message: ''
+    name: '',
+    email: '',
+    contactNumber: '',
+    subject: '',
+    message: ''
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true); setError('');
+    setLoading(true);
+    setError('');
+
     try {
       await ContactService.create(formData);
       setSubmitted(true);
       setFormData({ name: '', email: '', contactNumber: '', subject: '', message: '' });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to send. Please try again.');
+      console.error("Contact submission failed", err);
+      setError(err.response?.data?.message || "Failed to send message. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
-      {/* ── Contact Form ──────────────────────────────────────── */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6 max-w-6xl">
+    <section className="py-20 sm:py-28 bg-slate-50/70 border-t border-slate-200/80 relative" id="contact">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Header Section */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200/90 text-brand-900 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <Building2 className="w-3.5 h-3.5 text-brand-600" />
+            <span>Corporate &amp; Clinical Correspondence</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+            Connect with Our Clinical &amp; R&amp;D Team
+          </h2>
+          <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
+            Whether inquiring about transdermal therapeutic formulation access, clinical research partnerships, or commercial distribution, our interdisciplinary team is ready to connect.
+          </p>
+        </div>
 
-          {/* split: heading left / form right */}
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-16 lg:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 max-w-6xl mx-auto items-start">
+          
+          {/* Left Column: Contact Form */}
+          <div className="lg:col-span-7 bg-white p-7 sm:p-10 rounded-3xl border border-slate-200/90 shadow-soft">
+            <h3 className="text-2xl font-extrabold text-slate-900 mb-2">
+              Send an Official Inquiry
+            </h3>
+            <p className="text-sm text-slate-500 mb-8 font-normal">
+              Direct submission routed to Drepto Biodevices corporate desk.
+            </p>
 
-            {/* left column */}
-            <div className="lg:sticky lg:top-24 pt-2">
-              <p className="text-xs font-semibold tracking-widest uppercase text-primary mb-6">Contact</p>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-[1.1] mb-6">
-                Let's talk<br />about your<br />project.
-              </h2>
-              <p className="text-gray-500 text-sm leading-relaxed mb-10 max-w-xs">
-                We respond to every enquiry within 24 hours on business days.
-              </p>
-
-              {/* contact details — no cards, just ruled rows */}
-              <div className="divide-y divide-gray-100">
-                {[
-                  { Icon: Mail,     label: 'Email',   value: 'office@dreptobiodevices.com', href: 'mailto:office@dreptobiodevices.com' },
-                  { Icon: Phone,    label: 'Phone',   value: '+91 84518 22256',             href: 'tel:+918451822256' },
-                  { Icon: Linkedin, label: 'LinkedIn',value: 'Drepto Biodevices',           href: 'https://www.linkedin.com/company/drepto-biodevices-pvt-ltd/posts/?feedView=all' },
-                ].map(({ Icon, label, value, href }) => (
-                  <div key={label} className="flex items-center gap-4 py-4">
-                    <Icon className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-0.5">{label}</p>
-                      <a href={href} target="_blank" rel="noopener noreferrer"
-                        className="text-sm text-gray-700 hover:text-primary transition-colors truncate block">
-                        {value}
-                      </a>
-                    </div>
+            {submitted ? (
+              <div className="text-center py-12 px-6 bg-brand-50/50 rounded-2xl border border-brand-200/80">
+                <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <h4 className="text-2xl font-bold text-slate-900 mb-2">{t('contact.thankYou')}</h4>
+                <p className="text-slate-600 text-sm max-w-md mx-auto leading-relaxed">{t('contact.successMessage')}</p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-brand-700 hover:text-brand-800 underline underline-offset-4"
+                >
+                  {t('contact.sendAnother')}
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm">
+                    {error}
                   </div>
-                ))}
-                <div className="flex items-center gap-4 py-4">
-                  <span className="w-4 h-4 flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5 text-gray-400" stroke="currentColor" strokeWidth="1.5">
-                      <circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 2.5"/>
-                    </svg>
-                  </span>
+                )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-0.5">Hours</p>
-                    <p className="text-sm text-gray-700">Mon – Fri, 9 am – 5 pm IST</p>
+                    <label htmlFor="name" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('contact.name')} *</label>
+                    <input
+                      type="text"
+                      id="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Dr. / Mr. / Ms. Full Name"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('contact.email')} *</label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="corporate@institution.com"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-all"
+                    />
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* right column — form */}
-            <div>
-              {submitted ? (
-                <div className="flex flex-col items-start gap-4 py-16">
-                  <CheckCircle className="w-10 h-10 text-primary" />
-                  <h3 className="text-2xl font-bold text-gray-900">Message received.</h3>
-                  <p className="text-gray-500 text-sm">We'll be in touch within 24 hours.</p>
-                  <button onClick={() => setSubmitted(false)}
-                    className="mt-4 text-xs font-semibold tracking-widest uppercase text-primary border-b border-primary pb-0.5 hover:opacity-70 transition-opacity">
-                    Send another →
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="contactNumber" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('contact.contactNumber')}</label>
+                    <input
+                      type="tel"
+                      id="contactNumber"
+                      value={formData.contactNumber}
+                      onChange={handleChange}
+                      placeholder="+91 00000 00000"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="subject" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('contact.subject')} *</label>
+                    <input
+                      type="text"
+                      id="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                      placeholder="Clinical Trial / Wholesale / Inquiry"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('contact.message')} *</label>
+                  <textarea
+                    id="message"
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    placeholder="Please describe your clinical or commercial requirements..."
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-all leading-relaxed"
+                  ></textarea>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-bold text-sm tracking-wide text-white bg-brand-700 hover:bg-brand-800 shadow-md shadow-brand-700/20 transition-all active:scale-98 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  >
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>{t('contact.sending')}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Submit Inquiry</span>
+                      </>
+                    )}
                   </button>
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-                  {error && (
-                    <p className="text-red-500 text-sm border-l-2 border-red-400 pl-3">{error}</p>
-                  )}
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <Field id="name" label="Name" required>
-                      <input type="text" id="name" value={formData.name} onChange={handleChange}
-                        required className={inputCls} placeholder="Jane Smith" />
-                    </Field>
-                    <Field id="email" label="Email" required>
-                      <input type="email" id="email" value={formData.email} onChange={handleChange}
-                        required className={inputCls} placeholder="jane@example.com" />
-                    </Field>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <Field id="contactNumber" label="Phone">
-                      <input type="tel" id="contactNumber" value={formData.contactNumber} onChange={handleChange}
-                        className={inputCls} placeholder="+91 98765 43210" />
-                    </Field>
-                    <Field id="subject" label="Subject" required>
-                      <input type="text" id="subject" value={formData.subject} onChange={handleChange}
-                        required className={inputCls} placeholder="Partnership inquiry" />
-                    </Field>
-                  </div>
-
-                  <Field id="message" label="Message" required>
-                    <textarea id="message" rows={5} value={formData.message} onChange={handleChange}
-                      required className={`${inputCls} resize-none`}
-                      placeholder="Tell us about your project or question…" />
-                  </Field>
-
-                  <div className="flex items-center justify-between pt-2">
-                    <p className="text-xs text-gray-400">Fields marked <span className="text-primary">*</span> are required</p>
-                    <button type="submit" disabled={loading}
-                      className="inline-flex items-center gap-2.5 bg-primary text-white text-sm font-semibold px-7 py-3.5 rounded-[0.25rem] hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
-                      {loading ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Sending
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4" />
-                          Send message
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
+              </form>
+            )}
           </div>
-        </div>
-      </section>
 
-      {/* ── Hiring Banner ─────────────────────────────────────── */}
-      <section className="py-16">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="relative overflow-hidden bg-primary rounded-md px-10 py-16 md:px-16 md:py-20">
+          {/* Right Column: Corporate Coordinates & Channels */}
+          <div className="lg:col-span-5 space-y-6">
+            
+            {/* Corporate Location Card */}
+            <div className="bg-white p-7 sm:p-8 rounded-3xl border border-slate-200/90 shadow-soft space-y-6">
+              <h3 className="text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-4">
+                Corporate Coordinates
+              </h3>
 
-            {/* decorative ruled lines — architectural texture */}
-            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              {[...Array(8)].map((_, i) => (
-                <div key={i}
-                  className="absolute top-0 bottom-0 border-r border-white/5"
-                  style={{ left: `${(i + 1) * 12.5}%` }} />
-              ))}
-            </div>
-
-            <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 items-center">
-              {/* text block */}
-              <div>
-                <p className="text-xs font-semibold tracking-widest uppercase text-white/50 mb-4">Careers</p>
-                <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
-                  Join our team.<br />Shape medical technology.
-                </h2>
-                <p className="text-white/60 text-sm max-w-lg leading-relaxed mb-8">
-                  We're a small, ambitious team building diagnostic tools that matter. 
-                  If you're driven by impact and want to work on hard problems in healthcare, we want to hear from you.
-                </p>
-
-                {/* three pillars — stripped back, no icon circles */}
-                <div className="flex flex-wrap gap-6">
-                  {[
-                    'Cutting-edge research',
-                    'Collaborative culture',
-                    'Real career growth',
-                  ].map(item => (
-                    <div key={item} className="flex items-center gap-2 text-white/70 text-sm">
-                      <span className="w-1 h-1 rounded-full bg-white/40 flex-shrink-0" />
-                      {item}
-                    </div>
-                  ))}
+              {/* Incubation Lab */}
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-brand-50 text-brand-700 flex items-center justify-center shrink-0 border border-brand-200/80">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-brand-800">R&amp;D &amp; Incubation Facility</h4>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5">SINE, IIT Bombay</p>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-0.5">Powai, Mumbai 400076, Maharashtra, India</p>
                 </div>
               </div>
 
-              {/* CTA */}
-              <a href="https://forms.gle/Li6JY1YQW5fs8bUW8" target="_blank" rel="noopener noreferrer"
-                className="flex-shrink-0 inline-flex items-center gap-3 bg-white text-primary text-sm font-bold px-8 py-4 rounded-[0.25rem] hover:bg-white/90 transition-colors duration-200">
-                Apply now
-                <ArrowRight className="w-4 h-4" />
+              {/* Registered Office */}
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-slate-50 text-slate-700 flex items-center justify-center shrink-0 border border-slate-200">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Registered Office</h4>
+                  <p className="text-sm font-semibold text-slate-800 mt-0.5">Drepto Biodevices Pvt. Ltd.</p>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-0.5">
+                    1001-11, Rustomjee Ozone, Behind Teleexch, Goregaon West, Mumbai, Maharashtra 400104.
+                  </p>
+                </div>
+              </div>
+
+              {/* Contact Channels */}
+              <div className="pt-4 border-t border-slate-100 space-y-3.5">
+                <div className="flex items-center gap-3 text-sm">
+                  <Mail className="w-4 h-4 text-brand-700 shrink-0" />
+                  <a href="mailto:office@dreptobiodevices.com" className="font-semibold text-slate-700 hover:text-brand-700 transition-colors">
+                    office@dreptobiodevices.com
+                  </a>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm">
+                  <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <a href="tel:+918451822256" className="font-semibold text-slate-700 hover:text-brand-700 transition-colors">
+                    +91 84518 22256
+                  </a>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-slate-500">
+                  <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span>Mon – Fri, 09:00 – 17:00 IST</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm">
+                  <Linkedin className="w-4 h-4 text-[#0077b5] shrink-0" />
+                  <a
+                    href="https://www.linkedin.com/company/drepto-biodevices-pvt-ltd/posts/?feedView=all"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-slate-700 hover:text-[#0077b5] transition-colors"
+                  >
+                    LinkedIn Corporate Profile
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Careers Pill Card */}
+            <div className="bg-gradient-to-br from-brand-900 to-slate-900 text-white p-7 rounded-3xl shadow-soft">
+              <div className="inline-block px-3 py-1 rounded-full bg-white/10 text-brand-200 text-[10px] font-bold uppercase tracking-wider mb-3">
+                Talent &amp; Clinical Fellowship
+              </div>
+              <h4 className="text-lg font-bold text-white mb-1.5">
+                Looking to Join Our Biomedical Team?
+              </h4>
+              <p className="text-xs text-slate-300 leading-relaxed mb-4">
+                We are actively accepting CVs for pharmaceutical formulation scientists, clinical research coordinators, and biomedical engineers.
+              </p>
+              <a
+                href="https://forms.gle/Li6JY1YQW5fs8bUW8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold rounded-xl text-xs tracking-wide transition-colors"
+              >
+                <span>Submit Candidate Application</span>
+                <Send className="w-3.5 h-3.5" />
               </a>
             </div>
+
           </div>
+
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
