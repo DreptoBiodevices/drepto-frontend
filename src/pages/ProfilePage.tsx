@@ -260,19 +260,19 @@ const ProfilePage: React.FC = () => {
 
   const renderTabs = () => (
       <div className="flex overflow-x-auto space-x-2 border-b border-slate-200 mb-6 pb-2 scrollbar-hide">
-          <button onClick={() => setActiveTab('personal')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'personal' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('personal')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'personal' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <UserIcon className="w-4 h-4" /> Personal
           </button>
-          <button onClick={() => setActiveTab('security')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'security' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('security')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'security' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <Lock className="w-4 h-4" /> Security
           </button>
-          <button onClick={() => setActiveTab('history')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'history' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('history')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'history' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <History className="w-4 h-4" /> History
           </button>
-          <button onClick={() => setActiveTab('address')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'address' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('address')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'address' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <MapPin className="w-4 h-4" /> Address
           </button>
-          <button onClick={() => setActiveTab('reviews')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'reviews' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('reviews')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'reviews' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <Star className="w-4 h-4" /> Reviews
           </button>
       </div>
@@ -284,7 +284,7 @@ const ProfilePage: React.FC = () => {
         <BackButton fallbackPath="/dashboard" />
         
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6 animate-fade-in-up">
-          <div className="p-6 sm:p-8 bg-brand-700 text-white flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="p-6 sm:p-8 bg-[#c01226] text-white flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-6 w-full">
               <div className="relative w-24 h-24 rounded-full overflow-hidden bg-white/20 border-4 border-white/30 backdrop-blur-sm flex-shrink-0">
                 {formData.profileImage ? (
@@ -301,7 +301,7 @@ const ProfilePage: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold">{formData.firstName} {formData.lastName}</h1>
-                <p className="text-brand-100 mt-1">{user.email}</p>
+                <p className="text-white/80 mt-1">{user.email}</p>
                 <div className="flex items-center gap-2 mt-2">
                     {phoneVerified ? (
                         <span className="flex items-center gap-1 text-xs bg-green-500/20 text-green-100 px-2 py-1 rounded-full"><CheckCircle className="w-3 h-3" /> Phone Verified</span>
@@ -315,7 +315,7 @@ const ProfilePage: React.FC = () => {
             {activeTab === 'personal' && (
                 <div className="flex-shrink-0">
                 {!isEditing ? (
-                <button onClick={() => setIsEditing(true)} className="px-6 py-2 bg-white text-brand-700 font-semibold rounded-lg hover:bg-brand-50 transition-colors w-full sm:w-auto">
+                <button onClick={() => setIsEditing(true)} className="px-6 py-2 bg-white text-[#c01226] font-semibold rounded-lg hover:bg-red-50 transition-colors w-full sm:w-auto">
                     Edit Profile
                 </button>
                 ) : (
@@ -323,7 +323,7 @@ const ProfilePage: React.FC = () => {
                     <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-white/20 text-white font-medium rounded-lg hover:bg-white/30 transition-colors flex-1">
                         Cancel
                     </button>
-                    <button onClick={handlePersonalSave} className="px-6 py-2 bg-white text-brand-700 font-bold rounded-lg hover:bg-brand-50 transition-colors flex-1 shadow-sm">
+                    <button onClick={handlePersonalSave} className="px-6 py-2 bg-white text-[#c01226] font-bold rounded-lg hover:bg-red-50 transition-colors flex-1 shadow-sm">
                         Save
                     </button>
                 </div>
@@ -340,11 +340,11 @@ const ProfilePage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">First Name</label>
-                        <input type="text" name="firstName" value={formData.firstName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
+                        <input type="text" name="firstName" value={formData.firstName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
-                        <input type="text" name="lastName" value={formData.lastName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
+                        <input type="text" name="lastName" value={formData.lastName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
@@ -353,7 +353,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Gender</label>
-                        <select name="gender" value={formData.gender} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
+                        <select name="gender" value={formData.gender} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -362,11 +362,11 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Age</label>
-                        <input type="number" name="age" value={formData.age} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
+                        <input type="number" name="age" value={formData.age} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Blood Group</label>
-                        <select name="bloodGroup" value={formData.bloodGroup} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
+                        <select name="bloodGroup" value={formData.bloodGroup} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
                             <option value="">Select Blood Group</option>
                             <option value="A+">A+</option><option value="A-">A-</option>
                             <option value="B+">B+</option><option value="B-">B-</option>
@@ -427,15 +427,15 @@ const ProfilePage: React.FC = () => {
                         <form onSubmit={handlePasswordChange} className="space-y-4 max-w-md">
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Current Password</label>
-                                <input type="password" required value={passwords.current} onChange={(e) => setPasswords({...passwords, current: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                <input type="password" required value={passwords.current} onChange={(e) => setPasswords({...passwords, current: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226]" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">New Password</label>
-                                <input type="password" required value={passwords.new} onChange={(e) => setPasswords({...passwords, new: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500" minLength={6} />
+                                <input type="password" required value={passwords.new} onChange={(e) => setPasswords({...passwords, new: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226]" minLength={6} />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Rewrite New Password</label>
-                                <input type="password" required value={passwords.confirm} onChange={(e) => setPasswords({...passwords, confirm: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500" minLength={6} />
+                                <input type="password" required value={passwords.confirm} onChange={(e) => setPasswords({...passwords, confirm: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226]" minLength={6} />
                             </div>
                             <button type="submit" className="px-6 py-2 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors">
                                 Update Password
@@ -527,7 +527,7 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <div className="pt-6">
-                        <Link to="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-700 text-white font-bold rounded-xl hover:bg-brand-800 transition-colors">
+                        <Link to="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-[#c01226] text-white font-bold rounded-xl hover:bg-red-700 transition-colors">
                             View Detailed History <Activity className="w-5 h-5" />
                         </Link>
                     </div>
@@ -548,7 +548,7 @@ const ProfilePage: React.FC = () => {
                         <div>
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="font-bold text-lg">Your Addresses</h3>
-                                {!showAddressForm && <button onClick={() => setShowAddressForm(true)} className="px-4 py-2 bg-brand-700 text-white rounded-lg text-sm font-medium hover:bg-brand-800">Add Address</button>}
+                                {!showAddressForm && <button onClick={() => setShowAddressForm(true)} className="px-4 py-2 bg-[#c01226] text-white rounded-lg text-sm font-medium hover:bg-red-700">Add Address</button>}
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 {addresses.map((addr, idx) => (
@@ -573,28 +573,28 @@ const ProfilePage: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Street Address</label>
-                                    <input required type="text" value={newAddress.street} onChange={e => setNewAddress({...newAddress, street: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                    <input required type="text" value={newAddress.street} onChange={e => setNewAddress({...newAddress, street: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">City</label>
-                                    <input required type="text" value={newAddress.city} onChange={e => setNewAddress({...newAddress, city: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                    <input required type="text" value={newAddress.city} onChange={e => setNewAddress({...newAddress, city: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">State</label>
-                                    <input required type="text" value={newAddress.state} onChange={e => setNewAddress({...newAddress, state: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                    <input required type="text" value={newAddress.state} onChange={e => setNewAddress({...newAddress, state: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Zip Code</label>
-                                    <input required type="text" value={newAddress.zipCode} onChange={e => setNewAddress({...newAddress, zipCode: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                    <input required type="text" value={newAddress.zipCode} onChange={e => setNewAddress({...newAddress, zipCode: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Country</label>
-                                    <input required type="text" value={newAddress.country} onChange={e => setNewAddress({...newAddress, country: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500" />
+                                    <input required type="text" value={newAddress.country} onChange={e => setNewAddress({...newAddress, country: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
                                 </div>
                             </div>
                             <div className="mt-6 flex justify-end gap-3">
                                 <button type="button" onClick={() => setShowAddressForm(false)} className="px-4 py-2 border rounded-lg hover:bg-slate-100 font-medium">Cancel</button>
-                                <button type="submit" className="px-6 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 font-medium">Save Address</button>
+                                <button type="submit" className="px-6 py-2 bg-[#c01226] text-white rounded-lg hover:bg-red-700 font-medium">Save Address</button>
                             </div>
                         </form>
                     )}
@@ -623,10 +623,10 @@ const ProfilePage: React.FC = () => {
                                                     </button>
                                                 ))}
                                             </div>
-                                            <textarea className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-brand-500" value={editingReview.reviewText} onChange={e => setEditingReview({...editingReview, reviewText: e.target.value})} rows={3} />
+                                            <textarea className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#c01226]" value={editingReview.reviewText} onChange={e => setEditingReview({...editingReview, reviewText: e.target.value})} rows={3} />
                                             <div className="flex justify-end gap-2">
                                                 <button onClick={() => setEditingReview(null)} className="px-4 py-2 border rounded-lg hover:bg-slate-50">Cancel</button>
-                                                <button onClick={handleUpdateReview} className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800">Save Update</button>
+                                                <button onClick={handleUpdateReview} className="px-4 py-2 bg-[#c01226] text-white rounded-lg hover:bg-red-700">Save Update</button>
                                             </div>
                                         </div>
                                     ) : (

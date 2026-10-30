@@ -32,7 +32,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab, setActiv
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
-                        <h1 className="font-bold text-lg text-primary">{title}</h1>
+                        <h1 className="font-bold text-lg text-[#c01226]">{title}</h1>
                     </div>
                 </header>
 

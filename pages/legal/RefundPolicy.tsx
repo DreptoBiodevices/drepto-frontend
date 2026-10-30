@@ -34,7 +34,7 @@ const RefundPolicy: React.FC = () => {
             <section className="mb-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">How to Initiate a Return</h3>
                 <ul className="list-disc pl-5 space-y-2">
-                    <li><strong>Notification:</strong> You must notify us within 48 hours of delivery by emailing <a href="mailto:support@dreptobiodevices.com" className="text-primary hover:underline">support@dreptobiodevices.com</a> with your Order ID and clear photographs of the damaged/wrong product.</li>
+                    <li><strong>Notification:</strong> You must notify us within 48 hours of delivery by emailing <a href="mailto:support@dreptobiodevices.com" className="text-[#c01226] hover:underline font-semibold">support@dreptobiodevices.com</a> with your Order ID and clear photographs of the damaged/wrong product.</li>
                     <li><strong>Verification:</strong> Our team will review the claim. Once approved, we will initiate a reverse pickup or ask you to dispose of the item safely.</li>
                     <li><strong>Refund Processing:</strong> Refunds will be processed to the original payment method within {REFUND_PROCESSING_TIME} after claim approval.</li>
                 </ul>

@@ -54,14 +54,14 @@ const BottomNav: React.FC = () => {
             >
               {/* Active indicator dot */}
               {active && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-brand-600" />
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[#c01226]" />
               )}
 
               {/* Icon container */}
               <span
                 className={`flex items-center justify-center w-10 h-7 rounded-xl transition-all duration-200 ${
                   active
-                    ? 'bg-brand-50 text-brand-700'
+                    ? 'bg-red-50 text-[#c01226]'
                     : 'text-gray-400 group-active:bg-gray-100'
                 }`}
               >
@@ -76,7 +76,7 @@ const BottomNav: React.FC = () => {
               {/* Label */}
               <span
                 className={`text-[9px] font-semibold tracking-wide transition-colors duration-200 leading-none ${
-                  active ? 'text-brand-700' : 'text-gray-400'
+                  active ? 'text-[#c01226]' : 'text-gray-400'
                 }`}
               >
                 {item.name}

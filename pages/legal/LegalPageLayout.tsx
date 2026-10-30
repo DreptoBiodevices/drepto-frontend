@@ -9,34 +9,34 @@ interface LegalPageLayoutProps {
 }
 
 const LegalPageLayout: React.FC<LegalPageLayoutProps> = ({ title, lastUpdated, children }) => {
-    // Dummy refs for Navbar
-    const dummyRefs = {
-        home: { current: null },
-        product: { current: null },
-        about: { current: null },
-        contact: { current: null },
-    };
-
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50">
-            <Navbar
-                sectionRefs={dummyRefs as any}
-                isMobileMenuOpen={isMobileMenuOpen}
-                setIsMobileMenuOpen={setIsMobileMenuOpen}
-            />
+        <div className="flex flex-col min-h-screen bg-[#f8f9fa] text-slate-900">
+            <Navbar />
 
-            <main className="flex-grow pt-24 md:pt-28 pb-16 px-6">
-                <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-12">
-                    <header className="mb-10 text-center border-b border-gray-100 pb-8">
-                        <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3 font-display">{title}</h1>
+            <main className="flex-grow">
+                {/* Luminous Healthcare Hero */}
+                <div className="bg-gradient-to-b from-[#f8f9fa] via-white to-[#f1f3f6] py-14 sm:py-20 px-4 sm:px-8 border-b border-slate-200/80 relative overflow-hidden">
+                    <div className="max-w-4xl mx-auto relative z-10 text-center">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+                            Legal &amp; Compliance
+                        </div>
+                        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 mb-4 font-display">
+                            {title}
+                        </h1>
                         {lastUpdated && (
-                            <p className="text-gray-500 text-sm font-medium">Effective Date: {lastUpdated}</p>
+                            <p className="text-slate-500 text-sm font-medium">
+                                Effective Date: {lastUpdated}
+                            </p>
                         )}
-                    </header>
-                    <div className="prose prose-teal prose-lg max-w-none text-gray-700">
-                        {children}
+                    </div>
+                </div>
+
+                {/* Content Document Card */}
+                <div className="py-12 sm:py-16 px-4 sm:px-8">
+                    <div className="max-w-4xl mx-auto bg-white rounded-[2rem] shadow-sm border border-slate-200/80 p-6 sm:p-12">
+                        <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed text-sm sm:text-base space-y-4">
+                            {children}
+                        </div>
                     </div>
                 </div>
             </main>

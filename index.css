@@ -149,7 +149,7 @@
   transform: translateX(-50%);
   width: 0;
   height: 2px;
-  background: #0f766e;
+  background: #c01226;
   border-radius: 0 0 4px 4px;
   transition: width 0.25s ease;
 }
@@ -232,7 +232,7 @@
 
 /* ===== GRADIENT TEXT ===== */
 .gradient-text {
-  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  background: linear-gradient(135deg, #c01226, #e11d48);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

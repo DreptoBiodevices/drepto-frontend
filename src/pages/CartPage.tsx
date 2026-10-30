@@ -356,7 +356,7 @@ const CartPage: React.FC = () => {
                     contact: String(user.mobileNumber || "")
                 },
                 theme: {
-                    color: "#0D9488"
+                    color: "#c01226"
                 }
             };
 
@@ -387,17 +387,17 @@ const CartPage: React.FC = () => {
                 {/* Progress Indicators */}
                 {cart.length > 0 && (
                     <div className="flex items-center justify-center mb-8 space-x-4">
-                        <div className={`flex items-center gap-2 ${checkoutStep === 'cart' ? 'text-primary font-bold' : 'text-gray-500'}`}>
+                        <div className={`flex items-center gap-2 ${checkoutStep === 'cart' ? 'text-[#c01226] font-bold' : 'text-gray-500'}`}>
                             <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center">1</div>
                             <span>Cart</span>
                         </div>
                         <div className="w-12 h-1 bg-gray-200"></div>
-                        <div className={`flex items-center gap-2 ${checkoutStep === 'address' ? 'text-primary font-bold' : 'text-gray-500'}`}>
+                        <div className={`flex items-center gap-2 ${checkoutStep === 'address' ? 'text-[#c01226] font-bold' : 'text-gray-500'}`}>
                             <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center">2</div>
                             <span>Shipping</span>
                         </div>
                         <div className="w-12 h-1 bg-gray-200"></div>
-                        <div className={`flex items-center gap-2 ${checkoutStep === 'payment' ? 'text-primary font-bold' : 'text-gray-500'}`}>
+                        <div className={`flex items-center gap-2 ${checkoutStep === 'payment' ? 'text-[#c01226] font-bold' : 'text-gray-500'}`}>
                             <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center">3</div>
                             <span>Payment</span>
                         </div>
@@ -410,7 +410,7 @@ const CartPage: React.FC = () => {
                             <Truck className="w-8 h-8" />
                         </div>
                         <p className="text-gray-500 font-medium text-lg">Your cart is empty.</p>
-                        <button onClick={() => navigate('/our-products')} className="mt-4 text-primary font-semibold hover:underline">
+                        <button onClick={() => navigate('/our-products')} className="mt-4 text-[#c01226] font-semibold hover:underline">
                             Browse Products
                         </button>
                     </div>
@@ -453,7 +453,7 @@ const CartPage: React.FC = () => {
                                                 {/* Offer status badge & breakdown */}
                                                 {pricing.freeUnits > 0 && (
                                                     <div className="flex items-center gap-2 mt-1.5">
-                                                        <span className="text-xs font-bold text-orange-600 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">
+                                                        <span className="text-xs font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
                                                             {pricing.paidUnits} paid
                                                         </span>
                                                         <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
@@ -473,7 +473,7 @@ const CartPage: React.FC = () => {
                                                 <div className="flex items-center gap-4 mt-2">
                                                     <div className="flex flex-col">
                                                         <div className="flex items-baseline gap-2">
-                                                            <p className="text-primary font-bold text-base">
+                                                            <p className="text-[#c01226] font-bold text-base">
                                                                 ₹{pricing.finalTotal}
                                                             </p>
                                                             {pricing.discount > 0 && (
@@ -544,11 +544,11 @@ const CartPage: React.FC = () => {
                                         </div>
                                         <div className="border-t pt-4 flex justify-between font-bold text-lg mb-6">
                                             <span>Est. Total</span>
-                                            <span className="text-primary">₹{calculateSubtotal().toFixed(2)}</span>
+                                            <span className="text-[#c01226]">₹{calculateSubtotal().toFixed(2)}</span>
                                         </div>
                                         <button
                                             onClick={handleProceedToCheckout}
-                                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/25"
+                                            className="w-full bg-[#c01226] text-white py-3 rounded-xl font-bold hover:bg-[#c01226]/90 transition-all shadow-lg shadow-red-600/20"
                                         >
                                             Proceed to Checkout
                                         </button>
@@ -560,8 +560,8 @@ const CartPage: React.FC = () => {
                         {checkoutStep === 'address' && (
                             <div className="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-sm border border-gray-100 animate-slide-in-right">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                                        <MapPin className="w-5 h-5 text-primary" />
+                                    <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center">
+                                        <MapPin className="w-5 h-5 text-[#c01226]" />
                                     </div>
                                     <div>
                                         <h2 className="text-xl font-bold text-gray-900">Shipping Details</h2>
@@ -608,7 +608,7 @@ const CartPage: React.FC = () => {
                                                         {shippingAddress?.houseNo}, {shippingAddress?.street}, {shippingAddress?.city} - {shippingAddress?.pincode}
                                                     </div>
                                                 </div>
-                                                <button onClick={() => setCheckoutStep('address')} className="text-primary text-xs font-bold hover:underline">One-Edit</button>
+                                                <button onClick={() => setCheckoutStep('address')} className="text-[#c01226] text-xs font-bold hover:underline">One-Edit</button>
                                             </div>
                                         </div>
 
@@ -618,11 +618,11 @@ const CartPage: React.FC = () => {
                                             <div className="space-y-3">
                                                 <div
                                                     onClick={() => setShippingMethod('India Post')}
-                                                    className={`p-4 rounded-xl border-2 cursor-pointer flex items-center justify-between transition-all ${shippingMethod === 'India Post' ? 'border-primary bg-primary/5' : 'border-gray-100 hover:border-gray-200'}`}
+                                                    className={`p-4 rounded-xl border-2 cursor-pointer flex items-center justify-between transition-all ${shippingMethod === 'India Post' ? 'border-[#c01226] bg-red-50/30' : 'border-gray-100 hover:border-gray-200'}`}
                                                 >
                                                     <div className="flex items-center gap-3">
-                                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${shippingMethod === 'India Post' ? 'border-primary' : 'border-gray-300'}`}>
-                                                            {shippingMethod === 'India Post' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${shippingMethod === 'India Post' ? 'border-[#c01226]' : 'border-gray-300'}`}>
+                                                            {shippingMethod === 'India Post' && <div className="w-2.5 h-2.5 rounded-full bg-[#c01226]" />}
                                                         </div>
                                                         <div>
                                                             <div className="font-bold text-gray-800">India Post</div>
@@ -661,7 +661,7 @@ const CartPage: React.FC = () => {
                                             </div>
                                             <div className="flex justify-between text-lg font-bold text-gray-900 mt-2 pt-2 border-t border-dashed">
                                                 <span>Total Amount</span>
-                                                <span className="text-primary">₹{calculateTotal().toFixed(2)}</span>
+                                                <span className="text-[#c01226]">₹{calculateTotal().toFixed(2)}</span>
                                             </div>
 
                                             <p className="text-xs text-center text-gray-500 mt-4">
@@ -671,7 +671,7 @@ const CartPage: React.FC = () => {
                                             <button
                                                 onClick={handlePayment}
                                                 disabled={processing || !isRazorpayLoaded}
-                                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg flex items-center justify-center gap-2 mt-2"
+                                                className="w-full bg-[#c01226] text-white py-3 rounded-xl font-bold hover:bg-[#c01226]/90 transition-all shadow-lg flex items-center justify-center gap-2 mt-2"
                                             >
                                                 {processing ? (
                                                     <>

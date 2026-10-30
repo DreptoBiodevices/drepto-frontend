@@ -110,7 +110,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                         value={formData.houseNo}
                         onChange={handleChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border"
                     />
                 </div>
                 <div>
@@ -120,7 +120,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                         name="buildingName"
                         value={formData.buildingName}
                         onChange={handleChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border"
                     />
                 </div>
             </div>
@@ -133,7 +133,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                     value={formData.street}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border"
                 />
             </div>
 
@@ -144,7 +144,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                     name="landmark"
                     value={formData.landmark}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border"
                 />
             </div>
 
@@ -157,7 +157,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                         value={formData.city}
                         onChange={handleChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border"
                     />
                 </div>
                 <div>
@@ -167,7 +167,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                         value={formData.state}
                         onChange={handleChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border bg-white"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border bg-white"
                     >
                         <option value="">Select State</option>
                         {indianStates.map((state) => (
@@ -187,7 +187,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                         value={formData.country}
                         onChange={handleChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border bg-white"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border bg-white"
                     >
                         <option value="">Select Country</option>
                         {countries.map((c) => (
@@ -207,7 +207,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                         required
                         maxLength={6}
                         inputMode="numeric"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border"
                     />
                 </div>
             </div>
@@ -222,13 +222,13 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({ onSubmit, ini
                     required
                     maxLength={10}
                     inputMode="numeric"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2 border"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c01226] focus:ring-2 focus:ring-red-500/20 p-2 border"
                 />
             </div>
 
             <button
                 type="submit"
-                className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors font-semibold"
+                className="w-full bg-[#c01226] text-white py-3 px-6 rounded-xl hover:bg-red-700 transition-all font-bold shadow-md"
             >
                 Confirm Address & Proceed
             </button>

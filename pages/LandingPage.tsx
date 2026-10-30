@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import SEOHead from '../components/SEOHead';
 import Navbar from '../components/Navbar';
-import HeroSection from '../components/HeroSection';
+import CorporateHeroSection from '../components/CorporateHeroSection';
 import ScienceSection from '../components/ScienceSection';
 import ProductSection from '../components/ProductSection';
 import AboutSection from '../components/AboutSection';
@@ -55,8 +55,8 @@ const LandingPage: React.FC = () => {
       />
 
       {/* Main Content - Visible on all screens */}
-      <main>
-        <div ref={homeRef}><HeroSection /></div>
+      <main className="-mt-16 sm:-mt-20">
+        <div ref={homeRef}><CorporateHeroSection /></div>
         <ScienceSection />
         <div ref={productRef}><ProductSection /></div>
         <div ref={aboutRef}><AboutSection /></div>

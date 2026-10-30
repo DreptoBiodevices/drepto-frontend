@@ -54,7 +54,7 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-12 h-12 rounded-xl bg-teal-600 flex items-center justify-center text-white mb-3 shadow-md shadow-teal-600/20">
@@ -82,7 +82,7 @@ const AdminLogin: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition-all"
+                className="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226] transition-all"
                 placeholder="Dreptoadmin@gmail.com"
                 required
               />
@@ -99,7 +99,7 @@ const AdminLogin: React.FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-9 pr-10 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition-all"
+                className="w-full pl-9 pr-10 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226] transition-all"
                 placeholder="••••••••"
                 required
               />
@@ -117,7 +117,7 @@ const AdminLogin: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 bg-teal-600 text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-teal-700 active:scale-[0.99] transition-all shadow-md shadow-teal-600/20 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+            className="w-full mt-2 bg-[#c01226] text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-red-700 active:scale-[0.99] transition-all shadow-md shadow-red-600/20 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
           >
             {loading ? 'Authenticating…' : 'Enter Admin Portal'}
             <ArrowRight className="w-4 h-4" />

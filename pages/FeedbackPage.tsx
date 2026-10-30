@@ -46,10 +46,10 @@ const FeedbackPage: React.FC = () => {
 
     if (submitState === 'success') {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-emerald-50 flex items-center justify-center p-6">
+            <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-6">
                 <div className="max-w-md w-full text-center animate-fade-in-up">
-                    <div className="bg-white rounded-3xl shadow-xl p-10 border border-teal-100">
-                        <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-6 animate-zoom-in">
+                    <div className="bg-white rounded-3xl shadow-xl p-10 border border-slate-200">
+                        <div className="w-20 h-20 bg-[#c01226] rounded-full flex items-center justify-center mx-auto mb-6 animate-zoom-in">
                             <CheckCircle className="w-10 h-10 text-white" />
                         </div>
                         <h2 className="text-2xl font-bold text-gray-800 font-display mb-3">Thank You!</h2>
@@ -59,7 +59,7 @@ const FeedbackPage: React.FC = () => {
                         <div className="flex flex-col gap-3">
                             <button
                                 onClick={() => setSubmitState('idle')}
-                                className="w-full py-3 bg-gradient-to-r from-primary to-teal-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:opacity-95"
+                                className="w-full py-3 bg-[#c01226] hover:bg-red-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:opacity-95"
                             >
                                 Submit Another
                             </button>
@@ -77,28 +77,28 @@ const FeedbackPage: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-emerald-50 flex items-center justify-center p-4 md:p-6">
+        <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-4 md:p-6">
             <div className="max-w-lg w-full">
                 {/* Back Link */}
                 <Link
                     to="/"
-                    className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors mb-6 text-sm font-medium"
+                    className="inline-flex items-center gap-2 text-gray-500 hover:text-[#c01226] transition-colors mb-6 text-sm font-medium"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     Back to Home
                 </Link>
 
                 {/* Card */}
-                <div className="bg-white rounded-3xl shadow-xl border border-teal-50 overflow-hidden">
+                <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-primary to-teal-600 px-8 py-8 text-white text-center">
+                    <div className="bg-gradient-to-b from-[#f8f9fa] to-white px-8 py-8 text-slate-900 text-center border-b border-slate-200/80">
                         <img
                             src="/images/logo.png"
                             alt="Drepto Biodevices"
-                            className="h-10 mx-auto mb-4 brightness-0 invert"
+                            className="h-10 mx-auto mb-4 object-contain"
                         />
-                        <h1 className="text-2xl md:text-3xl font-bold font-display">We Value Your Feedback</h1>
-                        <p className="text-teal-100 mt-2 text-sm">Help us improve — share your experience with Drepto</p>
+                        <h1 className="text-2xl md:text-3xl font-bold font-display font-black text-slate-900">We Value Your Feedback</h1>
+                        <p className="text-slate-500 mt-2 text-sm">Help us improve — share your experience with Drepto</p>
                     </div>
 
                     {/* Form */}
@@ -148,7 +148,7 @@ const FeedbackPage: React.FC = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 required
                                 placeholder="John Doe"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c01226] focus:ring-2 focus:ring-[#c01226]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
                             />
                         </div>
 
@@ -163,7 +163,7 @@ const FeedbackPage: React.FC = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="you@example.com"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c01226] focus:ring-2 focus:ring-[#c01226]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
                             />
                         </div>
 
@@ -179,7 +179,7 @@ const FeedbackPage: React.FC = () => {
                                 required
                                 rows={4}
                                 placeholder="Tell us about your experience…"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-gray-800 placeholder:text-gray-300 resize-none"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c01226] focus:ring-2 focus:ring-[#c01226]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300 resize-none"
                             />
                         </div>
 
@@ -195,7 +195,7 @@ const FeedbackPage: React.FC = () => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full py-3.5 bg-gradient-to-r from-primary to-teal-600 text-white rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full py-3.5 bg-[#c01226] hover:bg-red-700 text-white rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {isSubmitting ? (
                                 <>

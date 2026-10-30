@@ -73,7 +73,7 @@ const InvoicePage: React.FC = () => {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="flex flex-col items-center">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#c01226] mb-4"></div>
                     <p className="text-gray-500 font-medium">Loading invoice...</p>
                 </div>
             </div>
@@ -86,7 +86,7 @@ const InvoicePage: React.FC = () => {
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-800">Order Not Found</h2>
                     <p className="text-gray-500 mt-2">The requested invoice could not be retrieved.</p>
-                    <button onClick={handleBack} className="mt-4 text-primary hover:underline font-medium">
+                    <button onClick={handleBack} className="mt-4 text-[#c01226] hover:underline font-medium">
                         Return {localStorage.getItem('adminAuth') === 'true' ? 'to Admin Portal' : 'to Orders'}
                     </button>
                 </div>
@@ -105,14 +105,14 @@ const InvoicePage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 py-8 px-4 print:bg-white print:p-0">
-            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm overflow-hidden print:shadow-none">
+            <div className="max-w-4xl mx-auto bg-white rounded-[2rem] shadow-sm border border-slate-200/80 overflow-hidden print:shadow-none">
                 {/* Toolbar */}
-                <div className="bg-gray-800 text-white p-4 flex justify-between items-center print:hidden">
+                <div className="bg-neutral-900 text-white border-b border-white/10 p-4 flex justify-between items-center print:hidden">
                     <button onClick={handleBack} className="flex items-center gap-2 text-sm hover:text-gray-300">
                         <ArrowLeft className="w-4 h-4" /> Back {localStorage.getItem('adminAuth') === 'true' ? 'to Admin Portal' : 'to Orders'}
                     </button>
                     <div className="flex gap-3">
-                        <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-primary rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">
+                        <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-[#c01226] rounded-xl text-sm font-bold hover:bg-red-700 shadow-md transition-colors">
                             <Printer className="w-4 h-4" /> Print Invoice
                         </button>
                     </div>

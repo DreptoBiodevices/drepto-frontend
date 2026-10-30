@@ -8,26 +8,27 @@ export default {
     './components/**/*.{ts,tsx}',
     './pages/**/*.{ts,tsx}',
     './hooks/**/*.{ts,tsx}',
-    './lib/**/*.{ts,tsx}'
+    './lib/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}'
   ],
   theme: {
     extend: {
       colors: {
-        primary: '#007E85',
+        primary: '#c01226',
         secondary: '#10B981',
-        'light-blue': '#F0FDFA',
-        'dark-blue': '#115E59',
-        'accent': '#F472B6',
+        'light-blue': '#fef2f2',
+        'dark-blue': '#1c1917',
+        'accent': '#c01226',
         brand: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          500: '#14b8a6',
-          600: '#0d9488',
-          700: '#0f766e',
-          800: '#115e59',
-          900: '#134e4a',
-          950: '#042f2e',
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#c01226',
+          800: '#991b1b',
+          900: '#7f1d1d',
+          950: '#450a0a',
         },
         clinical: {
           card: '#ffffff',

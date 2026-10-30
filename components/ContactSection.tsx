@@ -1,259 +1,268 @@
 import React, { useState } from 'react';
 import { ContactService } from '../lib/api_controller';
-import { Phone, Linkedin } from 'lucide-react';
+import { Phone, Mail, MapPin, Building2, Send, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 
 const ContactSection: React.FC = () => {
-    const { t } = useLanguage();
-    const [submitted, setSubmitted] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        contactNumber: '',
-        subject: '',
-        message: ''
-    });
+  const { t } = useLanguage();
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    contactNumber: '',
+    subject: '',
+    message: '',
+  });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({ ...formData, [e.target.id]: e.target.value });
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError('');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-        try {
-            // Basic Validation if needed, but HTML5 validation handles 'required'
-            await ContactService.create(formData);
-            setSubmitted(true);
-            setFormData({ name: '', email: '', contactNumber: '', subject: '', message: '' }); // Reset
-        } catch (err: any) {
-            console.error("Contact submission failed", err);
-            setError(err.response?.data?.message || "Failed to send message. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    try {
+      await ContactService.create(formData);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', contactNumber: '', subject: '', message: '' });
+    } catch (err: any) {
+      console.error('Contact submission failed', err);
+      setError(err.response?.data?.message || 'Failed to send message. Please try again or email us directly.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <section className="py-20 bg-gray-50">
-            <div className="container mx-auto px-6">
-                {/* Header Section */}
-                <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-primary inline-block border-b-4 border-primary pb-2 mb-6">
-                        {t('contact.title')}
-                    </h2>
-                    <p className="text-gray-600 text-lg">
-                        {t('contact.subtitle')}
+  return (
+    <section className="py-20 sm:py-28 bg-white border-t border-slate-200/80" id="contact">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header: Emcure Style with Red Accent */}
+        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <Mail className="w-3.5 h-3.5 text-[#c01226]" />
+            <span>CONNECT WITH OUR TEAM</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight font-display">
+            Contact &amp; Institutional Partnerships
+          </h2>
+          <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
+            Whether you are a healthcare professional, institutional partner, or seeking personal product support, our team at SINE, IIT Bombay is here to assist.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 max-w-6xl mx-auto items-stretch">
+          
+          {/* Left Column: Corporate & Laboratory Information */}
+          <div className="lg:col-span-5 bg-[#ebedf1] rounded-3xl p-8 sm:p-10 border border-slate-200/80 flex flex-col justify-between shadow-2xs">
+            <div>
+              <h3 className="text-2xl font-black text-slate-900 mb-6 font-display">
+                Drepto Biodevices <span className="text-[#c01226]">Pvt. Ltd.</span>
+              </h3>
+
+              <div className="space-y-6 text-sm text-slate-700">
+                {/* R&D Lab */}
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                    <Building2 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">R&amp;D &amp; Incubation Facility</h4>
+                    <p className="text-slate-600 text-xs sm:text-sm mt-0.5 leading-relaxed">
+                      Society for Innovation and Entrepreneurship (SINE), CSRE Building, Indian Institute of Technology Bombay, Powai, Mumbai 400076, India.
                     </p>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                    {/* Left Column: Contact Form */}
-                    <div className="bg-white p-8 rounded-lg shadow-lg">
-                        <h3 className="text-2xl font-bold text-primary text-center mb-8">
-                            {t('contact.sendMessage')}
-                        </h3>
-
-                        {submitted ? (
-                            <div className="text-center py-10">
-                                <h3 className="text-2xl font-bold text-secondary mb-2">{t('contact.thankYou')}</h3>
-                                <p className="text-gray-600">{t('contact.successMessage')}</p>
-                                <button
-                                    onClick={() => setSubmitted(false)}
-                                    className="mt-6 text-primary underline hover:text-dark-blue"
-                                >
-                                    {t('contact.sendAnother')}
-                                </button>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleSubmit} className="space-y-4">
-                                {error && (
-                                    <div className="bg-red-50 text-red-500 p-3 rounded-md text-sm">
-                                        {error}
-                                    </div>
-                                )}
-                                <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.name')}</label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        required
-                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.email')}</label>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required
-                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="contactNumber" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.contactNumber')}</label>
-                                    <input
-                                        type="tel"
-                                        id="contactNumber" // Changed ID to match DTO field name
-                                        value={formData.contactNumber}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.subject')}</label>
-                                    <input
-                                        type="text"
-                                        id="subject"
-                                        value={formData.subject}
-                                        onChange={handleChange}
-                                        required
-                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.message')}</label>
-                                    <textarea
-                                        id="message"
-                                        rows={4}
-                                        value={formData.message}
-                                        onChange={handleChange}
-                                        required
-                                        className="w-full px-4 py-2 border border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                    ></textarea>
-                                </div>
-                                <div className="pt-4">
-                                    <button
-                                        type="submit"
-                                        disabled={loading}
-                                        className={`bg-primary text-white font-semibold py-2 px-6 rounded hover:bg-dark-blue transition-colors w-full flex justify-center items-center ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                                    >
-                                        {loading ? (
-                                            <>
-                                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                </svg>
-                                                {t('contact.sending')}
-                                            </>
-                                        ) : t('contact.send')}
-                                    </button>
-                                </div>
-                            </form>
-                        )}
-                    </div>
-
-                    {/* Right Column: Info & Hiring */}
-                    <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col justify-between">
-                        {/* Hiring Section */}
-                        <div className="text-center mb-8">
-                            <h3 className="text-2xl font-bold text-primary mb-6">
-                                We're Growing Fast and Hiring!
-                            </h3>
-                            <p className="text-gray-600 mb-8">
-                                Join our team and help shape the future of technology.
-                            </p>
-                            <a href="https://forms.gle/Li6JY1YQW5fs8bUW8" target="_blank" rel="noopener noreferrer" className="block w-full py-3 text-center no-underline bg-[#00857C] text-white font-semibold rounded-lg shadow-md hover:bg-[#006A63] transition-colors">Submit Your Application</a>
-                        </div>
-
-                        {/* Why Join Us - Filler Content */}
-                        <div className="mb-8">
-                            <h4 className="text-lg font-bold text-gray-800 mb-4 text-center">Why Join Drepto?</h4>
-                            <ul className="space-y-3 text-gray-600 px-4">
-                                <li className="flex items-start gap-2">
-                                    <svg className="w-5 h-5 text-teal-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span>Work on ground-breaking medical technology</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <svg className="w-5 h-5 text-teal-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span>Collaborative and innovative environment</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <svg className="w-5 h-5 text-teal-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span>Opportunities for growth and research</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <hr className="border-gray-200 my-8" />
-
-                        {/* Connect Section */}
-                        <div className="text-center">
-                            <h3 className="text-2xl font-bold text-primary mb-6">
-                                Connect With Us
-                            </h3>
-                            <div className="flex flex-col gap-4 text-left max-w-sm mx-auto">
-                                {/* Email */}
-                                <div className="flex items-start gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <span className="text-lg">✉</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-primary text-sm">Email</p>
-                                        <a href="mailto:office@dreptobiodevices.com" className="text-gray-700 hover:text-primary transition-colors break-all">office@dreptobiodevices.com</a>
-                                    </div>
-                                </div>
-
-                                {/* Contact Number */}
-                                <div className="flex items-start gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Phone className="w-4 h-4 text-green-600" />
-                                    </div>
-
-                                    <div>
-                                        <p className="font-bold text-primary text-sm">Phone</p>
-                                        <a
-                                            href="tel:+918451822256"
-                                            className="text-gray-700 hover:text-primary transition-colors"
-                                        >
-                                            +91 84518 22256
-                                        </a>
-                                    </div>
-                                </div>
-
-                                {/* Working Hours */}
-                                <div className="flex items-start gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <span className="text-lg">🕒</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-primary text-sm">Working Hours</p>
-                                        <p className="text-gray-700">Monday - Friday, 9am - 5pm IST</p>
-                                    </div>
-                                </div>
-
-                                {/* LinkedIn */}
-                                <div className="flex items-start gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Linkedin className="w-4 h-4 text-[#0077b5]" />
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-primary text-sm">LinkedIn</p>
-                                        <a
-                                            href="https://www.linkedin.com/company/drepto-biodevices-pvt-ltd/posts/?feedView=all"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-gray-700 hover:text-primary transition-colors"
-                                        >
-                                            Follow us on LinkedIn
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                {/* Registered Office */}
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">Registered Corporate Office</h4>
+                    <p className="text-slate-600 text-xs sm:text-sm mt-0.5 leading-relaxed">
+                      1001-11, Rustomjee Ozone, Goregaon West, Mumbai, Maharashtra 400104.
+                    </p>
+                  </div>
                 </div>
+
+                {/* Email Contacts */}
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">Direct Enquiries</h4>
+                    <p className="text-slate-600 text-xs sm:text-sm mt-0.5">
+                      info@dreptobiodevices.com<br />
+                      support@dreptobiodevices.com
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-        </section>
-    );
+
+            {/* Corporate Registration Badges */}
+            <div className="pt-6 mt-8 border-t border-slate-300/80 space-y-2 text-xs">
+              <div className="flex justify-between text-slate-500">
+                <span className="font-bold text-slate-700">CIN:</span>
+                <span className="font-mono text-slate-800">U21001MH2025PTC445595</span>
+              </div>
+              <div className="flex justify-between text-slate-500">
+                <span className="font-bold text-slate-700">GSTIN:</span>
+                <span className="font-mono text-slate-800">27AALCD6030F1ZS</span>
+              </div>
+              <div className="flex justify-between text-slate-500">
+                <span className="font-bold text-slate-700">Incubator:</span>
+                <span className="text-[#c01226] font-semibold">SINE, IIT Bombay</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Contact & Message Form */}
+          <div className="lg:col-span-7 bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-sm flex flex-col justify-center">
+            <h3 className="text-2xl font-black text-slate-900 mb-2 font-display">
+              Send a Direct Message
+            </h3>
+            <p className="text-slate-500 text-xs sm:text-sm mb-6">
+              Please share your requirement and our team will get in touch promptly.
+            </p>
+
+            {submitted ? (
+              <div className="text-center py-12 space-y-4">
+                <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-8 h-8" />
+                </div>
+                <h4 className="text-2xl font-bold text-slate-900">Thank You!</h4>
+                <p className="text-slate-600 text-sm max-w-md mx-auto">
+                  Your message has been received by our scientific and corporate communications team. We will respond within 24 business hours.
+                </p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="mt-4 px-6 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                >
+                  Send Another Message
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="bg-red-50 text-red-700 border border-red-200 p-3 rounded-xl text-xs font-semibold">
+                    {error}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="e.g. Dr. Priya Verma"
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="name@organization.com"
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="contactNumber" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="contactNumber"
+                      value={formData.contactNumber}
+                      onChange={handleChange}
+                      placeholder="+91 98765 43210"
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="subject" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      Nature of Inquiry *
+                    </label>
+                    <select
+                      id="subject"
+                      required
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors text-slate-700"
+                    >
+                      <option value="">Select Category</option>
+                      <option value="MenstroHerb Order / Feedback">MenstroHerb Order &amp; Product Support</option>
+                      <option value="Clinical / Medical Research Partnership">Clinical &amp; Medical Research</option>
+                      <option value="Pharmacy / Distribution Tie-up">Pharmacy &amp; Distribution Partnership</option>
+                      <option value="Transdermal Formulation Licensing">Transdermal Matrix Licensing</option>
+                      <option value="Other">General Corporate Inquiry</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Your Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell us about your query or how you would like to collaborate..."
+                    className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3.5 bg-[#c01226] hover:bg-red-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {loading ? (
+                    <span>Submitting...</span>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>Transmit Message to Scientific Team</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  );
 };
 
 export default ContactSection;

@@ -1,92 +1,154 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
+import { Building2, MapPin, Mail, ShieldCheck, Award } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const { t } = useLanguage();
+
   return (
-    <footer className="bg-[#001a2c] text-white border-t border-white/5">
-      <div className="container mx-auto px-6 py-8">
+    <footer className="bg-neutral-950 text-slate-400 border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        
         {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
 
-          {/* Column 1: Logo & Company Info */}
-          <div className="flex flex-col gap-4">
-            <img
-              src="/images/logo.png"
-              alt="Drepto Biodevices Logo"
-              className="h-10 w-auto brightness-0 invert self-start"
-            />
-            <p className="text-teal-100/60 text-sm leading-relaxed">
-              Advancing healthcare through innovative biodevice solutions and diagnostic excellence.
+          {/* Column 1: Brand & SINE IIT Bombay (5 cols) */}
+          <div className="lg:col-span-5 flex flex-col gap-5">
+            <Link to="/" className="inline-block">
+              <img
+                src="/images/logo.png"
+                alt="Drepto Biodevices Logo"
+                className="h-9 w-auto brightness-0 invert opacity-95"
+              />
+            </Link>
+
+            <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+              Drepto Biodevices is a deep-tech biomedical enterprise incubated at SINE, IIT Bombay. We pioneer non-invasive transdermal drug delivery platforms—headlined by MenstroHerb™—delivering gentle, targeted therapeutic relief for feminine hygiene and chronic inflammatory conditions without oral side effects.
             </p>
-            {/* Registration Details */}
-            <div className="flex flex-col gap-2 pt-4 border-t border-white/10">
-              <div className="flex items-center justify-between text-[10px] tracking-widest uppercase">
-                <span className="text-teal-400 font-bold">GSTIN</span>
-                <span className="text-white/80 font-mono select-all">27AALCD6030F1ZS</span>
+
+            {/* Corporate Regulatory Credentials */}
+            <div className="flex flex-col gap-2 pt-4 border-t border-white/10 max-w-sm">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-500 font-semibold uppercase tracking-wider">Corporate ID (CIN)</span>
+                <span className="text-slate-300 font-mono select-all">U21001MH2025PTC445595</span>
               </div>
-              <div className="flex items-center justify-between text-[10px] tracking-widest uppercase">
-                <span className="text-teal-400 font-bold">CIN</span>
-                <span className="text-white/80 font-mono select-all">U21001MH2025PTC445595</span>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-500 font-semibold uppercase tracking-wider">GSTIN</span>
+                <span className="text-slate-300 font-mono select-all">27AALCD6030F1ZS</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-500 font-semibold uppercase tracking-wider">Incubator Hub</span>
+                <span className="text-red-400 font-semibold">SINE, IIT Bombay</span>
               </div>
             </div>
           </div>
 
-          {/* Column 2: Addresses */}
-          <div className="lg:col-span-1 space-y-4">
-            <div className="flex items-center gap-2 mb-4 text-teal-400">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <h3 className="font-bold text-xs uppercase tracking-[0.2em]">{t('footer.ourLocations')}</h3>
-            </div>
+          {/* Column 2: Therapeutic Innovations & Products (2 cols) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="font-bold text-white text-xs uppercase tracking-widest border-b border-white/10 pb-2">
+              Therapeutics
+            </h4>
+            <nav className="flex flex-col space-y-2.5 text-xs sm:text-sm">
+              <Link to="/our-products" className="text-slate-400 hover:text-red-400 transition-colors">
+                MenstroHerb™ Patch
+              </Link>
+              <Link to="/our-products" className="text-slate-400 hover:text-red-400 transition-colors">
+                Menstrual Care Packs
+              </Link>
+              <Link to="/our-research" className="text-slate-400 hover:text-red-400 transition-colors">
+                Transdermal Matrix R&amp;D
+              </Link>
+              <Link to="/our-research" className="text-slate-400 hover:text-red-400 transition-colors">
+                ArthriTrans System
+              </Link>
+              <Link to="/our-products" className="text-slate-400 hover:text-red-400 transition-colors">
+                All Products
+              </Link>
+            </nav>
+          </div>
 
-            <div className="space-y-3">
+          {/* Column 3: Corporate & Clinical (2 cols) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="font-bold text-white text-xs uppercase tracking-widest border-b border-white/10 pb-2">
+              Company
+            </h4>
+            <nav className="flex flex-col space-y-2.5 text-xs sm:text-sm">
+              <Link to="/about-us" className="text-slate-400 hover:text-red-400 transition-colors">
+                About Drepto
+              </Link>
+              <Link to="/about-us" className="text-slate-400 hover:text-red-400 transition-colors">
+                Founder &amp; Leadership
+              </Link>
+              <Link to="/our-research" className="text-slate-400 hover:text-red-400 transition-colors">
+                Clinical Research Dossier
+              </Link>
+              <Link to="/contact" className="text-slate-400 hover:text-red-400 transition-colors">
+                Institutional Enquiries
+              </Link>
+              <Link to="/feedback" className="text-slate-400 hover:text-red-400 transition-colors">
+                Patient Feedback
+              </Link>
+            </nav>
+          </div>
+
+          {/* Column 4: Laboratory & Facility Addresses (3 cols) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="font-bold text-white text-xs uppercase tracking-widest border-b border-white/10 pb-2">
+              Laboratory &amp; Offices
+            </h4>
+            
+            <div className="space-y-3.5 text-xs text-slate-400">
               <div>
-                <h4 className="text-white text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Office Address</h4>
-                <p className="text-teal-50 text-sm leading-relaxed mb-3">
-                  SINE IIT Bombay, Mumbai 400076, India
+                <p className="text-slate-200 font-semibold mb-0.5">R&amp;D &amp; Incubation Hub:</p>
+                <p className="leading-relaxed">
+                  Society for Innovation &amp; Entrepreneurship (SINE), CSRE Bldg, IIT Bombay, Powai, Mumbai 400076.
                 </p>
-                <h4 className="text-white text-xs font-bold mb-1 opacity-50 uppercase tracking-tighter">Registered Address</h4>
-                <p className="text-teal-50 text-sm leading-relaxed">
-                  1001-11, Rustomjee Ozone, Co-op Hsg Behind Teleexch, Goregaon (Mumbai). Mumbai, Goregaon West, Maharashtra, India, 400104.
+              </div>
+
+              <div>
+                <p className="text-slate-200 font-semibold mb-0.5">Corporate Office:</p>
+                <p className="leading-relaxed">
+                  1001-11, Rustomjee Ozone, Goregaon West, Mumbai, Maharashtra 400104.
                 </p>
+              </div>
+
+              <div className="pt-2">
+                <p className="text-slate-300 font-medium">Direct Inquiries:</p>
+                <a
+                  href="mailto:info@dreptobiodevices.com"
+                  className="text-red-400 hover:underline"
+                >
+                  info@dreptobiodevices.com
+                </a>
               </div>
             </div>
           </div>
 
-          {/* Column 3: Navigation Links */}
-          <div className="grid grid-cols-2 gap-6 lg:col-span-2">
-            <div className="flex flex-col gap-3">
-              <h4 className="font-bold text-white text-sm uppercase tracking-wider">{t('footer.company')}</h4>
-              <nav className="flex flex-col gap-2">
-                <Link to="/about-us" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.aboutUs')}</Link>
-                <Link to="/our-research" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Our Research</Link>
-                <Link to="/contact" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.contact')}</Link>
-                <Link to="/our-products" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">{t('nav.ourProducts') || 'Our Products'}</Link>
-                <Link to="/feedback" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Feedback</Link>
-                {/* <Link to="/social" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Blog</Link> */}
-              </nav>
-            </div>
-            <div className="flex flex-col gap-3">
-              <h4 className="font-bold text-white text-sm uppercase tracking-wider">{t('footer.legal')}</h4>
-              <nav className="flex flex-col gap-2">
-                <Link to="/privacy-policy" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Privacy Policy</Link>
-                <Link to="/terms" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Terms of Service</Link>
-                <Link to="/refund-policy" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Refund Policy</Link>
-                <Link to="/shipping-policy" className="text-teal-100/60 hover:text-teal-400 text-sm transition-colors">Shipping Policy</Link>
-              </nav>
-            </div>
+        </div>
+
+        {/* Bottom Bar: Legal & Attribution */}
+        <div className="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div>
+            &copy; {new Date().getFullYear()} Drepto Biodevices Pvt. Ltd. Incubated at SINE, IIT Bombay. All rights reserved.
+          </div>
+
+          <div className="flex items-center gap-6">
+            <Link to="/privacy-policy" className="hover:text-slate-400 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="hover:text-slate-400 transition-colors">
+              Terms of Service
+            </Link>
+            <Link to="/refund-policy" className="hover:text-slate-400 transition-colors">
+              Refund Policy
+            </Link>
+            <Link to="/shipping-policy" className="hover:text-slate-400 transition-colors">
+              Shipping Policy
+            </Link>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white/5 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-teal-200/40 text-[11px] font-medium tracking-widest uppercase">
-          <p>&copy; {new Date().getFullYear()} Drepto Biodevices Pvt. Ltd. All Rights Reserved.</p>
-          <p>Innovating Healthcare & Diagnostics</p>
-        </div>
       </div>
     </footer>
   );

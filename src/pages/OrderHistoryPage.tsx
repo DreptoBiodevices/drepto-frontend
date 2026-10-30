@@ -104,19 +104,19 @@ const OrderHistoryPage: React.FC = () => {
         <div className="flex overflow-x-auto space-x-2 border-b border-gray-200 mb-8 pb-2 scrollbar-hide">
             <button
                 onClick={() => setActiveTab('products')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'products' ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'products' ? 'bg-[#c01226] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
             >
                 <Package className="w-4 h-4" /> Product Orders
             </button>
             <button
                 onClick={() => setActiveTab('doctor')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'doctor' ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'doctor' ? 'bg-[#c01226] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
             >
                 <Stethoscope className="w-4 h-4" /> Doctor Appointments
             </button>
             <button
                 onClick={() => setActiveTab('nurse')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'nurse' ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'nurse' ? 'bg-[#c01226] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
             >
                 <FileText className="w-4 h-4" /> Nurse Appointments
             </button>
@@ -204,7 +204,7 @@ const OrderHistoryPage: React.FC = () => {
                                         e.stopPropagation();
                                         navigate(`/invoice/${order.id}`);
                                     }}
-                                    className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
+                                    className="px-3 py-1.5 text-xs font-medium text-[#c01226] bg-red-50 font-bold border border-red-200 rounded-lg hover:bg-[#c01226]/20 transition-colors"
                                 >
                                     View Invoice
                                 </button>
@@ -393,7 +393,7 @@ const OrderHistoryPage: React.FC = () => {
 
                 {isLoading ? (
                     <div className="text-center py-20">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#c01226] mx-auto"></div>
                         <p className="mt-4 text-gray-500">Loading data...</p>
                     </div>
                 ) : (

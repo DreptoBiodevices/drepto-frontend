@@ -86,7 +86,7 @@ const Main: React.FC = () => {
       <div className="min-h-screen flex flex-col pb-20 md:pb-0">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/lab-tests" element={<LabTestsPage />} />
+          <Route path="/lab-tests" element={<Navigate to="/our-products" replace />} />
           <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/our-products" element={<OurProductsPage />} />

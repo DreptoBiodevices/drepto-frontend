@@ -77,7 +77,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                                 className={`
                                     w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-200 group relative
                                     ${isActive
-                                        ? 'bg-blue-50 text-blue-600 shadow-sm'
+                                        ? 'bg-red-50 text-[#c01226] shadow-sm'
                                         : item.disabled
                                             ? 'text-slate-300 cursor-not-allowed opacity-70'
                                             : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
@@ -87,7 +87,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                                 <div className={`
                                     w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200
                                     ${isActive
-                                        ? 'bg-white shadow-sm text-blue-600'
+                                        ? 'bg-white shadow-sm text-[#c01226]'
                                         : item.disabled
                                             ? 'bg-slate-50 text-slate-300'
                                             : 'bg-slate-50 text-slate-400 group-hover:bg-white group-hover:shadow-sm group-hover:text-slate-600'
@@ -103,7 +103,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                                         </span>
                                     )}
                                 </div>
-                                {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />}
+                                {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#c01226]" />}
                             </button>
                         );
                     })}

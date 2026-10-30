@@ -5,27 +5,20 @@ import { useLanguage } from '../hooks/useLanguage';
 import { LangCode } from '../lib/translations';
 import {
   Home,
-  Pill,
-  TestTube2,
-  Zap,
-  Info,
-  Mail,
   Menu,
   X,
   LogIn,
   UserPlus,
   ChevronRight,
+  ChevronDown,
   ShoppingBag,
   User,
   LogOut,
   Package,
   FileText,
   Globe,
-  MapPin,
   Upload,
   Check,
-  AlertCircle,
-  BookOpen,
   Shield,
 } from 'lucide-react';
 
@@ -47,8 +40,11 @@ const LANGUAGES = [
   { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી' },
 ];
 
-
-const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefObject<HTMLDivElement>>, isMobileMenuOpen: externalIsOpen, setIsMobileMenuOpen: externalSetIsOpen }) => {
+const Navbar: React.FC<NavbarProps> = ({
+  sectionRefs = {} as Record<string, RefObject<HTMLDivElement>>,
+  isMobileMenuOpen: externalIsOpen,
+  setIsMobileMenuOpen: externalSetIsOpen,
+}) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const { user, logout, setAuthModalView } = useAuth();
   const { language, setLanguage, t } = useLanguage();
@@ -57,20 +53,16 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
   const setIsMobileMenuOpen = externalSetIsOpen || setInternalIsOpen;
 
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
-
   // ── Language state ──
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const languageRef = useRef<HTMLDivElement>(null);
-
-  // ── Location state ──
-  const [locationName, setLocationName] = useState(() => localStorage.getItem('drepto_location') || 'Select Location');
-  const [showLocationPrompt, setShowLocationPrompt] = useState(false);
-  const locationPromptRef = useRef<HTMLDivElement>(null);
-  const [isLocating, setIsLocating] = useState(false);
 
   // ── Upload Prescription state ──
   const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
@@ -98,48 +90,52 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
     return () => window.removeEventListener('cart:updated', updateCartCount);
   }, []);
 
-  const navLinks = [
-    { name: t('nav.home'), ref: sectionRefs.home, path: '/', icon: Home, key: 'Home' },
-    { name: t('nav.ourProducts'), path: '/our-products', icon: ShoppingBag, key: 'Our Products' },
-    { name: t('nav.ourResearch') || 'Our Research', path: '/our-research', icon: BookOpen, key: 'Our Research' },
-    { name: t('nav.aboutUs'), path: '/about-us', icon: Info, key: 'About Us' },
-    { name: t('nav.contact'), path: '/contact', icon: Mail, key: 'Contact' },
-  ];
-
-  const handleNavigation = (link: typeof navLinks[0]) => {
-    setIsMobileMenuOpen(false);
-
-    if (link.path && link.path !== '/') {
-      navigate(link.path);
-      return;
-    }
-
-    if (link.name === 'Home') {
-      if (!isHomePage) {
-        navigate('/');
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      return;
-    }
-
-    if (!isHomePage) {
-      navigate('/');
-      return;
-    }
-
-    if (link.ref) {
-      link.ref.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleMouseEnter = (name: string) => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setActiveDropdown(name);
   };
 
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 150);
+  };
+
+  // ── Emcure-inspired Nav Links with Dropdowns ──
+  const navItems = [
+    {
+      name: 'About Us',
+      path: '/about-us',
+      dropdown: [
+        { label: 'About Drepto', desc: 'Deeptech biomedical innovations at SINE, IIT Bombay', path: '/about-us' },
+        { label: 'Leadership & Team', desc: 'Message from Founder Rahul Kumar Gupta & Advisors', path: '/about-us' },
+        { label: 'Incubation & Recognition', desc: 'SINE IIT Bombay, BIRAC, and JAIMS', path: '/about-us' },
+      ],
+    },
+    {
+      name: 'Our Products',
+      path: '/our-products',
+      dropdown: [
+        { label: 'MenstroHerb (Cramp Relief)', desc: '12-hour sustained herbal patch for dysmenorrhea', path: '/our-products' },
+        { label: 'Chronic Pain Therapeutics', desc: 'Arthritis and targeted musculoskeletal patches', path: '/our-products' },
+        { label: 'Browse Product Catalog', desc: 'Explore all formulations, packs, and subscriptions', path: '/our-products' },
+      ],
+    },
+    {
+      name: 'Our Research',
+      path: '/our-research',
+    },
+    {
+      name: 'Contact Us',
+      path: '/contact',
+    },
+  ];
 
   // ── Language logic ──
   const handleLanguageChange = (code: string) => {
     setLanguage(code as LangCode);
     setShowLanguageDropdown(false);
 
-    // Show a notification 
     const langName = LANGUAGES.find((l) => l.code === code)?.name || code;
     const notif = document.createElement('div');
     notif.className = 'fixed top-24 right-4 bg-brand-700 text-white px-6 py-3 rounded-xl shadow-lg z-[100] animate-fade-in-up font-medium';
@@ -151,8 +147,6 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
       setTimeout(() => notif.remove(), 300);
     }, 2000);
   };
-
-  const currentLanguage = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
 
   // ── Prescription Upload logic ──
   const handlePrescriptionClick = () => {
@@ -176,16 +170,10 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
 
   const handlePrescriptionUpload = async () => {
     if (!prescriptionFile) return;
-
     setPrescriptionUploading(true);
-
-    // Simulate upload (replace with actual API call when backend supports it)
     await new Promise((resolve) => setTimeout(resolve, 2000));
-
     setPrescriptionUploading(false);
     setPrescriptionSuccess(true);
-
-    // Auto-close after success
     setTimeout(() => {
       setShowPrescriptionModal(false);
       setPrescriptionFile(null);
@@ -194,68 +182,11 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
     }, 2500);
   };
 
-  // ── Location logic ──
-  const requestLocation = (precise: boolean) => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
-      return;
-    }
-    setIsLocating(true);
-    setShowLocationPrompt(false);
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          
-          const API_URL = import.meta.env.VITE_API_URL || 'https://api.dreptobiodevices.com';
-          const response = await fetch(`${API_URL}/location/geocode?lat=${latitude}&lng=${longitude}`);
-          const data = await response.json();
-          
-          let locationStr = "Unknown Location";
-          if (data && data.status === "OK" && data.results && data.results.length > 0) {
-             if (precise) {
-               locationStr = data.results[0].formatted_address;
-               
-               if (locationStr.length > 45) {
-                 locationStr = locationStr.substring(0, 42) + '...';
-               }
-             } else {
-               const cityResult = data.results.find((result: any) => 
-                 result.types.includes("locality") || result.types.includes("administrative_area_level_2")
-               );
-               locationStr = cityResult ? cityResult.formatted_address : data.results[0].formatted_address;
-             }
-          }
-          
-          setLocationName(locationStr);
-          localStorage.setItem('drepto_location', locationStr);
-        } catch (error) {
-          setLocationName("Failed to get address");
-        } finally {
-          setIsLocating(false);
-        }
-      },
-      (error) => {
-        alert("Unable to retrieve your location. Please check your permissions.");
-        setIsLocating(false);
-      },
-      {
-        enableHighAccuracy: precise,
-        timeout: 10000,
-        maximumAge: precise ? 0 : 60000,
-      }
-    );
-  };
-
   // ── Click outside handlers ──
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (languageRef.current && !languageRef.current.contains(e.target as Node)) {
         setShowLanguageDropdown(false);
-      }
-      if (locationPromptRef.current && !locationPromptRef.current.contains(e.target as Node)) {
-        setShowLocationPrompt(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -264,7 +195,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -272,139 +203,18 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
 
   return (
     <>
-      {/* ---- Utility Header ---- */}
-      <div className="border-b border-slate-200 bg-white text-sm font-medium text-slate-600 hidden sm:block">
-        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 h-12 flex items-center justify-between">
-          {/* Institutional Credibility Strip */}
-          <div className="flex items-center space-x-3 text-xs">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 text-brand-900 border border-brand-200/80 font-semibold tracking-tight">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Incubated at SINE, IIT Bombay
-            </span>
-            <span className="hidden md:inline text-slate-300">•</span>
-            <span className="hidden md:inline text-slate-600 font-medium">
-              ISO 10993-23 Certified Biocompatibility
-            </span>
-            <span className="hidden xl:inline text-slate-300">•</span>
-            <span className="hidden xl:inline text-slate-500 font-mono text-[11px]">
-              Patent App: IN202521129798
-            </span>
-          </div>
-          {/* Right utilities */}
-          <div className="flex items-center space-x-6">
-            {/* Language Selector */}
-            <div className="relative" ref={languageRef}>
-              <button
-                className="flex items-center space-x-1.5 hover:text-brand-700 transition-colors"
-                title="Change Language"
-                onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
-              >
-                <Globe className="w-4 h-4 text-slate-500" />
-                <span>{currentLanguage.name}</span>
-                <svg
-                  className={`w-3 h-3 text-slate-400 transition-transform ${showLanguageDropdown ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {/* Language Dropdown */}
-              {showLanguageDropdown && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-[60] animate-fade-in-down">
-                  <div className="px-4 py-2 border-b border-slate-100">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('util.selectLanguage')}</p>
-                  </div>
-                  {LANGUAGES.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => handleLanguageChange(lang.code)}
-                      className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors ${
-                        language === lang.code
-                          ? 'bg-brand-50 text-brand-700 font-semibold'
-                          : 'text-slate-700 hover:bg-slate-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-medium">{lang.name}</span>
-                        <span className="text-slate-400 text-xs">{lang.nativeName}</span>
-                      </div>
-                      {language === lang.code && (
-                        <Check className="w-4 h-4 text-brand-600" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Cart */}
-            <button
-              className="flex items-center space-x-1.5 hover:text-brand-700 transition-colors relative py-1"
-              onClick={() => navigate('/cart')}
-            >
-              <ShoppingBag className="w-5 h-5 text-slate-700" />
-              <span className="font-medium">{t('util.cart')}</span>
-              {cartCount > 0 && (
-                <span className="inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-bold leading-none text-white bg-brand-600 rounded-full">{cartCount}</span>
-              )}
-            </button>
-            {/* Auth */}
-            <div className="flex items-center space-x-3 pl-3 border-l border-slate-200">
-              {user ? (
-                <>
-                  {(user.role === 'Admin' || localStorage.getItem('adminAuth') === 'true') && (
-                    <button
-                      onClick={() => navigate('/admin/dashboard')}
-                      className="px-3 py-1 font-semibold text-xs text-brand-700 bg-brand-50 border border-brand-200 rounded-md hover:bg-brand-100 transition-colors flex items-center gap-1.5 shadow-xs"
-                    >
-                      <Shield className="w-3.5 h-3.5" />
-                      Admin Portal
-                    </button>
-                  )}
-                  <button
-                    onClick={() => navigate(user.role === 'Admin' ? '/admin/dashboard' : '/profile')}
-                    className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors flex items-center gap-1"
-                  >
-                    <User className="w-4 h-4" />
-                    {user.firstName}
-                  </button>
-                  <button
-                    onClick={logout}
-                    className="px-4 py-1.5 font-semibold text-white bg-red-500 hover:bg-red-600 rounded-md transition-all shadow-sm text-sm"
-                  >
-                    {t('util.signOut')}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => setAuthModalView('login')}
-                    className="px-4 py-1.5 font-semibold text-slate-700 hover:text-brand-700 transition-colors"
-                  >
-                    {t('util.signIn')}
-                  </button>
-                  <button
-                    onClick={() => setAuthModalView('signup')}
-                    className="px-4 py-1.5 font-semibold text-white bg-brand-700 hover:bg-brand-800 rounded-md transition-all shadow-sm"
-                  >
-                    {t('util.signUp')}
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ---- Main Header ---- */}
-      <nav
-        className={`sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-shadow duration-300 ${isScrolled ? 'shadow-md' : 'shadow-sm'}`}
+      {/* ─────────────────────────────────────────────────────────────
+          Sleek Emcure-Inspired Frosted Glass Single Navigation Bar
+          ───────────────────────────────────────────────────────────── */}
+      <header
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled || !isHomePage
+            ? 'bg-neutral-950/95 backdrop-blur-xl border-b border-white/10 shadow-md'
+            : 'bg-black/55 backdrop-blur-md border-b border-white/10 shadow-sm'
+        }`}
       >
         <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
-          <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-8">
+          <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
 
             {/* Brand Logo */}
             <div
@@ -414,94 +224,231 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
               <img
                 src="/images/logo.png"
                 alt="Drepto Biodevices Logo"
-                className="h-9 sm:h-12 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+                className="h-8 sm:h-11 w-auto object-contain brightness-0 invert opacity-95 group-hover:opacity-100 transition-all"
               />
             </div>
 
-            {/* Desktop Nav Links */}
-            <nav className="hidden lg:flex items-center justify-center space-x-1 xl:space-x-2 font-medium text-sm xl:text-base flex-1 mx-4">
-              {navLinks.map((link) => {
-                const isActive = (location.pathname === link.path && link.path !== '/') || (link.name === 'Home' && isHomePage && link.path === '/');
+            {/* Desktop Navigation Links with Dropdowns (Highlighted White Text) */}
+            <nav className="hidden lg:flex items-center justify-center space-x-6 xl:space-x-8 flex-1 mx-4">
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.path;
                 return (
-                  <button
-                    key={link.name}
-                    onClick={() => handleNavigation(link)}
-                    className={`relative px-3.5 py-2 rounded-lg transition-all font-semibold ${isActive
-                      ? 'text-brand-800 bg-brand-50/90 shadow-2xs'
-                      : 'text-slate-600 hover:text-brand-700 hover:bg-slate-50'
-                      }`}
+                  <div
+                    key={item.name}
+                    className="relative"
+                    onMouseEnter={() => handleMouseEnter(item.name)}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    {link.name}
-                  </button>
+                    <button
+                      onClick={() => {
+                        setActiveDropdown(null);
+                        if (item.path === '/') {
+                          if (!isHomePage) navigate('/');
+                          else window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                          navigate(item.path);
+                        }
+                      }}
+                      className={`font-semibold text-sm tracking-wide transition-colors flex items-center gap-1.5 py-2 group cursor-pointer ${
+                        isActive
+                          ? 'text-[#c01226]'
+                          : 'text-white hover:text-red-400'
+                      }`}
+                    >
+                      <span className="drop-shadow-xs">{item.name}</span>
+                      {item.dropdown && (
+                        <ChevronDown
+                          className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                            activeDropdown === item.name
+                              ? 'rotate-180 text-red-400'
+                              : 'text-white/70 group-hover:text-red-400'
+                          }`}
+                        />
+                      )}
+                    </button>
+
+                    {/* Dark Glass Dropdown Panel */}
+                    {item.dropdown && activeDropdown === item.name && (
+                      <div
+                        className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-72 z-50 animate-fade-in-down"
+                        onMouseEnter={() => handleMouseEnter(item.name)}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <div className="bg-neutral-900/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-2">
+                          {item.dropdown.map((sub) => (
+                            <button
+                              key={sub.label}
+                              onClick={() => {
+                                setActiveDropdown(null);
+                                navigate(sub.path);
+                              }}
+                              className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-white/10 transition-colors group/sub block"
+                            >
+                              <div className="text-white group-hover/sub:text-red-400 font-semibold text-xs tracking-wide transition-colors">
+                                {sub.label}
+                              </div>
+                              {sub.desc && (
+                                <div className="text-slate-400 text-[11px] mt-0.5 line-clamp-1">
+                                  {sub.desc}
+                                </div>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </nav>
 
-            {/* Desktop Right: Upload Prescription + Order Products + User Orders */}
-            <div className="hidden lg:flex items-center space-x-3 flex-shrink-0">
+            {/* Desktop Right Utilities (Upload Prescription, Cart, Lang, Auth) */}
+            <div className="hidden lg:flex items-center space-x-3.5 flex-shrink-0">
+              {/* Sleek Outline Upload Prescription Button */}
               <button
-                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl border border-slate-200/90 text-slate-700 bg-white hover:bg-slate-50 hover:border-brand-500 font-semibold text-xs tracking-wide transition-all shadow-xs group"
                 type="button"
                 onClick={handlePrescriptionClick}
-                title="Submit medical prescription for custom formulation"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-white/30 hover:border-[#c01226] text-white hover:text-white bg-white/10 hover:bg-[#c01226]/30 font-semibold text-xs tracking-wide transition-all shadow-sm backdrop-blur-sm cursor-pointer"
               >
-                <FileText className="w-4 h-4 text-brand-700 group-hover:scale-110 transition-transform" />
+                <FileText className="w-3.5 h-3.5 text-white/90" />
                 <span>{t('util.uploadPrescription')}</span>
               </button>
 
+              {/* Language Selector */}
+              <div className="relative" ref={languageRef}>
+                <button
+                  onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                  className="flex items-center space-x-1 text-white hover:text-red-400 text-xs font-semibold px-2 py-1 rounded-lg transition-colors cursor-pointer"
+                  title="Language"
+                >
+                  <Globe className="w-4 h-4 text-white/80" />
+                  <span className="uppercase text-[11px]">{language}</span>
+                  <ChevronDown className="w-3 h-3 text-white/60" />
+                </button>
+                {showLanguageDropdown && (
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-neutral-900/95 backdrop-blur-xl border border-white/15 rounded-xl shadow-2xl py-1.5 z-[60]">
+                    {LANGUAGES.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => handleLanguageChange(lang.code)}
+                        className={`w-full flex items-center justify-between px-3.5 py-2 text-xs transition-colors ${
+                          language === lang.code
+                            ? 'bg-white/15 text-red-400 font-bold'
+                            : 'text-white/90 hover:bg-white/10'
+                        }`}
+                      >
+                        <span>{lang.name}</span>
+                        <span className="text-white/50 text-[10px]">{lang.nativeName}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Cart Button */}
               <button
-                onClick={() => navigate('/our-products')}
-                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-brand-700 hover:bg-brand-800 text-white font-bold text-xs tracking-wide transition-all shadow-sm shadow-brand-700/20 active:scale-95"
+                onClick={() => navigate('/cart')}
+                className="relative p-2 text-white hover:text-red-400 transition-colors cursor-pointer"
+                title={t('util.cart')}
               >
-                <ShoppingBag className="w-4 h-4" />
-                <span>Order Formulations</span>
+                <ShoppingBag className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#c01226] text-white text-[10px] font-extrabold rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
               </button>
 
-              {user ? (
-                <div
-                  className="flex items-center gap-1.5 cursor-pointer hover:bg-slate-100 py-2 px-3 rounded-xl transition-all border border-transparent hover:border-slate-200"
-                  onClick={() => navigate('/orders')}
-                >
-                  <Package className="w-4 h-4 text-slate-700" />
-                  <span className="text-xs font-semibold text-slate-700">{t('util.myOrders')}</span>
-                </div>
-              ) : null}
+              {/* Authentication */}
+              <div className="flex items-center space-x-2 pl-2 border-l border-white/15">
+                {user ? (
+                  <>
+                    {(user.role === 'Admin' || localStorage.getItem('adminAuth') === 'true') && (
+                      <button
+                        onClick={() => navigate('/admin/dashboard')}
+                        className="px-2.5 py-1 font-bold text-xs text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all flex items-center gap-1 cursor-pointer"
+                      >
+                        <Shield className="w-3 h-3 text-red-400" />
+                        <span>Admin</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => navigate(user.role === 'Admin' ? '/admin/dashboard' : '/profile')}
+                      className="text-white hover:text-red-400 font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <User className="w-4 h-4 text-white/80" />
+                      <span>{user.firstName}</span>
+                    </button>
+                    <button
+                      onClick={logout}
+                      className="text-white/70 hover:text-red-400 text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      {t('util.signOut')}
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex items-center space-x-2.5">
+                    <button
+                      onClick={() => setAuthModalView('login')}
+                      className="text-white hover:text-red-400 font-semibold text-xs transition-colors cursor-pointer"
+                    >
+                      {t('util.signIn')}
+                    </button>
+                    <button
+                      onClick={() => setAuthModalView('signup')}
+                      className="bg-[#c01226] hover:bg-red-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-full transition-all shadow-sm cursor-pointer"
+                    >
+                      {t('util.signUp')}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Mobile Hamburger */}
             <button
-              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none flex-shrink-0"
+              className="lg:hidden p-2 text-white hover:text-red-400 transition-colors focus:outline-none flex-shrink-0 cursor-pointer"
               onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open Menu"
             >
               <Menu className="w-6 h-6" />
             </button>
           </div>
-
         </div>
-      </nav>
+      </header>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* ─────────────────────────────────────────────────────────────
+          Mobile Sidebar Drawer
+          ───────────────────────────────────────────────────────────── */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/30 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
             onClick={() => setIsMobileMenuOpen(false)}
           ></div>
 
           {/* Sidebar Drawer */}
-          <div className="relative w-[300px] bg-white h-full shadow-2xl flex flex-col animate-slide-in-right transform transition-transform duration-300 ease-out">
+          <div className="relative w-[300px] bg-neutral-950 text-white h-full shadow-2xl flex flex-col border-l border-white/10 animate-slide-in-right transform transition-transform duration-300 ease-out">
 
             {/* Header */}
-            <div className="p-6 flex items-center justify-between border-b border-gray-100 bg-gray-50/50">
-              <img
-                src="/images/logo.png"
-                alt="Logo"
-                className="h-8 w-auto object-contain"
-              />
+            <div className="p-6 flex items-center justify-between border-b border-white/10 bg-black/40">
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  navigate('/');
+                }}
+              >
+                <img
+                  src="/images/logo.png"
+                  alt="Drepto Logo"
+                  className="h-8 w-auto object-contain brightness-0 invert"
+                />
+              </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 bg-white rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm border border-gray-100"
+                className="p-2 bg-white/10 rounded-full text-white/70 hover:text-red-400 hover:bg-white/20 transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -509,26 +456,23 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
 
             {/* Navigation Links */}
             <div className="flex-1 overflow-y-auto py-4">
-              <div className="px-4 space-y-1">
-                {navLinks.map((link) => (
+              <div className="px-4 space-y-1.5">
+                {navItems.map((item) => (
                   <button
-                    key={link.name}
-                    onClick={() => handleNavigation(link)}
-                    className={`w-full flex items-center justify-between p-3 rounded-xl transition-all group ${(location.pathname === link.path && link.path !== '/') || (link.name === 'Home' && isHomePage)
-                      ? 'bg-primary/10 text-primary font-bold'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                      }`}
+                    key={item.name}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      if (item.path === '/') {
+                        if (!isHomePage) navigate('/');
+                        else window.scrollTo({ top: 0, behavior: 'smooth' });
+                      } else {
+                        navigate(item.path);
+                      }
+                    }}
+                    className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 hover:text-red-400 text-left font-semibold text-sm cursor-pointer"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${(location.pathname === link.path && link.path !== '/') || (link.name === 'Home' && isHomePage)
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary group-hover:shadow-sm'
-                        } transition-colors`}>
-                        <link.icon className="w-5 h-5" />
-                      </div>
-                      <span className="text-base">{link.name}</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-primary/50" />
+                    <span>{item.name}</span>
+                    <ChevronRight className="w-4 h-4 text-white/40" />
                   </button>
                 ))}
 
@@ -538,75 +482,73 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                     setIsMobileMenuOpen(false);
                     handlePrescriptionClick();
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
+                  className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 mt-2 border border-white/10 cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-brand-50 text-brand-600 transition-colors">
+                    <div className="p-2 rounded-lg bg-red-600/20 text-[#c01226]">
                       <Upload className="w-5 h-5" />
                     </div>
-                    <span className="text-base font-medium">{t('util.uploadPrescription')}</span>
+                    <span className="text-sm font-semibold">{t('util.uploadPrescription')}</span>
                   </div>
+                </button>
+
+                {/* Mobile Cart */}
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    navigate('/cart');
+                  }}
+                  className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-white/10 text-white">
+                      <ShoppingBag className="w-5 h-5" />
+                    </div>
+                    <span className="text-sm font-semibold">{t('util.myCart')}</span>
+                  </div>
+                  {cartCount > 0 && (
+                    <span className="bg-[#c01226] text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
                 </button>
 
                 {/* Mobile User Links */}
                 {user && (
                   <>
-                    <div className="h-px bg-gray-100 my-2 mx-2"></div>
-                    <button
-                      onClick={() => { navigate('/cart'); setIsMobileMenuOpen(false); }}
-                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
-                          <ShoppingBag className="w-5 h-5" />
-                        </div>
-                        <span className="text-base">{t('util.myCart')}</span>
-                      </div>
-                    </button>
+                    <div className="h-px bg-white/10 my-3 mx-2"></div>
                     <button
                       onClick={() => { navigate('/orders'); setIsMobileMenuOpen(false); }}
-                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
+                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
+                        <div className="p-2 rounded-lg bg-white/10 text-white">
                           <Package className="w-5 h-5" />
                         </div>
-                        <span className="text-base">{t('util.myOrders')}</span>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => { navigate('/dashboard'); setIsMobileMenuOpen(false); }}
-                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all group text-gray-600 hover:bg-gray-50"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-primary transition-colors">
-                          <User className="w-5 h-5" />
-                        </div>
-                        <span className="text-base">{t('util.dashboard')}</span>
+                        <span className="text-sm font-semibold">{t('util.myOrders')}</span>
                       </div>
                     </button>
                     {(user.role === 'Admin' || localStorage.getItem('adminAuth') === 'true') && (
                       <button
                         onClick={() => { navigate('/admin/dashboard'); setIsMobileMenuOpen(false); }}
-                        className="w-full flex items-center justify-between p-3 rounded-xl transition-all group bg-brand-50 text-brand-800 font-semibold border border-brand-200"
+                        className="w-full flex items-center justify-between p-3 rounded-xl transition-all bg-white/10 text-white font-semibold border border-white/15 cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-brand-700 text-white">
+                          <div className="p-2 rounded-lg bg-[#c01226] text-white">
                             <Shield className="w-5 h-5" />
                           </div>
-                          <span className="text-base">Admin Portal</span>
+                          <span className="text-sm">Admin Portal</span>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-brand-600" />
+                        <ChevronRight className="w-4 h-4 text-white/50" />
                       </button>
                     )}
                   </>
                 )}
-
               </div>
             </div>
 
             {/* Footer / Auth Actions */}
-            <div className="p-6 border-t border-gray-100 bg-gray-50/50 space-y-3">
+            <div className="p-6 border-t border-white/10 bg-black/40 space-y-3">
               {!user ? (
                 <>
                   <button
@@ -614,7 +556,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                       setAuthModalView('login');
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl font-bold text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
+                    className="w-full flex items-center justify-center gap-2 py-3 border border-white/20 rounded-xl font-bold text-white bg-white/5 hover:bg-white/10 transition-all text-sm cursor-pointer"
                   >
                     <LogIn className="w-5 h-5" />
                     {t('util.signIn')}
@@ -624,7 +566,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                       setAuthModalView('signup');
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-600 to-primary text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:opacity-95 transition-all transform active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-[#c01226] text-white rounded-xl font-bold shadow-lg hover:bg-red-700 transition-all text-sm cursor-pointer"
                   >
                     <UserPlus className="w-5 h-5" />
                     {t('util.signUpNow')}
@@ -637,14 +579,14 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                     setIsMobileMenuOpen(false);
                     navigate('/');
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-red-600 border border-red-100 rounded-xl font-bold hover:bg-red-100 transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-red-950/60 text-red-400 border border-red-900/60 rounded-xl font-bold hover:bg-red-950 transition-all text-sm cursor-pointer"
                 >
                   <LogOut className="w-5 h-5" />
                   Sign Out
                 </button>
               )}
-              <p className="text-xs text-center text-gray-400 mt-4">
-                © 2025 Drepto Biodevices
+              <p className="text-xs text-center text-white/40 mt-4">
+                © 2025 Drepto Biodevices Pvt. Ltd.
               </p>
             </div>
 
@@ -652,15 +594,17 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
         </div>
       )}
 
-      {/* ── Upload Prescription Modal ── */}
+      {/* ─────────────────────────────────────────────────────────────
+          Upload Prescription Modal
+          ───────────────────────────────────────────────────────────── */}
       {showPrescriptionModal && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-zoom-in">
             {/* Header */}
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-brand-50/50">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-slate-50">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center">
-                  <Upload className="w-5 h-5 text-brand-700" />
+                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
+                  <Upload className="w-5 h-5 text-[#c01226]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">{t('prescription.title')}</h3>
@@ -669,7 +613,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
               </div>
               <button
                 onClick={() => setShowPrescriptionModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -691,7 +635,7 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                 <>
                   {/* Upload Area */}
                   <div
-                    className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-all"
+                    className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center cursor-pointer hover:border-[#c01226] hover:bg-red-50/20 transition-all"
                     onClick={() => fileInputRef.current?.click()}
                   >
                     {prescriptionPreview ? (
@@ -701,76 +645,66 @@ const Navbar: React.FC<NavbarProps> = ({ sectionRefs = {} as Record<string, RefO
                           alt="Prescription preview"
                           className="max-h-48 mx-auto rounded-xl object-contain"
                         />
-                        <p className="text-sm font-medium text-brand-700">{prescriptionFile?.name}</p>
+                        <p className="text-sm font-medium text-slate-800">{prescriptionFile?.name}</p>
                         <p className="text-xs text-slate-400">{t('prescription.changeFile')}</p>
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-100 flex items-center justify-center">
-                          <Upload className="w-7 h-7 text-slate-400" />
+                        <div className="w-14 h-14 mx-auto rounded-2xl bg-red-50 flex items-center justify-center text-[#c01226]">
+                          <Upload className="w-7 h-7" />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-slate-700">
-                            {t('prescription.clickToUpload')}
-                          </p>
-                          <p className="text-xs text-slate-400 mt-1">
-                            {t('prescription.fileSupport')}
-                          </p>
+                          <p className="text-sm font-semibold text-gray-700">{t('prescription.dragDrop')}</p>
+                          <p className="text-xs text-gray-400 mt-1">PNG, JPG or PDF (Max 10MB)</p>
                         </div>
+                        <button
+                          type="button"
+                          className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
+                        >
+                          {t('prescription.browseFiles')}
+                        </button>
                       </div>
                     )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*,.pdf"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
                   </div>
 
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    className="hidden"
-                    accept="image/*,.pdf"
-                    onChange={handleFileChange}
-                  />
-
-                  {/* Info */}
-                  <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                    <div className="flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="text-xs text-blue-700 font-medium">
-                          Make sure the prescription is clearly visible and contains:
-                        </p>
-                        <ul className="text-xs text-blue-600 mt-1 space-y-0.5 list-disc list-inside">
-                          <li>Doctor's name and registration number</li>
-                          <li>Patient's name and medicine details</li>
-                          <li>Date of prescription (within 6 months)</li>
-                        </ul>
-                      </div>
-                    </div>
+                  {/* Security Notice */}
+                  <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-500">
+                    <Shield className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>Your medical records are encrypted and protected under healthcare privacy standards.</span>
                   </div>
 
-                  {/* Upload Button */}
-                  <button
-                    onClick={handlePrescriptionUpload}
-                    disabled={!prescriptionFile || prescriptionUploading}
-                    className={`w-full py-4 rounded-xl font-bold text-base shadow-lg flex items-center justify-center gap-2 transition-all ${
-                      prescriptionFile && !prescriptionUploading
-                        ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white hover:shadow-xl hover:-translate-y-0.5'
-                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    }`}
-                  >
-                    {prescriptionUploading ? (
-                      <>
-                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        {t('prescription.uploading')}
-                      </>
-                    ) : (
-                      <>
-                        <Upload className="w-5 h-5" />
-                        {t('prescription.title')}
-                      </>
-                    )}
-                  </button>
+                  {/* Actions */}
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowPrescriptionModal(false)}
+                      className="flex-1 py-3 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-colors text-sm cursor-pointer"
+                    >
+                      {t('prescription.cancel')}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!prescriptionFile || prescriptionUploading}
+                      onClick={handlePrescriptionUpload}
+                      className="flex-1 py-3 bg-[#c01226] text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    >
+                      {prescriptionUploading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>{t('prescription.uploading')}</span>
+                        </>
+                      ) : (
+                        <span>{t('prescription.uploadNow')}</span>
+                      )}
+                    </button>
+                  </div>
                 </>
               )}
             </div>

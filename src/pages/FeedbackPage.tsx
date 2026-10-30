@@ -7,7 +7,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { supabase } from '../lib/supabase';
 
-const inputCls = 'w-full px-0 py-2.5 bg-transparent border-0 border-b border-gray-200 text-sm text-gray-900 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors duration-200';
+const inputCls = 'w-full px-0 py-2.5 bg-transparent border-0 border-b border-gray-200 text-sm text-gray-900 placeholder:text-gray-300 focus:outline-none focus:border-[#c01226] transition-colors duration-200';
 
 const Field: React.FC<{ label: string; required?: boolean; optional?: boolean; children: React.ReactNode }> = ({ label, required, optional, children }) => (
   <div className="flex flex-col gap-1">

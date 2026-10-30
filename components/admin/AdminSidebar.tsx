@@ -49,7 +49,7 @@ const AdminSidebar: React.FC<Props & { isOpen: boolean; onClose: () => void }> =
       `}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-gray-100">
-          <div className="w-8 h-8 rounded-lg bg-brand-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-[#c01226] flex items-center justify-center">
             <span className="text-white text-xs font-bold">D</span>
           </div>
           <div className="min-w-0">
@@ -73,7 +73,7 @@ const AdminSidebar: React.FC<Props & { isOpen: boolean; onClose: () => void }> =
                     <button key={id} onClick={() => handleNav(id)}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                         activeTab === id
-                          ? 'bg-brand-700 text-white shadow-sm shadow-brand-700/20'
+                          ? 'bg-[#c01226] text-white shadow-sm shadow-red-700/20'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       }`}>
                       <Icon className="w-4 h-4 shrink-0" />

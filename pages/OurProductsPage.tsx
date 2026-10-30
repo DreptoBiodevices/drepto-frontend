@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { Product, Order } from '../types';
 import { ProductService, OrderService, PaymentService } from '../lib/api_controller';
 import useRazorpay from '../hooks/useRazorpay';
-import { X, CheckCircle, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
+import { X, CheckCircle, Package, ExternalLink, Trash2, Plus, Minus } from 'lucide-react';
 import VideoTestimonialsSection from '../components/VideoTestimonialsSection';
 import { resolveItemOffer, getAutoFreeUnitsToAdd } from '../lib/offerCalculator';
 
@@ -276,7 +277,7 @@ const OurProductsPage: React.FC = () => {
                 contact: user?.mobileNumber || ""
             },
             theme: {
-                color: "#0D9488"
+                color: "#c01226"
             }
         };
 
@@ -292,13 +293,30 @@ const OurProductsPage: React.FC = () => {
         <div className="min-h-screen bg-gray-50 flex flex-col">
             <Navbar />
 
-            <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-7xl mx-auto w-full">
-                <div className="text-center mb-12 animate-fade-in-up">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Discover our curated selection of top-quality wellness and healthcare essentials.
-                    </p>
-                </div>
+            <main className="flex-grow">
+                {/* ── Luminous Healthcare Hero Banner ── */}
+                <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#f8f9fa] via-white to-[#f1f3f6] border-b border-slate-200/80 mb-10 sm:mb-14">
+                    <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
+                    <div className="absolute -bottom-10 left-10 w-96 h-96 bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-4xl">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
+                            <Package className="w-4 h-4 text-[#c01226]" />
+                            <span>OUR PRODUCTS &amp; THERAPEUTIC FORMULATIONS</span>
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6 font-display">
+                            Targeted Bio-Delivery for{' '}
+                            <span className="text-[#c01226]">
+                                Women &amp; Beyond
+                            </span>
+                        </h1>
+                        <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto font-normal">
+                            Explore our clinically validated transdermal patches and non-invasive healthcare formulations engineered at SINE, IIT Bombay.
+                        </p>
+                    </div>
+                </section>
+
+                <div className="px-4 md:px-8 max-w-7xl mx-auto w-full pb-16">
 
                 {notification && (
                     <div className="fixed top-24 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-bounce-in">
@@ -308,7 +326,7 @@ const OurProductsPage: React.FC = () => {
 
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#c01226]"></div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -357,7 +375,7 @@ const OurProductsPage: React.FC = () => {
                                         </div>
                                     )}
                                     <h3
-                                        className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-primary transition-colors"
+                                        className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-[#c01226] transition-colors"
                                         onClick={() => navigate(`/product/${product._id}`)}
                                     >
                                         {product.name}
@@ -451,7 +469,7 @@ const OurProductsPage: React.FC = () => {
                                             
                                             <button
                                                 onClick={(e) => buyNow(product, e)}
-                                                className="w-full py-2.5 px-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
+                                                className="w-full py-2.5 px-4 bg-[#c01226] hover:bg-red-700 shadow-md font-bold text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
                                             >
                                                 {(() => {
                                                     const qty = getProductCountInCart(product.name);
@@ -469,7 +487,7 @@ const OurProductsPage: React.FC = () => {
                                         </div>
                                         {/* <button
                                             onClick={() => addToCart(product)}
-                                            className="bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-orange-500 transition-colors shadow-md group-active:scale-95 flex items-center gap-2 font-medium"
+                                            className="bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-[#c01226] transition-colors shadow-md group-active:scale-95 flex items-center gap-2 font-medium"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
                                             Add
@@ -485,20 +503,17 @@ const OurProductsPage: React.FC = () => {
                 <div className="mt-16">
                     <VideoTestimonialsSection />
                 </div>
+            </div>
             </main>
 
-            <footer className="bg-white border-t py-12">
-                <div className="max-w-7xl mx-auto px-4 text-center text-gray-500">
-                    <p>&copy; {new Date().getFullYear()} Drepto. All rights reserved.</p>
-                </div>
-            </footer>
+            <Footer />
 
 
             {/* Subscription Modal */}
             {showSubscriptionModal && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
                     <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in">
-                        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-teal-50/50">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-slate-50">
                             <h3 className="text-xl font-bold text-gray-900">Get Premium Subscription</h3>
                             <button
                                 onClick={() => setShowSubscriptionModal(false)}
@@ -525,7 +540,7 @@ const OurProductsPage: React.FC = () => {
                             <div className="space-y-4">
                                 <h4 className="font-bold text-gray-800">Step 2: Payment</h4>
                                 <label className="flex items-start gap-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
-                                    <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${formFilled ? 'bg-primary border-primary text-white' : 'border-gray-300 bg-white'}`}>
+                                    <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${formFilled ? 'bg-[#c01226] border-[#c01226] text-white' : 'border-gray-300 bg-white'}`}>
                                         {formFilled && <CheckCircle className="w-3.5 h-3.5" />}
                                     </div>
                                     <input

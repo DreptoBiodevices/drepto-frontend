@@ -1,4 +1,5 @@
 import React from 'react';
+import { Linkedin } from 'lucide-react';
 
 interface TeamMember {
   name: string;
@@ -11,110 +12,94 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     name: 'Rahul Kumar Gupta',
-    role: 'Founder & Director',
-    description: 'M.Tech-PhD, IIT Bombay',
+    role: 'Founder & Chief Executive Officer',
+    description: 'IIT Bombay Alumnus & Biomedical Innovator. Driving transdermal therapeutic formulation and corporate strategy.',
     image: '/images/rahulsir.jpeg',
-    linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/'
+    linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/',
   },
   {
     name: 'Prof. Rohit Srivastava',
     role: 'Scientific Advisor & Mentor',
-    description: 'Prof. IIT Bombay',
+    description: 'Professor, Dept of Biosciences & Bioengineering, IIT Bombay (Shanti Swarup Bhatnagar Awardee).',
     image: '/images/rohitsir.jpeg',
-    linkedin: 'https://www.linkedin.com/in/rohit-srivastava-02bb2b16/'
-  },
-  {
-    name: 'Dr. Rupesh Ghyar',
-    role: 'Technical Advisor',
-    description: 'Alumnus, IIT Bombay',
-    image: '/images/dr_rupesh.jpg',
-    linkedin: 'https://www.linkedin.com/in/rupesh-ghyar-7510442b7/'
+    linkedin: 'https://www.linkedin.com/in/rohit-srivastava-02bb2b16/',
   },
   {
     name: 'Dr. Chandan Yadav',
-    role: 'Medical Advisor',
-    description: 'Senior Radiologist, Medanta Hospital',
+    role: 'Chief Medical Officer',
+    description: 'Senior Radiologist, Medanta Hospital. Leading clinical evaluation and therapeutic protocols.',
     image: '/images/dr_chandan.jpg',
-    linkedin: 'https://www.dreptobiodevices.com/'
+    linkedin: 'https://www.dreptobiodevices.com/',
   },
-  {
-    name: 'Rupesh Kumar Gupta',
-    role: 'Business Head',
-    description: 'Director, DyCine Pharmaceuticals Ltd.',
-    image: '/images/rupesh_gupta.webp',
-    linkedin: 'https://www.linkedin.com/in/rupesh-kumar-gupta-95669b25/'
-  }
 ];
 
-const LinkedInIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z" />
-  </svg>
-);
-
-const TeamSection: React.FC = () => {
+export const TeamSection: React.FC = () => {
   return (
-    <section className="bg-white py-24">
-      <div className="container mx-auto px-6 max-w-6xl">
-
-        {/* header — consistent with other sections */}
-        <div className="border-t border-gray-100 pt-8 mb-20">
-          <p className="text-xs font-semibold tracking-widest uppercase text-primary mb-2">Leadership</p>
-          <div className="flex items-end justify-between">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-none">
-              The Team
-            </h2>
-            <p className="text-sm text-gray-400 hidden md:block">
-              The minds behind Drepto Biodevices.
-            </p>
+    <section className="py-20 sm:py-28 bg-[#f8f9fa] border-t border-slate-200/80" id="team">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <span>EXECUTIVE LEADERSHIP &amp; ADVISORY</span>
           </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight font-display">
+            The Scientific &amp; Strategic Minds Behind Drepto
+          </h2>
+          <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
+            Combining world-class academic engineering from IIT Bombay with pharmaceutical industry leadership and clinical hospital expertise.
+          </p>
         </div>
 
-        {/* team grid — portrait-first, no cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-gray-100">
+        {/* Team Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
           {teamMembers.map((member, index) => (
-            <div key={index} className="group px-6 first:pl-0 last:pr-0">
+            <div
+              key={index}
+              className="bg-[#ebedf1] rounded-[2rem] p-8 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all duration-300 w-full max-w-sm flex flex-col justify-between group hover:-translate-y-1 relative overflow-hidden"
+            >
+              {/* Top Accent Line */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-[#c01226] opacity-0 group-hover:opacity-100 transition-opacity" />
 
-              {/* photo — square crop, no border halo, no shadow */}
-              <div className="overflow-hidden bg-gray-50 aspect-square mb-6">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
-                />
+              <div>
+                {/* Member Portrait */}
+                <div className="relative w-32 h-32 mx-auto mb-6">
+                  <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-md bg-slate-200">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-slate-900 mb-1 font-display">
+                    {member.name}
+                  </h3>
+                  <p className="text-xs font-bold text-[#c01226] uppercase tracking-wider mb-3">
+                    {member.role}
+                  </p>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    {member.description}
+                  </p>
+                </div>
               </div>
 
-              {/* index number */}
-              <p className="text-xs tabular-nums text-gray-300 mb-3">
-                {String(index + 1).padStart(2, '0')}
-              </p>
-
-              {/* name */}
-              <h3 className="text-base font-bold text-gray-900 leading-snug mb-1">
-                {member.name}
-              </h3>
-
-              {/* role */}
-              <p className="text-xs font-semibold tracking-wider uppercase text-primary mb-2">
-                {member.role}
-              </p>
-
-              {/* credential */}
-              <p className="text-xs text-gray-400 leading-relaxed mb-5">
-                {member.description}
-              </p>
-
-              {/* linkedin — text link, no icon button blob */}
-              <a
-                href={member.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-primary transition-colors duration-200"
-              >
-                <LinkedInIcon />
-                <span>LinkedIn</span>
-              </a>
-
+              {/* LinkedIn / Bio Link */}
+              {member.linkedin && (
+                <div className="mt-6 pt-4 border-t border-slate-300/60 flex items-center justify-center">
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-[#c01226] transition-colors"
+                  >
+                    <Linkedin className="w-4 h-4 text-[#c01226]" />
+                    <span>View Professional Profile</span>
+                  </a>
+                </div>
+              )}
             </div>
           ))}
         </div>
