@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 
 interface BreadcrumbItem {
   label: string;
@@ -34,17 +33,28 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = '' }) => {
     ]
   };
 
+  useEffect(() => {
+    const scriptId = 'breadcrumb-structured-data';
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = scriptId;
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(structuredData);
+
+    return () => {
+      const existing = document.getElementById(scriptId);
+      if (existing) existing.remove();
+    };
+  }, [items]);
+
   return (
-    <>
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      </Helmet>
-      <nav 
-        aria-label="Breadcrumb" 
-        className={`flex items-center space-x-1 text-sm text-gray-500 ${className}`}
-      >
+    <nav 
+      aria-label="Breadcrumb" 
+      className={`flex items-center space-x-1 text-sm text-gray-500 ${className}`}
+    >
       {/* Home Link */}
       <Link 
         to="/" 
@@ -75,8 +85,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = '' }) => {
           )}
         </React.Fragment>
       ))}
-      </nav>
-    </>
+    </nav>
   );
 };
 

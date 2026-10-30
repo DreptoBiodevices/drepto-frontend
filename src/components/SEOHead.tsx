@@ -1,5 +1,4 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React, { useEffect } from 'react';
 
 interface SEOHeadProps {
   title: string;
@@ -12,6 +11,16 @@ interface SEOHeadProps {
 
 const BASE_URL = 'https://www.dreptobiodevices.com';
 const DEFAULT_IMAGE = `${BASE_URL}/images/logo.png`;
+
+const setMetaTag = (attr: string, key: string, content: string) => {
+  let element = document.querySelector(`meta[${attr}="${key}"]`);
+  if (!element) {
+    element = document.createElement('meta');
+    element.setAttribute(attr, key);
+    document.head.appendChild(element);
+  }
+  element.setAttribute('content', content);
+};
 
 const SEOHead: React.FC<SEOHeadProps> = ({
   title,
@@ -29,24 +38,35 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       : `Drepto Biodevices | ${title}`;
   const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
 
-  return (
-    <Helmet>
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      {keywords && <meta name="keywords" content={keywords} />}
-      <link rel="canonical" href={fullUrl} />
+  useEffect(() => {
+    document.title = fullTitle;
 
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={fullUrl} />
-      <meta property="og:image" content={image} />
-      <meta property="og:type" content={type} />
+    setMetaTag('name', 'description', description);
+    if (keywords) setMetaTag('name', 'keywords', keywords);
 
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-    </Helmet>
-  );
+    // Canonical link
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', fullUrl);
+
+    // OpenGraph
+    setMetaTag('property', 'og:title', fullTitle);
+    setMetaTag('property', 'og:description', description);
+    setMetaTag('property', 'og:url', fullUrl);
+    setMetaTag('property', 'og:image', image);
+    setMetaTag('property', 'og:type', type);
+
+    // Twitter
+    setMetaTag('name', 'twitter:title', fullTitle);
+    setMetaTag('name', 'twitter:description', description);
+    setMetaTag('name', 'twitter:image', image);
+  }, [fullTitle, description, keywords, fullUrl, image, type]);
+
+  return null;
 };
 
 export default SEOHead;
