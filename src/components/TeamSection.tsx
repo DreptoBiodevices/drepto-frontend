@@ -35,12 +35,12 @@ const teamMembers: TeamMember[] = [
 
 export const TeamSection: React.FC = () => {
   return (
-    <section className="py-20 sm:py-28 bg-[#f8f9fa] border-t border-slate-200/80" id="team">
+    <section className="py-20 sm:py-28 bg-[#f8f9fa] border-t border-slate-200/80 scroll-mt-24" id="team">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
             <span>EXECUTIVE LEADERSHIP &amp; ADVISORY</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black text-slate-900 tracking-tight leading-tight font-display">

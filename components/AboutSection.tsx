@@ -16,13 +16,13 @@ const AboutSection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20 sm:py-28 bg-white relative overflow-hidden border-t border-slate-200/80" id="purpose">
+    <section className="py-20 sm:py-28 bg-white relative overflow-hidden border-t border-slate-200/80 scroll-mt-24" id="purpose">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header: Emcure Style with Red Accent */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
-            <Target className="w-3.5 h-3.5 text-[#c01226]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300/80 text-slate-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <Target className="w-3.5 h-3.5 text-slate-700" />
             <span>CORPORATE IDENTITY &amp; PHILOSOPHY</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black tracking-tight text-slate-900 leading-tight font-display">
@@ -87,16 +87,16 @@ const AboutSection: React.FC = () => {
           </div>
 
           {/* ── Card 2: SINE, IIT Bombay Ecosystem ── */}
-          <div className="bg-[#ebedf1]/60 rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
-            {/* Top red accent rule */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#c01226]" />
+          <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+            {/* Top slate accent rule */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
 
             <div>
               <div className="flex items-center justify-between mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-300 text-slate-900 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-mono font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-red-50 text-[#c01226] border border-red-200">
+                <span className="text-xs font-mono font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-slate-100 text-slate-800 border border-slate-300">
                   02 &bull; DEEPTECH HERITAGE
                 </span>
               </div>

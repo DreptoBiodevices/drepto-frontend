@@ -43,8 +43,8 @@ const ContactSection: React.FC = () => {
         
         {/* Section Header: Emcure Style with Red Accent */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
-            <Mail className="w-3.5 h-3.5 text-[#c01226]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <Mail className="w-3.5 h-3.5 text-slate-700" />
             <span>CONNECT WITH OUR TEAM</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black tracking-tight text-slate-900 leading-tight font-display">
@@ -243,7 +243,7 @@ const ContactSection: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 bg-[#c01226] hover:bg-red-700 text-white font-bold text-sm tracking-wide rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm tracking-wide rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {loading ? (
                     <span>Submitting...</span>

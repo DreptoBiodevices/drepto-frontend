@@ -7,7 +7,7 @@ import BackButton from '../components/BackButton';
 import { CITIES, LAB_TESTS_DATA, LAB_PACKAGES_DATA, LAB_REVIEWS } from '../constants';
 import { LabTestDetail, LabPackageDetail } from '../types';
 import { loadLabTests } from '../components/admin/LabTestData';
-import { X, ChevronDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { X, ChevronDown, ArrowLeft, ArrowRight, Star } from 'lucide-react';
 
 type View = 'home' | 'individual' | 'packages' | 'detail';
 
@@ -207,7 +207,7 @@ const DetailView: React.FC<{
                     <span className="text-sm font-bold text-gray-900">{rev.userName}</span>
                     <span className="text-xs text-gray-400">{rev.date}</span>
                   </div>
-                  <p className="text-xs text-yellow-500 mb-1">{'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}</p>
+                  <div className="flex gap-0.5 mb-1">{[...Array(5)].map((_, i) => <Star key={i} className={`w-3 h-3 ${i < rev.rating ? 'fill-amber-400 text-amber-400' : 'text-slate-300'}`} />)}</div>
                   <p className="text-sm text-gray-500 italic">"{rev.comment}"</p>
                 </div>
               ))}

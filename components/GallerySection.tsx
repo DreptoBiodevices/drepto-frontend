@@ -86,7 +86,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
   return (
     <IKContext publicKey={publicKey} urlEndpoint={urlEndpoint}>
       <section
-        className="relative py-20 sm:py-28 overflow-hidden bg-white border-t border-slate-200/80"
+        id="gallery"
+        className="relative py-20 sm:py-28 overflow-hidden bg-white border-t border-slate-200/80 scroll-mt-24"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -96,7 +97,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
             {/* Header Row */}
             <div className="flex items-end justify-between mb-8 sm:mb-12 gap-4">
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-2 shadow-2xs">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-2 shadow-2xs">
                   <span>VISUAL JOURNEY</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black text-slate-900 leading-tight font-display">
@@ -179,7 +180,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
           </div>
 
           {/* --- AWARDS & INSTITUTIONAL VALIDATION SECTION: NEW LUMINOUS DESIGN --- */}
-          <div className="max-w-6xl mx-auto mt-16 sm:mt-24">
+          <div id="recognition" className="max-w-6xl mx-auto mt-16 sm:mt-24 scroll-mt-28">
             <div className="bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 border border-slate-300/90 shadow-md relative overflow-hidden">
               {/* Subtle Ambient Red Glow */}
               <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
@@ -188,8 +189,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                 
                 {/* Left 7 Columns: Content & Credentials Grid */}
                 <div className="lg:col-span-7 space-y-6">
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-[#c01226] text-xs font-bold tracking-wider uppercase shadow-2xs">
-                    <Award className="w-4 h-4 text-[#c01226]" />
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold tracking-wider uppercase shadow-2xs">
+                    <Award className="w-4 h-4 text-amber-600" />
                     <span>INSTITUTIONAL VALIDATION &amp; CERTIFICATIONS</span>
                   </div>
 
@@ -247,7 +248,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                   <div className="pt-2">
                     <a
                       href="/our-research"
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#c01226] hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md group"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md group"
                     >
                       <span>Inspect Research Reports &amp; Papers</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -267,8 +268,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                     </div>
                     {/* Prestigious Award Ribbon */}
                     <div className="mt-3.5 p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-amber-950 flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-xs">
-                        🏆
+                      <div className="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <Award className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <div className="text-xs font-extrabold uppercase tracking-wide text-amber-900">India Pharma Awards Winner</div>

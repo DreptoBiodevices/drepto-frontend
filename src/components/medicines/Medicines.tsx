@@ -3,7 +3,7 @@ import { PHARMACY_FAQS, PHARMACY_TESTIMONIALS, MEDICINES as DEFAULT_MEDICINES } 
 import type { Medicine, Testimonial } from '../../types';
 import FAQ from './FAQ';
 import Pagination from '../ui/Pagination';
-import { Search, ArrowRight, ChevronDown } from 'lucide-react';
+import { Search, ArrowRight, ChevronDown, Star } from 'lucide-react';
 
 interface MedicinesProps {
   onViewDetails: (medicine: Medicine) => void;
@@ -97,7 +97,7 @@ const TestimonialRow: React.FC<{ testimonial: Testimonial }> = ({ testimonial })
         <p className="text-sm font-bold text-gray-900">{testimonial.name}</p>
         <p className="text-xs text-gray-400">{testimonial.location}</p>
       </div>
-      <p className="text-xs text-yellow-500">{'★'.repeat(5)}</p>
+      <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />)}</div>
     </div>
     <p className="text-sm text-gray-500 leading-relaxed italic">"{testimonial.quote}"</p>
   </div>

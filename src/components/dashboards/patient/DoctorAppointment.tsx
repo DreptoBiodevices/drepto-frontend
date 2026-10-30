@@ -360,7 +360,7 @@ const DoctorAppointment: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         onChange={(e) => { setAvailabilityFilter(e.target.value); setCurrentPage(1); }}
                         className="bg-white py-3 px-5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 focus:ring-2 focus:ring-primary/20 outline-none"
                     >
-                        <option value="All">📅 Any Availability</option>
+                        <option value="All">Any Availability</option>
                         <option value="Today">Today</option>
                         <option value="Tomorrow">Tomorrow</option>
                     </select>

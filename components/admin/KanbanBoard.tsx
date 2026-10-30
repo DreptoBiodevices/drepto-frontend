@@ -111,7 +111,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ project, onUpdate }) => {
                                     </div>
                                     <div className="flex justify-between items-center text-xs text-gray-500">
                                         <span className="bg-gray-100 px-2 py-0.5 rounded flex items-center gap-1">
-                                            👤 {task.assignee}
+                                            {task.assignee}
                                         </span>
                                     </div>
 
@@ -129,7 +129,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ project, onUpdate }) => {
                                         )}
                                         {col.id !== 'done' && (
                                             <button onClick={() => moveTask(task.id, 'done')} className="text-[10px] bg-green-50 hover:bg-green-100 text-green-600 px-2 py-1 rounded">
-                                                Done ✓
+                                                Done
                                             </button>
                                         )}
                                     </div>

@@ -112,10 +112,10 @@ export function calculateItemOfferPricing(
 
         let hint: string | undefined;
         if (freeUnits > 0) {
-            hint = `🎁 ${freeUnits} FREE product${freeUnits > 1 ? 's' : ''} automatically included in your order!`;
+            hint = `${freeUnits} FREE product${freeUnits > 1 ? 's' : ''} automatically included in your order!`;
         } else if (remainder > 0 && remainder < buyQty) {
             const need = buyQty - remainder;
-            hint = `Add ${need} more item${need > 1 ? 's' : ''} to get ${freeQty} FREE automatically! 🎁`;
+            hint = `Add ${need} more item${need > 1 ? 's' : ''} to get ${freeQty} FREE automatically!`;
         }
 
         return {

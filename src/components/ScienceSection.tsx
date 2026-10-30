@@ -24,8 +24,8 @@ export const ScienceSection: React.FC = () => {
         
         {/* Section Header: Emcure Style with Red Accent */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
-            <Microscope className="w-3.5 h-3.5 text-[#c01226]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/90 text-teal-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+            <Microscope className="w-3.5 h-3.5 text-teal-700" />
             <span>SCIENCE &amp; INNOVATION</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black tracking-tight text-slate-900 leading-tight font-display">
@@ -41,7 +41,7 @@ export const ScienceSection: React.FC = () => {
               onClick={() => setActiveTab('mechanism')}
               className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center ${
                 activeTab === 'mechanism'
-                  ? 'bg-[#c01226] text-white shadow-sm'
+                  ? 'bg-slate-900 text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
@@ -51,7 +51,7 @@ export const ScienceSection: React.FC = () => {
               onClick={() => setActiveTab('pipeline')}
               className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center ${
                 activeTab === 'pipeline'
-                  ? 'bg-[#c01226] text-white shadow-sm'
+                  ? 'bg-slate-900 text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
@@ -61,7 +61,7 @@ export const ScienceSection: React.FC = () => {
               onClick={() => setActiveTab('evidence')}
               className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center ${
                 activeTab === 'evidence'
-                  ? 'bg-[#c01226] text-white shadow-sm'
+                  ? 'bg-slate-900 text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
@@ -88,21 +88,21 @@ export const ScienceSection: React.FC = () => {
                   </h3>
                   <ul className="space-y-4 text-sm text-slate-600">
                     <li className="flex items-start gap-3">
-                      <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">✕</span>
+                      <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">×</span>
                       <div>
                         <strong className="text-slate-900 block font-semibold">Severe Gastrointestinal Toxicity:</strong>
                         Oral NSAIDs cause direct mucosal contact irritation, gastritis, and stomach acid reflux in regular users.
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">✕</span>
+                      <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">×</span>
                       <div>
                         <strong className="text-slate-900 block font-semibold">Extensive First-Pass Hepatic Metabolism:</strong>
                         Up to 60% of oral dosage is metabolized and discarded by the liver, requiring high chemical doses to achieve relief.
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">✕</span>
+                      <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">×</span>
                       <div>
                         <strong className="text-slate-900 block font-semibold">Peak-and-Trough Serum Spikes:</strong>
                         Oral tablets lead to unpredictable plasma spikes, causing fatigue, nausea, and rapid wear-off within 3–4 hours.
@@ -117,10 +117,10 @@ export const ScienceSection: React.FC = () => {
               </div>
 
               {/* Drepto Transdermal Solution */}
-              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border-2 border-[#c01226]/30 relative shadow-md flex flex-col justify-between">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border-2 border-teal-600/30 relative shadow-md flex flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-[#c01226] text-xs font-bold uppercase mb-4">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#c01226]" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase mb-4">
+                    <ShieldCheck className="w-3.5 h-3.5 text-teal-700" />
                     <span>The Drepto Bio-Matrix Solution</span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4">
@@ -128,7 +128,7 @@ export const ScienceSection: React.FC = () => {
                   </h3>
                   <ul className="space-y-4 text-sm text-slate-600">
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
                       <div>
                         <strong className="text-slate-900 block font-semibold">100% Gastrointestinal Bypass:</strong>
                         Active therapeutics diffuse directly into sub-dermal capillary beds, completely eliminating stomach acid irritation.
@@ -190,6 +190,32 @@ export const ScienceSection: React.FC = () => {
                 </p>
               </div>
             </div>
+
+            {/* Animated Device Mechanism Video Showcase */}
+            <div className="mt-8 rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-300/90 shadow-md bg-white">
+              <div className="px-5 py-3.5 bg-slate-900 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-semibold text-white tracking-tight">
+                    Transdermal Dosing &amp; Compartment Flux Simulation
+                  </span>
+                </div>
+                <span className="text-slate-400 text-[11px] font-mono">
+                  SINE IIT Bombay &bull; Patent App IN202521129798
+                </span>
+              </div>
+              <div className="relative w-full bg-white flex items-center justify-center p-2 sm:p-4">
+                <video
+                  src="/images/vid.mp4"
+                  className="w-full h-auto max-h-[460px] object-contain rounded-xl shadow-xs"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                />
+              </div>
+            </div>
           </div>
         )}
 
@@ -206,7 +232,7 @@ export const ScienceSection: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#c01226] animate-pulse" />
-                  <span className="text-xs font-bold text-[#c01226] uppercase tracking-wider bg-red-50 border border-red-200 px-3 py-1 rounded-full">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider bg-slate-100 border border-slate-300 px-3 py-1 rounded-full">
                     Active Programs
                   </span>
                 </div>
@@ -233,15 +259,15 @@ export const ScienceSection: React.FC = () => {
                   {/* Status Steps */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                     <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
-                      <span className="font-bold block text-emerald-700">✓ Formulation</span>
+                      <span className="font-bold block text-emerald-700">Formulation</span>
                       Polymer Matrix
                     </div>
                     <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
-                      <span className="font-bold block text-emerald-700">✓ ISO 10993-23</span>
+                      <span className="font-bold block text-emerald-700">ISO 10993-23</span>
                       Certified (PII 0.00)
                     </div>
                     <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
-                      <span className="font-bold block text-emerald-700">✓ Clinical Pilot</span>
+                      <span className="font-bold block text-emerald-700">Clinical Pilot</span>
                       Published (JAIMS)
                     </div>
                     <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-[#c01226] font-bold">
@@ -269,7 +295,7 @@ export const ScienceSection: React.FC = () => {
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                     <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
-                      <span className="font-bold block text-emerald-700">✓ Preformulation</span>
+                      <span className="font-bold block text-emerald-700">Preformulation</span>
                       Carrier Synthesis
                     </div>
                     <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-bold">

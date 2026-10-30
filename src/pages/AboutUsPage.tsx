@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AboutSection from '../components/AboutSection';
@@ -9,15 +10,38 @@ import { FounderQuoteCard } from '../components/CorporateHeroSection';
 import { Award, Target, Lightbulb, Users, Building2, ShieldCheck } from 'lucide-react';
 
 const AboutUsPage: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   const dummyRefs = {
-    homeRef: React.useRef(null),
-    aboutRef: React.useRef(null),
-    teamRef: React.useRef(null),
-    galleryRef: React.useRef(null),
-    contactRef: React.useRef(null),
+    homeRef: useRef(null),
+    aboutRef: useRef(null),
+    teamRef: useRef(null),
+    galleryRef: useRef(null),
+    contactRef: useRef(null),
   };
+
+  useEffect(() => {
+    if (location.hash) {
+      const scroll = () => {
+        const el = document.querySelector(location.hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return true;
+        }
+        return false;
+      };
+
+      if (!scroll()) {
+        const timer1 = setTimeout(scroll, 100);
+        const timer2 = setTimeout(scroll, 300);
+        return () => {
+          clearTimeout(timer1);
+          clearTimeout(timer2);
+        };
+      }
+    }
+  }, [location.pathname, location.hash]);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -76,19 +100,25 @@ const AboutUsPage: React.FC = () => {
         </section>
 
         {/* Corporate Purpose, Mission & SINE Incubation */}
-        <AboutSection />
+        <div id="purpose" className="scroll-mt-24">
+          <AboutSection />
+        </div>
 
-        {/* Visual Journey Gallery */}
-        <GallerySection />
+        {/* Visual Journey Gallery & Institutional Recognition */}
+        <div id="recognition" className="scroll-mt-24">
+          <GallerySection />
+        </div>
 
-        {/* Founder & CEO Thought Leadership Card */}
-        <FounderQuoteCard />
-
-        {/* Executive Leadership & Advisory Team */}
-        <TeamSection />
+        {/* Founder & CEO Thought Leadership Card + Executive Leadership Team */}
+        <div id="team" className="scroll-mt-24">
+          <FounderQuoteCard />
+          <TeamSection />
+        </div>
 
         {/* Institutional Contact & Partnerships */}
-        <ContactSection />
+        <div id="contact" className="scroll-mt-24">
+          <ContactSection />
+        </div>
       </main>
 
       <Footer />

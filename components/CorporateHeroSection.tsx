@@ -4,19 +4,19 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 
 export const FounderQuoteCard: React.FC = () => {
   return (
-    <section className="py-16 sm:py-24 bg-slate-50/70 border-t border-slate-200/60">
+    <section className="py-16 sm:py-24 bg-slate-50/70 border-t border-slate-200/60 scroll-mt-24" id="founder">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Grey Rounded Container */}
         <div className="relative bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-10 lg:p-14 shadow-sm border border-slate-300/90">
           {/* Top Red Quotation Mark & Horizontal Accent Line */}
           <div className="flex items-center gap-4 mb-6 sm:mb-8">
             <span
-              className="text-[#c01226] text-4xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mb-2"
+              className="text-slate-800 text-4xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mb-2"
               aria-hidden="true"
             >
               &ldquo;
             </span>
-            <div className="h-0.5 sm:h-1 bg-[#c01226] flex-1 rounded-full opacity-90" />
+            <div className="h-0.5 sm:h-1 bg-slate-300 flex-1 rounded-full opacity-90" />
           </div>
 
           {/* Inner Content: Portrait + Quote Body */}
@@ -54,7 +54,7 @@ export const FounderQuoteCard: React.FC = () => {
 
               {/* Leader Name in Bold Uppercase Red */}
               <div className="mt-6 sm:mt-8 pt-4 border-t border-slate-300/60">
-                <h3 className="text-base sm:text-xl lg:text-2xl font-bold uppercase tracking-wide text-[#c01226]">
+                <h3 className="text-base sm:text-xl lg:text-2xl font-bold uppercase tracking-wide text-slate-900">
                   RAHUL KUMAR GUPTA
                 </h3>
                 <p className="text-slate-600 font-medium text-xs sm:text-sm lg:text-base mt-1">
@@ -69,9 +69,9 @@ export const FounderQuoteCard: React.FC = () => {
 
           {/* Bottom Red Horizontal Accent Line & Closing Quotation Mark */}
           <div className="flex items-center justify-end gap-4 mt-6 sm:mt-8">
-            <div className="h-0.5 sm:h-1 bg-[#c01226] flex-1 rounded-full opacity-90" />
+            <div className="h-0.5 sm:h-1 bg-slate-300 flex-1 rounded-full opacity-90" />
             <span
-              className="text-[#c01226] text-4xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mt-4"
+              className="text-slate-400 text-4xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mt-4"
               aria-hidden="true"
             >
               &rdquo;
@@ -223,8 +223,8 @@ const CorporateHeroSection: React.FC = () => {
       <section id="caring-beyond" className="py-16 sm:py-24 lg:py-28 bg-white relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Heading in Signature Emcure Crimson Red */}
-          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-[#c01226] text-center mb-8 sm:mb-14 lg:mb-16">
-            Curing the World, Caring Beyond
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-slate-900 text-center mb-8 sm:mb-14 lg:mb-16">
+            Curing the World, <span className="text-[#c01226]">Caring Beyond</span>
           </h2>
 
           {/* Two-Column Grid */}
@@ -297,6 +297,50 @@ const CorporateHeroSection: React.FC = () => {
                 <div
                   className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-3 w-3 sm:w-4 h-28 sm:h-36 bg-[#c01226] rounded-xs shadow-md pointer-events-none"
                   aria-hidden="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Patented Transdermal Biodevice Video Showcase ── */}
+          <div className="mt-14 sm:mt-20 pt-10 sm:pt-14 border-t border-slate-200/80">
+            <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-[#c01226] animate-pulse" />
+                <span>PATENTED BIODEVICETECHNOLOGY IN MOTION</span>
+              </div>
+              <h3 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-display">
+                Precision Transdermal Micro-Flux Delivery
+              </h3>
+              <p className="mt-2 text-slate-600 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
+                Watch the multi-chamber controlled reservoir kinetics, dosing button mechanism, and micro-permeation architecture engineered at SINE, IIT Bombay.
+              </p>
+            </div>
+
+            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-300/90 shadow-2xl bg-white max-w-5xl mx-auto">
+              {/* Clinical Chassis Header */}
+              <div className="px-5 py-3.5 bg-slate-900 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-semibold text-white tracking-tight">
+                    Transdermal Kinetic Release &amp; Polymer Matrix Architecture
+                  </span>
+                </div>
+                <span className="text-slate-400 text-[11px] font-mono">
+                  Patent App IN202521129798 &bull; Ex-Vivo Bio-Permeation Demonstration
+                </span>
+              </div>
+
+              {/* Video Frame */}
+              <div className="relative w-full bg-white flex items-center justify-center p-2 sm:p-6">
+                <video
+                  src="/images/vid.mp4"
+                  className="w-full h-auto max-h-[520px] object-contain rounded-xl shadow-xs"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
                 />
               </div>
             </div>

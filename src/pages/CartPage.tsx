@@ -457,7 +457,7 @@ const CartPage: React.FC = () => {
                                                             {pricing.paidUnits} paid
                                                         </span>
                                                         <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                                                            + {pricing.freeUnits} FREE 🎁
+                                                            + {pricing.freeUnits} FREE
                                                         </span>
                                                     </div>
                                                 )}
@@ -465,7 +465,7 @@ const CartPage: React.FC = () => {
                                                 {pricing.hint && (
                                                     <div className="mt-1">
                                                         <span className="text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-md inline-block">
-                                                            💡 {pricing.hint}
+                                                            {pricing.hint}
                                                         </span>
                                                     </div>
                                                 )}

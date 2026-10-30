@@ -50,8 +50,8 @@ const ProductSection: React.FC = () => {
         {/* Section Header: Emcure Style with Red Accent */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 sm:mb-16 gap-6">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#c01226] bg-red-50 px-3.5 py-1.5 rounded-full border border-red-200/90 mb-3 shadow-2xs">
-              <Package className="w-3.5 h-3.5 text-[#c01226]" />
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 bg-slate-100 px-3.5 py-1.5 rounded-full border border-slate-300/80 mb-3 shadow-2xs">
+              <Package className="w-3.5 h-3.5 text-slate-700" />
               <span>OUR PRODUCTS &amp; THERAPEUTIC FORMULATIONS</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black text-slate-900 tracking-tight leading-tight font-display">
@@ -65,7 +65,7 @@ const ProductSection: React.FC = () => {
           <div className="shrink-0">
             <button
               onClick={() => navigate('/our-products')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-[#c01226] hover:bg-red-700 transition-all shadow-md cursor-pointer group"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-slate-900 hover:bg-slate-800 transition-all shadow-md cursor-pointer group"
             >
               <span>View Complete Catalog</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -78,10 +78,10 @@ const ProductSection: React.FC = () => {
           
           {/* Top Red Quotation & Line Accent */}
           <div className="flex flex-wrap items-center gap-3 mb-6 sm:mb-8">
-            <span className="text-[10px] sm:text-xs font-black tracking-wider uppercase px-3 py-1.5 rounded-full bg-white text-[#c01226] border border-slate-300 shadow-2xs">
+            <span className="text-[10px] sm:text-xs font-black tracking-wider uppercase px-3 py-1.5 rounded-full bg-white text-slate-800 border border-slate-300 shadow-2xs">
               Flagship Innovation &bull; Feminine Hygiene &amp; Cramp Relief
             </span>
-            <div className="hidden sm:block h-0.5 bg-[#c01226] flex-1 rounded-full opacity-60" />
+            <div className="hidden sm:block h-0.5 bg-slate-300 flex-1 rounded-full opacity-80" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -149,10 +149,10 @@ const ProductSection: React.FC = () => {
                   {/* Bottom Clinical Trust Bar */}
                   <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-700 z-10">
                     <span className="flex items-center gap-1 text-slate-700">
-                      <span className="text-[#c01226]">✓</span> 100% Stomach Safe
+                      <span className="text-emerald-600 font-bold">•</span> 100% Stomach Safe
                     </span>
                     <span className="text-emerald-700 flex items-center gap-1">
-                      <span>✓</span> ISO 10993 Certified
+                      <span className="text-emerald-600 font-bold">•</span> ISO 10993 Certified
                     </span>
                   </div>
                 </div>
@@ -175,7 +175,7 @@ const ProductSection: React.FC = () => {
               {/* 4 Pillars of Product Superiority */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
                   <span className="text-xs sm:text-sm font-semibold text-slate-800">
                     <strong>100% Gastrointestinal Bypass</strong> (Zero stomach irritation)
                   </span>
@@ -252,7 +252,7 @@ const ProductSection: React.FC = () => {
               <span className="text-base font-black text-slate-900">Starting at ₹349</span>
               <button
                 onClick={() => navigate('/our-products')}
-                className="text-xs font-bold text-[#c01226] hover:text-red-700 flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-slate-900 hover:text-teal-700 flex items-center gap-1 cursor-pointer"
               >
                 <span>View Options</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -267,7 +267,7 @@ const ProductSection: React.FC = () => {
                 <div className="p-3 bg-slate-100 text-slate-800 rounded-2xl border border-slate-200 group-hover:scale-105 transition-transform">
                   <Activity className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full">
+                <span className="text-xs font-bold text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
                   Preclinical R&amp;D
                 </span>
               </div>

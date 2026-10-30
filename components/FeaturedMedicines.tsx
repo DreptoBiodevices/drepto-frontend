@@ -25,48 +25,67 @@ const FeaturedMedicines: React.FC = () => {
                         <p className="text-gray-500 mt-2">Top health products for you</p>
                     </div>
                     <button
-                        onClick={() => navigate('/auth')}
+                        onClick={() => navigate('/login')}
                         className="hidden md:flex items-center text-primary font-semibold hover:gap-2 transition-all"
                     >
                         View All <span className="ml-1">→</span>
                     </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 overflow-x-auto">
                     {medicines.map((med, idx) => (
                         <div
                             key={med.id}
-                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:shadow-lg transition-shadow duration-300 flex flex-col animate-fade-in-up"
+                            className="relative h-80 rounded overflow-hidden group cursor-pointer transform hover:scale-105 transition-all duration-300 animate-fade-in-up flex-shrink-0"
                             style={{ animationDelay: `${idx * 0.1}s` }}
+                            onClick={() => navigate('/login')}
                         >
-                            <div className="h-40 bg-white rounded-lg flex items-center justify-center mb-4 overflow-hidden relative group">
+                            {/* Background Image */}
+                            <div className="absolute inset-0">
                                 {med.imageUrl ? (
-                                    <img src={med.imageUrl} alt={med.name} className="h-full w-full object-contain p-2" />
+                                    <img 
+                                        src={med.imageUrl} 
+                                        alt={med.name} 
+                                        className="h-full w-full object-cover"
+                                    />
                                 ) : (
-                                    <span className="text-4xl">💊</span>
+                                    <div 
+                                        className="h-full w-full bg-cover bg-center"
+                                        style={{ 
+                                            backgroundImage: `url(https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=600&fit=crop&crop=center)` 
+                                        }}
+                                    />
                                 )}
-                                <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
-
-                            <div className="flex-1">
-                                <p className="text-xs text-primary font-medium mb-1">{med.brand}</p>
-                                <h3 className="font-bold text-gray-800 line-clamp-1">{med.name}</h3>
-                                <p className="text-xs text-gray-500 mt-1 line-clamp-2">{med.description || 'No description available'}</p>
-                            </div>
-
-                            <div className="mt-4 flex items-center justify-between">
-                                <div>
-                                    <span className="text-lg font-bold text-dark-blue">₹{med.price}</span>
+                            
+                            {/* Overlay */}
+                            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300" />
+                            
+                            {/* Content */}
+                            <div className="relative h-full p-4 flex flex-col justify-end text-white">
+                                {/* Brand - shows on hover */}
+                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 mb-2">
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-2 py-1 rounded font-medium">
+                                        {med.brand}
+                                    </span>
+                                </div>
+                                
+                                <h3 className="text-xl font-bold mb-1 group-hover:mb-3 transition-all duration-300">
+                                    {med.name}
+                                </h3>
+                                
+                                {/* Price */}
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-lg font-bold">₹{med.price}</span>
                                     {med.mrp > med.price && (
-                                        <span className="text-xs text-gray-400 line-through ml-2">₹{med.mrp}</span>
+                                        <span className="text-sm line-through opacity-75">₹{med.mrp}</span>
                                     )}
                                 </div>
-                                <button
-                                    onClick={() => navigate('/auth')}
-                                    className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
-                                >
-                                    +
-                                </button>
+                                
+                                {/* Description - shows on hover */}
+                                <p className="text-sm opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 leading-relaxed line-clamp-2">
+                                    {med.description || 'Premium quality medicine for your health needs'}
+                                </p>
                             </div>
                         </div>
                     ))}
@@ -74,7 +93,7 @@ const FeaturedMedicines: React.FC = () => {
 
                 <div className="mt-8 text-center md:hidden">
                     <button
-                        onClick={() => navigate('/auth')}
+                        onClick={() => navigate('/login')}
                         className="text-primary font-semibold hover:underline"
                     >
                         View All Medicines

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import {
+  Zap,
   BookOpen,
   FileText,
   Download,
@@ -609,8 +610,8 @@ const OurResearchPage: React.FC = () => {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
-                <Microscope className="w-4 h-4 text-[#c01226]" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
+                <Microscope className="w-4 h-4 text-teal-700" />
                 <span>PIONEERING BIOMEDICAL SCIENCE • IIT BOMBAY COLLABORATION</span>
               </div>
 
@@ -699,7 +700,7 @@ const OurResearchPage: React.FC = () => {
         </section>
 
         {/* ── SCIENCE EXPLAINER ────────────────────────────────────────────── */}
-        <section className="py-16 bg-white border-y border-slate-200/80">
+        <section id="science" className="py-16 bg-white border-y border-slate-200/80 scroll-mt-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-14">
               <span className="text-[#c01226] font-bold text-xs uppercase tracking-widest">Scientific Innovation</span>
@@ -759,8 +760,8 @@ const OurResearchPage: React.FC = () => {
               <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
 
               <div className="max-w-3xl mb-10">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
-                  <Activity className="w-3.5 h-3.5 text-[#c01226]" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
+                  <Activity className="w-3.5 h-3.5 text-teal-700" />
                   <span>PHARMACOKINETIC &amp; CLINICAL BENCHMARK</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 font-display tracking-tight">
@@ -774,8 +775,8 @@ const OurResearchPage: React.FC = () => {
               {/* Quick Metrics Bar */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
                 <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-[#c01226] font-bold text-lg shrink-0">
-                    ⚡
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 font-bold text-lg shrink-0">
+                    <Zap className="w-5 h-5 text-amber-600" />
                   </div>
                   <div>
                     <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Onset Time</div>
@@ -785,7 +786,7 @@ const OurResearchPage: React.FC = () => {
 
                 <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-lg shrink-0">
-                    🛡️
+                    <ShieldCheck className="w-5 h-5 text-emerald-600" />
                   </div>
                   <div>
                     <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Gastric Safety</div>
@@ -795,7 +796,7 @@ const OurResearchPage: React.FC = () => {
 
                 <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-lg shrink-0">
-                    ⏱️
+                    <Clock className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
                     <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Sustained Relief</div>
@@ -862,7 +863,7 @@ const OurResearchPage: React.FC = () => {
                   </div>
 
                   <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">✓ SINE IIT Bombay Incubated &bull; JAIMS Peer-Reviewed</span>
+                    <span className="font-semibold text-slate-700">SINE IIT Bombay Incubated &bull; JAIMS Peer-Reviewed</span>
                     <span className="text-[#c01226] font-bold">Recommended</span>
                   </div>
                 </div>

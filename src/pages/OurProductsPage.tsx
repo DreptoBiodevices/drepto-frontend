@@ -127,7 +127,7 @@ const OurProductsPage: React.FC = () => {
         window.dispatchEvent(new Event('cart:updated'));
 
         if (autoFree > 0) {
-            setNotification(`Added to cart + ${autoFree} FREE product auto-added! 🎁`);
+            setNotification(`Added to cart + ${autoFree} FREE product auto-added!`);
         } else {
             setNotification('Added to cart!');
         }
@@ -312,8 +312,8 @@ const OurProductsPage: React.FC = () => {
                     <div className="absolute -bottom-10 left-10 w-96 h-96 bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-4xl">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
-                            <Package className="w-4 h-4 text-[#c01226]" />
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
+                            <Package className="w-4 h-4 text-slate-700" />
                             <span>OUR PRODUCTS &amp; THERAPEUTIC FORMULATIONS</span>
                         </div>
                         <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
@@ -328,7 +328,7 @@ const OurProductsPage: React.FC = () => {
                     </div>
                 </section>
 
-                <div className="px-4 md:px-8 max-w-7xl mx-auto w-full pb-16">
+                <div id="catalog" className="px-4 md:px-8 max-w-7xl mx-auto w-full pb-16 scroll-mt-24">
 
                 {notification && (
                     <div className="fixed top-24 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-bounce-in">
@@ -440,7 +440,7 @@ const OurProductsPage: React.FC = () => {
                                                                 const paid = Math.ceil(qty / 2);
                                                                 const free = Math.floor(qty / 2);
                                                                 return free > 0
-                                                                    ? `${paid} buying + ${free} FREE 🎁`
+                                                                    ? `${paid} buying + ${free} FREE`
                                                                     : `${qty} in cart`;
                                                             })()}
                                                         </span>
@@ -462,7 +462,7 @@ const OurProductsPage: React.FC = () => {
                                                         if (free > 0) {
                                                             return (
                                                                 <p className="text-[10px] text-center text-emerald-600 font-semibold mb-2">
-                                                                    🎁 {free} FREE unit{free > 1 ? 's' : ''} auto-added!
+                                                                    {free} FREE unit{free > 1 ? 's' : ''} auto-added!
                                                                 </p>
                                                             );
                                                         }
@@ -492,7 +492,7 @@ const OurProductsPage: React.FC = () => {
                                                     const free = Math.floor(qty / bundle) * freeQty;
                                                     const paid = qty - free;
                                                     return free > 0
-                                                        ? `Buy ${paid} → Got ${free} FREE 🎁`
+                                                        ? `Buy ${paid} → Got ${free} FREE`
                                                         : qty > 0 ? `In Cart (${qty}) · Proceed to Checkout` : (offer?.type === 'BOGO' ? `Buy ${buyQty} Get ${freeQty} Free (Auto-Added)` : 'Buy Now');
                                                 })()}
                                             </button>

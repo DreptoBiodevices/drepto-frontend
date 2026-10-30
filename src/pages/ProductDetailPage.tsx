@@ -241,7 +241,7 @@ const ProductDetailPage: React.FC = () => {
         window.dispatchEvent(new Event('cart:updated'));
         
         if (itemsToAdd > count) {
-            setNotification(`Added to cart + ${itemsToAdd - count} FREE product auto-added! 🎁`);
+            setNotification(`Added to cart + ${itemsToAdd - count} FREE product auto-added!`);
         } else if (count > 1) {
             setNotification(`Added Pack of ${count} to cart!`);
         } else {
@@ -459,7 +459,7 @@ const ProductDetailPage: React.FC = () => {
                                             if (autoFree > 0) {
                                                 return (
                                                     <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs">
-                                                        🎁 +{autoFree} FREE product auto-added
+                                                        +{autoFree} FREE product auto-added
                                                     </span>
                                                 );
                                             }
@@ -540,7 +540,7 @@ const ProductDetailPage: React.FC = () => {
                                                 <ShoppingCart className="w-4 h-4 group-hover:scale-110 transition-transform" />
                                                 {(() => {
                                                     const autoFree = getAutoFreeUnitsToAdd(product, 0, selectedPack);
-                                                    return `Add Pack of ${selectedPack}${autoFree > 0 ? ` (+${autoFree} FREE 🎁)` : ''} to Cart`;
+                                                    return `Add Pack of ${selectedPack}${autoFree > 0 ? ` (+${autoFree} FREE)` : ''} to Cart`;
                                                 })()}
                                             </button>
                                         )}
@@ -560,7 +560,7 @@ const ProductDetailPage: React.FC = () => {
                                                 {cartCount === 0 
                                                     ? (() => {
                                                         const autoFree = getAutoFreeUnitsToAdd(product, 0, selectedPack);
-                                                        return `Buy Now · Pack of ${selectedPack}${autoFree > 0 ? ` (+${autoFree} FREE 🎁)` : ''} (₹${packPricing.finalTotal})`;
+                                                        return `Buy Now · Pack of ${selectedPack}${autoFree > 0 ? ` (+${autoFree} FREE)` : ''} (₹${packPricing.finalTotal})`;
                                                       })()
                                                     : `Proceed to Checkout (${cartCount} item${cartCount > 1 ? 's' : ''} · ₹${calculateItemOfferPricing(product, cartCount).finalTotal})`}
                                             </span>
@@ -778,7 +778,7 @@ const ProductDetailPage: React.FC = () => {
                         {/* Guarantee Footer */}
                         <div className="mt-6 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
                             <span>Product SKU: {product._id ? product._id.slice(-8).toUpperCase() : 'DB-PROD'}</span>
-                            <span className="text-emerald-600 font-semibold">✓ In Stock &amp; Ready for Delivery</span>
+                            <span className="text-emerald-600 font-semibold">In Stock &amp; Ready for Delivery</span>
                         </div>
 
                     </div>

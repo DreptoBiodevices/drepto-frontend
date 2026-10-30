@@ -54,6 +54,35 @@ const Navbar: React.FC<NavbarProps> = ({
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileExpandedItem, setMobileExpandedItem] = useState<string | null>(null);
+
+  const handleNavClick = (path: string, hash?: string) => {
+    setActiveDropdown(null);
+    setIsMobileMenuOpen(false);
+
+    if (location.pathname === path) {
+      if (hash) {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (location.hash !== hash) {
+          navigate(`${path}${hash}`, { replace: true });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (location.hash) {
+          navigate(path, { replace: true });
+        }
+      }
+    } else {
+      if (hash) {
+        navigate(`${path}${hash}`);
+      } else {
+        navigate(path);
+      }
+    }
+  };
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navigate = useNavigate();
@@ -102,22 +131,35 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   // ── Emcure-inspired Nav Links with Dropdowns ──
-  const navItems = [
+  interface SubNavItem {
+    label: string;
+    desc?: string;
+    path: string;
+    hash?: string;
+  }
+
+  interface NavItem {
+    name: string;
+    path: string;
+    dropdown?: SubNavItem[];
+  }
+
+  const navItems: NavItem[] = [
     {
       name: 'About Us',
       path: '/about-us',
       dropdown: [
-        { label: 'About Drepto', desc: 'Deeptech biomedical innovations at SINE, IIT Bombay', path: '/about-us' },
-        { label: 'Leadership & Team', desc: 'Message from Founder Rahul Kumar Gupta & Advisors', path: '/about-us' },
-        { label: 'Incubation & Recognition', desc: 'SINE IIT Bombay, BIRAC, and JAIMS', path: '/about-us' },
+        { label: 'About Drepto', desc: 'Deeptech biomedical innovations at SINE, IIT Bombay', path: '/about-us', hash: '#purpose' },
+        { label: 'Leadership & Team', desc: 'Message from Founder Rahul Kumar Gupta & Advisors', path: '/about-us', hash: '#team' },
+        { label: 'Incubation & Recognition', desc: 'SINE IIT Bombay, BIRAC, and JAIMS', path: '/about-us', hash: '#recognition' },
       ],
     },
     {
       name: 'Our Products',
       path: '/our-products',
       dropdown: [
-        { label: 'MenstroHerb (Cramp Relief)', desc: '12-hour sustained herbal patch for dysmenorrhea', path: '/our-products' },
-        { label: 'Chronic Pain Therapeutics', desc: 'Arthritis and targeted musculoskeletal patches', path: '/our-products' },
+        { label: 'MenstroHerb (Cramp Relief)', desc: '12-hour sustained herbal patch for dysmenorrhea', path: '/our-products', hash: '#catalog' },
+        { label: 'Chronic Pain Therapeutics', desc: 'Arthritis and targeted musculoskeletal patches', path: '/our-research', hash: '#science' },
         { label: 'Browse Product Catalog', desc: 'Explore all formulations, packs, and subscriptions', path: '/our-products' },
       ],
     },
@@ -228,7 +270,7 @@ const Navbar: React.FC<NavbarProps> = ({
               />
             </div>
 
-            {/* Desktop Navigation Links with Dropdowns (Highlighted White Text) */}
+            {/* Desktop Navigation Links with Dropdowns */}
             <nav className="hidden lg:flex items-center justify-center space-x-6 xl:space-x-8 flex-1 mx-4">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
@@ -236,36 +278,43 @@ const Navbar: React.FC<NavbarProps> = ({
                   <div
                     key={item.name}
                     className="relative"
-                    onMouseEnter={() => handleMouseEnter(item.name)}
-                    onMouseLeave={handleMouseLeave}
+                    onMouseEnter={() => item.dropdown && handleMouseEnter(item.name)}
+                    onMouseLeave={item.dropdown ? handleMouseLeave : undefined}
                   >
-                    <button
-                      onClick={() => {
-                        setActiveDropdown(null);
-                        if (item.path === '/') {
-                          if (!isHomePage) navigate('/');
-                          else window.scrollTo({ top: 0, behavior: 'smooth' });
-                        } else {
-                          navigate(item.path);
-                        }
-                      }}
-                      className={`font-semibold text-sm tracking-wide transition-colors flex items-center gap-1.5 py-2 group cursor-pointer ${
+                    <div
+                      className={`font-semibold text-sm tracking-wide transition-colors flex items-center gap-1 py-1 group ${
                         isActive
                           ? 'text-[#c01226]'
                           : 'text-white hover:text-red-400'
                       }`}
                     >
-                      <span className="drop-shadow-xs">{item.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleNavClick(item.path)}
+                        className="py-1 cursor-pointer hover:text-red-400 transition-colors drop-shadow-xs"
+                      >
+                        {item.name}
+                      </button>
                       {item.dropdown && (
-                        <ChevronDown
-                          className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                            activeDropdown === item.name
-                              ? 'rotate-180 text-red-400'
-                              : 'text-white/70 group-hover:text-red-400'
-                          }`}
-                        />
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveDropdown(activeDropdown === item.name ? null : item.name);
+                          }}
+                          className="p-1 cursor-pointer text-white/70 hover:text-red-400 transition-colors"
+                          aria-label={`Toggle ${item.name} menu`}
+                        >
+                          <ChevronDown
+                            className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                              activeDropdown === item.name
+                                ? 'rotate-180 text-red-400'
+                                : 'text-white/70 group-hover:text-red-400'
+                            }`}
+                          />
+                        </button>
                       )}
-                    </button>
+                    </div>
 
                     {/* Dark Glass Dropdown Panel */}
                     {item.dropdown && activeDropdown === item.name && (
@@ -278,11 +327,9 @@ const Navbar: React.FC<NavbarProps> = ({
                           {item.dropdown.map((sub) => (
                             <button
                               key={sub.label}
-                              onClick={() => {
-                                setActiveDropdown(null);
-                                navigate(sub.path);
-                              }}
-                              className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-white/10 transition-colors group/sub block"
+                              type="button"
+                              onClick={() => handleNavClick(sub.path, sub.hash)}
+                              className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-white/10 transition-colors group/sub block cursor-pointer"
                             >
                               <div className="text-white group-hover/sub:text-red-400 font-semibold text-xs tracking-wide transition-colors">
                                 {sub.label}
@@ -473,31 +520,74 @@ const Navbar: React.FC<NavbarProps> = ({
                 </div>
               )}
 
-              {/* Main Nav Items */}
+              {/* Main Nav Items with Accordion Submenus */}
               <div className="space-y-1">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
+                  const hasDropdown = Boolean(item.dropdown && item.dropdown.length > 0);
+                  const isExpanded = mobileExpandedItem === item.name;
+
                   return (
-                    <button
-                      key={item.name}
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        if (item.path === '/') {
-                          if (!isHomePage) navigate('/');
-                          else window.scrollTo({ top: 0, behavior: 'smooth' });
-                        } else {
-                          navigate(item.path);
-                        }
-                      }}
-                      className={`w-full flex items-center justify-between p-3.5 rounded-2xl transition-all text-left font-semibold text-sm cursor-pointer ${
-                        isActive
-                          ? 'bg-red-50 text-[#c01226] font-bold border border-red-200/80'
-                          : 'text-slate-800 hover:bg-slate-100 hover:text-[#c01226]'
-                      }`}
-                    >
-                      <span>{item.name}</span>
-                      <ChevronRight className={`w-4 h-4 ${isActive ? 'text-[#c01226]' : 'text-slate-400'}`} />
-                    </button>
+                    <div key={item.name} className="rounded-2xl overflow-hidden transition-colors">
+                      <div
+                        className={`w-full flex items-center justify-between p-3.5 transition-all text-left font-semibold text-sm ${
+                          isActive
+                            ? 'bg-red-50 text-[#c01226] font-bold border border-red-200/80'
+                            : 'text-slate-800 hover:bg-slate-100 hover:text-[#c01226]'
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleNavClick(item.path)}
+                          className="flex-1 text-left cursor-pointer"
+                        >
+                          {item.name}
+                        </button>
+                        {hasDropdown && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMobileExpandedItem(isExpanded ? null : item.name);
+                            }}
+                            className="p-1 rounded-lg hover:bg-slate-200/60 transition-colors cursor-pointer text-slate-500"
+                            aria-label={`Toggle ${item.name} submenu`}
+                          >
+                            <ChevronDown
+                              className={`w-4 h-4 transition-transform duration-200 ${
+                                isExpanded ? 'rotate-180 text-[#c01226]' : 'text-slate-400'
+                              }`}
+                            />
+                          </button>
+                        )}
+                        {!hasDropdown && (
+                          <ChevronRight className={`w-4 h-4 ${isActive ? 'text-[#c01226]' : 'text-slate-400'}`} />
+                        )}
+                      </div>
+
+                      {/* Mobile Accordion Submenu */}
+                      {hasDropdown && isExpanded && (
+                        <div className="bg-slate-50/80 px-3 py-2 space-y-1 border-t border-slate-200/60 animate-fade-in">
+                          {item.dropdown!.map((sub) => (
+                            <button
+                              key={sub.label}
+                              type="button"
+                              onClick={() => handleNavClick(sub.path, sub.hash)}
+                              className="w-full text-left p-2.5 rounded-xl hover:bg-white transition-colors block cursor-pointer group"
+                            >
+                              <div className="text-xs font-bold text-slate-800 group-hover:text-[#c01226] transition-colors">
+                                {sub.label}
+                              </div>
+                              {sub.desc && (
+                                <div className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">
+                                  {sub.desc}
+                                </div>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
