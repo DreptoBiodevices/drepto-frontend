@@ -97,7 +97,7 @@ const GenericCard: React.FC<{
   onRead: () => void;
 }> = ({ paper, onRead }) => (
   <div className="group relative flex flex-col bg-white rounded-3xl border border-slate-200 shadow-soft hover:shadow-elevated transition-all duration-300 overflow-hidden hover:border-[#c01226]/40">
-    <div className="h-2 w-full bg-gradient-to-r from-slate-400 via-slate-500 to-slate-400" />
+    <div className="h-1.5 w-full bg-slate-900" />
 
     <div className="p-6 sm:p-8 flex flex-col flex-grow">
       {/* Header */}
@@ -131,7 +131,7 @@ const GenericCard: React.FC<{
       <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
         <button
           onClick={onRead}
-          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-800 hover:to-slate-700 shadow-md hover:shadow-lg transition-all group/btn"
+          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-slate-900 hover:bg-slate-800 shadow-soft transition-colors group/btn"
         >
           <FileText className="w-4 h-4 text-slate-300 group-hover/btn:scale-110 transition-transform" />
           <span>Read more</span>
@@ -162,10 +162,10 @@ const RichCard: React.FC<{
     <div className="group relative flex flex-col justify-between bg-white rounded-3xl border border-slate-200 shadow-soft hover:shadow-elevated transition-all duration-300 overflow-hidden hover:border-[#c01226]/40">
       {/* Accent bar */}
       <div
-        className={`h-2 w-full ${
+        className={`h-1.5 w-full ${
           isClinical
-            ? 'bg-gradient-to-r from-teal-500 via-brand-500 to-cyan-500'
-            : 'bg-gradient-to-r from-emerald-500 via-brand-600 to-teal-500'
+            ? 'bg-teal-700'
+            : 'bg-slate-900'
         }`}
       />
 
@@ -224,7 +224,7 @@ const RichCard: React.FC<{
                 Intellectual Property &amp; Trademarks
               </h5>
             </div>
-            <div className="flex flex-wrap gap-2 text-xs font-mono font-bold text-amber-900 mb-2">
+            <div className="flex flex-wrap gap-2 text-xs font-bold text-amber-900 mb-2">
               <span className="bg-white px-2 py-0.5 rounded-md border border-amber-300">
                 Patent: {paper.ipDetails.patentApp}
               </span>
@@ -326,7 +326,7 @@ const RichCard: React.FC<{
           <div className="grid grid-cols-3 gap-2 py-4 border-y border-slate-100 mb-6 mt-auto">
             {paper.keyOutcomes.map((item, idx) => (
               <div key={idx} className="text-center p-2 rounded-xl bg-slate-50">
-                <div className="text-base sm:text-lg font-bold text-[#c01226] font-mono leading-tight">
+                <div className="text-base sm:text-lg font-bold text-brand-800 font-bold leading-tight">
                   {item.value}
                 </div>
                 <div className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-tight mt-0.5">
@@ -341,9 +341,9 @@ const RichCard: React.FC<{
         <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
           <button
             onClick={onRead}
-            className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-brand-700 to-teal-700 hover:from-brand-800 hover:to-teal-800 shadow-md hover:shadow-lg transition-all group/btn"
+            className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-slate-900 hover:bg-slate-800 shadow-soft transition-colors group/btn"
           >
-            <FileText className="w-4 h-4 text-red-300 group-hover/btn:scale-110 transition-transform" />
+            <FileText className="w-4 h-4 text-slate-300 group-hover/btn:scale-110 transition-transform" />
             <span>Read more</span>
             <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
           </button>
@@ -614,7 +614,7 @@ const OurResearchPage: React.FC = () => {
                 <span>PIONEERING BIOMEDICAL SCIENCE • IIT BOMBAY COLLABORATION</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15] mb-6 font-display">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
                 Our Research &amp;{' '}
                 <span className="text-[#c01226]">
                   Clinical Evidence
@@ -755,7 +755,7 @@ const OurResearchPage: React.FC = () => {
             </div>
 
             {/* ── Modern Clinical Comparison Matrix: Transdermal vs Oral ── */}
-            <div className="mt-16 bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-[2.5rem] p-6 sm:p-10 lg:p-12 border border-slate-200/90 shadow-xl shadow-slate-200/40 relative overflow-hidden">
+            <div className="mt-12 sm:mt-16 bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 border border-slate-300/90 shadow-md relative overflow-hidden">
               <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
 
               <div className="max-w-3xl mb-10">
@@ -763,7 +763,7 @@ const OurResearchPage: React.FC = () => {
                   <Activity className="w-3.5 h-3.5 text-[#c01226]" />
                   <span>PHARMACOKINETIC &amp; CLINICAL BENCHMARK</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 font-display tracking-tight">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 font-display tracking-tight">
                   Targeted Transdermal Delivery vs. Conventional Oral NSAIDs
                 </h3>
                 <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
@@ -808,7 +808,7 @@ const OurResearchPage: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                 
                 {/* Winner Card: Drepto MenstroHerb */}
-                <div className="bg-white rounded-[2rem] border-2 border-[#c01226]/30 shadow-lg shadow-red-950/5 overflow-hidden flex flex-col justify-between">
+                <div className="bg-white rounded-2xl border-2 border-[#c01226]/40 shadow-md overflow-hidden flex flex-col justify-between">
                   <div className="bg-gradient-to-r from-[#c01226] to-red-600 text-white px-6 py-4 flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-100 block">Proprietary Transdermal Patch</span>
@@ -819,7 +819,7 @@ const OurResearchPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="p-6 sm:p-8 space-y-4 flex-1">
+                  <div className="p-4 sm:p-6 space-y-3 flex-1">
                     <div className="p-4 rounded-xl bg-red-50/50 border border-red-100/80">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Onset of Action</span>
@@ -868,7 +868,7 @@ const OurResearchPage: React.FC = () => {
                 </div>
 
                 {/* Drawback Card: Conventional Oral NSAIDs */}
-                <div className="bg-[#f8f9fa] rounded-[2rem] border border-slate-200/90 shadow-sm overflow-hidden flex flex-col justify-between">
+                <div className="bg-[#f8f9fa] rounded-2xl border border-slate-300 shadow-xs overflow-hidden flex flex-col justify-between">
                   <div className="bg-slate-200 text-slate-800 px-6 py-4 flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Conventional Oral Regimen</span>
@@ -933,23 +933,23 @@ const OurResearchPage: React.FC = () => {
         </section>
 
         {/* ── CTA ──────────────────────────────────────────────────────────── */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-slate-50 to-teal-50/50">
+        <section className="py-16 md:py-20 bg-white border-t border-slate-200">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4">
-              <Stethoscope className="w-4 h-4 text-[#c01226]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-4">
+              <Stethoscope className="w-4 h-4 text-slate-900" />
               <span>Research Collaboration &amp; Clinical Inquiries</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-4">
               Partner With Drepto Biodevices
             </h2>
-            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8 font-normal">
               We collaborate with research institutions, clinical trial investigators, and healthcare distributors
               to advance targeted transdermal healthcare solutions.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link
                 to="/our-products"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-[#c01226] hover:bg-red-700 shadow-md hover:shadow-lg transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 shadow-soft transition-colors"
               >
                 <span>View Patented Products</span>
                 <ArrowRight className="w-4 h-4" />

@@ -28,20 +28,20 @@ export const ScienceSection: React.FC = () => {
             <Microscope className="w-3.5 h-3.5 text-[#c01226]" />
             <span>SCIENCE &amp; INNOVATION</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight font-display">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black tracking-tight text-slate-900 leading-tight font-display">
             Evidence-Based Innovation in Transdermal Drug Delivery
           </h2>
-          <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
+          <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
             Overcoming the pharmacokinetic, hepatic, and gastrointestinal limitations of conventional oral painkillers through non-invasive precision bio-delivery.
           </p>
 
           {/* Tab Controls: Sleek Corporate Pill Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-8 p-1.5 bg-[#ebedf1] rounded-2xl max-w-xl mx-auto shadow-inner border border-slate-200/60">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 mt-6 p-1.5 bg-[#ebedf1] rounded-2xl max-w-xl mx-auto border border-slate-300/80 shadow-xs">
             <button
               onClick={() => setActiveTab('mechanism')}
-              className={`flex-1 min-w-[140px] py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center ${
                 activeTab === 'mechanism'
-                  ? 'bg-[#c01226] text-white shadow-md'
+                  ? 'bg-[#c01226] text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
@@ -49,9 +49,9 @@ export const ScienceSection: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('pipeline')}
-              className={`flex-1 min-w-[140px] py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center ${
                 activeTab === 'pipeline'
-                  ? 'bg-[#c01226] text-white shadow-md'
+                  ? 'bg-[#c01226] text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
@@ -59,9 +59,9 @@ export const ScienceSection: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('evidence')}
-              className={`flex-1 min-w-[140px] py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center ${
                 activeTab === 'evidence'
-                  ? 'bg-[#c01226] text-white shadow-md'
+                  ? 'bg-[#c01226] text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
@@ -77,7 +77,7 @@ export const ScienceSection: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
               
               {/* Conventional Oral Limitations */}
-              <div className="bg-[#ebedf1]/60 rounded-3xl p-6 sm:p-10 border border-slate-200 relative shadow-sm flex flex-col justify-between">
+              <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 relative shadow-sm flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100/90 border border-rose-200 text-rose-800 text-xs font-bold uppercase mb-4">
                     <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
@@ -117,7 +117,7 @@ export const ScienceSection: React.FC = () => {
               </div>
 
               {/* Drepto Transdermal Solution */}
-              <div className="bg-white rounded-3xl p-6 sm:p-10 border-2 border-[#c01226]/20 relative shadow-md flex flex-col justify-between">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border-2 border-[#c01226]/30 relative shadow-md flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-[#c01226] text-xs font-bold uppercase mb-4">
                     <ShieldCheck className="w-3.5 h-3.5 text-[#c01226]" />
@@ -160,7 +160,7 @@ export const ScienceSection: React.FC = () => {
 
             {/* 3 Pillars of Technology */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-              <div className="p-6 sm:p-8 bg-[#ebedf1]/50 rounded-2xl border border-slate-200/80 shadow-2xs hover:shadow-md hover:border-[#c01226]/40 transition-all group">
+              <div className="p-5 sm:p-7 bg-[#ebedf1]/70 rounded-2xl border border-slate-300/90 shadow-2xs hover:shadow-md hover:border-[#c01226]/40 transition-all group">
                 <div className="w-12 h-12 rounded-xl bg-white text-[#c01226] shadow-sm flex items-center justify-center mb-4 border border-slate-200/80 group-hover:scale-110 transition-transform">
                   <Layers className="w-6 h-6" />
                 </div>
@@ -196,7 +196,7 @@ export const ScienceSection: React.FC = () => {
         {/* TAB 2: R&D Pipeline */}
         {activeTab === 'pipeline' && (
           <div className="space-y-8 animate-fade-in">
-            <div className="bg-[#ebedf1]/40 rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm">
+            <div className="bg-[#ebedf1]/60 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 shadow-sm">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 border-b border-slate-200/80 pb-6">
                 <div>
                   <h3 className="text-2xl font-bold text-slate-900 font-display">Development Pipeline &amp; Regulatory Pathway</h3>
@@ -215,7 +215,7 @@ export const ScienceSection: React.FC = () => {
               {/* Timeline / Roadmap items */}
               <div className="space-y-6">
                 {/* Program 1: MenstroHerb Polyherbal Matrix */}
-                <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-2xs">
+                <div className="p-4 sm:p-6 bg-white rounded-2xl border border-slate-300/90 shadow-2xs">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-3">
                       <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
@@ -296,7 +296,7 @@ export const ScienceSection: React.FC = () => {
           <div className="space-y-8 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Card 1: ISO 10993 */}
-              <div className="bg-[#ebedf1]/60 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-300/90 shadow-sm flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase mb-4 border border-emerald-200">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />

@@ -95,7 +95,7 @@ const TestimonialsPreview: React.FC = () => {
               <MessageSquare className="w-3.5 h-3.5 text-[#c01226]" />
               <span>PATIENT VOICES &amp; CLINICAL TESTIMONIALS</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight font-display">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black text-slate-900 tracking-tight leading-tight font-display">
               Empowering Women with Pain-Free Days
             </h2>
             <p className="text-slate-600 text-base sm:text-lg mt-3 leading-relaxed">
@@ -123,25 +123,25 @@ const TestimonialsPreview: React.FC = () => {
         </div>
 
         {/* ── Corporate Quote Card: Emcure MD Aesthetic ── */}
-        <div className="relative bg-[#ebedf1] rounded-[2rem] sm:rounded-[2.75rem] p-8 sm:p-12 lg:p-16 shadow-sm border border-slate-200/70 transition-all">
+        <div className="relative bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 shadow-sm border border-slate-300/90 transition-all">
           
           {/* Top Red Quotation Mark & Horizontal Accent Line */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex flex-wrap items-center gap-3 mb-6 sm:mb-8">
             <span
-              className="text-[#c01226] text-6xl sm:text-7xl font-serif font-black leading-none select-none inline-block -mb-3"
+              className="text-[#c01226] text-4xl sm:text-6xl font-serif font-black leading-none select-none inline-block -mb-2"
               aria-hidden="true"
             >
               &ldquo;
             </span>
-            <div className="h-0.5 sm:h-1 bg-[#c01226] flex-1 rounded-full opacity-80" />
-            <span className="text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-white text-[#c01226] border border-slate-200 shadow-2xs">
+            <div className="hidden sm:block h-0.5 sm:h-1 bg-[#c01226] flex-1 rounded-full opacity-80" />
+            <span className="text-[10px] sm:text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-white text-[#c01226] border border-slate-300 shadow-2xs">
               {current.tag || 'Verified Patient Review'}
             </span>
           </div>
 
           {/* Quote Body */}
           <div className="max-w-4xl">
-            <p className="text-slate-800 text-base sm:text-xl lg:text-2xl leading-relaxed font-normal italic mb-8 sm:mb-10">
+            <p className="text-slate-800 text-sm sm:text-base lg:text-xl leading-relaxed font-normal italic mb-6 sm:mb-8">
               "{current.message}"
             </p>
 
@@ -164,7 +164,7 @@ const TestimonialsPreview: React.FC = () => {
 
             {/* Author Attribution with Red Accent */}
             <div className="pt-6 border-t border-slate-300/80">
-              <h4 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-[#c01226]">
+              <h4 className="text-base sm:text-lg lg:text-xl font-bold uppercase tracking-wide text-[#c01226]">
                 {current.name || current.firstName}
               </h4>
               <p className="text-slate-600 font-medium text-xs sm:text-sm mt-0.5">

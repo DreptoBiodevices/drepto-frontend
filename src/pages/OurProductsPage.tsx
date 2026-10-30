@@ -94,6 +94,18 @@ const OurProductsPage: React.FC = () => {
     }, []);
 
 
+    
+    const resolveProductImage = (p: Product) => {
+        if (p.images && p.images.length > 0 && p.images[0]) {
+            return p.images[0];
+        }
+        const name = (p.name || '').toLowerCase();
+        if (name.includes('menstro')) return '/images/products/menstro/menstro1.jpg';
+        if (name.includes('arya')) return '/images/products/aryasoothe.jpg';
+        if (name.includes('suraveda')) return '/images/drepto-surveda-relief.png';
+        return '/images/products/menstro/menstro1.jpg';
+    };
+
     const addToCart = (product: Product) => {
         if (!user) {
             setAuthModalView('login');
@@ -304,7 +316,7 @@ const OurProductsPage: React.FC = () => {
                             <Package className="w-4 h-4 text-[#c01226]" />
                             <span>OUR PRODUCTS &amp; THERAPEUTIC FORMULATIONS</span>
                         </div>
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6 font-display">
+                        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
                             Targeted Bio-Delivery for{' '}
                             <span className="text-[#c01226]">
                                 Women &amp; Beyond
@@ -331,13 +343,13 @@ const OurProductsPage: React.FC = () => {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {products.map((product, index) => (
-                            <div key={index} className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden border border-gray-100 flex flex-col">
+                            <div key={index} className="bg-white rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden border border-slate-300/90 flex flex-col">
                                 <div
                                     className="relative h-64 overflow-hidden bg-gray-100 cursor-pointer"
                                     onClick={() => navigate(`/product/${product._id}`)}
                                 >
                                     <img
-                                        src={product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.png'}
+                                        src={resolveProductImage(product)}
                                         alt={product.name}
                                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                     />

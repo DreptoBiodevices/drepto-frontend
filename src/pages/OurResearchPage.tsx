@@ -614,7 +614,7 @@ const OurResearchPage: React.FC = () => {
                 <span>PIONEERING BIOMEDICAL SCIENCE • IIT BOMBAY COLLABORATION</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15] mb-6 font-display">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
                 Our Research &amp;{' '}
                 <span className="text-[#c01226]">
                   Clinical Evidence
@@ -755,7 +755,7 @@ const OurResearchPage: React.FC = () => {
             </div>
 
             {/* ── Modern Clinical Comparison Matrix: Transdermal vs Oral ── */}
-            <div className="mt-16 bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-[2.5rem] p-6 sm:p-10 lg:p-12 border border-slate-200/90 shadow-xl shadow-slate-200/40 relative overflow-hidden">
+            <div className="mt-12 sm:mt-16 bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 border border-slate-300/90 shadow-md relative overflow-hidden">
               <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
 
               <div className="max-w-3xl mb-10">
@@ -763,7 +763,7 @@ const OurResearchPage: React.FC = () => {
                   <Activity className="w-3.5 h-3.5 text-[#c01226]" />
                   <span>PHARMACOKINETIC &amp; CLINICAL BENCHMARK</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 font-display tracking-tight">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 font-display tracking-tight">
                   Targeted Transdermal Delivery vs. Conventional Oral NSAIDs
                 </h3>
                 <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
@@ -808,7 +808,7 @@ const OurResearchPage: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                 
                 {/* Winner Card: Drepto MenstroHerb */}
-                <div className="bg-white rounded-[2rem] border-2 border-[#c01226]/30 shadow-lg shadow-red-950/5 overflow-hidden flex flex-col justify-between">
+                <div className="bg-white rounded-2xl border-2 border-[#c01226]/40 shadow-md overflow-hidden flex flex-col justify-between">
                   <div className="bg-gradient-to-r from-[#c01226] to-red-600 text-white px-6 py-4 flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-100 block">Proprietary Transdermal Patch</span>
@@ -819,7 +819,7 @@ const OurResearchPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="p-6 sm:p-8 space-y-4 flex-1">
+                  <div className="p-4 sm:p-6 space-y-3 flex-1">
                     <div className="p-4 rounded-xl bg-red-50/50 border border-red-100/80">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Onset of Action</span>
@@ -868,7 +868,7 @@ const OurResearchPage: React.FC = () => {
                 </div>
 
                 {/* Drawback Card: Conventional Oral NSAIDs */}
-                <div className="bg-[#f8f9fa] rounded-[2rem] border border-slate-200/90 shadow-sm overflow-hidden flex flex-col justify-between">
+                <div className="bg-[#f8f9fa] rounded-2xl border border-slate-300 shadow-xs overflow-hidden flex flex-col justify-between">
                   <div className="bg-slate-200 text-slate-800 px-6 py-4 flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Conventional Oral Regimen</span>

@@ -4,6 +4,19 @@ import { Home, TestTube2, ShoppingBag, User, Package, Shield } from 'lucide-reac
 import { useAuth } from '../hooks/useAuth';
 
 const BottomNav: React.FC = () => {
+
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkDrawer = () => {
+      setIsMobileDrawerOpen(document.body.getAttribute('data-mobile-menu') === 'open');
+    };
+    checkDrawer();
+    const observer = new MutationObserver(checkDrawer);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-mobile-menu'] });
+    return () => observer.disconnect();
+  }, []);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { user, setAuthModalView } = useAuth();

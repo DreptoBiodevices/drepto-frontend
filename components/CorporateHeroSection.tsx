@@ -7,11 +7,11 @@ export const FounderQuoteCard: React.FC = () => {
     <section className="py-16 sm:py-24 bg-slate-50/70 border-t border-slate-200/60">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Grey Rounded Container */}
-        <div className="relative bg-[#ebedf1] rounded-[2rem] sm:rounded-[2.75rem] p-6 sm:p-12 lg:p-16 shadow-sm border border-slate-200/50">
+        <div className="relative bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-10 lg:p-14 shadow-sm border border-slate-300/90">
           {/* Top Red Quotation Mark & Horizontal Accent Line */}
           <div className="flex items-center gap-4 mb-6 sm:mb-8">
             <span
-              className="text-[#c01226] text-5xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mb-2"
+              className="text-[#c01226] text-4xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mb-2"
               aria-hidden="true"
             >
               &ldquo;
@@ -23,7 +23,7 @@ export const FounderQuoteCard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Leader Portrait with Red L-Bracket Accent */}
             <div className="md:col-span-5 flex justify-center">
-              <div className="relative w-44 sm:w-52 md:w-60 aspect-[4/5] flex-shrink-0">
+              <div className="relative w-36 sm:w-52 md:w-60 aspect-[4/5] flex-shrink-0">
                 {/* Red L-shaped Corner Accent Bracket (Bottom-Left) */}
                 <div
                   className="absolute -bottom-2.5 -left-2.5 sm:-bottom-3.5 sm:-left-3.5 w-16 sm:w-20 h-24 sm:h-28 border-b-4 border-l-4 sm:border-b-[5px] sm:border-l-[5px] border-[#c01226] rounded-bl-2xl pointer-events-none z-10"
@@ -54,7 +54,7 @@ export const FounderQuoteCard: React.FC = () => {
 
               {/* Leader Name in Bold Uppercase Red */}
               <div className="mt-6 sm:mt-8 pt-4 border-t border-slate-300/60">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase tracking-wide text-[#c01226]">
+                <h3 className="text-base sm:text-xl lg:text-2xl font-bold uppercase tracking-wide text-[#c01226]">
                   RAHUL KUMAR GUPTA
                 </h3>
                 <p className="text-slate-600 font-medium text-xs sm:text-sm lg:text-base mt-1">
@@ -71,7 +71,7 @@ export const FounderQuoteCard: React.FC = () => {
           <div className="flex items-center justify-end gap-4 mt-6 sm:mt-8">
             <div className="h-0.5 sm:h-1 bg-[#c01226] flex-1 rounded-full opacity-90" />
             <span
-              className="text-[#c01226] text-5xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mt-4"
+              className="text-[#c01226] text-4xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mt-4"
               aria-hidden="true"
             >
               &rdquo;
@@ -203,13 +203,13 @@ const CorporateHeroSection: React.FC = () => {
                 opacity: Math.max(0, 1 - progress * 2),
               }}
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-md">
+              <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[10px] sm:text-xs md:text-sm font-semibold tracking-wide uppercase shadow-md max-w-[92vw] text-center">
                 Feminine Hygiene &bull; Pain-Free Wellness &bull; SINE, IIT Bombay
               </span>
             </div>
 
             {/* Massive Typography: CURE & BEYOND (Moves up and covers the image) */}
-            <h1 className="w-full text-center text-[2.85rem] sm:text-6xl md:text-8xl lg:text-[9.5rem] xl:text-[11.5rem] font-black uppercase tracking-tight text-white leading-none select-none drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] font-display">
+            <h1 className="w-full text-center text-3xl sm:text-5xl md:text-7xl lg:text-[9.5rem] xl:text-[11.5rem] font-black uppercase tracking-tight text-white leading-none select-none drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] font-display">
               CURE &amp; BEYOND
             </h1>
           </div>
@@ -223,14 +223,14 @@ const CorporateHeroSection: React.FC = () => {
       <section id="caring-beyond" className="py-16 sm:py-24 lg:py-28 bg-white relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Heading in Signature Emcure Crimson Red */}
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#c01226] text-center mb-12 sm:mb-16 lg:mb-20">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-[#c01226] text-center mb-8 sm:mb-14 lg:mb-16">
             Curing the World, Caring Beyond
           </h2>
 
           {/* Two-Column Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left Column: Authoritative Feminine Hygiene & Healthcare Narrative */}
-            <div className="lg:col-span-7 space-y-6 text-slate-700 text-base sm:text-lg leading-relaxed text-justify sm:text-left font-normal">
+            <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-slate-700 text-sm sm:text-base lg:text-lg leading-relaxed text-left font-normal">
               <p>
                 Drepto Biodevices is a pioneering Indian biomedical enterprise incubated at the
                 Society for Innovation &amp; Entrepreneurship (SINE), IIT Bombay, committed to
@@ -259,17 +259,17 @@ const CorporateHeroSection: React.FC = () => {
               </p>
 
               {/* Action Buttons */}
-              <div className="pt-4 flex flex-wrap items-center gap-4">
+              <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <button
                   onClick={() => navigate('/our-products')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#c01226] hover:bg-[#a00f20] text-white font-semibold text-sm transition-all shadow-md active:scale-95"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#c01226] hover:bg-[#a00f20] text-white font-semibold text-sm transition-all shadow-md active:scale-95"
                 >
                   <span>Discover MenstroHerb</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => navigate('/our-research')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-slate-300 hover:border-slate-400 bg-white text-slate-700 hover:text-slate-900 font-semibold text-sm transition-all shadow-xs"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-slate-300 hover:border-slate-400 bg-white text-slate-700 hover:text-slate-900 font-semibold text-sm transition-all shadow-xs"
                 >
                   <span>Clinical Research Papers</span>
                 </button>
@@ -280,7 +280,7 @@ const CorporateHeroSection: React.FC = () => {
             <div className="lg:col-span-5 relative mt-4 lg:mt-0 flex justify-center">
               <div className="relative w-full max-w-md sm:max-w-lg lg:max-w-none">
                 {/* Photo */}
-                <div className="relative overflow-hidden rounded-xl shadow-lg border border-slate-100 bg-slate-100">
+                <div className="relative overflow-hidden rounded-2xl shadow-md border border-slate-300 bg-slate-100">
                   <img
                     src={patientImg}
                     alt="Serene, comfortable woman experiencing feminine wellness"

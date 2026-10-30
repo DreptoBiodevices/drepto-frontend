@@ -43,7 +43,7 @@ export const TeamSection: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
             <span>EXECUTIVE LEADERSHIP &amp; ADVISORY</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight font-display">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black text-slate-900 tracking-tight leading-tight font-display">
             The Scientific &amp; Strategic Minds Behind Drepto
           </h2>
           <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
@@ -56,14 +56,14 @@ export const TeamSection: React.FC = () => {
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="bg-[#ebedf1] rounded-[2rem] p-8 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all duration-300 w-full max-w-sm flex flex-col justify-between group hover:-translate-y-1 relative overflow-hidden"
+              className="bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-300/90 shadow-2xs hover:shadow-md transition-all duration-300 w-full max-w-sm flex flex-col justify-between group hover:-translate-y-1 relative overflow-hidden"
             >
               {/* Top Accent Line */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-[#c01226] opacity-0 group-hover:opacity-100 transition-opacity" />
 
               <div>
                 {/* Member Portrait */}
-                <div className="relative w-32 h-32 mx-auto mb-6">
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-4">
                   <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-md bg-slate-200">
                     <img
                       src={member.image}
@@ -74,7 +74,7 @@ export const TeamSection: React.FC = () => {
                 </div>
 
                 <div className="text-center">
-                  <h3 className="text-xl font-bold text-slate-900 mb-1 font-display">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1 font-display">
                     {member.name}
                   </h3>
                   <p className="text-xs font-bold text-[#c01226] uppercase tracking-wider mb-3">

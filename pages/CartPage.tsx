@@ -380,7 +380,7 @@ const CartPage: React.FC = () => {
             <Navbar />
 
             <main className="flex-grow pt-24 pb-16 px-4 md:px-8 max-w-4xl mx-auto w-full">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
                     {checkoutStep === 'cart' ? 'Your Cart' : checkoutStep === 'address' ? 'Shipping Address' : 'Payment'}
                 </h1>
 
@@ -424,7 +424,7 @@ const CartPage: React.FC = () => {
                                         const pricing = getItemPricing(item, qty);
 
                                         return (
-                                        <div key={idx} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm hover:border-gray-200 transition-all">
+                                        <div key={idx} className="bg-white p-4 rounded-2xl border border-slate-300/90 flex items-center gap-4 shadow-sm hover:border-slate-400 transition-all">
                                             <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
                                                 <img
                                                     src={Array.isArray(item.images) ? item.images[0] : (item.imageUrl || item.image)}
@@ -514,7 +514,7 @@ const CartPage: React.FC = () => {
                                 </div>
 
                                 <div className="md:col-span-1">
-                                    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm sticky top-24">
+                                    <div className="bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-300/90 shadow-sm sticky top-24">
                                         <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
                                         {/* Dynamic Offer Banner */}
                                         {calculateOfferSavings() > 0 && (

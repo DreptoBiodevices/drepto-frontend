@@ -25,7 +25,7 @@ const AboutSection: React.FC = () => {
             <Target className="w-3.5 h-3.5 text-[#c01226]" />
             <span>CORPORATE IDENTITY &amp; PHILOSOPHY</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight font-display">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black tracking-tight text-slate-900 leading-tight font-display">
             Engineering Non-Invasive Therapeutic Freedom
           </h2>
           <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
@@ -37,7 +37,7 @@ const AboutSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-14">
 
           {/* ── Card 1: Mission & Patient Care ── */}
-          <div className="bg-[#ebedf1]/60 rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+          <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
             {/* Top red accent rule */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#c01226]" />
             
@@ -51,7 +51,7 @@ const AboutSection: React.FC = () => {
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3 tracking-tight font-display">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 mb-3 tracking-tight font-display">
                 Liberating Women from the Toxicity of Oral Pain Pills
               </h3>
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">

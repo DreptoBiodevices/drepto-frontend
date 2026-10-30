@@ -70,6 +70,25 @@ export interface Product {
 }
 
 const ProductDetailPage: React.FC = () => {
+
+    const getResolvedImages = (p: any) => {
+        if (p?.images && Array.isArray(p.images) && p.images.length > 0 && p.images[0]) {
+            return p.images;
+        }
+        const name = (p?.name || '').toLowerCase();
+        if (name.includes('menstro')) {
+            return [
+                '/images/products/menstro/menstro1.jpg',
+                '/images/products/menstro/menstro2.jpg',
+                '/images/products/menstro/menstro4.jpg',
+                '/images/products/menstroherb.jpg'
+            ];
+        }
+        if (name.includes('arya')) return ['/images/products/aryasoothe.jpg'];
+        if (name.includes('suraveda')) return ['/images/drepto-surveda-relief.png'];
+        return ['/images/products/menstro/menstro1.jpg'];
+    };
+
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { user, setAuthModalView } = useAuth();
@@ -262,13 +281,13 @@ const ProductDetailPage: React.FC = () => {
                 </nav>
 
                 {/* ── Main Product Card (Optimized Screen Space) ── */}
-                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0">
+                <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-slate-300/90 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0">
                     
                     {/* ── LEFT COLUMN (5 of 12 cols): Image Gallery & Fast Facts Bento ── */}
-                    <div className="lg:col-span-5 bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-gray-100 flex flex-col justify-between gap-4">
+                    <div className="lg:col-span-5 bg-gradient-to-b from-gray-50/80 via-white to-gray-50/50 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col justify-between gap-4">
                         
                         {/* Image Viewer */}
-                        <div className="relative rounded-2xl bg-white p-3 border border-gray-100/80 shadow-xs flex flex-col items-center">
+                        <div className="relative rounded-2xl bg-white p-3 border border-slate-200 shadow-xs flex flex-col items-center">
                             {/* Badges Overlay */}
                             <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-1.5 items-center">
                                 <span className="bg-[#c01226]/10 text-[#c01226] border border-[#c01226]/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
@@ -320,7 +339,7 @@ const ProductDetailPage: React.FC = () => {
                         </div>
 
                         {/* Fast-Facts Bento Grid (Space Optimized: Puts 6 specs right under image) */}
-                        <div className="bg-slate-50/80 rounded-2xl p-3 border border-gray-100">
+                        <div className="bg-slate-50/80 rounded-2xl p-3 border border-slate-200">
                             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Product Specifications</p>
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 <div className="bg-white p-2.5 rounded-xl border border-gray-100 shadow-2xs">

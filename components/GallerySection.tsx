@@ -99,7 +99,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-2 shadow-2xs">
                   <span>VISUAL JOURNEY</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight font-display">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black text-slate-900 leading-tight font-display">
                   Biomedical Milestones &amp; Facilities
                 </h2>
                 <p className="text-slate-600 text-sm sm:text-base max-w-2xl">
@@ -133,7 +133,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
             {/* Main Image Viewport */}
             <div className="relative" ref={galleryRef}>
               <div
-                className="overflow-hidden rounded-3xl shadow-xl bg-slate-900 aspect-video select-none border border-slate-200"
+                className="overflow-hidden rounded-2xl sm:rounded-3xl shadow-lg bg-slate-900 aspect-video select-none border border-slate-300"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
                 onTouchMove={handleTouchMove}
@@ -180,7 +180,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
           {/* --- AWARDS & INSTITUTIONAL VALIDATION SECTION: NEW LUMINOUS DESIGN --- */}
           <div className="max-w-6xl mx-auto mt-16 sm:mt-24">
-            <div className="bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 lg:p-14 border border-slate-200/90 shadow-xl shadow-slate-200/50 relative overflow-hidden">
+            <div className="bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 border border-slate-300/90 shadow-md relative overflow-hidden">
               {/* Subtle Ambient Red Glow */}
               <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
 
@@ -193,7 +193,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                     <span>INSTITUTIONAL VALIDATION &amp; CERTIFICATIONS</span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 font-display leading-tight tracking-tight">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 font-display leading-tight tracking-tight">
                     Backed by Academic Excellence &amp; Clinical Rigor
                   </h3>
 
@@ -203,7 +203,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
                   {/* 4 Interactive Feature Badges (2x2 Grid) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                    <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:border-[#c01226]/40 transition-all flex items-start gap-3.5 group">
+                    <div className="bg-white rounded-xl p-3.5 border border-slate-300/90 shadow-2xs hover:border-[#c01226]/40 transition-all flex items-start gap-3 group">
                       <div className="w-10 h-10 rounded-xl bg-red-50 text-[#c01226] flex items-center justify-center shrink-0 group-hover:bg-[#c01226] group-hover:text-white transition-colors">
                         <Building2 className="w-5 h-5" />
                       </div>
@@ -247,7 +247,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                   <div className="pt-2">
                     <a
                       href="/our-research"
-                      className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#c01226] hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md group"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#c01226] hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md group"
                     >
                       <span>Inspect Research Reports &amp; Papers</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -257,7 +257,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
                 {/* Right 5 Columns: Floating Trophy & Award Frame */}
                 <div className="lg:col-span-5 relative flex justify-center">
-                  <div className="relative z-10 p-3 sm:p-4 bg-white border border-slate-200/90 rounded-[2rem] shadow-xl max-w-sm w-full">
+                  <div className="relative z-10 p-3 sm:p-4 bg-white border border-slate-300 rounded-2xl shadow-md max-w-sm w-full">
                     <div className="overflow-hidden rounded-2xl aspect-[4/5] bg-slate-100 relative">
                       <IKImage
                         path={awardImagePaths[0]}

@@ -40,7 +40,7 @@ const AboutUsPage: React.FC = () => {
                 <Users className="w-4 h-4 text-[#c01226]" />
                 <span>ABOUT DREPTO BIODEVICES</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6 font-display">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
                 Innovating Healthcare,{' '}
                 <span className="text-[#c01226]">
                   Delivering Comfort Beyond
@@ -61,13 +61,13 @@ const AboutUsPage: React.FC = () => {
               ].map((stat, i) => (
                 <div
                   key={i}
-                  className="bg-[#ebedf1] rounded-[2rem] p-5 text-center border border-slate-200/80 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden"
+                  className="bg-[#ebedf1] rounded-2xl p-4 sm:p-5 text-center border border-slate-300/90 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 right-0 h-1 bg-[#c01226] opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-white shadow-2xs flex items-center justify-center group-hover:scale-105 transition-transform">
                     {stat.icon}
                   </div>
-                  <div className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-display">{stat.value}</div>
+                  <div className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight font-display">{stat.value}</div>
                   <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">{stat.label}</div>
                 </div>
               ))}

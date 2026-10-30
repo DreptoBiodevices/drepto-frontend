@@ -47,7 +47,7 @@ const ContactSection: React.FC = () => {
             <Mail className="w-3.5 h-3.5 text-[#c01226]" />
             <span>CONNECT WITH OUR TEAM</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight font-display">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold sm:font-black tracking-tight text-slate-900 leading-tight font-display">
             Contact &amp; Institutional Partnerships
           </h2>
           <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
@@ -58,9 +58,9 @@ const ContactSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 max-w-6xl mx-auto items-stretch">
           
           {/* Left Column: Corporate & Laboratory Information */}
-          <div className="lg:col-span-5 bg-[#ebedf1] rounded-3xl p-8 sm:p-10 border border-slate-200/80 flex flex-col justify-between shadow-2xs">
+          <div className="lg:col-span-5 bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 flex flex-col justify-between shadow-2xs">
             <div>
-              <h3 className="text-2xl font-black text-slate-900 mb-6 font-display">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-4 sm:mb-6 font-display">
                 Drepto Biodevices <span className="text-[#c01226]">Pvt. Ltd.</span>
               </h3>
 
@@ -125,8 +125,8 @@ const ContactSection: React.FC = () => {
           </div>
 
           {/* Right Column: Contact & Message Form */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-sm flex flex-col justify-center">
-            <h3 className="text-2xl font-black text-slate-900 mb-2 font-display">
+          <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 shadow-sm flex flex-col justify-center">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-2 font-display">
               Send a Direct Message
             </h3>
             <p className="text-slate-500 text-xs sm:text-sm mb-6">
@@ -250,7 +250,7 @@ const ContactSection: React.FC = () => {
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      <span>Transmit Message to Scientific Team</span>
+                      <span>Send Message to Scientific Team</span>
                     </>
                   )}
                 </button>

@@ -418,21 +418,21 @@ const Navbar: React.FC<NavbarProps> = ({
       </header>
 
       {/* ─────────────────────────────────────────────────────────────
-          Mobile Sidebar Drawer
+          Mobile Sidebar Drawer (Luminous Healthcare Redesign)
           ───────────────────────────────────────────────────────────── */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-[80] flex justify-end">
+          {/* Backdrop with Soft Blur */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-fade-in"
             onClick={() => setIsMobileMenuOpen(false)}
-          ></div>
+          />
 
-          {/* Sidebar Drawer */}
-          <div className="relative w-[300px] bg-neutral-950 text-white h-full shadow-2xl flex flex-col border-l border-white/10 animate-slide-in-right transform transition-transform duration-300 ease-out">
+          {/* Sidebar Drawer Panel */}
+          <div className="relative w-[85vw] max-w-[340px] bg-white text-slate-900 h-full shadow-2xl flex flex-col border-l border-slate-200 animate-slide-in-right transform transition-transform duration-300 ease-out z-10">
 
-            {/* Header */}
-            <div className="p-6 flex items-center justify-between border-b border-white/10 bg-black/40">
+            {/* Header: Pure White with Authentic Color Logo & Circular Close Button */}
+            <div className="p-5 flex items-center justify-between border-b border-slate-100 bg-[#f8f9fa]">
               <div
                 className="flex items-center cursor-pointer"
                 onClick={() => {
@@ -443,53 +443,87 @@ const Navbar: React.FC<NavbarProps> = ({
                 <img
                   src="/images/logo.png"
                   alt="Drepto Logo"
-                  className="h-8 w-auto object-contain brightness-0 invert"
+                  className="h-8 w-auto object-contain"
                 />
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 bg-white/10 rounded-full text-white/70 hover:text-red-400 hover:bg-white/20 transition-all cursor-pointer"
+                className="p-2 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100 shadow-2xs transition-all cursor-pointer"
+                aria-label="Close Menu"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Navigation Links */}
-            <div className="flex-1 overflow-y-auto py-4">
-              <div className="px-4 space-y-1.5">
-                {navItems.map((item) => (
-                  <button
-                    key={item.name}
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      if (item.path === '/') {
-                        if (!isHomePage) navigate('/');
-                        else window.scrollTo({ top: 0, behavior: 'smooth' });
-                      } else {
-                        navigate(item.path);
-                      }
-                    }}
-                    className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 hover:text-red-400 text-left font-semibold text-sm cursor-pointer"
-                  >
-                    <span>{item.name}</span>
-                    <ChevronRight className="w-4 h-4 text-white/40" />
-                  </button>
-                ))}
+            {/* Navigation Links & Content */}
+            <div className="flex-1 overflow-y-auto py-4 px-4 space-y-2">
+              
+              {/* Logged in User Pill */}
+              {user && (
+                <div className="p-3.5 mb-3 bg-red-50/60 border border-red-100/80 rounded-2xl flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#c01226] text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
+                    {user.firstName?.charAt(0) || 'U'}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-slate-900 truncate">
+                      {user.firstName} {user.lastName || ''}
+                    </p>
+                    <p className="text-xs text-slate-500 truncate">{user.email || user.role}</p>
+                  </div>
+                </div>
+              )}
 
-                {/* Upload Prescription (Mobile) */}
+              {/* Main Nav Items */}
+              <div className="space-y-1">
+                {navItems.map((item) => {
+                  const isActive = location.pathname === item.path;
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        if (item.path === '/') {
+                          if (!isHomePage) navigate('/');
+                          else window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                          navigate(item.path);
+                        }
+                      }}
+                      className={`w-full flex items-center justify-between p-3.5 rounded-2xl transition-all text-left font-semibold text-sm cursor-pointer ${
+                        isActive
+                          ? 'bg-red-50 text-[#c01226] font-bold border border-red-200/80'
+                          : 'text-slate-800 hover:bg-slate-100 hover:text-[#c01226]'
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      <ChevronRight className={`w-4 h-4 ${isActive ? 'text-[#c01226]' : 'text-slate-400'}`} />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="h-px bg-slate-100 my-3" />
+
+              {/* Quick Action Cards */}
+              <div className="space-y-2">
+                {/* Upload Prescription */}
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     handlePrescriptionClick();
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 mt-2 border border-white/10 cursor-pointer"
+                  className="w-full flex items-center justify-between p-3 rounded-2xl bg-red-50/70 border border-red-100/90 text-slate-900 hover:bg-red-100/70 transition-all cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-red-600/20 text-[#c01226]">
-                      <Upload className="w-5 h-5" />
+                    <div className="p-2.5 rounded-xl bg-white text-[#c01226] shadow-2xs group-hover:scale-105 transition-transform">
+                      <Upload className="w-4 h-4" />
                     </div>
-                    <span className="text-sm font-semibold">{t('util.uploadPrescription')}</span>
+                    <div className="text-left">
+                      <span className="text-xs font-bold block text-slate-900">{t('util.uploadPrescription')}</span>
+                      <span className="text-[10px] text-slate-500 font-medium">Fast doorstep dispatch</span>
+                    </div>
                   </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
 
                 {/* Mobile Cart */}
@@ -498,80 +532,88 @@ const Navbar: React.FC<NavbarProps> = ({
                     setIsMobileMenuOpen(false);
                     navigate('/cart');
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 cursor-pointer"
+                  className="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-900 hover:bg-slate-100 transition-all cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-white/10 text-white">
-                      <ShoppingBag className="w-5 h-5" />
+                    <div className="p-2.5 rounded-xl bg-white text-slate-700 shadow-2xs group-hover:scale-105 transition-transform">
+                      <ShoppingBag className="w-4 h-4 text-slate-700" />
                     </div>
-                    <span className="text-sm font-semibold">{t('util.myCart')}</span>
+                    <span className="text-xs font-bold text-slate-900">{t('util.myCart')}</span>
                   </div>
-                  {cartCount > 0 && (
-                    <span className="bg-[#c01226] text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {cartCount > 0 ? (
+                    <span className="bg-[#c01226] text-white text-xs font-extrabold px-2 py-0.5 rounded-full shadow-2xs">
                       {cartCount}
                     </span>
+                  ) : (
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
                   )}
                 </button>
 
-                {/* Mobile User Links */}
+                {/* Mobile Orders (if user logged in) */}
                 {user && (
-                  <>
-                    <div className="h-px bg-white/10 my-3 mx-2"></div>
-                    <button
-                      onClick={() => { navigate('/orders'); setIsMobileMenuOpen(false); }}
-                      className="w-full flex items-center justify-between p-3 rounded-xl transition-all text-white hover:bg-white/10 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-white/10 text-white">
-                          <Package className="w-5 h-5" />
-                        </div>
-                        <span className="text-sm font-semibold">{t('util.myOrders')}</span>
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate('/orders');
+                    }}
+                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-900 hover:bg-slate-100 transition-all cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl bg-white text-slate-700 shadow-2xs group-hover:scale-105 transition-transform">
+                        <Package className="w-4 h-4 text-slate-700" />
                       </div>
-                    </button>
-                    {(user.role === 'Admin' || localStorage.getItem('adminAuth') === 'true') && (
-                      <button
-                        onClick={() => { navigate('/admin/dashboard'); setIsMobileMenuOpen(false); }}
-                        className="w-full flex items-center justify-between p-3 rounded-xl transition-all bg-white/10 text-white font-semibold border border-white/15 cursor-pointer"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-[#c01226] text-white">
-                            <Shield className="w-5 h-5" />
-                          </div>
-                          <span className="text-sm">Admin Portal</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-white/50" />
-                      </button>
-                    )}
-                  </>
+                      <span className="text-xs font-bold text-slate-900">{t('util.myOrders')}</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  </button>
+                )}
+
+                {/* Admin Portal (if admin) */}
+                {user && (user.role === 'Admin' || localStorage.getItem('adminAuth') === 'true') && (
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate('/admin/dashboard');
+                    }}
+                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-900 text-white hover:bg-slate-800 transition-all cursor-pointer shadow-sm group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl bg-white/10 text-red-400">
+                        <Shield className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold">Admin Portal</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/50" />
+                  </button>
                 )}
               </div>
             </div>
 
             {/* Footer / Auth Actions */}
-            <div className="p-6 border-t border-white/10 bg-black/40 space-y-3">
+            <div className="p-5 border-t border-slate-100 bg-[#f8f9fa] space-y-2.5">
               {!user ? (
-                <>
+                <div className="grid grid-cols-2 gap-2.5">
                   <button
                     onClick={() => {
                       setAuthModalView('login');
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-center gap-2 py-3 border border-white/20 rounded-xl font-bold text-white bg-white/5 hover:bg-white/10 transition-all text-sm cursor-pointer"
+                    className="flex items-center justify-center gap-2 py-3 border border-slate-300 rounded-xl font-bold text-slate-800 bg-white hover:bg-slate-50 transition-all text-xs cursor-pointer shadow-2xs"
                   >
-                    <LogIn className="w-5 h-5" />
-                    {t('util.signIn')}
+                    <LogIn className="w-4 h-4 text-slate-600" />
+                    <span>{t('util.signIn')}</span>
                   </button>
                   <button
                     onClick={() => {
                       setAuthModalView('signup');
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-[#c01226] text-white rounded-xl font-bold shadow-lg hover:bg-red-700 transition-all text-sm cursor-pointer"
+                    className="flex items-center justify-center gap-2 py-3 bg-[#c01226] text-white rounded-xl font-bold shadow-md hover:bg-red-700 transition-all text-xs cursor-pointer"
                   >
-                    <UserPlus className="w-5 h-5" />
-                    {t('util.signUpNow')}
+                    <UserPlus className="w-4 h-4" />
+                    <span>{t('util.signUpNow')}</span>
                   </button>
-                </>
+                </div>
               ) : (
                 <button
                   onClick={() => {
@@ -579,13 +621,13 @@ const Navbar: React.FC<NavbarProps> = ({
                     setIsMobileMenuOpen(false);
                     navigate('/');
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-red-950/60 text-red-400 border border-red-900/60 rounded-xl font-bold hover:bg-red-950 transition-all text-sm cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-[#c01226] border border-red-200/90 rounded-xl font-bold hover:bg-red-100 transition-all text-xs cursor-pointer shadow-2xs"
                 >
-                  <LogOut className="w-5 h-5" />
-                  Sign Out
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
                 </button>
               )}
-              <p className="text-xs text-center text-white/40 mt-4">
+              <p className="text-[11px] text-center text-slate-400 mt-2 font-medium">
                 © 2025 Drepto Biodevices Pvt. Ltd.
               </p>
             </div>
