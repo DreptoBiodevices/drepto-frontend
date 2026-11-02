@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
                   href="mailto:info@dreptobiodevices.com"
                   className="text-red-400 hover:underline"
                 >
-                  info@dreptobiodevices.com
+                  office@dreptobiodevices.com
                 </a>
               </div>
             </div>
