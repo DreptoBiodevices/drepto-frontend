@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-neutral-950 text-slate-400 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        
+
         {/* Main Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
 
@@ -97,7 +97,7 @@ const Footer: React.FC = () => {
             <h4 className="font-bold text-white text-xs uppercase tracking-widest border-b border-white/10 pb-2">
               Laboratory &amp; Offices
             </h4>
-            
+
             <div className="space-y-3.5 text-xs text-slate-400">
               <div>
                 <p className="text-slate-200 font-semibold mb-0.5">R&amp;D &amp; Incubation Hub:</p>
@@ -116,7 +116,7 @@ const Footer: React.FC = () => {
               <div className="pt-2">
                 <p className="text-slate-300 font-medium">Direct Inquiries:</p>
                 <a
-                  href="mailto:info@dreptobiodevices.com"
+                  href="mailto:office@dreptobiodevices.com"
                   className="text-red-400 hover:underline"
                 >
                   office@dreptobiodevices.com
