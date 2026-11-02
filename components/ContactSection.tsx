@@ -40,7 +40,7 @@ const ContactSection: React.FC = () => {
   return (
     <section className="py-20 sm:py-28 bg-white border-t border-slate-200/80" id="contact">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header: Emcure Style with Red Accent */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
@@ -56,7 +56,7 @@ const ContactSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 max-w-6xl mx-auto items-stretch">
-          
+
           {/* Left Column: Corporate & Laboratory Information */}
           <div className="lg:col-span-5 bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 flex flex-col justify-between shadow-2xs">
             <div>
@@ -71,7 +71,7 @@ const ContactSection: React.FC = () => {
                     <Building2 className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-900 text-sm">R&amp;D &amp; Incubation Facility</h4>
+                    <h4 className="font-bold text-slate-900 text-sm">Incubated At</h4>
                     <p className="text-slate-600 text-xs sm:text-sm mt-0.5 leading-relaxed">
                       Society for Innovation and Entrepreneurship (SINE), CSRE Building, Indian Institute of Technology Bombay, Powai, Mumbai 400076, India.
                     </p>
@@ -99,8 +99,7 @@ const ContactSection: React.FC = () => {
                   <div>
                     <h4 className="font-bold text-slate-900 text-sm">Direct Enquiries</h4>
                     <p className="text-slate-600 text-xs sm:text-sm mt-0.5">
-                      info@dreptobiodevices.com<br />
-                      support@dreptobiodevices.com
+                      office@dreptobiodevices.com<br />
                     </p>
                   </div>
                 </div>

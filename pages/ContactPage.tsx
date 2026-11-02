@@ -50,8 +50,8 @@ const ContactPage: React.FC = () => {
                   <Mail className="w-5 h-5 text-[#c01226]" />
                 </div>
                 <h3 className="text-slate-900 font-bold text-sm mb-1">Corporate Email</h3>
-                <a href="mailto:info@dreptobiodevices.com" className="text-slate-600 text-sm font-medium hover:text-[#c01226] transition-colors break-all">
-                  info@dreptobiodevices.com
+                <a href="mailto:office@dreptobiodevices.com" className="text-slate-600 text-sm font-medium hover:text-[#c01226] transition-colors break-all">
+                  office@dreptobiodevices.com
                 </a>
               </div>
 

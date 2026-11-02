@@ -58,7 +58,7 @@ export const FounderQuoteCard: React.FC = () => {
                   RAHUL KUMAR GUPTA
                 </h3>
                 <p className="text-slate-600 font-medium text-xs sm:text-sm lg:text-base mt-1">
-                  Founder and Chief Executive Officer
+                  Founder and Director
                 </p>
                 <p className="text-slate-500 font-medium text-xs sm:text-sm">
                   Drepto Biodevices Pvt. Ltd. &bull; Incubated at SINE, IIT Bombay
