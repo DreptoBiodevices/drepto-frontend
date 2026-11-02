@@ -190,32 +190,6 @@ export const ScienceSection: React.FC = () => {
                 </p>
               </div>
             </div>
-
-            {/* Animated Device Mechanism Video Showcase */}
-            <div className="mt-8 rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-300/90 shadow-md bg-white">
-              <div className="px-5 py-3.5 bg-slate-900 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-semibold text-white tracking-tight">
-                    Transdermal Dosing &amp; Compartment Flux Simulation
-                  </span>
-                </div>
-                <span className="text-slate-400 text-[11px] font-mono">
-                  SINE IIT Bombay &bull; Patent App IN202521129798
-                </span>
-              </div>
-              <div className="relative w-full bg-white flex items-center justify-center p-2 sm:p-4">
-                <video
-                  src="/images/vid.mp4"
-                  className="w-full h-auto max-h-[460px] object-contain rounded-xl shadow-xs"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  controls
-                />
-              </div>
-            </div>
           </div>
         )}
 
