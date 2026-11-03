@@ -89,7 +89,7 @@ const features: FeatureItem[] = [
       'Average response < 15 min',
     ],
     image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80',
-    color: 'from-red-500 to-orange-600',
+    color: 'from-[#0B6F6D] to-[#429695]',
   },
   {
     icon: <ShieldCheck className="w-7 h-7" />,

@@ -112,7 +112,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
               <div className="hidden sm:flex items-center gap-3">
                 <button
                   onClick={goPrev}
-                  className="p-3 rounded-full bg-[#ebedf1] text-slate-700 hover:text-[#c01226] hover:bg-red-50 border border-slate-200 shadow-2xs transition-all cursor-pointer"
+                  className="p-3 rounded-full bg-[#F4F9F9] text-slate-700 hover:text-[#0B6F6D] hover:bg-[#F4F9F9] border border-slate-200 shadow-2xs transition-all cursor-pointer"
                   aria-label="Previous image"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,7 +121,7 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                 </button>
                 <button
                   onClick={goNext}
-                  className="p-3 rounded-full bg-[#ebedf1] text-slate-700 hover:text-[#c01226] hover:bg-red-50 border border-slate-200 shadow-2xs transition-all cursor-pointer"
+                  className="p-3 rounded-full bg-[#F4F9F9] text-slate-700 hover:text-[#0B6F6D] hover:bg-[#F4F9F9] border border-slate-200 shadow-2xs transition-all cursor-pointer"
                   aria-label="Next image"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,9 +181,9 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
           {/* --- AWARDS & INSTITUTIONAL VALIDATION SECTION: NEW LUMINOUS DESIGN --- */}
           <div id="recognition" className="max-w-6xl mx-auto mt-16 sm:mt-24 scroll-mt-28">
-            <div className="bg-gradient-to-br from-white via-[#f8f9fa] to-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 border border-slate-300/90 shadow-md relative overflow-hidden">
+            <div className="bg-gradient-to-br from-white via-[#f8f9fa] to-[#F4F9F9] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 border border-[#D0E6E6] shadow-md relative overflow-hidden">
               {/* Subtle Ambient Red Glow */}
-              <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
+              <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0B6F6D]/5 rounded-full blur-[100px] pointer-events-none" />
 
               <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
                 
@@ -204,8 +204,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
 
                   {/* 4 Interactive Feature Badges (2x2 Grid) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                    <div className="bg-white rounded-xl p-3.5 border border-slate-300/90 shadow-2xs hover:border-[#c01226]/40 transition-all flex items-start gap-3 group">
-                      <div className="w-10 h-10 rounded-xl bg-red-50 text-[#c01226] flex items-center justify-center shrink-0 group-hover:bg-[#c01226] group-hover:text-white transition-colors">
+                    <div className="bg-white rounded-xl p-3.5 border border-slate-300/90 shadow-2xs hover:border-[#0B6F6D]/40 transition-all flex items-start gap-3 group">
+                      <div className="w-10 h-10 rounded-xl bg-[#F4F9F9] text-[#0B6F6D] flex items-center justify-center shrink-0 group-hover:bg-[#0B6F6D] group-hover:text-white transition-colors">
                         <Building2 className="w-5 h-5" />
                       </div>
                       <div>
@@ -214,8 +214,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                       </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:border-[#c01226]/40 transition-all flex items-start gap-3.5 group">
-                      <div className="w-10 h-10 rounded-xl bg-red-50 text-[#c01226] flex items-center justify-center shrink-0 group-hover:bg-[#c01226] group-hover:text-white transition-colors">
+                    <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:border-[#0B6F6D]/40 transition-all flex items-start gap-3.5 group">
+                      <div className="w-10 h-10 rounded-xl bg-[#F4F9F9] text-[#0B6F6D] flex items-center justify-center shrink-0 group-hover:bg-[#0B6F6D] group-hover:text-white transition-colors">
                         <ShieldCheck className="w-5 h-5" />
                       </div>
                       <div>
@@ -224,8 +224,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                       </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:border-[#c01226]/40 transition-all flex items-start gap-3.5 group">
-                      <div className="w-10 h-10 rounded-xl bg-red-50 text-[#c01226] flex items-center justify-center shrink-0 group-hover:bg-[#c01226] group-hover:text-white transition-colors">
+                    <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:border-[#0B6F6D]/40 transition-all flex items-start gap-3.5 group">
+                      <div className="w-10 h-10 rounded-xl bg-[#F4F9F9] text-[#0B6F6D] flex items-center justify-center shrink-0 group-hover:bg-[#0B6F6D] group-hover:text-white transition-colors">
                         <Award className="w-5 h-5" />
                       </div>
                       <div>
@@ -234,8 +234,8 @@ const GallerySection: React.FC<{ onOpenMenu?: () => void }> = () => {
                       </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:border-[#c01226]/40 transition-all flex items-start gap-3.5 group">
-                      <div className="w-10 h-10 rounded-xl bg-red-50 text-[#c01226] flex items-center justify-center shrink-0 group-hover:bg-[#c01226] group-hover:text-white transition-colors">
+                    <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:border-[#0B6F6D]/40 transition-all flex items-start gap-3.5 group">
+                      <div className="w-10 h-10 rounded-xl bg-[#F4F9F9] text-[#0B6F6D] flex items-center justify-center shrink-0 group-hover:bg-[#0B6F6D] group-hover:text-white transition-colors">
                         <FileText className="w-5 h-5" />
                       </div>
                       <div>

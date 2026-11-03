@@ -9,7 +9,7 @@ const statusConfig = {
   processing: { label: 'Processing', color: 'bg-blue-50 text-blue-700 border-blue-200',     icon: <Package className="w-3 h-3" /> },
   shipped:    { label: 'Shipped',    color: 'bg-indigo-50 text-indigo-700 border-indigo-200', icon: <Truck className="w-3 h-3" /> },
   delivered:  { label: 'Delivered',  color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: <CheckCircle className="w-3 h-3" /> },
-  cancelled:  { label: 'Cancelled',  color: 'bg-red-50 text-red-700 border-red-200',        icon: <XCircle className="w-3 h-3" /> },
+  cancelled:  { label: 'Cancelled',  color: 'bg-[#FDF7F5] text-[#C86146] border-[#F8D4CB]',        icon: <XCircle className="w-3 h-3" /> },
 };
 
 const StatusBadge = ({ status }: { status: string }) => {

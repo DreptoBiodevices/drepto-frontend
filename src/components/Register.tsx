@@ -101,7 +101,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
             placeholder="First Name"
             value={formData.firstName}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
           />
           <input
             type="text"
@@ -109,7 +109,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
             placeholder="Last Name"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
           />
         </div>
         <input
@@ -118,7 +118,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
           placeholder="Email ID"
           value={formData.email}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
         />
         <input
           type="tel"
@@ -126,14 +126,14 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
           placeholder="Mobile Number"
           value={formData.mobileNumber}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
         />
         <div className="grid grid-cols-2 gap-3">
           <select
             name="gender"
             onChange={handleChange}
             value={formData.gender}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226] text-gray-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D] text-gray-500"
           >
             <option value="">Gender</option>
             <option value="male">Male</option>
@@ -146,7 +146,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
             placeholder="Age"
             value={formData.age}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
           />
         </div>
 
@@ -158,7 +158,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className={`w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226] ${formData.password && !passwordStrength.strong ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D] ${formData.password && !passwordStrength.strong ? 'border-red-500' : 'border-gray-300'
                 }`}
             />
             <button
@@ -184,7 +184,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
             placeholder="Confirm Password"
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
           />
           <button
             type="button"
@@ -204,14 +204,14 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
             id="terms"
             checked={agreedToTerms}
             onChange={(e) => setAgreedToTerms(e.target.checked)}
-            className="w-4 h-4 text-[#c01226] border-gray-300 rounded focus:ring-[#c01226] focus:ring-2 cursor-pointer"
+            className="w-4 h-4 text-[#0B6F6D] border-gray-300 rounded focus:ring-[#0B6F6D] focus:ring-2 cursor-pointer"
           />
           <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer select-none">
-            I agree to the <Link to="/terms" className="text-[#c01226] font-semibold hover:underline">Terms and Conditions</Link>
+            I agree to the <Link to="/terms" className="text-[#0B6F6D] font-semibold hover:underline">Terms and Conditions</Link>
           </label>
         </div>
 
-        <button type="submit" className="w-full bg-[#c01226] text-white font-bold py-3 rounded-xl hover:bg-red-700 shadow-lg hover:shadow-red-900/20 transition-colors">
+        <button type="submit" className="w-full bg-[#0B6F6D] text-white font-bold py-3 rounded-xl hover:bg-[#0B5C5A] shadow-lg hover:shadow-[#0B6F6D]/20 transition-colors">
           Sign Up
         </button>
 
@@ -252,7 +252,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView, hideBackButton }) => 
       </form>
       <p className="text-center text-sm text-gray-600 mt-4">
         Already have an account?{' '}
-        <button onClick={onToggleView} className="font-semibold text-[#c01226] hover:underline font-semibold">
+        <button onClick={onToggleView} className="font-semibold text-[#0B6F6D] hover:underline font-semibold">
           Sign In
         </button>
       </p>

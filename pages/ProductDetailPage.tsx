@@ -154,7 +154,7 @@ const ProductDetailPage: React.FC = () => {
             <div className="min-h-screen bg-gray-50 flex flex-col">
                 <Navbar />
                 <div className="flex-grow flex justify-center items-center pt-24">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#c01226]"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0B6F6D]"></div>
                 </div>
                 <Footer />
             </div>
@@ -168,7 +168,7 @@ const ProductDetailPage: React.FC = () => {
                 <div className="flex-grow flex flex-col justify-center items-center pt-24 text-gray-500">
                     <Leaf className="w-16 h-16 mb-4 opacity-50" />
                     <h2 className="text-xl font-bold">Product not found</h2>
-                    <button onClick={() => navigate('/our-products')} className="mt-4 text-[#c01226] font-medium hover:underline">
+                    <button onClick={() => navigate('/our-products')} className="mt-4 text-[#0B6F6D] font-medium hover:underline">
                         Return to Products
                     </button>
                 </div>
@@ -273,9 +273,9 @@ const ProductDetailPage: React.FC = () => {
                 
                 {/* ── Breadcrumb ── */}
                 <nav className="flex items-center gap-2 text-xs text-gray-500 mb-4 px-1">
-                    <Link to="/" className="hover:text-[#c01226] transition-colors">Home</Link>
+                    <Link to="/" className="hover:text-[#0B6F6D] transition-colors">Home</Link>
                     <ChevronRight className="w-3 h-3 text-gray-400" />
-                    <Link to="/our-products" className="hover:text-[#c01226] transition-colors">Our Products</Link>
+                    <Link to="/our-products" className="hover:text-[#0B6F6D] transition-colors">Our Products</Link>
                     <ChevronRight className="w-3 h-3 text-gray-400" />
                     <span className="text-gray-800 font-semibold truncate max-w-xs sm:max-w-md">{product.name}</span>
                 </nav>
@@ -290,11 +290,11 @@ const ProductDetailPage: React.FC = () => {
                         <div className="relative rounded-2xl bg-white p-3 border border-slate-200 shadow-xs flex flex-col items-center">
                             {/* Badges Overlay */}
                             <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-1.5 items-center">
-                                <span className="bg-[#c01226]/10 text-[#c01226] border border-[#c01226]/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
+                                <span className="bg-[#0B6F6D]/10 text-[#0B6F6D] border border-[#0B6F6D]/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
                                     {product.category}
                                 </span>
                                 {discount > 0 && (
-                                    <span className="bg-red-500 text-white px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider shadow-xs">
+                                    <span className="bg-[#E17C61] text-white px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider shadow-xs">
                                         {discount}% OFF
                                     </span>
                                 )}
@@ -328,7 +328,7 @@ const ProductDetailPage: React.FC = () => {
                                             key={idx} 
                                             onClick={() => setActiveImageIndex(idx)}
                                             className={`w-12 h-12 rounded-lg border-2 overflow-hidden shrink-0 transition-all ${
-                                                activeImageIndex === idx ? 'border-[#c01226] ring-2 ring-primary/20 shadow-xs' : 'border-gray-200 opacity-60 hover:opacity-100'
+                                                activeImageIndex === idx ? 'border-[#0B6F6D] ring-2 ring-primary/20 shadow-xs' : 'border-gray-200 opacity-60 hover:opacity-100'
                                             }`}
                                         >
                                             <img src={img} alt="thumbnail" className="w-full h-full object-cover bg-white" />
@@ -399,7 +399,7 @@ const ProductDetailPage: React.FC = () => {
                             {/* Product Title & Review Snip */}
                             <div className="flex flex-col gap-1.5">
                                 <div className="flex items-center justify-between gap-4">
-                                    <span className="text-xs font-bold uppercase tracking-wider text-[#c01226]">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-[#0B6F6D]">
                                         Drepto Clinical Biodevice
                                     </span>
                                     <button 
@@ -504,10 +504,10 @@ const ProductDetailPage: React.FC = () => {
                                     {/* Quantity Counter or Add button */}
                                     <div className="sm:col-span-5">
                                         {cartCount > 0 ? (
-                                            <div className="w-full flex items-center justify-between border-2 border-[#c01226] rounded-xl h-[48px] bg-white px-2 shadow-xs">
+                                            <div className="w-full flex items-center justify-between border-2 border-[#0B6F6D] rounded-xl h-[48px] bg-white px-2 shadow-xs">
                                                 <button 
                                                     onClick={handleDecrement}
-                                                    className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 text-gray-700 hover:text-red-600 transition-colors"
+                                                    className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 text-gray-700 hover:text-[#0B6F6D] transition-colors"
                                                     title="Decrease"
                                                 >
                                                     {cartCount === 1 ? <Trash2 className="w-4 h-4" /> : <Minus className="w-4 h-4" />}
@@ -554,7 +554,7 @@ const ProductDetailPage: React.FC = () => {
                                                 if (cartCount === 0) confirmAddToCart('Warehouse', selectedPack);
                                                 navigate('/cart');
                                             }}
-                                            className="w-full h-[48px] bg-[#c01226] hover:bg-red-700 text-white rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
+                                            className="w-full h-[48px] bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2"
                                         >
                                             <span>
                                                 {cartCount === 0 
@@ -578,7 +578,7 @@ const ProductDetailPage: React.FC = () => {
                                         onClick={() => setActiveTab('overview')}
                                         className={`pb-2.5 text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 ${
                                             activeTab === 'overview'
-                                                ? 'border-[#c01226] text-[#c01226]'
+                                                ? 'border-[#0B6F6D] text-[#0B6F6D]'
                                                 : 'border-transparent text-gray-500 hover:text-gray-800'
                                         }`}
                                     >
@@ -589,7 +589,7 @@ const ProductDetailPage: React.FC = () => {
                                         onClick={() => setActiveTab('ingredients')}
                                         className={`pb-2.5 text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 ${
                                             activeTab === 'ingredients'
-                                                ? 'border-[#c01226] text-[#c01226]'
+                                                ? 'border-[#0B6F6D] text-[#0B6F6D]'
                                                 : 'border-transparent text-gray-500 hover:text-gray-800'
                                         }`}
                                     >
@@ -600,7 +600,7 @@ const ProductDetailPage: React.FC = () => {
                                         onClick={() => setActiveTab('safety')}
                                         className={`pb-2.5 text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 ${
                                             activeTab === 'safety'
-                                                ? 'border-[#c01226] text-[#c01226]'
+                                                ? 'border-[#0B6F6D] text-[#0B6F6D]'
                                                 : 'border-transparent text-gray-500 hover:text-gray-800'
                                         }`}
                                     >
@@ -627,12 +627,12 @@ const ProductDetailPage: React.FC = () => {
                                             {product.keyFeatures && product.keyFeatures.length > 0 && (
                                                 <div className="bg-gray-50/70 rounded-xl p-3 border border-gray-100">
                                                     <h4 className="font-bold text-gray-800 text-xs uppercase tracking-wider mb-2 flex items-center gap-1">
-                                                        <Check className="w-3.5 h-3.5 text-[#c01226]" /> Key Features
+                                                        <Check className="w-3.5 h-3.5 text-[#0B6F6D]" /> Key Features
                                                     </h4>
                                                     <ul className="space-y-1.5 text-xs text-gray-600">
                                                         {product.keyFeatures.map((feat, idx) => (
                                                             <li key={idx} className="flex items-start gap-1.5">
-                                                                <span className="w-1.5 h-1.5 rounded-full bg-[#c01226] mt-1 shrink-0" />
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0B6F6D] mt-1 shrink-0" />
                                                                 <span>{feat}</span>
                                                             </li>
                                                         ))}
@@ -699,11 +699,11 @@ const ProductDetailPage: React.FC = () => {
                                         {product.composition && product.composition.length > 0 && (
                                             <div>
                                                 <h4 className="font-bold text-gray-800 text-xs uppercase tracking-wider mb-2 flex items-center gap-1">
-                                                    <Layers className="w-3.5 h-3.5 text-[#c01226]" /> Formulation Composition
+                                                    <Layers className="w-3.5 h-3.5 text-[#0B6F6D]" /> Formulation Composition
                                                 </h4>
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {product.composition.map((comp, idx) => (
-                                                        <span key={idx} className="bg-red-50 text-red-900 border border-red-200/60 px-3 py-1 rounded-lg text-xs font-medium">
+                                                        <span key={idx} className="bg-[#F4F9F9] text-[#052121] border border-[#D0E6E6]/60 px-3 py-1 rounded-lg text-xs font-medium">
                                                             {comp}
                                                         </span>
                                                     ))}
@@ -837,7 +837,7 @@ const ProductDetailPage: React.FC = () => {
                             </div>
 
                             <textarea 
-                                className="w-full bg-white border border-gray-200 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:border-[#c01226] focus:ring-1 focus:ring-[#c01226] mb-3"
+                                className="w-full bg-white border border-gray-200 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:border-[#0B6F6D] focus:ring-1 focus:ring-[#0B6F6D] mb-3"
                                 placeholder="Describe your experience with this product, relief time, and results..."
                                 rows={3}
                                 value={reviewForm.reviewText}
@@ -886,7 +886,7 @@ const ProductDetailPage: React.FC = () => {
                                     <button 
                                         disabled={isSubmitting}
                                         type="button"
-                                        className="bg-[#c01226] hover:bg-[#c01226]/90 text-white font-bold py-1.5 px-4 rounded-lg text-xs transition-colors disabled:opacity-50 shadow-xs"
+                                        className="bg-[#0B6F6D] hover:bg-[#0B6F6D]/90 text-white font-bold py-1.5 px-4 rounded-lg text-xs transition-colors disabled:opacity-50 shadow-xs"
                                         onClick={async () => {
                                             if(!reviewForm.reviewText?.trim() || !product?._id) return;
                                             setIsSubmitting(true);
@@ -941,7 +941,7 @@ const ProductDetailPage: React.FC = () => {
                                     {reviewForm.images.map((img: string, idx: number) => (
                                         <div key={idx} className="relative inline-block">
                                             <div 
-                                                className="absolute -top-1.5 -right-1.5 bg-red-500 rounded-full p-0.5 cursor-pointer z-10" 
+                                                className="absolute -top-1.5 -right-1.5 bg-[#242B2B] hover:bg-[#E17C61] text-white rounded-full p-0.5 cursor-pointer z-10" 
                                                 onClick={() => setReviewForm({...reviewForm, images: reviewForm.images.filter((_: any, i: number) => i !== idx)})}
                                             >
                                                 <X className="w-3 h-3 text-white" />
@@ -952,7 +952,7 @@ const ProductDetailPage: React.FC = () => {
                                     {reviewForm.videos.map((vid: string, idx: number) => (
                                         <div key={idx} className="relative inline-block">
                                             <div 
-                                                className="absolute -top-1.5 -right-1.5 bg-red-500 rounded-full p-0.5 cursor-pointer z-10" 
+                                                className="absolute -top-1.5 -right-1.5 bg-[#242B2B] hover:bg-[#E17C61] text-white rounded-full p-0.5 cursor-pointer z-10" 
                                                 onClick={() => setReviewForm({...reviewForm, videos: reviewForm.videos.filter((_: any, i: number) => i !== idx)})}
                                             >
                                                 <X className="w-3 h-3 text-white" />

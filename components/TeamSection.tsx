@@ -56,10 +56,10 @@ export const TeamSection: React.FC = () => {
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-300/90 shadow-2xs hover:shadow-md transition-all duration-300 w-full max-w-sm flex flex-col justify-between group hover:-translate-y-1 relative overflow-hidden"
+              className="bg-[#F4F9F9] rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-[#D0E6E6] shadow-2xs hover:shadow-md transition-all duration-300 w-full max-w-sm flex flex-col justify-between group hover:-translate-y-1 relative overflow-hidden"
             >
               {/* Top Accent Line */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-[#c01226] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute top-0 left-0 right-0 h-1 bg-[#0B6F6D] opacity-0 group-hover:opacity-100 transition-opacity" />
 
               <div>
                 {/* Member Portrait */}
@@ -77,7 +77,7 @@ export const TeamSection: React.FC = () => {
                   <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1 font-display">
                     {member.name}
                   </h3>
-                  <p className="text-xs font-bold text-[#c01226] uppercase tracking-wider mb-3">
+                  <p className="text-xs font-bold text-[#0B6F6D] uppercase tracking-wider mb-3">
                     {member.role}
                   </p>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
@@ -93,9 +93,9 @@ export const TeamSection: React.FC = () => {
                     href={member.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-[#c01226] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-[#0B6F6D] transition-colors"
                   >
-                    <Linkedin className="w-4 h-4 text-[#c01226]" />
+                    <Linkedin className="w-4 h-4 text-[#0B6F6D]" />
                     <span>View Professional Profile</span>
                   </a>
                 </div>

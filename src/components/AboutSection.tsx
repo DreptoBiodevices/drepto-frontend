@@ -37,16 +37,16 @@ const AboutSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-14">
 
           {/* ── Card 1: Mission & Patient Care ── */}
-          <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+          <div className="bg-[#F4F9F9]/80 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-[#D0E6E6] shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
             {/* Top red accent rule */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#c01226]" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#0B6F6D]" />
             
             <div>
               <div className="flex items-center justify-between mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-[#0B6F6D] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                   <Target className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-mono font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-red-50 text-[#c01226] border border-red-200">
+                <span className="text-xs font-mono font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-[#F4F9F9] text-[#0B6F6D] border border-[#D0E6E6]">
                   01 &bull; OUR PURPOSE
                 </span>
               </div>
@@ -60,19 +60,19 @@ const AboutSection: React.FC = () => {
 
               <div className="space-y-3 pt-4 border-t border-slate-200/80">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-sm font-semibold text-slate-800">
                     100% Gastrointestinal Bypass — Zero stomach lining contact or acid burning
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-sm font-semibold text-slate-800">
                     Biphasic steady-state kinetics delivering 12 continuous hours of pelvic comfort
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-sm font-semibold text-slate-800">
                     Discreet, non-invasive patch application that respects feminine dignity
                   </span>
@@ -82,12 +82,12 @@ const AboutSection: React.FC = () => {
 
             <div className="mt-8 pt-5 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
               <span>Drepto Bio-Matrix System</span>
-              <span className="text-[#c01226] font-bold">Patent: IN202521129798</span>
+              <span className="text-[#0B6F6D] font-bold">Patent: IN202521129798</span>
             </div>
           </div>
 
           {/* ── Card 2: SINE, IIT Bombay Ecosystem ── */}
-          <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+          <div className="bg-[#F4F9F9]/80 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-[#D0E6E6] shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
             {/* Top slate accent rule */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
 
@@ -110,19 +110,19 @@ const AboutSection: React.FC = () => {
 
               <div className="space-y-3 pt-4 border-t border-slate-200/80">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-sm font-semibold text-slate-800">
                     Incubated at SINE, IIT Bombay with multidisciplinary scientific advisory
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-sm font-semibold text-slate-800">
                     Evaluated under international ISO 10993-23:2021 medical device standards
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-sm font-semibold text-slate-800">
                     Clinical pilot publication accepted in peer-reviewed journal (JAIMS)
                   </span>
@@ -132,7 +132,7 @@ const AboutSection: React.FC = () => {
 
             <div className="mt-8 pt-5 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
               <span>SINE Ecosystem</span>
-              <span className="text-[#c01226] font-bold">Mumbai, 400076</span>
+              <span className="text-[#0B6F6D] font-bold">Mumbai, 400076</span>
             </div>
           </div>
 
@@ -140,26 +140,26 @@ const AboutSection: React.FC = () => {
 
         {/* ── 4 Executive Metrics Cards in Emcure Style ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <div className="bg-[#ebedf1] rounded-2xl p-6 border border-slate-200/80 text-center shadow-2xs hover:shadow-sm transition-all">
-            <div className="text-3xl sm:text-4xl font-black text-[#c01226] font-display">0.00</div>
+          <div className="bg-[#F4F9F9] rounded-2xl p-6 border border-[#D0E6E6]/80 text-center shadow-2xs hover:shadow-sm transition-all">
+            <div className="text-3xl sm:text-4xl font-black text-[#0B6F6D] font-display">0.00</div>
             <div className="text-xs font-bold text-slate-900 uppercase tracking-wide mt-1">Primary Irritation Index</div>
             <div className="text-[11px] text-slate-500 mt-0.5">ISO 10993-23 Certified Non-Irritant</div>
           </div>
 
-          <div className="bg-[#ebedf1] rounded-2xl p-6 border border-slate-200/80 text-center shadow-2xs hover:shadow-sm transition-all">
-            <div className="text-3xl sm:text-4xl font-black text-[#c01226] font-display">91.2%</div>
+          <div className="bg-[#F4F9F9] rounded-2xl p-6 border border-[#D0E6E6]/80 text-center shadow-2xs hover:shadow-sm transition-all">
+            <div className="text-3xl sm:text-4xl font-black text-[#0B6F6D] font-display">91.2%</div>
             <div className="text-xs font-bold text-slate-900 uppercase tracking-wide mt-1">Ex-Vivo Drug Release</div>
             <div className="text-[11px] text-slate-500 mt-0.5">Franz Cell 12-Hour Permeation</div>
           </div>
 
-          <div className="bg-[#ebedf1] rounded-2xl p-6 border border-slate-200/80 text-center shadow-2xs hover:shadow-sm transition-all">
-            <div className="text-3xl sm:text-4xl font-black text-[#c01226] font-display">12 hrs</div>
+          <div className="bg-[#F4F9F9] rounded-2xl p-6 border border-[#D0E6E6]/80 text-center shadow-2xs hover:shadow-sm transition-all">
+            <div className="text-3xl sm:text-4xl font-black text-[#0B6F6D] font-display">12 hrs</div>
             <div className="text-xs font-bold text-slate-900 uppercase tracking-wide mt-1">Continuous Steady Relief</div>
             <div className="text-[11px] text-slate-500 mt-0.5">Biphasic Zero-Order Kinetics</div>
           </div>
 
-          <div className="bg-[#ebedf1] rounded-2xl p-6 border border-slate-200/80 text-center shadow-2xs hover:shadow-sm transition-all">
-            <div className="text-3xl sm:text-4xl font-black text-[#c01226] font-display">100%</div>
+          <div className="bg-[#F4F9F9] rounded-2xl p-6 border border-[#D0E6E6]/80 text-center shadow-2xs hover:shadow-sm transition-all">
+            <div className="text-3xl sm:text-4xl font-black text-[#0B6F6D] font-display">100%</div>
             <div className="text-xs font-bold text-slate-900 uppercase tracking-wide mt-1">GI Tract Bypass</div>
             <div className="text-[11px] text-slate-500 mt-0.5">Zero Stomach Acid Erosion</div>
           </div>

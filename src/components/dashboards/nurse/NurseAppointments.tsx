@@ -43,7 +43,7 @@ const NurseAppointments: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
     const renderVisitItem = (visit: Visit) => (
         <div key={visit.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col lg:flex-row items-start lg:items-center gap-6 hover:shadow-lg transition-all duration-300 group relative overflow-hidden">
-            <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${visit.priority === 'High' ? 'bg-red-500' : 'bg-emerald-500'}`}></div>
+            <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${visit.priority === 'High' ? 'bg-[#E17C61]' : 'bg-emerald-500'}`}></div>
             
             {/* Time & Distance */}
             <div className="flex lg:flex-col items-center lg:items-start gap-3 lg:gap-1 min-w-[100px] text-gray-500 text-sm">
@@ -58,7 +58,7 @@ const NurseAppointments: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-xl text-gray-900">{visit.patientName}</h3>
-                    {visit.priority === 'High' && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] font-bold uppercase tracking-wide rounded-full">High Priority</span>}
+                    {visit.priority === 'High' && <span className="px-2 py-0.5 bg-[#FDF7F5] text-[#C86146] text-[10px] font-bold uppercase tracking-wide rounded-full">High Priority</span>}
                 </div>
                 <p className="text-emerald-600 font-medium text-sm mb-1">{visit.type}</p>
                 <p className="text-gray-500 text-sm flex items-start gap-1">

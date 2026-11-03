@@ -7,7 +7,7 @@ export const FounderQuoteCard: React.FC = () => {
     <section className="py-16 sm:py-24 bg-slate-50/70 border-t border-slate-200/60 scroll-mt-24" id="founder">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Grey Rounded Container */}
-        <div className="relative bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-10 lg:p-14 shadow-sm border border-slate-300/90">
+        <div className="relative bg-[#F4F9F9] rounded-2xl sm:rounded-3xl p-5 sm:p-10 lg:p-14 shadow-sm border border-[#D0E6E6]">
           {/* Top Red Quotation Mark & Horizontal Accent Line */}
           <div className="flex items-center gap-4 mb-6 sm:mb-8">
             <span
@@ -16,7 +16,7 @@ export const FounderQuoteCard: React.FC = () => {
             >
               &ldquo;
             </span>
-            <div className="h-0.5 sm:h-1 bg-slate-300 flex-1 rounded-full opacity-90" />
+            <div className="h-0.5 sm:h-1 bg-[#D0E6E6] flex-1 rounded-full opacity-90" />
           </div>
 
           {/* Inner Content: Portrait + Quote Body */}
@@ -26,7 +26,7 @@ export const FounderQuoteCard: React.FC = () => {
               <div className="relative w-36 sm:w-52 md:w-60 aspect-[4/5] flex-shrink-0">
                 {/* Red L-shaped Corner Accent Bracket (Bottom-Left) */}
                 <div
-                  className="absolute -bottom-2.5 -left-2.5 sm:-bottom-3.5 sm:-left-3.5 w-16 sm:w-20 h-24 sm:h-28 border-b-4 border-l-4 sm:border-b-[5px] sm:border-l-[5px] border-[#c01226] rounded-bl-2xl pointer-events-none z-10"
+                  className="absolute -bottom-2.5 -left-2.5 sm:-bottom-3.5 sm:-left-3.5 w-16 sm:w-20 h-24 sm:h-28 border-b-4 border-l-4 sm:border-b-[5px] sm:border-l-[5px] border-[#0B6F6D] rounded-bl-2xl pointer-events-none z-10"
                   aria-hidden="true"
                 />
 
@@ -69,7 +69,7 @@ export const FounderQuoteCard: React.FC = () => {
 
           {/* Bottom Red Horizontal Accent Line & Closing Quotation Mark */}
           <div className="flex items-center justify-end gap-4 mt-6 sm:mt-8">
-            <div className="h-0.5 sm:h-1 bg-slate-300 flex-1 rounded-full opacity-90" />
+            <div className="h-0.5 sm:h-1 bg-[#D0E6E6] flex-1 rounded-full opacity-90" />
             <span
               className="text-slate-400 text-4xl sm:text-6xl lg:text-7xl font-serif font-black leading-none select-none inline-block -mt-4"
               aria-hidden="true"
@@ -137,7 +137,7 @@ const CorporateHeroSection: React.FC = () => {
       {/* ─────────────────────────────────────────────────────────────
           1. HERO BANNER: Direct Seamless Banner (NO extra empty space)
           ───────────────────────────────────────────────────────────── */}
-      <section className="relative w-full h-[76vh] sm:h-[84vh] md:h-[88vh] lg:h-[92vh] max-h-[1000px] overflow-hidden bg-slate-950 flex flex-col justify-end">
+      <section className="relative w-full h-[76vh] sm:h-[84vh] md:h-[88vh] lg:h-[92vh] max-h-[1000px] overflow-hidden bg-[#052121] flex flex-col justify-end">
         {/* Background Image: Fades out smoothly as text rises */}
         <div
           className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
@@ -163,7 +163,7 @@ const CorporateHeroSection: React.FC = () => {
         <div
           className="absolute inset-0 pointer-events-none transition-colors duration-150"
           style={{
-            backgroundColor: `rgba(15, 23, 42, ${overlayDarkness})`,
+            backgroundColor: `rgba(5, 33, 33, ${overlayDarkness})`,
           }}
         />
 
@@ -224,7 +224,7 @@ const CorporateHeroSection: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Heading in Signature Emcure Crimson Red */}
           <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-slate-900 text-center mb-8 sm:mb-14 lg:mb-16">
-            Curing the World, <span className="text-[#c01226]">Caring Beyond</span>
+            Curing the World, <span className="text-[#0B6F6D]">Caring Beyond</span>
           </h2>
 
           {/* Two-Column Grid */}
@@ -262,7 +262,7 @@ const CorporateHeroSection: React.FC = () => {
               <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <button
                   onClick={() => navigate('/our-products')}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#c01226] hover:bg-[#a00f20] text-white font-semibold text-sm transition-all shadow-md active:scale-95"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white font-semibold text-sm transition-all shadow-md active:scale-95"
                 >
                   <span>Discover MenstroHerb</span>
                   <ArrowRight className="w-4 h-4" />
@@ -295,7 +295,7 @@ const CorporateHeroSection: React.FC = () => {
 
                 {/* Signature Red Vertical Accent Bar (bottom-right) */}
                 <div
-                  className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-3 w-3 sm:w-4 h-28 sm:h-36 bg-[#c01226] rounded-xs shadow-md pointer-events-none"
+                  className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-3 w-3 sm:w-4 h-28 sm:h-36 bg-[#0B6F6D] rounded-xs shadow-md pointer-events-none"
                   aria-hidden="true"
                 />
               </div>
@@ -306,7 +306,7 @@ const CorporateHeroSection: React.FC = () => {
           <div className="mt-14 sm:mt-20 pt-10 sm:pt-14 border-t border-slate-200/80">
             <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-[#c01226] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#0B6F6D] animate-pulse" />
                 <span>PATENTED BIODEVICETECHNOLOGY IN MOTION</span>
               </div>
               <h3 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-display">

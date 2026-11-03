@@ -36,7 +36,7 @@ export const ScienceSection: React.FC = () => {
           </p>
 
           {/* Tab Controls: Sleek Corporate Pill Tabs */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 mt-6 p-1.5 bg-[#ebedf1] rounded-2xl max-w-xl mx-auto border border-slate-300/80 shadow-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 mt-6 p-1.5 bg-[#F4F9F9] rounded-2xl max-w-xl mx-auto border border-[#D0E6E6] shadow-xs">
             <button
               onClick={() => setActiveTab('mechanism')}
               className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-center ${
@@ -77,7 +77,7 @@ export const ScienceSection: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
               
               {/* Conventional Oral Limitations */}
-              <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 relative shadow-sm flex flex-col justify-between">
+              <div className="bg-[#F4F9F9]/80 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-[#D0E6E6] relative shadow-sm flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100/90 border border-rose-200 text-rose-800 text-xs font-bold uppercase mb-4">
                     <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
@@ -135,14 +135,14 @@ export const ScienceSection: React.FC = () => {
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                       <div>
                         <strong className="text-slate-900 block font-semibold">12-Hour Sustained Zero-Order Kinetics:</strong>
                         Engineered polymer matrix delivers rapid onset in under 30 minutes followed by constant, steady comfort for 12 hours.
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                       <div>
                         <strong className="text-slate-900 block font-semibold">Ultra-Discreet &amp; Biocompatible:</strong>
                         Ultra-thin, skin-toned, non-irritant patch designed for active women—wearable undetected under any attire.
@@ -151,7 +151,7 @@ export const ScienceSection: React.FC = () => {
                   </ul>
                 </div>
 
-                <div className="mt-8 pt-4 border-t border-slate-200/80 text-xs text-[#c01226] font-bold flex items-center justify-between">
+                <div className="mt-8 pt-4 border-t border-slate-200/80 text-xs text-[#0B6F6D] font-bold flex items-center justify-between">
                   <span>Patent App: IN202521129798</span>
                   <span>ISO 10993-23 Certified Non-Irritant</span>
                 </div>
@@ -160,8 +160,8 @@ export const ScienceSection: React.FC = () => {
 
             {/* 3 Pillars of Technology */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-              <div className="p-5 sm:p-7 bg-[#ebedf1]/70 rounded-2xl border border-slate-300/90 shadow-2xs hover:shadow-md hover:border-[#c01226]/40 transition-all group">
-                <div className="w-12 h-12 rounded-xl bg-white text-[#c01226] shadow-sm flex items-center justify-center mb-4 border border-slate-200/80 group-hover:scale-110 transition-transform">
+              <div className="p-5 sm:p-7 bg-[#F4F9F9]/80 rounded-2xl border border-[#D0E6E6] shadow-2xs hover:shadow-md hover:border-[#0B6F6D]/40 transition-all group">
+                <div className="w-12 h-12 rounded-xl bg-white text-[#0B6F6D] shadow-sm flex items-center justify-center mb-4 border border-slate-200/80 group-hover:scale-110 transition-transform">
                   <Layers className="w-6 h-6" />
                 </div>
                 <h4 className="text-lg font-bold text-slate-900 mb-2">Polymer Permeation Matrix</h4>
@@ -170,8 +170,8 @@ export const ScienceSection: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-6 sm:p-8 bg-[#ebedf1]/50 rounded-2xl border border-slate-200/80 shadow-2xs hover:shadow-md hover:border-[#c01226]/40 transition-all group">
-                <div className="w-12 h-12 rounded-xl bg-white text-[#c01226] shadow-sm flex items-center justify-center mb-4 border border-slate-200/80 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-[#F4F9F9]/60 rounded-2xl border border-[#D0E6E6]/80 shadow-2xs hover:shadow-md hover:border-[#0B6F6D]/40 transition-all group">
+                <div className="w-12 h-12 rounded-xl bg-white text-[#0B6F6D] shadow-sm flex items-center justify-center mb-4 border border-slate-200/80 group-hover:scale-110 transition-transform">
                   <Activity className="w-6 h-6" />
                 </div>
                 <h4 className="text-lg font-bold text-slate-900 mb-2">12-Hour Controlled Kinetics</h4>
@@ -180,8 +180,8 @@ export const ScienceSection: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-6 sm:p-8 bg-[#ebedf1]/50 rounded-2xl border border-slate-200/80 shadow-2xs hover:shadow-md hover:border-[#c01226]/40 transition-all group">
-                <div className="w-12 h-12 rounded-xl bg-white text-[#c01226] shadow-sm flex items-center justify-center mb-4 border border-slate-200/80 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-[#F4F9F9]/60 rounded-2xl border border-[#D0E6E6]/80 shadow-2xs hover:shadow-md hover:border-[#0B6F6D]/40 transition-all group">
+                <div className="w-12 h-12 rounded-xl bg-white text-[#0B6F6D] shadow-sm flex items-center justify-center mb-4 border border-slate-200/80 group-hover:scale-110 transition-transform">
                   <Award className="w-6 h-6" />
                 </div>
                 <h4 className="text-lg font-bold text-slate-900 mb-2">Preclinical Safety Rigor</h4>
@@ -196,7 +196,7 @@ export const ScienceSection: React.FC = () => {
         {/* TAB 2: R&D Pipeline */}
         {activeTab === 'pipeline' && (
           <div className="space-y-8 animate-fade-in">
-            <div className="bg-[#ebedf1]/60 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 shadow-sm">
+            <div className="bg-[#F4F9F9]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-[#D0E6E6] shadow-sm">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 border-b border-slate-200/80 pb-6">
                 <div>
                   <h3 className="text-2xl font-bold text-slate-900 font-display">Development Pipeline &amp; Regulatory Pathway</h3>
@@ -205,7 +205,7 @@ export const ScienceSection: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#c01226] animate-pulse" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#0B6F6D] animate-pulse" />
                   <span className="text-xs font-bold text-slate-800 uppercase tracking-wider bg-slate-100 border border-slate-300 px-3 py-1 rounded-full">
                     Active Programs
                   </span>
@@ -244,7 +244,7 @@ export const ScienceSection: React.FC = () => {
                       <span className="font-bold block text-emerald-700">Clinical Pilot</span>
                       Published (JAIMS)
                     </div>
-                    <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-[#c01226] font-bold">
+                    <div className="p-2.5 rounded-xl bg-[#F4F9F9] border border-[#D0E6E6] text-[#0B6F6D] font-bold">
                       <span className="font-bold block">● Commercial</span>
                       Available in India
                     </div>
@@ -296,7 +296,7 @@ export const ScienceSection: React.FC = () => {
           <div className="space-y-8 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Card 1: ISO 10993 */}
-              <div className="bg-[#ebedf1]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-300/90 shadow-sm flex flex-col justify-between">
+              <div className="bg-[#F4F9F9]/80 rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-[#D0E6E6] shadow-sm flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase mb-4 border border-emerald-200">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
@@ -331,10 +331,10 @@ export const ScienceSection: React.FC = () => {
               </div>
 
               {/* Card 2: JAIMS Publication */}
-              <div className="bg-[#ebedf1]/60 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div className="bg-[#F4F9F9]/70 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-[#c01226] text-xs font-bold uppercase mb-4 border border-red-200">
-                    <FileText className="w-3.5 h-3.5 text-[#c01226]" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4F9F9] text-[#0B6F6D] text-xs font-bold uppercase mb-4 border border-[#D0E6E6]">
+                    <FileText className="w-3.5 h-3.5 text-[#0B6F6D]" />
                     <span>Peer-Reviewed Clinical Literature</span>
                   </div>
                   <h4 className="text-2xl font-black text-slate-900 mb-3">
@@ -362,7 +362,7 @@ export const ScienceSection: React.FC = () => {
                 <div className="mt-6 pt-4 border-t border-slate-200/80 flex items-center justify-between">
                   <button
                     onClick={() => navigate('/our-research')}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#c01226] hover:text-red-700 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B6F6D] hover:text-[#0B5C5A] transition-colors cursor-pointer"
                   >
                     <span>Read Full Paper in Our Research</span>
                     <ExternalLink className="w-3.5 h-3.5" />

@@ -95,7 +95,7 @@ const DashboardStats = () => {
 
     return (
         <div className="space-y-6 mb-8">
-            {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl border border-red-200">{error}</div>}
+            {error && <div className="bg-[#FDF7F5] text-[#C86146] p-4 rounded-xl border border-[#F8D4CB]">{error}</div>}
             
             <div className="bg-gradient-to-r from-primary to-blue-600 rounded-2xl p-6 text-white shadow-lg flex justify-between items-center">
                 <div>

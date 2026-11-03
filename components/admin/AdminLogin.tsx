@@ -65,8 +65,8 @@ const AdminLogin: React.FC = () => {
         </div>
 
         {error && (
-          <div className="mb-5 p-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+          <div className="mb-5 p-3 rounded-xl bg-[#FDF7F5] border border-[#F8D4CB] text-[#C86146] text-xs flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E17C61] shrink-0" />
             {error}
           </div>
         )}
@@ -82,7 +82,7 @@ const AdminLogin: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226] transition-all"
+                className="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D] transition-all"
                 placeholder="Dreptoadmin@gmail.com"
                 required
               />
@@ -99,7 +99,7 @@ const AdminLogin: React.FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-9 pr-10 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226] transition-all"
+                className="w-full pl-9 pr-10 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D] transition-all"
                 placeholder="••••••••"
                 required
               />
@@ -117,7 +117,7 @@ const AdminLogin: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 bg-[#c01226] text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-red-700 active:scale-[0.99] transition-all shadow-md shadow-red-600/20 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+            className="w-full mt-2 bg-[#0B6F6D] text-white font-semibold py-2.5 px-4 rounded-xl hover:bg-[#0B5C5A] active:scale-[0.99] transition-all shadow-md shadow-[#0B6F6D]/20 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
           >
             {loading ? 'Authenticating…' : 'Enter Admin Portal'}
             <ArrowRight className="w-4 h-4" />

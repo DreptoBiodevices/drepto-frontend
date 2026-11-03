@@ -55,18 +55,18 @@ const AboutUsPage: React.FC = () => {
       <main className="flex-grow">
         {/* ── Luminous Healthcare Hero Banner ── */}
         <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#f8f9fa] via-white to-[#f1f3f6] border-b border-slate-200/80">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0B6F6D]/5 rounded-full blur-[100px] pointer-events-none" />
           <div className="absolute -bottom-10 left-10 w-96 h-96 bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
-                <Users className="w-4 h-4 text-[#c01226]" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4F9F9] border border-[#D0E6E6]/90 text-[#0B6F6D] text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
+                <Users className="w-4 h-4 text-[#0B6F6D]" />
                 <span>ABOUT DREPTO BIODEVICES</span>
               </div>
               <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
                 Innovating Healthcare,{' '}
-                <span className="text-[#c01226]">
+                <span className="text-[#0B6F6D]">
                   Delivering Comfort Beyond
                 </span>
               </h1>
@@ -78,16 +78,16 @@ const AboutUsPage: React.FC = () => {
             {/* Highlight Stats: Emcure-inspired Soft Grey Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-14 max-w-4xl mx-auto">
               {[
-                { icon: <Target className="w-5 h-5 text-[#c01226]" />, label: 'Founded', value: '2025' },
-                { icon: <Building2 className="w-5 h-5 text-[#c01226]" />, label: 'Incubated at', value: 'SINE IITB' },
-                { icon: <ShieldCheck className="w-5 h-5 text-[#c01226]" />, label: 'Core Platform', value: 'Transdermal' },
-                { icon: <Lightbulb className="w-5 h-5 text-[#c01226]" />, label: 'R&D Pipeline', value: 'Patented' },
+                { icon: <Target className="w-5 h-5 text-[#0B6F6D]" />, label: 'Founded', value: '2025' },
+                { icon: <Building2 className="w-5 h-5 text-[#0B6F6D]" />, label: 'Incubated at', value: 'SINE IITB' },
+                { icon: <ShieldCheck className="w-5 h-5 text-[#0B6F6D]" />, label: 'Core Platform', value: 'Transdermal' },
+                { icon: <Lightbulb className="w-5 h-5 text-[#0B6F6D]" />, label: 'R&D Pipeline', value: 'Patented' },
               ].map((stat, i) => (
                 <div
                   key={i}
-                  className="bg-[#ebedf1] rounded-2xl p-4 sm:p-5 text-center border border-slate-300/90 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden"
+                  className="bg-[#F4F9F9] rounded-2xl p-4 sm:p-5 text-center border border-[#D0E6E6] shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-[#c01226] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-[#0B6F6D] opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-white shadow-2xs flex items-center justify-center group-hover:scale-105 transition-transform">
                     {stat.icon}
                   </div>

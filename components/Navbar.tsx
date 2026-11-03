@@ -284,14 +284,14 @@ const Navbar: React.FC<NavbarProps> = ({
                     <div
                       className={`font-semibold text-sm tracking-wide transition-colors flex items-center gap-1 py-1 group ${
                         isActive
-                          ? 'text-[#c01226]'
-                          : 'text-white hover:text-red-400'
+                          ? 'text-[#0B6F6D]'
+                          : 'text-white hover:text-[#75B6B4]'
                       }`}
                     >
                       <button
                         type="button"
                         onClick={() => handleNavClick(item.path)}
-                        className="py-1 cursor-pointer hover:text-red-400 transition-colors drop-shadow-xs"
+                        className="py-1 cursor-pointer hover:text-[#75B6B4] transition-colors drop-shadow-xs"
                       >
                         {item.name}
                       </button>
@@ -302,14 +302,14 @@ const Navbar: React.FC<NavbarProps> = ({
                             e.stopPropagation();
                             setActiveDropdown(activeDropdown === item.name ? null : item.name);
                           }}
-                          className="p-1 cursor-pointer text-white/70 hover:text-red-400 transition-colors"
+                          className="p-1 cursor-pointer text-white/70 hover:text-[#75B6B4] transition-colors"
                           aria-label={`Toggle ${item.name} menu`}
                         >
                           <ChevronDown
                             className={`w-3.5 h-3.5 transition-transform duration-200 ${
                               activeDropdown === item.name
-                                ? 'rotate-180 text-red-400'
-                                : 'text-white/70 group-hover:text-red-400'
+                                ? 'rotate-180 text-[#75B6B4]'
+                                : 'text-white/70 group-hover:text-[#75B6B4]'
                             }`}
                           />
                         </button>
@@ -331,7 +331,7 @@ const Navbar: React.FC<NavbarProps> = ({
                               onClick={() => handleNavClick(sub.path, sub.hash)}
                               className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-white/10 transition-colors group/sub block cursor-pointer"
                             >
-                              <div className="text-white group-hover/sub:text-red-400 font-semibold text-xs tracking-wide transition-colors">
+                              <div className="text-white group-hover/sub:text-[#75B6B4] font-semibold text-xs tracking-wide transition-colors">
                                 {sub.label}
                               </div>
                               {sub.desc && (
@@ -355,7 +355,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={handlePrescriptionClick}
-                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-white/30 hover:border-[#c01226] text-white hover:text-white bg-white/10 hover:bg-[#c01226]/30 font-semibold text-xs tracking-wide transition-all shadow-sm backdrop-blur-sm cursor-pointer"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-white/30 hover:border-[#0B6F6D] text-white hover:text-white bg-white/10 hover:bg-[#0B6F6D]/30 font-semibold text-xs tracking-wide transition-all shadow-sm backdrop-blur-sm cursor-pointer"
               >
                 <FileText className="w-3.5 h-3.5 text-white/90" />
                 <span>{t('util.uploadPrescription')}</span>
@@ -365,7 +365,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <div className="relative" ref={languageRef}>
                 <button
                   onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
-                  className="flex items-center space-x-1 text-white hover:text-red-400 text-xs font-semibold px-2 py-1 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center space-x-1 text-white hover:text-[#75B6B4] text-xs font-semibold px-2 py-1 rounded-lg transition-colors cursor-pointer"
                   title="Language"
                 >
                   <Globe className="w-4 h-4 text-white/80" />
@@ -380,7 +380,7 @@ const Navbar: React.FC<NavbarProps> = ({
                         onClick={() => handleLanguageChange(lang.code)}
                         className={`w-full flex items-center justify-between px-3.5 py-2 text-xs transition-colors ${
                           language === lang.code
-                            ? 'bg-white/15 text-red-400 font-bold'
+                            ? 'bg-white/15 text-[#75B6B4] font-bold'
                             : 'text-white/90 hover:bg-white/10'
                         }`}
                       >
@@ -395,12 +395,12 @@ const Navbar: React.FC<NavbarProps> = ({
               {/* Cart Button */}
               <button
                 onClick={() => navigate('/cart')}
-                className="relative p-2 text-white hover:text-red-400 transition-colors cursor-pointer"
+                className="relative p-2 text-white hover:text-[#75B6B4] transition-colors cursor-pointer"
                 title={t('util.cart')}
               >
                 <ShoppingBag className="w-5 h-5" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#c01226] text-white text-[10px] font-extrabold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#E17C61] text-white text-[10px] font-extrabold rounded-full flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
@@ -415,20 +415,20 @@ const Navbar: React.FC<NavbarProps> = ({
                         onClick={() => navigate('/admin/dashboard')}
                         className="px-2.5 py-1 font-bold text-xs text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all flex items-center gap-1 cursor-pointer"
                       >
-                        <Shield className="w-3 h-3 text-red-400" />
+                        <Shield className="w-3 h-3 text-[#75B6B4]" />
                         <span>Admin</span>
                       </button>
                     )}
                     <button
                       onClick={() => navigate(user.role === 'Admin' ? '/admin/dashboard' : '/profile')}
-                      className="text-white hover:text-red-400 font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-white hover:text-[#75B6B4] font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <User className="w-4 h-4 text-white/80" />
                       <span>{user.firstName}</span>
                     </button>
                     <button
                       onClick={logout}
-                      className="text-white/70 hover:text-red-400 text-xs font-semibold transition-colors cursor-pointer"
+                      className="text-white/70 hover:text-[#75B6B4] text-xs font-semibold transition-colors cursor-pointer"
                     >
                       {t('util.signOut')}
                     </button>
@@ -437,13 +437,13 @@ const Navbar: React.FC<NavbarProps> = ({
                   <div className="flex items-center space-x-2.5">
                     <button
                       onClick={() => setAuthModalView('login')}
-                      className="text-white hover:text-red-400 font-semibold text-xs transition-colors cursor-pointer"
+                      className="text-white hover:text-[#75B6B4] font-semibold text-xs transition-colors cursor-pointer"
                     >
                       {t('util.signIn')}
                     </button>
                     <button
                       onClick={() => setAuthModalView('signup')}
-                      className="bg-[#c01226] hover:bg-red-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-full transition-all shadow-sm cursor-pointer"
+                      className="bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white font-bold text-xs px-3.5 py-1.5 rounded-full transition-all shadow-sm cursor-pointer"
                     >
                       {t('util.signUp')}
                     </button>
@@ -454,7 +454,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
             {/* Mobile Hamburger */}
             <button
-              className="lg:hidden p-2 text-white hover:text-red-400 transition-colors focus:outline-none flex-shrink-0 cursor-pointer"
+              className="lg:hidden p-2 text-white hover:text-[#75B6B4] transition-colors focus:outline-none flex-shrink-0 cursor-pointer"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open Menu"
             >
@@ -507,8 +507,8 @@ const Navbar: React.FC<NavbarProps> = ({
               
               {/* Logged in User Pill */}
               {user && (
-                <div className="p-3.5 mb-3 bg-red-50/60 border border-red-100/80 rounded-2xl flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#c01226] text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
+                <div className="p-3.5 mb-3 bg-[#F4F9F9]/60 border border-[#D0E6E6]/80 rounded-2xl flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#0B6F6D] text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
                     {user.firstName?.charAt(0) || 'U'}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -532,8 +532,8 @@ const Navbar: React.FC<NavbarProps> = ({
                       <div
                         className={`w-full flex items-center justify-between p-3.5 transition-all text-left font-semibold text-sm ${
                           isActive
-                            ? 'bg-red-50 text-[#c01226] font-bold border border-red-200/80'
-                            : 'text-slate-800 hover:bg-slate-100 hover:text-[#c01226]'
+                            ? 'bg-[#F4F9F9] text-[#0B6F6D] font-bold border border-[#D0E6E6]/80'
+                            : 'text-slate-800 hover:bg-slate-100 hover:text-[#0B6F6D]'
                         }`}
                       >
                         <button
@@ -555,13 +555,13 @@ const Navbar: React.FC<NavbarProps> = ({
                           >
                             <ChevronDown
                               className={`w-4 h-4 transition-transform duration-200 ${
-                                isExpanded ? 'rotate-180 text-[#c01226]' : 'text-slate-400'
+                                isExpanded ? 'rotate-180 text-[#0B6F6D]' : 'text-slate-400'
                               }`}
                             />
                           </button>
                         )}
                         {!hasDropdown && (
-                          <ChevronRight className={`w-4 h-4 ${isActive ? 'text-[#c01226]' : 'text-slate-400'}`} />
+                          <ChevronRight className={`w-4 h-4 ${isActive ? 'text-[#0B6F6D]' : 'text-slate-400'}`} />
                         )}
                       </div>
 
@@ -575,7 +575,7 @@ const Navbar: React.FC<NavbarProps> = ({
                               onClick={() => handleNavClick(sub.path, sub.hash)}
                               className="w-full text-left p-2.5 rounded-xl hover:bg-white transition-colors block cursor-pointer group"
                             >
-                              <div className="text-xs font-bold text-slate-800 group-hover:text-[#c01226] transition-colors">
+                              <div className="text-xs font-bold text-slate-800 group-hover:text-[#0B6F6D] transition-colors">
                                 {sub.label}
                               </div>
                               {sub.desc && (
@@ -602,10 +602,10 @@ const Navbar: React.FC<NavbarProps> = ({
                     setIsMobileMenuOpen(false);
                     handlePrescriptionClick();
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-2xl bg-red-50/70 border border-red-100/90 text-slate-900 hover:bg-red-100/70 transition-all cursor-pointer group"
+                  className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#F4F9F9]/70 border border-[#D0E6E6]/90 text-slate-900 hover:bg-[#D0E6E6]/70 transition-all cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-white text-[#c01226] shadow-2xs group-hover:scale-105 transition-transform">
+                    <div className="p-2.5 rounded-xl bg-white text-[#0B6F6D] shadow-2xs group-hover:scale-105 transition-transform">
                       <Upload className="w-4 h-4" />
                     </div>
                     <div className="text-left">
@@ -631,7 +631,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     <span className="text-xs font-bold text-slate-900">{t('util.myCart')}</span>
                   </div>
                   {cartCount > 0 ? (
-                    <span className="bg-[#c01226] text-white text-xs font-extrabold px-2 py-0.5 rounded-full shadow-2xs">
+                    <span className="bg-[#E17C61] text-white text-xs font-extrabold px-2 py-0.5 rounded-full shadow-2xs">
                       {cartCount}
                     </span>
                   ) : (
@@ -668,7 +668,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     className="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-900 text-white hover:bg-slate-800 transition-all cursor-pointer shadow-sm group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-white/10 text-red-400">
+                      <div className="p-2.5 rounded-xl bg-white/10 text-[#75B6B4]">
                         <Shield className="w-4 h-4" />
                       </div>
                       <span className="text-xs font-bold">Admin Portal</span>
@@ -698,7 +698,7 @@ const Navbar: React.FC<NavbarProps> = ({
                       setAuthModalView('signup');
                       setIsMobileMenuOpen(false);
                     }}
-                    className="flex items-center justify-center gap-2 py-3 bg-[#c01226] text-white rounded-xl font-bold shadow-md hover:bg-red-700 transition-all text-xs cursor-pointer"
+                    className="flex items-center justify-center gap-2 py-3 bg-[#0B6F6D] text-white rounded-xl font-bold shadow-md hover:bg-[#0B5C5A] transition-all text-xs cursor-pointer"
                   >
                     <UserPlus className="w-4 h-4" />
                     <span>{t('util.signUpNow')}</span>
@@ -711,7 +711,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     setIsMobileMenuOpen(false);
                     navigate('/');
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-[#c01226] border border-red-200/90 rounded-xl font-bold hover:bg-red-100 transition-all text-xs cursor-pointer shadow-2xs"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-[#F4F9F9] text-[#0B6F6D] border border-[#D0E6E6]/90 rounded-xl font-bold hover:bg-[#D0E6E6] transition-all text-xs cursor-pointer shadow-2xs"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Sign Out</span>
@@ -735,8 +735,8 @@ const Navbar: React.FC<NavbarProps> = ({
             {/* Header */}
             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-slate-50">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
-                  <Upload className="w-5 h-5 text-[#c01226]" />
+                <div className="w-10 h-10 rounded-xl bg-[#F4F9F9] flex items-center justify-center">
+                  <Upload className="w-5 h-5 text-[#0B6F6D]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">{t('prescription.title')}</h3>
@@ -767,7 +767,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <>
                   {/* Upload Area */}
                   <div
-                    className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center cursor-pointer hover:border-[#c01226] hover:bg-red-50/20 transition-all"
+                    className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center cursor-pointer hover:border-[#0B6F6D] hover:bg-[#F4F9F9]/20 transition-all"
                     onClick={() => fileInputRef.current?.click()}
                   >
                     {prescriptionPreview ? (
@@ -782,7 +782,7 @@ const Navbar: React.FC<NavbarProps> = ({
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        <div className="w-14 h-14 mx-auto rounded-2xl bg-red-50 flex items-center justify-center text-[#c01226]">
+                        <div className="w-14 h-14 mx-auto rounded-2xl bg-[#F4F9F9] flex items-center justify-center text-[#0B6F6D]">
                           <Upload className="w-7 h-7" />
                         </div>
                         <div>
@@ -825,7 +825,7 @@ const Navbar: React.FC<NavbarProps> = ({
                       type="button"
                       disabled={!prescriptionFile || prescriptionUploading}
                       onClick={handlePrescriptionUpload}
-                      className="flex-1 py-3 bg-[#c01226] text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
+                      className="flex-1 py-3 bg-[#0B6F6D] text-white rounded-xl font-bold hover:bg-[#0B5C5A] transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
                     >
                       {prescriptionUploading ? (
                         <>

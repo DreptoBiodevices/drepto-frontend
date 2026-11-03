@@ -49,7 +49,7 @@ const FeedbackPage: React.FC = () => {
             <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-6">
                 <div className="max-w-md w-full text-center animate-fade-in-up">
                     <div className="bg-white rounded-3xl shadow-xl p-10 border border-slate-200">
-                        <div className="w-20 h-20 bg-[#c01226] rounded-full flex items-center justify-center mx-auto mb-6 animate-zoom-in">
+                        <div className="w-20 h-20 bg-[#0B6F6D] rounded-full flex items-center justify-center mx-auto mb-6 animate-zoom-in">
                             <CheckCircle className="w-10 h-10 text-white" />
                         </div>
                         <h2 className="text-2xl font-bold text-gray-800 font-display mb-3">Thank You!</h2>
@@ -59,7 +59,7 @@ const FeedbackPage: React.FC = () => {
                         <div className="flex flex-col gap-3">
                             <button
                                 onClick={() => setSubmitState('idle')}
-                                className="w-full py-3 bg-[#c01226] hover:bg-red-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:opacity-95"
+                                className="w-full py-3 bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:opacity-95"
                             >
                                 Submit Another
                             </button>
@@ -82,7 +82,7 @@ const FeedbackPage: React.FC = () => {
                 {/* Back Link */}
                 <Link
                     to="/"
-                    className="inline-flex items-center gap-2 text-gray-500 hover:text-[#c01226] transition-colors mb-6 text-sm font-medium"
+                    className="inline-flex items-center gap-2 text-gray-500 hover:text-[#0B6F6D] transition-colors mb-6 text-sm font-medium"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     Back to Home
@@ -139,7 +139,7 @@ const FeedbackPage: React.FC = () => {
                         {/* Name */}
                         <div>
                             <label htmlFor="feedback-name" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                                Your Name <span className="text-red-400">*</span>
+                                Your Name <span className="text-[#E17C61]">*</span>
                             </label>
                             <input
                                 id="feedback-name"
@@ -148,7 +148,7 @@ const FeedbackPage: React.FC = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 required
                                 placeholder="John Doe"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c01226] focus:ring-2 focus:ring-[#c01226]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0B6F6D] focus:ring-2 focus:ring-[#0B6F6D]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
                             />
                         </div>
 
@@ -163,14 +163,14 @@ const FeedbackPage: React.FC = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="you@example.com"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c01226] focus:ring-2 focus:ring-[#c01226]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0B6F6D] focus:ring-2 focus:ring-[#0B6F6D]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300"
                             />
                         </div>
 
                         {/* Message */}
                         <div>
                             <label htmlFor="feedback-message" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                                Your Feedback <span className="text-red-400">*</span>
+                                Your Feedback <span className="text-[#E17C61]">*</span>
                             </label>
                             <textarea
                                 id="feedback-message"
@@ -179,13 +179,13 @@ const FeedbackPage: React.FC = () => {
                                 required
                                 rows={4}
                                 placeholder="Tell us about your experience…"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#c01226] focus:ring-2 focus:ring-[#c01226]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300 resize-none"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0B6F6D] focus:ring-2 focus:ring-[#0B6F6D]/20 outline-none transition-all text-gray-800 placeholder:text-gray-300 resize-none"
                             />
                         </div>
 
                         {/* Error Message */}
                         {(errorMessage || submitState === 'error') && (
-                            <div className="flex items-center gap-2 text-red-500 bg-red-50 px-4 py-3 rounded-xl text-sm">
+                            <div className="flex items-center gap-2 text-[#C86146] bg-[#FDF7F5] px-4 py-3 rounded-xl text-sm border border-[#F8D4CB]">
                                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                                 <span>{errorMessage || 'Something went wrong. Please try again.'}</span>
                             </div>
@@ -195,7 +195,7 @@ const FeedbackPage: React.FC = () => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full py-3.5 bg-[#c01226] hover:bg-red-700 text-white rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full py-3.5 bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {isSubmitting ? (
                                 <>

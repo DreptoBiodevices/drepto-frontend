@@ -104,19 +104,19 @@ const OrderHistoryPage: React.FC = () => {
         <div className="flex overflow-x-auto space-x-2 border-b border-gray-200 mb-8 pb-2 scrollbar-hide">
             <button
                 onClick={() => setActiveTab('products')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'products' ? 'bg-[#c01226] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'products' ? 'bg-[#0B6F6D] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
             >
                 <Package className="w-4 h-4" /> Product Orders
             </button>
             <button
                 onClick={() => setActiveTab('doctor')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'doctor' ? 'bg-[#c01226] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'doctor' ? 'bg-[#0B6F6D] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
             >
                 <Stethoscope className="w-4 h-4" /> Doctor Appointments
             </button>
             <button
                 onClick={() => setActiveTab('nurse')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'nurse' ? 'bg-[#c01226] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'nurse' ? 'bg-[#0B6F6D] text-white shadow-sm font-bold' : 'text-gray-600 hover:bg-gray-100'}`}
             >
                 <FileText className="w-4 h-4" /> Nurse Appointments
             </button>
@@ -161,7 +161,7 @@ const OrderHistoryPage: React.FC = () => {
                                     <div className="flex items-center gap-3 flex-wrap">
                                         <h3 className="font-bold text-gray-900 text-lg">Order #{order.id}</h3>
                                         <span className={`px-2 py-0.5 text-xs font-bold rounded-full border ${
-                                            (order.status as string) === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200' :
+                                            (order.status as string) === 'Cancelled' ? 'bg-[#FDF7F5] text-[#C86146] border-[#F8D4CB]' :
                                             order.status === 'Delivered' ? 'bg-green-50 text-green-700 border-green-100' :
                                             'bg-blue-50 text-blue-700 border-blue-100'
                                         }`}>
@@ -194,7 +194,7 @@ const OrderHistoryPage: React.FC = () => {
                                             e.stopPropagation();
                                             setShowCancelConfirm(order.id);
                                         }}
-                                        className="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors flex items-center gap-1"
+                                        className="px-3 py-1.5 text-xs font-medium text-[#E17C61] bg-[#FDF7F5] border border-[#F8D4CB] rounded-lg hover:bg-[#FCECE8] transition-colors flex items-center gap-1"
                                     >
                                         <XCircle className="w-3.5 h-3.5" /> Cancel Order
                                     </button>
@@ -204,7 +204,7 @@ const OrderHistoryPage: React.FC = () => {
                                         e.stopPropagation();
                                         navigate(`/invoice/${order.id}`);
                                     }}
-                                    className="px-3 py-1.5 text-xs font-medium text-[#c01226] bg-red-50 font-bold border border-red-200 rounded-lg hover:bg-[#c01226]/20 transition-colors"
+                                    className="px-3 py-1.5 text-xs font-medium text-[#0B6F6D] bg-[#F4F9F9] font-bold border border-[#D0E6E6] rounded-lg hover:bg-[#0B6F6D]/20 transition-colors"
                                 >
                                     View Invoice
                                 </button>
@@ -230,10 +230,10 @@ const OrderHistoryPage: React.FC = () => {
 
                         {/* Cancel Confirmation Inline Panel */}
                         {showCancelConfirm === order.id && (
-                            <div className="border-t border-red-100 bg-red-50 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fade-in">
+                            <div className="border-t border-[#F8D4CB] bg-[#FDF7F5] p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fade-in">
                                 <div>
-                                    <p className="font-semibold text-red-800 text-sm">Cancel this order?</p>
-                                    <p className="text-red-700 text-xs mt-1">If already paid, your refund of <strong>₹{order.total.toFixed(2)}</strong> will be credited within <strong>{REFUND_PROCESSING_TIME}</strong> to your original payment method.</p>
+                                    <p className="font-semibold text-[#A64B33] text-sm">Cancel this order?</p>
+                                    <p className="text-[#C86146] text-xs mt-1">If already paid, your refund of <strong>₹{order.total.toFixed(2)}</strong> will be credited within <strong>{REFUND_PROCESSING_TIME}</strong> to your original payment method.</p>
                                 </div>
                                 <div className="flex gap-2 flex-shrink-0">
                                     <button
@@ -245,7 +245,7 @@ const OrderHistoryPage: React.FC = () => {
                                     <button
                                         onClick={() => handleCancelOrder(order.id)}
                                         disabled={cancellingOrderId === order.id}
-                                        className="px-4 py-2 bg-red-600 text-white font-bold rounded-lg text-sm hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-1.5"
+                                        className="px-4 py-2 bg-[#E17C61] hover:bg-[#C86146] text-white font-bold rounded-lg text-sm transition-colors disabled:opacity-50 flex items-center gap-1.5"
                                     >
                                         {cancellingOrderId === order.id ? (
                                             <><div className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Cancelling...</>
@@ -393,7 +393,7 @@ const OrderHistoryPage: React.FC = () => {
 
                 {isLoading ? (
                     <div className="text-center py-20">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#c01226] mx-auto"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0B6F6D] mx-auto"></div>
                         <p className="mt-4 text-gray-500">Loading data...</p>
                     </div>
                 ) : (

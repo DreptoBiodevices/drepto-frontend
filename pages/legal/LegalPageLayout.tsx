@@ -17,7 +17,7 @@ const LegalPageLayout: React.FC<LegalPageLayoutProps> = ({ title, lastUpdated, c
                 {/* Luminous Healthcare Hero */}
                 <div className="bg-gradient-to-b from-[#f8f9fa] via-white to-[#f1f3f6] py-14 sm:py-20 px-4 sm:px-8 border-b border-slate-200/80 relative overflow-hidden">
                     <div className="max-w-4xl mx-auto relative z-10 text-center">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4F9F9] border border-[#D0E6E6]/90 text-[#0B6F6D] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
                             Legal &amp; Compliance
                         </div>
                         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 mb-4 font-display">

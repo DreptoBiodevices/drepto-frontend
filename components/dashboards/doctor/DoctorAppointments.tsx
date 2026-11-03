@@ -154,7 +154,7 @@ const DoctorAppointments: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
     const renderAppointmentItem = (appt: Appointment) => (
         <div key={appt.id} className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-start md:items-center gap-6 hover:shadow-lg transition-all duration-300 group relative overflow-hidden">
-            <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${appt.status === 'Upcoming' ? 'bg-blue-500' : appt.status === 'Completed' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${appt.status === 'Upcoming' ? 'bg-blue-500' : appt.status === 'Completed' ? 'bg-green-500' : 'bg-[#E17C61]'}`}></div>
             
             {/* Patient Details */}
             <div className="flex items-center gap-4 flex-1 w-full md:w-auto">
@@ -184,12 +184,12 @@ const DoctorAppointments: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="flex gap-3 w-full md:w-auto mt-2 md:mt-0 pt-4 md:pt-0 border-t md:border-none border-gray-100">
                 {appt.status === 'Upcoming' && (
                     <>
-                        <button className="flex-1 md:flex-none px-4 py-2 rounded-xl border border-gray-200 text-gray-600 font-bold text-xs hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">Cancel</button>
+                        <button className="flex-1 md:flex-none px-4 py-2 rounded-xl border border-gray-200 text-gray-600 font-bold text-xs hover:bg-[#F4F9F9] hover:text-red-500 hover:border-[#D0E6E6] transition-all">Cancel</button>
                         <button className="flex-1 md:flex-none px-4 py-2 rounded-xl bg-primary text-white font-bold text-xs hover:bg-blue-600 shadow-md shadow-blue-200 transition-all">Reschedule</button>
                     </>
                 )}
                 {appt.status !== 'Upcoming' && (
-                    <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${appt.status === 'Completed' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                    <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${appt.status === 'Completed' ? 'bg-green-100 text-green-600' : 'bg-[#FDF7F5] text-[#C86146]'}`}>
                         {appt.status}
                     </span>
                 )}

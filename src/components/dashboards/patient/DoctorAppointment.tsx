@@ -460,12 +460,12 @@ const DoctorAppointment: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             </div>
                         </div>
                         <div className="flex flex-col items-center sm:items-end gap-2 w-full sm:w-auto border-t sm:border-t-0 border-gray-100 pt-4 sm:pt-0">
-                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${appt.status === 'Upcoming' ? 'bg-green-100 text-green-600' : appt.status === 'Completed' ? 'bg-gray-100 text-gray-500' : 'bg-red-100 text-red-500'}`}>
+                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${appt.status === 'Upcoming' ? 'bg-green-100 text-green-600' : appt.status === 'Completed' ? 'bg-gray-100 text-gray-500' : 'bg-[#FDF7F5] text-[#C86146]'}`}>
                                 {appt.status}
                             </span>
                             {appt.status === 'Upcoming' && (
                                 <div className="flex gap-2 w-full sm:w-auto">
-                                    <button className="flex-1 sm:flex-none px-4 py-2 text-sm font-bold text-gray-500 hover:text-red-500 bg-gray-50 rounded-xl hover:bg-red-50 transition-colors">Cancel</button>
+                                    <button className="flex-1 sm:flex-none px-4 py-2 text-sm font-bold text-gray-500 hover:text-red-500 bg-gray-50 rounded-xl hover:bg-[#F4F9F9] transition-colors">Cancel</button>
                                     <button onClick={() => handleRescheduleClick(appt)} className="flex-1 sm:flex-none px-4 py-2 text-sm font-bold text-white bg-primary rounded-xl hover:bg-blue-600 transition-colors shadow-sm">Reschedule</button>
                                 </div>
                             )}

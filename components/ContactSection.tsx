@@ -58,16 +58,16 @@ const ContactSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 max-w-6xl mx-auto items-stretch">
 
           {/* Left Column: Corporate & Laboratory Information */}
-          <div className="lg:col-span-5 bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-300/90 flex flex-col justify-between shadow-2xs">
+          <div className="lg:col-span-5 bg-[#F4F9F9] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-[#D0E6E6] flex flex-col justify-between shadow-2xs">
             <div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-4 sm:mb-6 font-display">
-                Drepto Biodevices <span className="text-[#c01226]">Pvt. Ltd.</span>
+                Drepto Biodevices <span className="text-[#0B6F6D]">Pvt. Ltd.</span>
               </h3>
 
               <div className="space-y-6 text-sm text-slate-700">
                 {/* R&D Lab */}
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#0B6F6D] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                     <Building2 className="w-5 h-5" />
                   </div>
                   <div>
@@ -80,7 +80,7 @@ const ContactSection: React.FC = () => {
 
                 {/* Registered Office */}
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#0B6F6D] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
@@ -93,7 +93,7 @@ const ContactSection: React.FC = () => {
 
                 {/* Email Contacts */}
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#c01226] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-[#0B6F6D] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
@@ -118,7 +118,7 @@ const ContactSection: React.FC = () => {
               </div>
               <div className="flex justify-between text-slate-500">
                 <span className="font-bold text-slate-700">Incubator:</span>
-                <span className="text-[#c01226] font-semibold">SINE, IIT Bombay</span>
+                <span className="text-[#0B6F6D] font-semibold">SINE, IIT Bombay</span>
               </div>
             </div>
           </div>
@@ -151,7 +151,7 @@ const ContactSection: React.FC = () => {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                  <div className="bg-red-50 text-red-700 border border-red-200 p-3 rounded-xl text-xs font-semibold">
+                  <div className="bg-[#FDF7F5] text-[#C86146] border border-[#F8D4CB] p-3 rounded-xl text-xs font-semibold">
                     {error}
                   </div>
                 )}
@@ -168,7 +168,7 @@ const ContactSection: React.FC = () => {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="e.g. Dr. Priya Verma"
-                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors"
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0B6F6D] focus:bg-white transition-colors"
                     />
                   </div>
 
@@ -183,7 +183,7 @@ const ContactSection: React.FC = () => {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="name@organization.com"
-                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors"
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0B6F6D] focus:bg-white transition-colors"
                     />
                   </div>
                 </div>
@@ -199,7 +199,7 @@ const ContactSection: React.FC = () => {
                       value={formData.contactNumber}
                       onChange={handleChange}
                       placeholder="+91 98765 43210"
-                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors"
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0B6F6D] focus:bg-white transition-colors"
                     />
                   </div>
 
@@ -212,7 +212,7 @@ const ContactSection: React.FC = () => {
                       required
                       value={formData.subject}
                       onChange={handleChange}
-                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors text-slate-700"
+                      className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0B6F6D] focus:bg-white transition-colors text-slate-700"
                     >
                       <option value="">Select Category</option>
                       <option value="MenstroHerb Order / Feedback">MenstroHerb Order &amp; Product Support</option>
@@ -235,7 +235,7 @@ const ContactSection: React.FC = () => {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Tell us about your query or how you would like to collaborate..."
-                    className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#c01226] focus:bg-white transition-colors resize-none"
+                    className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0B6F6D] focus:bg-white transition-colors resize-none"
                   />
                 </div>
 

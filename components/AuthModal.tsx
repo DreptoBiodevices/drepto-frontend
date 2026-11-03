@@ -29,7 +29,7 @@ const AuthModal: React.FC = () => {
           <img src="/images/logo.png" alt="Drepto Logo" className="h-8 object-contain" />
           <button 
             onClick={close}
-            className="p-2 bg-gray-50 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm border border-gray-100"
+            className="p-2 bg-gray-50 rounded-full text-gray-400 hover:text-red-500 hover:bg-[#F4F9F9] transition-all shadow-sm border border-gray-100"
           >
             <X className="w-5 h-5" />
           </button>

@@ -52,7 +52,7 @@ const Login: React.FC<LoginProps> = ({ onToggleView, hideBackButton }) => {
             type="text"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
           />
         </div>
         <div>
@@ -62,7 +62,7 @@ const Login: React.FC<LoginProps> = ({ onToggleView, hideBackButton }) => {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#c01226]"
+              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B6F6D]/20 focus:border-[#0B6F6D]"
             />
             <button
               type="button"
@@ -74,11 +74,11 @@ const Login: React.FC<LoginProps> = ({ onToggleView, hideBackButton }) => {
             </button>
           </div>
         </div>
-        {error && <p className="text-red-500 text-sm bg-red-50 p-2 rounded-lg border border-red-100 flex items-center gap-2">
+        {error && <p className="text-[#C86146] text-sm bg-[#FDF7F5] p-2 rounded-lg border border-[#F8D4CB] flex items-center gap-2">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           {error}
         </p>}
-        <button type="submit" className="w-full bg-[#c01226] text-white font-bold py-3.5 rounded-xl hover:bg-red-700 transition-all shadow-lg hover:shadow-red-900/20 transform hover:-translate-y-0.5">
+        <button type="submit" className="w-full bg-[#0B6F6D] text-white font-bold py-3.5 rounded-xl hover:bg-[#0B5C5A] transition-all shadow-lg hover:shadow-[#0B6F6D]/20 transform hover:-translate-y-0.5">
           Sign In
         </button>
 
@@ -119,7 +119,7 @@ const Login: React.FC<LoginProps> = ({ onToggleView, hideBackButton }) => {
       </form>
       <p className="text-center text-sm text-gray-600 mt-6">
         Don't have an account?{' '}
-        <button onClick={onToggleView} className="font-semibold text-[#c01226] hover:underline font-semibold">
+        <button onClick={onToggleView} className="font-semibold text-[#0B6F6D] hover:underline font-semibold">
           Sign Up
         </button>
       </p>

@@ -107,14 +107,14 @@ const TestimonialsPreview: React.FC = () => {
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={goPrev}
-              className="p-3 rounded-full bg-white text-slate-700 hover:text-[#c01226] hover:bg-red-50/50 border border-slate-200 shadow-2xs transition-all cursor-pointer"
+              className="p-3 rounded-full bg-white text-slate-700 hover:text-[#0B6F6D] hover:bg-[#F4F9F9]/50 border border-slate-200 shadow-2xs transition-all cursor-pointer"
               aria-label="Previous Testimonial"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={goNext}
-              className="p-3 rounded-full bg-white text-slate-700 hover:text-[#c01226] hover:bg-red-50/50 border border-slate-200 shadow-2xs transition-all cursor-pointer"
+              className="p-3 rounded-full bg-white text-slate-700 hover:text-[#0B6F6D] hover:bg-[#F4F9F9]/50 border border-slate-200 shadow-2xs transition-all cursor-pointer"
               aria-label="Next Testimonial"
             >
               <ChevronRight className="w-5 h-5" />
@@ -123,7 +123,7 @@ const TestimonialsPreview: React.FC = () => {
         </div>
 
         {/* ── Corporate Quote Card: Emcure MD Aesthetic ── */}
-        <div className="relative bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 shadow-sm border border-slate-300/90 transition-all">
+        <div className="relative bg-[#F4F9F9] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 shadow-sm border border-[#D0E6E6] transition-all">
           
           {/* Top Red Quotation Mark & Horizontal Accent Line */}
           <div className="flex flex-wrap items-center gap-3 mb-6 sm:mb-8">
@@ -180,7 +180,7 @@ const TestimonialsPreview: React.FC = () => {
                 key={idx}
                 onClick={() => goTo(idx)}
                 className={`h-2 rounded-full transition-all cursor-pointer ${
-                  activeIndex === idx ? 'w-8 bg-[#c01226]' : 'w-2 bg-slate-300 hover:bg-slate-400'
+                  activeIndex === idx ? 'w-8 bg-[#0B6F6D]' : 'w-2 bg-slate-300 hover:bg-slate-400'
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />

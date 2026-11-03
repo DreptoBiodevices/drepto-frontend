@@ -49,7 +49,7 @@ const AdminSidebar: React.FC<Props & { isOpen: boolean; onClose: () => void }> =
       `}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-gray-100">
-          <div className="w-8 h-8 rounded-lg bg-[#c01226] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-[#0B6F6D] flex items-center justify-center">
             <span className="text-white text-xs font-bold">D</span>
           </div>
           <div className="min-w-0">
@@ -73,7 +73,7 @@ const AdminSidebar: React.FC<Props & { isOpen: boolean; onClose: () => void }> =
                     <button key={id} onClick={() => handleNav(id)}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                         activeTab === id
-                          ? 'bg-[#c01226] text-white shadow-sm shadow-red-700/20'
+                          ? 'bg-[#0B6F6D] text-white shadow-sm shadow-[#0B6F6D]/20'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       }`}>
                       <Icon className="w-4 h-4 shrink-0" />
@@ -89,7 +89,7 @@ const AdminSidebar: React.FC<Props & { isOpen: boolean; onClose: () => void }> =
         {/* Logout */}
         <div className="p-3 border-t border-gray-100">
           <button onClick={logout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-[#F4F9F9] transition-colors">
             <LogOut className="w-4 h-4 shrink-0" />
             Log out
           </button>

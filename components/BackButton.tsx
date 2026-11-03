@@ -19,7 +19,7 @@ const BackButton: React.FC<BackButtonProps> = ({
     return (
         <button
             onClick={handleBack}
-            className={`flex items-center gap-2 text-gray-600 hover:text-[#c01226] transition-colors font-medium ${className}`}
+            className={`flex items-center gap-2 text-gray-600 hover:text-[#0B6F6D] transition-colors font-medium ${className}`}
             aria-label="Go back to previous page"
         >
             <svg

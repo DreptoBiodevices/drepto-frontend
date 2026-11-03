@@ -175,7 +175,7 @@ const LabTestCRUD = () => {
                         <button onClick={() => startEdit(t)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                           <EditIcon />
                         </button>
-                        <button onClick={() => remove(t.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <button onClick={() => remove(t.id)} className="p-2 text-red-600 hover:bg-[#F4F9F9] rounded-lg transition-colors">
                           <TrashIcon />
                         </button>
                       </div>

@@ -73,7 +73,7 @@ const InvoicePage: React.FC = () => {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="flex flex-col items-center">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#c01226] mb-4"></div>
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#0B6F6D] mb-4"></div>
                     <p className="text-gray-500 font-medium">Loading invoice...</p>
                 </div>
             </div>
@@ -86,7 +86,7 @@ const InvoicePage: React.FC = () => {
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-800">Order Not Found</h2>
                     <p className="text-gray-500 mt-2">The requested invoice could not be retrieved.</p>
-                    <button onClick={handleBack} className="mt-4 text-[#c01226] hover:underline font-medium">
+                    <button onClick={handleBack} className="mt-4 text-[#0B6F6D] hover:underline font-medium">
                         Return {localStorage.getItem('adminAuth') === 'true' ? 'to Admin Portal' : 'to Orders'}
                     </button>
                 </div>
@@ -112,7 +112,7 @@ const InvoicePage: React.FC = () => {
                         <ArrowLeft className="w-4 h-4" /> Back {localStorage.getItem('adminAuth') === 'true' ? 'to Admin Portal' : 'to Orders'}
                     </button>
                     <div className="flex gap-3">
-                        <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-[#c01226] rounded-xl text-sm font-bold hover:bg-red-700 shadow-md transition-colors">
+                        <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-[#0B6F6D] rounded-xl text-sm font-bold hover:bg-[#0B5C5A] shadow-md transition-colors">
                             <Printer className="w-4 h-4" /> Print Invoice
                         </button>
                     </div>

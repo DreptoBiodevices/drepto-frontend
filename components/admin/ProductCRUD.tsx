@@ -366,7 +366,7 @@ const ProductCRUD: React.FC = () => {
                                                     </button>
                                                     <button
                                                         onClick={() => handleDeleteClick(product.id || product._id || '')}
-                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                                                        className="p-2 text-red-600 hover:bg-[#F4F9F9] rounded-lg transition-colors border border-transparent hover:border-[#D0E6E6]"
                                                         title="Delete"
                                                     >
                                                         <Trash2 className="w-4 h-4" />

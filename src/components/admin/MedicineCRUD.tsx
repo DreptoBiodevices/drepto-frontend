@@ -230,7 +230,7 @@ const MedicineCRUD = () => {
                         <button onClick={() => startEdit(m)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                           <EditIcon />
                         </button>
-                        <button onClick={() => remove(m.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <button onClick={() => remove(m.id)} className="p-2 text-red-600 hover:bg-[#F4F9F9] rounded-lg transition-colors">
                           <TrashIcon />
                         </button>
                       </div>
@@ -268,7 +268,7 @@ const MedicineCRUD = () => {
       </div>
 
       <div className="p-8 space-y-8">
-        {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg border border-red-100 text-sm">{error}</div>}
+        {error && <div className="p-3 bg-[#FDF7F5] text-[#C86146] rounded-lg border border-[#F8D4CB] text-sm">{error}</div>}
 
         {/* Section 1: Basic Stats */}
         <section className="space-y-4">

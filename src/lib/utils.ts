@@ -42,7 +42,7 @@ export function getRandomColor() {
     'bg-pink-500',
     'bg-indigo-500',
     'bg-yellow-500',
-    'bg-red-500',
+    'bg-[#E17C61]',
     'bg-teal-500',
   ];
   return colors[Math.floor(Math.random() * colors.length)];

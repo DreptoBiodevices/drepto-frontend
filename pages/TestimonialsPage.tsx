@@ -57,12 +57,12 @@ const TestimonialsPage: React.FC = () => {
                 <div className="container mx-auto px-6 text-center relative z-10">
                     <Link
                         to="/"
-                        className="inline-flex items-center gap-2 text-slate-500 hover:text-[#c01226] transition-colors mb-6 text-sm font-semibold"
+                        className="inline-flex items-center gap-2 text-slate-500 hover:text-[#0B6F6D] transition-colors mb-6 text-sm font-semibold"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Back to Home
                     </Link>
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200/90 text-[#c01226] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs mx-auto">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4F9F9] border border-[#D0E6E6]/90 text-[#0B6F6D] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs mx-auto">
                         <span>CLINICAL &amp; PATIENT FEEDBACK</span>
                     </div>
                     <h1 className="text-3xl md:text-5xl font-black text-slate-900 font-display mb-4">
@@ -75,11 +75,11 @@ const TestimonialsPage: React.FC = () => {
                     {/* Stats */}
                     {testimonials.length > 0 && (
                         <div className="flex items-center justify-center gap-8 flex-wrap">
-                            <div className="bg-[#ebedf1] rounded-[2rem] px-8 py-5 border border-slate-200/80 shadow-2xs">
+                            <div className="bg-[#F4F9F9] rounded-[2rem] px-8 py-5 border border-[#D0E6E6]/80 shadow-2xs">
                                 <div className="text-3xl font-black text-slate-900 font-display">{averageRating}</div>
                                 <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Average Rating</div>
                             </div>
-                            <div className="bg-[#ebedf1] rounded-[2rem] px-8 py-5 border border-slate-200/80 shadow-2xs">
+                            <div className="bg-[#F4F9F9] rounded-[2rem] px-8 py-5 border border-[#D0E6E6]/80 shadow-2xs">
                                 <div className="text-3xl font-black text-slate-900 font-display">{testimonials.length}</div>
                                 <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Verified Reviews</div>
                             </div>
@@ -98,7 +98,7 @@ const TestimonialsPage: React.FC = () => {
                         <button
                             onClick={() => setFilter(null)}
                             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${filter === null
-                                    ? 'bg-[#c01226] text-white shadow-md'
+                                    ? 'bg-[#0B6F6D] text-white shadow-md'
                                     : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                                 }`}
                         >
@@ -109,7 +109,7 @@ const TestimonialsPage: React.FC = () => {
                                 key={r}
                                 onClick={() => setFilter(filter === r ? null : r)}
                                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${filter === r
-                                        ? 'bg-[#c01226] text-white shadow-md'
+                                        ? 'bg-[#0B6F6D] text-white shadow-md'
                                         : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                                     }`}
                             >
@@ -121,7 +121,7 @@ const TestimonialsPage: React.FC = () => {
                     {/* CTA */}
                     <Link
                         to="/feedback"
-                        className="flex items-center gap-2 bg-[#c01226] hover:bg-red-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all hover:opacity-95 whitespace-nowrap"
+                        className="flex items-center gap-2 bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all hover:opacity-95 whitespace-nowrap"
                     >
                         <MessageSquarePlus className="w-4 h-4" />
                         Leave Your Feedback
@@ -133,7 +133,7 @@ const TestimonialsPage: React.FC = () => {
             <section className="container mx-auto px-6 py-12">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <div className="w-8 h-8 border-3 border-red-500/20 border-t-[#c01226] rounded-full animate-spin" />
+                        <div className="w-8 h-8 border-3 border-[#0B6F6D]/20 border-t-[#0B6F6D] rounded-full animate-spin" />
                     </div>
                 ) : filteredTestimonials.length === 0 ? (
                     <div className="text-center py-20">
@@ -148,7 +148,7 @@ const TestimonialsPage: React.FC = () => {
                         </p>
                         <Link
                             to="/feedback"
-                            className="inline-flex items-center gap-2 bg-[#c01226] text-white px-6 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all"
+                            className="inline-flex items-center gap-2 bg-[#0B6F6D] text-white px-6 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all"
                         >
                             <MessageSquarePlus className="w-4 h-4" />
                             Leave Your Feedback
@@ -159,11 +159,11 @@ const TestimonialsPage: React.FC = () => {
                         {filteredTestimonials.map((testimonial, index) => (
                             <div
                                 key={testimonial.id || index}
-                                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-red-200 transition-all duration-300 group"
+                                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#D0E6E6] transition-all duration-300 group"
                                 style={{ animationDelay: `${index * 0.1}s` }}
                             >
                                 {/* Quote Mark */}
-                                <div className="text-5xl font-serif text-[#c01226]/10 leading-none mb-2 group-hover:text-[#c01226]/20 transition-colors">
+                                <div className="text-5xl font-serif text-[#0B6F6D]/10 leading-none mb-2 group-hover:text-[#0B6F6D]/20 transition-colors">
                                     "
                                 </div>
 

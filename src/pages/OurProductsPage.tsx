@@ -289,7 +289,7 @@ const OurProductsPage: React.FC = () => {
                 contact: user?.mobileNumber || ""
             },
             theme: {
-                color: "#c01226"
+                color: "#0B6F6D"
             }
         };
 
@@ -308,7 +308,7 @@ const OurProductsPage: React.FC = () => {
             <main className="flex-grow">
                 {/* ── Luminous Healthcare Hero Banner ── */}
                 <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#f8f9fa] via-white to-[#f1f3f6] border-b border-slate-200/80 mb-10 sm:mb-14">
-                    <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
+                    <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0B6F6D]/5 rounded-full blur-[100px] pointer-events-none" />
                     <div className="absolute -bottom-10 left-10 w-96 h-96 bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-4xl">
@@ -318,7 +318,7 @@ const OurProductsPage: React.FC = () => {
                         </div>
                         <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
                             Targeted Bio-Delivery for{' '}
-                            <span className="text-[#c01226]">
+                            <span className="text-[#0B6F6D]">
                                 Women &amp; Beyond
                             </span>
                         </h1>
@@ -338,7 +338,7 @@ const OurProductsPage: React.FC = () => {
 
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#c01226]"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0B6F6D]"></div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -387,7 +387,7 @@ const OurProductsPage: React.FC = () => {
                                         </div>
                                     )}
                                     <h3
-                                        className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-[#c01226] transition-colors"
+                                        className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-[#0B6F6D] transition-colors"
                                         onClick={() => navigate(`/product/${product._id}`)}
                                     >
                                         {product.name}
@@ -426,7 +426,7 @@ const OurProductsPage: React.FC = () => {
                                                     <div className="w-full flex items-center justify-between border-2 border-yellow-400 rounded-full h-[44px] overflow-hidden bg-white mb-1.5 shadow-sm">
                                                         <button 
                                                             onClick={(e) => decrementCart(product.name, e)}
-                                                            className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-red-600"
+                                                            className="h-full px-4 flex items-center justify-center hover:bg-gray-100 transition-colors border-r border-gray-300 text-gray-700 hover:text-[#0B6F6D]"
                                                         >
                                                             {getProductCountInCart(product.name) === 1 ? (
                                                                 <Trash2 className="w-5 h-5" />
@@ -481,7 +481,7 @@ const OurProductsPage: React.FC = () => {
                                             
                                             <button
                                                 onClick={(e) => buyNow(product, e)}
-                                                className="w-full py-2.5 px-4 bg-[#c01226] hover:bg-red-700 shadow-md font-bold text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
+                                                className="w-full py-2.5 px-4 bg-[#0B6F6D] hover:bg-[#0B5C5A] shadow-md font-bold text-white rounded-xl font-medium transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
                                             >
                                                 {(() => {
                                                     const qty = getProductCountInCart(product.name);
@@ -499,7 +499,7 @@ const OurProductsPage: React.FC = () => {
                                         </div>
                                         {/* <button
                                             onClick={() => addToCart(product)}
-                                            className="bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-[#c01226] transition-colors shadow-md group-active:scale-95 flex items-center gap-2 font-medium"
+                                            className="bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-[#0B6F6D] transition-colors shadow-md group-active:scale-95 flex items-center gap-2 font-medium"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
                                             Add
@@ -552,7 +552,7 @@ const OurProductsPage: React.FC = () => {
                             <div className="space-y-4">
                                 <h4 className="font-bold text-gray-800">Step 2: Payment</h4>
                                 <label className="flex items-start gap-3 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
-                                    <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${formFilled ? 'bg-[#c01226] border-[#c01226] text-white' : 'border-gray-300 bg-white'}`}>
+                                    <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${formFilled ? 'bg-[#0B6F6D] border-[#0B6F6D] text-white' : 'border-gray-300 bg-white'}`}>
                                         {formFilled && <CheckCircle className="w-3.5 h-3.5" />}
                                     </div>
                                     <input

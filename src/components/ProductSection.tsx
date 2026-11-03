@@ -74,7 +74,7 @@ const ProductSection: React.FC = () => {
         </div>
 
         {/* ── FLAGSHIP PRODUCT HERO SPOTLIGHT: MENSTROHERB ── */}
-        <div className="relative bg-[#ebedf1] rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 shadow-sm border border-slate-300/90 mb-10 sm:mb-14">
+        <div className="relative bg-[#F4F9F9] rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 shadow-sm border border-[#D0E6E6] mb-10 sm:mb-14">
           
           {/* Top Red Quotation & Line Accent */}
           <div className="flex flex-wrap items-center gap-3 mb-6 sm:mb-8">
@@ -91,7 +91,7 @@ const ProductSection: React.FC = () => {
               <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/3] sm:aspect-square flex-shrink-0">
                 {/* Red L-shaped Corner Accent Bracket */}
                 <div
-                  className="absolute -bottom-2.5 -left-2.5 sm:-bottom-3.5 sm:-left-3.5 w-16 sm:w-20 h-24 sm:h-28 border-b-4 border-l-4 sm:border-b-[5px] sm:border-l-[5px] border-[#c01226] rounded-bl-2xl pointer-events-none z-10"
+                  className="absolute -bottom-2.5 -left-2.5 sm:-bottom-3.5 sm:-left-3.5 w-16 sm:w-20 h-24 sm:h-28 border-b-4 border-l-4 sm:border-b-[5px] sm:border-l-[5px] border-[#0B6F6D] rounded-bl-2xl pointer-events-none z-10"
                   aria-hidden="true"
                 />
 
@@ -99,7 +99,7 @@ const ProductSection: React.FC = () => {
                 <div className="w-full h-full bg-white rounded-2xl border border-slate-300 shadow-sm p-3.5 sm:p-5 flex flex-col justify-between overflow-hidden relative group">
                   {/* Top Bar with Badges */}
                   <div className="flex justify-between items-center z-10">
-                    <div className="px-3 py-1 rounded-md bg-[#c01226] text-white text-[10px] sm:text-[11px] font-bold tracking-wider uppercase shadow-xs flex items-center gap-1.5">
+                    <div className="px-3 py-1 rounded-md bg-[#0B6F6D] text-white text-[10px] sm:text-[11px] font-bold tracking-wider uppercase shadow-xs flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                       <span>12-Hour Sustained Relief</span>
                     </div>
@@ -137,7 +137,7 @@ const ProductSection: React.FC = () => {
                         }}
                         className={`text-[10px] font-bold px-2.5 py-1 rounded-full transition-all cursor-pointer ${
                           activeImageIndex === idx
-                            ? 'bg-[#c01226] text-white shadow-xs'
+                            ? 'bg-[#0B6F6D] text-white shadow-xs'
                             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                       >
@@ -162,9 +162,9 @@ const ProductSection: React.FC = () => {
             {/* Right Column: Product Narrative & Clinical Advantages */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight font-display">
-                Drepto MenstroHerb<span className="text-[#c01226]">™</span> Transdermal Patch
+                Drepto MenstroHerb<span className="text-[#0B6F6D]">™</span> Transdermal Patch
               </h3>
-              <p className="text-xs sm:text-sm font-bold text-[#c01226] uppercase tracking-wider mt-1 mb-4">
+              <p className="text-xs sm:text-sm font-bold text-[#0B6F6D] uppercase tracking-wider mt-1 mb-4">
                 Targeted Relief for Primary &amp; Secondary Dysmenorrhea
               </p>
 
@@ -181,19 +181,19 @@ const ProductSection: React.FC = () => {
                   </span>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-xs sm:text-sm font-semibold text-slate-800">
                     <strong>12-Hour Continuous Relief</strong> with sub-30 min rapid onset
                   </span>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-xs sm:text-sm font-semibold text-slate-800">
                     <strong>Discreet &amp; Skin-Toned</strong> (Wearable undetected under any outfit)
                   </span>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-[#c01226] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#0B6F6D] shrink-0 mt-0.5" />
                   <span className="text-xs sm:text-sm font-semibold text-slate-800">
                     <strong>0.00 Non-Irritant Score</strong> (ISO 10993-23 Certified)
                   </span>
@@ -204,7 +204,7 @@ const ProductSection: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 w-full">
                 <button
                   onClick={() => navigate('/our-products')}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#c01226] hover:bg-red-700 text-white font-bold text-sm tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white font-bold text-sm tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <ShoppingBag className="w-4 h-4" />
                   <span>Order MenstroHerb Online</span>
@@ -214,7 +214,7 @@ const ProductSection: React.FC = () => {
                   className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 font-bold text-sm tracking-wide transition-all shadow-2xs flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>View Clinical Research Dossier</span>
-                  <ArrowRight className="w-4 h-4 text-[#c01226]" />
+                  <ArrowRight className="w-4 h-4 text-[#0B6F6D]" />
                 </button>
               </div>
 
@@ -231,10 +231,10 @@ const ProductSection: React.FC = () => {
           <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-300/90 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-5">
-                <div className="p-3 bg-red-50 text-[#c01226] rounded-2xl border border-red-100 group-hover:scale-105 transition-transform">
+                <div className="p-3 bg-[#F4F9F9] text-[#0B6F6D] rounded-2xl border border-[#D0E6E6] group-hover:scale-105 transition-transform">
                   <Layers className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-bold text-[#c01226] bg-red-50 border border-red-200 px-3 py-1 rounded-full">
+                <span className="text-xs font-bold text-[#0B6F6D] bg-[#F4F9F9] border border-[#D0E6E6] px-3 py-1 rounded-full">
                   Feminine Hygiene
                 </span>
               </div>
@@ -285,7 +285,7 @@ const ProductSection: React.FC = () => {
               <span className="text-xs font-mono font-medium text-slate-500">Pipeline Stage: Franz Cells</span>
               <button
                 onClick={() => navigate('/our-research')}
-                className="text-xs font-bold text-[#c01226] hover:text-red-700 flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-[#0B6F6D] hover:text-[#0B5C5A] flex items-center gap-1 cursor-pointer"
               >
                 <span>Learn More</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -297,7 +297,7 @@ const ProductSection: React.FC = () => {
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-5">
-                <div className="p-3 bg-red-50 text-[#c01226] rounded-2xl border border-red-100 group-hover:scale-105 transition-transform">
+                <div className="p-3 bg-[#F4F9F9] text-[#0B6F6D] rounded-2xl border border-[#D0E6E6] group-hover:scale-105 transition-transform">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
@@ -318,7 +318,7 @@ const ProductSection: React.FC = () => {
               <span className="text-xs font-mono font-medium text-slate-500">App: IN202521129798</span>
               <button
                 onClick={() => navigate('/contact')}
-                className="text-xs font-bold text-[#c01226] hover:text-red-700 flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-[#0B6F6D] hover:text-[#0B5C5A] flex items-center gap-1 cursor-pointer"
               >
                 <span>Partner With Us</span>
                 <ArrowRight className="w-3.5 h-3.5" />

@@ -149,7 +149,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
 
                         <div className="space-y-3">
                             <button onClick={() => handleOpenModal(null, 'profile')} className="w-full py-3 border border-gray-200 rounded-xl font-bold text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all">Edit Profile Details</button>
-                            <button onClick={logout} className="w-full py-3 bg-red-50 text-red-600 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors flex items-center justify-center gap-2">
+                            <button onClick={logout} className="w-full py-3 bg-[#F4F9F9] text-[#0B6F6D] rounded-xl font-bold text-sm hover:bg-[#D0E6E6] transition-colors flex items-center justify-center gap-2">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                                 Logout
                             </button>
@@ -174,7 +174,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                             {activeSection === 'conditions' && (conditions.length === 0 ? <EmptyState text="No medical conditions recorded." icon={<svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>} /> : conditions.map(i => (
                                 <div key={i.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200 transition-all group">
                                     <div><h4 className="font-bold text-gray-800">{i.name}</h4><p className="text-xs text-gray-500 font-medium">Since: {i.date}</p></div>
-                                    <div className="flex items-center gap-3"><span className={`px-2.5 py-1 rounded-md text-xs font-bold border ${i.status === 'Active' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>{i.status}</span><Actions onEdit={() => handleOpenModal(i)} onDelete={() => handleDelete(i.id)} /></div>
+                                    <div className="flex items-center gap-3"><span className={`px-2.5 py-1 rounded-md text-xs font-bold border ${i.status === 'Active' ? 'bg-[#F4F9F9] text-[#0B6F6D] border-[#D0E6E6]' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>{i.status}</span><Actions onEdit={() => handleOpenModal(i)} onDelete={() => handleDelete(i.id)} /></div>
                                 </div>
                             )))}
 
@@ -185,7 +185,7 @@ const Profile: React.FC<{ user: User; onBack: () => void }> = ({ user, onBack })
                                         <p className="text-xs text-gray-500 mt-0.5">Reaction: <span className="text-gray-700">{i.reaction}</span></p>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <span className={`px-2.5 py-1 rounded-md text-xs font-bold border ${i.severity === 'Severe' ? 'bg-red-50 text-red-600 border-red-100' : i.severity === 'Moderate' ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-yellow-50 text-yellow-600 border-yellow-100'}`}>
+                                        <span className={`px-2.5 py-1 rounded-md text-xs font-bold border ${i.severity === 'Severe' ? 'bg-[#F4F9F9] text-[#0B6F6D] border-[#D0E6E6]' : i.severity === 'Moderate' ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-yellow-50 text-yellow-600 border-yellow-100'}`}>
                                             {i.severity}
                                         </span>
                                         <Actions onEdit={() => handleOpenModal(i)} onDelete={() => handleDelete(i.id)} />
@@ -336,7 +336,7 @@ interface ActionsProps { onEdit: () => void; onDelete: () => void; }
 const Actions: React.FC<ActionsProps> = ({ onEdit, onDelete }) => (
     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <button type="button" onClick={onEdit} className="p-1.5 text-gray-400 hover:text-primary bg-white hover:bg-blue-50 rounded-lg border border-gray-100 transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-        <button type="button" onClick={onDelete} className="p-1.5 text-gray-400 hover:text-red-500 bg-white hover:bg-red-50 rounded-lg border border-gray-100 transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+        <button type="button" onClick={onDelete} className="p-1.5 text-gray-400 hover:text-red-500 bg-white hover:bg-[#F4F9F9] rounded-lg border border-gray-100 transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
     </div>
 );
 

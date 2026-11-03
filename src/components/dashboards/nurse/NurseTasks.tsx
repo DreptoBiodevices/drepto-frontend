@@ -45,7 +45,7 @@ const NurseTasks: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const progress = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
 
     const getPriorityColor = (p: string) => {
-        if (p === 'High') return 'bg-red-100 text-red-600 border-red-200';
+        if (p === 'High') return 'bg-[#FDF7F5] text-[#C86146] border-[#F8D4CB]';
         if (p === 'Medium') return 'bg-orange-100 text-orange-600 border-orange-200';
         return 'bg-blue-100 text-blue-600 border-blue-200';
     };

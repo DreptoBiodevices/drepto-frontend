@@ -92,7 +92,7 @@ const AdminDashboard: React.FC = () => {
             <button
               onClick={handleLogout}
               title="Sign Out"
-              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+              className="p-2 text-gray-400 hover:text-[#0B6F6D] hover:bg-[#F4F9F9] rounded-xl transition-colors"
             >
               <LogOut className="w-4 h-4" />
             </button>

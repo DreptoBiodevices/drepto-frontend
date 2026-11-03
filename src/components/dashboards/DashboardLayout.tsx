@@ -77,7 +77,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                                 className={`
                                     w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-200 group relative
                                     ${isActive
-                                        ? 'bg-red-50 text-[#c01226] shadow-sm'
+                                        ? 'bg-[#F4F9F9] text-[#0B6F6D] shadow-sm'
                                         : item.disabled
                                             ? 'text-slate-300 cursor-not-allowed opacity-70'
                                             : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
@@ -87,7 +87,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                                 <div className={`
                                     w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200
                                     ${isActive
-                                        ? 'bg-white shadow-sm text-[#c01226]'
+                                        ? 'bg-white shadow-sm text-[#0B6F6D]'
                                         : item.disabled
                                             ? 'bg-slate-50 text-slate-300'
                                             : 'bg-slate-50 text-slate-400 group-hover:bg-white group-hover:shadow-sm group-hover:text-slate-600'
@@ -103,7 +103,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                                         </span>
                                     )}
                                 </div>
-                                {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#c01226]" />}
+                                {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#0B6F6D]" />}
                             </button>
                         );
                     })}
@@ -121,7 +121,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white text-red-500 rounded-lg flex items-center justify-center shadow-sm opacity-50 hover:opacity-100 transition-all hover:bg-red-50"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white text-red-500 rounded-lg flex items-center justify-center shadow-sm opacity-50 hover:opacity-100 transition-all hover:bg-[#F4F9F9]"
                             title="Logout"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
@@ -161,7 +161,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, navItems, activ
                             onClick={() => onTabChange('notifications')}
                             className="relative w-10 h-10 rounded-full bg-white border border-slate-100 flex items-center justify-center hover:bg-slate-50 hover:shadow-sm transition-all text-slate-600">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
-                            <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                            <span className="absolute top-2 right-2.5 w-2 h-2 bg-[#E17C61] rounded-full border border-white"></span>
                         </button>
                     </div>
                 </header>

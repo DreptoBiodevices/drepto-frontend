@@ -260,19 +260,19 @@ const ProfilePage: React.FC = () => {
 
   const renderTabs = () => (
       <div className="flex overflow-x-auto space-x-2 border-b border-slate-200 mb-6 pb-2 scrollbar-hide">
-          <button onClick={() => setActiveTab('personal')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'personal' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('personal')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'personal' ? 'bg-[#0B6F6D] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <UserIcon className="w-4 h-4" /> Personal
           </button>
-          <button onClick={() => setActiveTab('security')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'security' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('security')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'security' ? 'bg-[#0B6F6D] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <Lock className="w-4 h-4" /> Security
           </button>
-          <button onClick={() => setActiveTab('history')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'history' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('history')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'history' ? 'bg-[#0B6F6D] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <History className="w-4 h-4" /> History
           </button>
-          <button onClick={() => setActiveTab('address')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'address' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('address')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'address' ? 'bg-[#0B6F6D] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <MapPin className="w-4 h-4" /> Address
           </button>
-          <button onClick={() => setActiveTab('reviews')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'reviews' ? 'bg-[#c01226] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+          <button onClick={() => setActiveTab('reviews')} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${activeTab === 'reviews' ? 'bg-[#0B6F6D] text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
               <Star className="w-4 h-4" /> Reviews
           </button>
       </div>
@@ -284,7 +284,7 @@ const ProfilePage: React.FC = () => {
         <BackButton fallbackPath="/dashboard" />
         
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6 animate-fade-in-up">
-          <div className="p-6 sm:p-8 bg-[#c01226] text-white flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="p-6 sm:p-8 bg-[#0B6F6D] text-white flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-6 w-full">
               <div className="relative w-24 h-24 rounded-full overflow-hidden bg-white/20 border-4 border-white/30 backdrop-blur-sm flex-shrink-0">
                 {formData.profileImage ? (
@@ -315,7 +315,7 @@ const ProfilePage: React.FC = () => {
             {activeTab === 'personal' && (
                 <div className="flex-shrink-0">
                 {!isEditing ? (
-                <button onClick={() => setIsEditing(true)} className="px-6 py-2 bg-white text-[#c01226] font-semibold rounded-lg hover:bg-red-50 transition-colors w-full sm:w-auto">
+                <button onClick={() => setIsEditing(true)} className="px-6 py-2 bg-white text-[#0B6F6D] font-semibold rounded-lg hover:bg-[#F4F9F9] transition-colors w-full sm:w-auto">
                     Edit Profile
                 </button>
                 ) : (
@@ -323,7 +323,7 @@ const ProfilePage: React.FC = () => {
                     <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-white/20 text-white font-medium rounded-lg hover:bg-white/30 transition-colors flex-1">
                         Cancel
                     </button>
-                    <button onClick={handlePersonalSave} className="px-6 py-2 bg-white text-[#c01226] font-bold rounded-lg hover:bg-red-50 transition-colors flex-1 shadow-sm">
+                    <button onClick={handlePersonalSave} className="px-6 py-2 bg-white text-[#0B6F6D] font-bold rounded-lg hover:bg-[#F4F9F9] transition-colors flex-1 shadow-sm">
                         Save
                     </button>
                 </div>
@@ -340,11 +340,11 @@ const ProfilePage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">First Name</label>
-                        <input type="text" name="firstName" value={formData.firstName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
+                        <input type="text" name="firstName" value={formData.firstName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D] focus:border-[#0B6F6D] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
-                        <input type="text" name="lastName" value={formData.lastName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
+                        <input type="text" name="lastName" value={formData.lastName} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D] focus:border-[#0B6F6D] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
@@ -353,7 +353,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Gender</label>
-                        <select name="gender" value={formData.gender} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
+                        <select name="gender" value={formData.gender} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D] focus:border-[#0B6F6D] disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -362,11 +362,11 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Age</label>
-                        <input type="number" name="age" value={formData.age} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
+                        <input type="number" name="age" value={formData.age} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D] focus:border-[#0B6F6D] disabled:bg-slate-50 disabled:text-slate-500 transition-colors" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Blood Group</label>
-                        <select name="bloodGroup" value={formData.bloodGroup} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226] focus:border-[#c01226] disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
+                        <select name="bloodGroup" value={formData.bloodGroup} onChange={handlePersonalChange} disabled={!isEditing} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D] focus:border-[#0B6F6D] disabled:bg-slate-50 disabled:text-slate-500 transition-colors">
                             <option value="">Select Blood Group</option>
                             <option value="A+">A+</option><option value="A-">A-</option>
                             <option value="B+">B+</option><option value="B-">B-</option>
@@ -421,21 +421,21 @@ const ProfilePage: React.FC = () => {
                             <h3 className="font-bold text-lg text-slate-900">Change Password</h3>
                         </div>
                         
-                        {passwordError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200">{passwordError}</div>}
+                        {passwordError && <div className="mb-4 p-3 bg-[#FDF7F5] text-[#C86146] rounded-lg text-sm border border-[#F8D4CB]">{passwordError}</div>}
                         {passwordSuccess && <div className="mb-4 p-3 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200">{passwordSuccess}</div>}
 
                         <form onSubmit={handlePasswordChange} className="space-y-4 max-w-md">
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Current Password</label>
-                                <input type="password" required value={passwords.current} onChange={(e) => setPasswords({...passwords, current: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226]" />
+                                <input type="password" required value={passwords.current} onChange={(e) => setPasswords({...passwords, current: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">New Password</label>
-                                <input type="password" required value={passwords.new} onChange={(e) => setPasswords({...passwords, new: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226]" minLength={6} />
+                                <input type="password" required value={passwords.new} onChange={(e) => setPasswords({...passwords, new: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" minLength={6} />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Rewrite New Password</label>
-                                <input type="password" required value={passwords.confirm} onChange={(e) => setPasswords({...passwords, confirm: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#c01226]" minLength={6} />
+                                <input type="password" required value={passwords.confirm} onChange={(e) => setPasswords({...passwords, confirm: e.target.value})} className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" minLength={6} />
                             </div>
                             <button type="submit" className="px-6 py-2 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors">
                                 Update Password
@@ -444,17 +444,17 @@ const ProfilePage: React.FC = () => {
                     </div>
 
                     {/* Danger Zone — Delete Account */}
-                    <div className="bg-red-50 rounded-xl p-6 border-2 border-red-200">
+                    <div className="bg-[#FDF7F5] rounded-xl p-6 border-2 border-[#F8D4CB]">
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="p-2 bg-red-100 text-red-600 rounded-lg"><AlertTriangle className="w-5 h-5" /></div>
-                            <h3 className="font-bold text-lg text-red-800">Danger Zone</h3>
+                            <div className="p-2 bg-[#FCECE8] text-[#C86146] rounded-lg"><AlertTriangle className="w-5 h-5" /></div>
+                            <h3 className="font-bold text-lg text-[#A64B33]">Danger Zone</h3>
                         </div>
-                        <p className="text-sm text-red-700 mb-4">
+                        <p className="text-sm text-[#C86146] mb-4">
                             Permanently deleting your account will remove all your personal information, order history, saved addresses, and reviews from our platform. <strong>This action cannot be undone.</strong>
                         </p>
                         <button
                             onClick={() => { setShowDeleteModal(true); setDeleteConfirmText(''); }}
-                            className="px-5 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                            className="px-5 py-2 bg-[#E17C61] hover:bg-[#C86146] text-white font-semibold rounded-lg transition-colors flex items-center gap-2"
                         >
                             <Trash2 className="w-4 h-4" /> Delete My Account
                         </button>
@@ -465,22 +465,22 @@ const ProfilePage: React.FC = () => {
             {/* DELETE ACCOUNT CONFIRMATION MODAL */}
             {showDeleteModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 border border-red-100">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 border border-[#D0E6E6]">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
-                                <div className="p-2 bg-red-100 text-red-600 rounded-lg"><AlertTriangle className="w-5 h-5" /></div>
+                                <div className="p-2 bg-[#FCECE8] text-[#C86146] rounded-lg"><AlertTriangle className="w-5 h-5" /></div>
                                 <h2 className="text-xl font-bold text-slate-900">Delete Account</h2>
                             </div>
                             <button onClick={() => setShowDeleteModal(false)} className="p-1 text-slate-400 hover:text-slate-600 transition-colors rounded-lg hover:bg-slate-100"><X className="w-5 h-5" /></button>
                         </div>
-                        <p className="text-slate-600 text-sm mb-2">This action is <strong className="text-red-600">permanent and irreversible</strong>. All your data including orders, addresses, reviews, and account information will be deleted forever.</p>
-                        <p className="text-slate-700 text-sm font-medium mb-3">To confirm, type <span className="font-mono font-bold text-red-600 bg-red-50 px-1 py-0.5 rounded">{DELETE_KEYWORD}</span> in the box below:</p>
+                        <p className="text-slate-600 text-sm mb-2">This action is <strong className="text-[#C86146]">permanent and irreversible</strong>. All your data including orders, addresses, reviews, and account information will be deleted forever.</p>
+                        <p className="text-slate-700 text-sm font-medium mb-3">To confirm, type <span className="font-mono font-bold text-[#C86146] bg-[#FDF7F5] px-1 py-0.5 rounded">{DELETE_KEYWORD}</span> in the box below:</p>
                         <input
                             type="text"
                             value={deleteConfirmText}
                             onChange={(e) => setDeleteConfirmText(e.target.value.toUpperCase())}
                             placeholder={`Type ${DELETE_KEYWORD} to confirm`}
-                            className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 font-mono tracking-widest text-center mb-4 transition-colors"
+                            className="w-full px-4 py-2 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-[#E17C61] focus:border-[#E17C61] font-mono tracking-widest text-center mb-4 transition-colors"
                         />
                         <div className="flex gap-3">
                             <button
@@ -492,7 +492,7 @@ const ProfilePage: React.FC = () => {
                             <button
                                 onClick={handleDeleteAccount}
                                 disabled={deleteConfirmText !== DELETE_KEYWORD || isDeleting}
-                                className="flex-1 px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                className="flex-1 px-4 py-2 bg-[#E17C61] hover:bg-[#C86146] text-white font-bold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                             >
                                 {isDeleting ? (
                                     <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Deleting...</>
@@ -527,7 +527,7 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <div className="pt-6">
-                        <Link to="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-[#c01226] text-white font-bold rounded-xl hover:bg-red-700 transition-colors">
+                        <Link to="/orders" className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B6F6D] text-white font-bold rounded-xl hover:bg-[#0B5C5A] transition-colors">
                             View Detailed History <Activity className="w-5 h-5" />
                         </Link>
                     </div>
@@ -548,7 +548,7 @@ const ProfilePage: React.FC = () => {
                         <div>
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="font-bold text-lg">Your Addresses</h3>
-                                {!showAddressForm && <button onClick={() => setShowAddressForm(true)} className="px-4 py-2 bg-[#c01226] text-white rounded-lg text-sm font-medium hover:bg-red-700">Add Address</button>}
+                                {!showAddressForm && <button onClick={() => setShowAddressForm(true)} className="px-4 py-2 bg-[#0B6F6D] text-white rounded-lg text-sm font-medium hover:bg-[#0B5C5A]">Add Address</button>}
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 {addresses.map((addr, idx) => (
@@ -559,7 +559,7 @@ const ProfilePage: React.FC = () => {
                                             <div className="text-slate-500 text-sm">{addr.country}</div>
                                         </div>
                                         <div className="mt-4 flex justify-end">
-                                            <button onClick={() => handleDeleteAddress(addr._id)} className="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1"><Trash2 className="w-4 h-4" /> Delete</button>
+                                            <button onClick={() => handleDeleteAddress(addr._id)} className="text-[#E17C61] hover:text-[#C86146] text-sm font-medium flex items-center gap-1"><Trash2 className="w-4 h-4" /> Delete</button>
                                         </div>
                                     </div>
                                 ))}
@@ -573,28 +573,28 @@ const ProfilePage: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Street Address</label>
-                                    <input required type="text" value={newAddress.street} onChange={e => setNewAddress({...newAddress, street: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
+                                    <input required type="text" value={newAddress.street} onChange={e => setNewAddress({...newAddress, street: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">City</label>
-                                    <input required type="text" value={newAddress.city} onChange={e => setNewAddress({...newAddress, city: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
+                                    <input required type="text" value={newAddress.city} onChange={e => setNewAddress({...newAddress, city: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">State</label>
-                                    <input required type="text" value={newAddress.state} onChange={e => setNewAddress({...newAddress, state: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
+                                    <input required type="text" value={newAddress.state} onChange={e => setNewAddress({...newAddress, state: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Zip Code</label>
-                                    <input required type="text" value={newAddress.zipCode} onChange={e => setNewAddress({...newAddress, zipCode: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
+                                    <input required type="text" value={newAddress.zipCode} onChange={e => setNewAddress({...newAddress, zipCode: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Country</label>
-                                    <input required type="text" value={newAddress.country} onChange={e => setNewAddress({...newAddress, country: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c01226]" />
+                                    <input required type="text" value={newAddress.country} onChange={e => setNewAddress({...newAddress, country: e.target.value})} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" />
                                 </div>
                             </div>
                             <div className="mt-6 flex justify-end gap-3">
                                 <button type="button" onClick={() => setShowAddressForm(false)} className="px-4 py-2 border rounded-lg hover:bg-slate-100 font-medium">Cancel</button>
-                                <button type="submit" className="px-6 py-2 bg-[#c01226] text-white rounded-lg hover:bg-red-700 font-medium">Save Address</button>
+                                <button type="submit" className="px-6 py-2 bg-[#0B6F6D] text-white rounded-lg hover:bg-[#0B5C5A] font-medium">Save Address</button>
                             </div>
                         </form>
                     )}
@@ -623,10 +623,10 @@ const ProfilePage: React.FC = () => {
                                                     </button>
                                                 ))}
                                             </div>
-                                            <textarea className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#c01226]" value={editingReview.reviewText} onChange={e => setEditingReview({...editingReview, reviewText: e.target.value})} rows={3} />
+                                            <textarea className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#0B6F6D]" value={editingReview.reviewText} onChange={e => setEditingReview({...editingReview, reviewText: e.target.value})} rows={3} />
                                             <div className="flex justify-end gap-2">
                                                 <button onClick={() => setEditingReview(null)} className="px-4 py-2 border rounded-lg hover:bg-slate-50">Cancel</button>
-                                                <button onClick={handleUpdateReview} className="px-4 py-2 bg-[#c01226] text-white rounded-lg hover:bg-red-700">Save Update</button>
+                                                <button onClick={handleUpdateReview} className="px-4 py-2 bg-[#0B6F6D] text-white rounded-lg hover:bg-[#0B5C5A]">Save Update</button>
                                             </div>
                                         </div>
                                     ) : (
@@ -642,7 +642,7 @@ const ProfilePage: React.FC = () => {
                                                 </div>
                                                 <div className="flex gap-2">
                                                     <button onClick={() => setEditingReview(review)} className="p-2 text-slate-400 hover:text-blue-600 bg-slate-50 rounded-lg transition-colors"><Edit className="w-4 h-4" /></button>
-                                                    <button onClick={() => handleDeleteReview(review._id)} className="p-2 text-slate-400 hover:text-red-600 bg-slate-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                                    <button onClick={() => handleDeleteReview(review._id)} className="p-2 text-slate-400 hover:text-[#0B6F6D] bg-slate-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
                                                 </div>
                                             </div>
                                             <p className="text-slate-700 mt-3">{review.reviewText}</p>

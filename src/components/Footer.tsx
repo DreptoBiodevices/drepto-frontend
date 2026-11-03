@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <footer className="bg-neutral-950 text-slate-400 border-t border-white/10">
+    <footer className="bg-[#242B2B] text-slate-400 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         
         {/* Main Grid Layout */}
@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-500 font-semibold uppercase tracking-wider">Incubator Hub</span>
-                <span className="text-red-400 font-semibold">SINE, IIT Bombay</span>
+                <span className="text-[#E17C61] font-semibold">SINE, IIT Bombay</span>
               </div>
             </div>
           </div>
@@ -50,19 +50,19 @@ const Footer: React.FC = () => {
               Therapeutics
             </h4>
             <nav className="flex flex-col space-y-2.5 text-xs sm:text-sm">
-              <Link to="/our-products" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/our-products" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 MenstroHerb™ Patch
               </Link>
-              <Link to="/our-products" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/our-products" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 Menstrual Care Packs
               </Link>
-              <Link to="/our-research" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/our-research" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 Transdermal Matrix R&amp;D
               </Link>
-              <Link to="/our-research" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/our-research" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 ArthriTrans System
               </Link>
-              <Link to="/our-products" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/our-products" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 All Products
               </Link>
             </nav>
@@ -74,19 +74,19 @@ const Footer: React.FC = () => {
               Company
             </h4>
             <nav className="flex flex-col space-y-2.5 text-xs sm:text-sm">
-              <Link to="/about-us" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/about-us" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 About Drepto
               </Link>
-              <Link to="/about-us" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/about-us" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 Founder &amp; Leadership
               </Link>
-              <Link to="/our-research" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/our-research" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 Clinical Research Dossier
               </Link>
-              <Link to="/contact" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/contact" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 Institutional Enquiries
               </Link>
-              <Link to="/feedback" className="text-slate-400 hover:text-red-400 transition-colors">
+              <Link to="/feedback" className="text-slate-400 hover:text-[#75B6B4] transition-colors">
                 Patient Feedback
               </Link>
             </nav>
@@ -117,7 +117,7 @@ const Footer: React.FC = () => {
                 <p className="text-slate-300 font-medium">Direct Inquiries:</p>
                 <a
                   href="mailto:info@dreptobiodevices.com"
-                  className="text-red-400 hover:underline"
+                  className="text-[#75B6B4] hover:underline"
                 >
                   info@dreptobiodevices.com
                 </a>
