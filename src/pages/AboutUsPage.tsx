@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AboutSection from '../components/AboutSection';
+import VideoTestimonialsSection from '../components/VideoTestimonialsSection';
 import TeamSection from '../components/TeamSection';
 import GallerySection from '../components/GallerySection';
 import ContactSection from '../components/ContactSection';
@@ -103,6 +104,9 @@ const AboutUsPage: React.FC = () => {
         <div id="purpose" className="scroll-mt-24">
           <AboutSection />
         </div>
+
+        {/* User Testimonial Videos (same as below Products) */}
+        <VideoTestimonialsSection />
 
         {/* Visual Journey Gallery & Institutional Recognition */}
         <div id="recognition" className="scroll-mt-24">
