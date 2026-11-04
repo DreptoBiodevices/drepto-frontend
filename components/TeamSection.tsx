@@ -13,7 +13,7 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     name: 'Rahul Kumar Gupta',
-    role: 'Founder & Chief Executive Officer',
+    role: 'Founder & Director',
     description: 'IIT Bombay Alumnus & Biomedical Innovator. Driving transdermal therapeutic formulation and corporate strategy.',
     image: '/images/rahulsir.jpeg',
     linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/',
@@ -40,7 +40,7 @@ export const TeamSection: React.FC = () => {
   return (
     <section className="py-20 sm:py-28 bg-[#f8f9fa] border-t border-slate-200/80 scroll-mt-24" id="team">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
