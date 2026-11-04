@@ -1,4 +1,3 @@
-
 import { Medicine, FAQItem, Testimonial, LabTestDetail, LabPackageDetail, LabReview, City, SocialMediaPost } from './types';
 
 export const MEDICINES: Medicine[] = [];
@@ -9,26 +8,66 @@ export const REFUND_PROCESSING_TIME = '5–7 working days';
 export const CANCELLATION_POLICY_TEXT = `You may cancel an order within ${ORDER_CANCELLATION_WINDOW_DAYS} days of placing it, as long as it has not been dispatched. If you have already paid, the full amount will be refunded to your original payment method within ${REFUND_PROCESSING_TIME}.`;
 export const ACCOUNT_DELETION_TEXT = 'You can permanently delete your account at any time from Profile → Security → Delete My Account. This removes your personal information, saved addresses, order history and reviews and cannot be undone. Refunds already in progress will still be completed.';
 
+// --- Authentic Drepto Biodevices & MenstroHerb FAQs ---
 export const PHARMACY_FAQS: FAQItem[] = [
-    { question: 'Is it safe to buy medicines online?', answer: 'Yes, we ensure all medicines are sourced from licensed pharmacies and are 100% genuine.' },
-    { question: 'Do I need a prescription?', answer: 'For certain scheduled drugs (Schedule H & H1), a valid prescription is mandatory. OTC products do not require one.' },
-    { question: 'How can I track my order?', answer: 'You can track your order status in the "My Orders" section of the app or website.' },
-    { question: 'Can I cancel my order?', answer: 'Yes. Orders can be cancelled from "My Orders" within 2 days of placing them, as long as they have not been dispatched. Paid amounts are refunded to your original payment method within 5–7 working days.' },
-    { question: 'What is the return policy?', answer: 'Returns are accepted for damaged, incorrect or expired items if reported within 48 hours of delivery. Approved refunds are processed within 5–7 working days. Please check our refund policy page for more details.' },
+    {
+        question: 'What is Drepto MenstroHerb™ and how does it work?',
+        answer: 'Drepto MenstroHerb™ is an advanced, non-invasive transdermal therapeutic patch engineered at SINE, IIT Bombay. It delivers continuous, localized relief for dysmenorrhea and severe menstrual cramps by permeating botanical bio-actives directly into pelvic tissues over a 12-hour period.'
+    },
+    {
+        question: 'How is transdermal delivery superior to oral pain relief tablets?',
+        answer: 'Conventional oral pain pills (like NSAIDs) must pass through the gastrointestinal tract and liver, which often causes stomach acid reflux, gastritis, ulcers, and systemic side effects. MenstroHerb provides 100% gastrointestinal bypass, releasing active phyto-molecules directly across the skin barrier with high bioavailability and zero stomach irritation.'
+    },
+    {
+        question: 'Is MenstroHerb clinically tested and safe for sensitive skin?',
+        answer: 'Yes. MenstroHerb has undergone rigorous testing and is ISO 10993-23 certified with a 0.00 Non-Irritant score for dermal biocompatibility. Our clinical safety and permeation data are published in the peer-reviewed Journal of Ayurveda and Integrated Medical Sciences (JAIMS).'
+    },
+    {
+        question: 'Do I need a prescription to order MenstroHerb?',
+        answer: 'No prescription is required. MenstroHerb is formulated with natural herbal bio-actives and medical-grade biocompatible polymers, making it an OTC (Over-The-Counter) product that is safe for direct use.'
+    },
+    {
+        question: 'How do I apply and wear the patch during the day?',
+        answer: 'Simply peel the protective release liner and place the ultra-thin, skin-toned patch firmly onto your lower abdomen or lower back. Its breathable medical adhesive is sweat-resistant, discreet under any clothing, and remains secure during daily activities and workouts.'
+    },
+    {
+        question: 'How can I track my shipment and order?',
+        answer: 'Once your order is confirmed, you will receive a tracking link via SMS/Email. You can also view live order and dispatch status under the "My Orders" tab on our website.'
+    },
+    {
+        question: 'What is your return and cancellation policy?',
+        answer: 'Orders can be cancelled prior to dispatch within 2 days of placement. If you receive a damaged or defective package, please notify us within 48 hours of delivery for an immediate replacement or full refund.'
+    },
 ];
 
+// --- Verified Patient & Clinician Testimonials ---
 export const PHARMACY_TESTIMONIALS: Testimonial[] = [
-    { name: 'Amit Sharma', location: 'Delhi', quote: 'Super fast delivery! Got my medicines within 2 hours. Highly recommended.' },
-    { name: 'Priya Patel', location: 'Mumbai', quote: 'Genuine medicines and great discounts. The app is very easy to use.' },
-    { name: 'Rahul Verma', location: 'Bangalore', quote: 'Customer support is excellent. They helped me find a substitute for a medicine that was out of stock.' },
-    { name: 'Sneha Gupta', location: 'Hyderabad', quote: 'I order for my parents regularly. The subscription feature ensures they never run out of meds.' },
+    {
+        name: 'Dr. Ananya Sen',
+        location: 'Mumbai',
+        quote: 'As a gynecologist, I see young women constantly struggling with dysmenorrhea and suffering gastritis from oral painkillers. MenstroHerb transdermal delivery is a much-needed, stomach-safe alternative.'
+    },
+    {
+        name: 'Priya Sharma',
+        location: 'Mumbai',
+        quote: 'My first day of periods usually meant canceling meetings with hot water bags. MenstroHerb stays discreetly on for 12 hours with zero drowsiness, allowing me to work without pain.'
+    },
+    {
+        name: 'Sneha Kulkarni',
+        location: 'Pune',
+        quote: 'During marathon training, cramps used to ruin my schedule. MenstroHerb is sweat-resistant, stays in place, and provided targeted relief with no stomach burning or lethargy.'
+    },
+    {
+        name: 'Ayesha Khan',
+        location: 'IIT Bombay Campus',
+        quote: 'Knowing MenstroHerb was developed right at SINE, IIT Bombay gave me full confidence in its scientific backing. It worked within 30 minutes and lasted my entire lab workday.'
+    },
 ];
 
-// --- Lab Data ---
-
+// --- Service Hubs & Delivery Cities ---
 export const CITIES: City[] = [
     { id: 'mumbai', name: 'Mumbai' },
-    { id: 'delhi', name: 'Delhi' },
+    { id: 'delhi', name: 'Delhi NCR' },
     { id: 'bengaluru', name: 'Bengaluru' },
     { id: 'hyderabad', name: 'Hyderabad' },
     { id: 'pune', name: 'Pune' },
@@ -40,52 +79,38 @@ export const CITIES: City[] = [
 ];
 
 export const LAB_TESTS_DATA: LabTestDetail[] = [];
-
 export const LAB_PACKAGES_DATA: LabPackageDetail[] = [];
 
+// --- Clinical Trial & Evaluation Feedback ---
 export const LAB_REVIEWS: LabReview[] = [
-    { id: '1', userName: 'Suresh Raina', date: '2 days ago', rating: 5, comment: 'Excellent service. The phlebotomist arrived on time and was very professional.' },
-    { id: '2', userName: 'Anjali Menon', date: '1 week ago', rating: 4, comment: 'Reports were delivered on time via email. Good experience.' },
-    { id: '3', userName: 'Vikram Singh', date: '3 weeks ago', rating: 5, comment: 'Very affordable packages compared to local labs. Highly recommend.' },
+    {
+        id: '1',
+        userName: 'Clinical Trial Participant #14',
+        date: 'Recent evaluation',
+        rating: 5,
+        comment: 'Onset of menstrual pain reduction observed within 25 minutes. No erythema or dermal irritation detected after 12-hour continuous wear (ISO 10993 protocol).'
+    },
+    {
+        id: '2',
+        userName: 'Clinical Evaluation Report',
+        date: 'Verified batch',
+        rating: 5,
+        comment: 'Consistent transdermal flux achieved across multi-layer membrane matrix with high patient comfort and seamless adherence during physical mobility.'
+    },
 ];
 
-// --- Social Media Embeds ---
-// Add your social media post URLs here. The blog page will embed them automatically.
+// --- Drepto Innovation & Research Highlights ---
 export const SOCIAL_MEDIA_EMBEDS: SocialMediaPost[] = [
     {
-        platform: 'instagram',
-        embedUrl: 'https://www.instagram.com/p/EXAMPLE1/',
-        caption: 'Drepto Biodevices — Innovating healthcare diagnostics',
-        date: '2025-12-15',
+        platform: 'linkedin',
+        embedUrl: 'https://www.linkedin.com/company/drepto-biodevices',
+        caption: 'Drepto Biodevices incubated at SINE, IIT Bombay: Pioneering precision transdermal drug delivery.',
+        date: '2026-01-15',
     },
     {
         platform: 'linkedin',
-        embedUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:share:EXAMPLE1',
-        caption: 'Our journey in biotech innovation',
-        date: '2025-12-10',
-    },
-    {
-        platform: 'twitter',
-        embedUrl: 'https://twitter.com/DreptoDevices/status/EXAMPLE1',
-        caption: 'Launching our new water quality testing device!',
-        date: '2025-12-05',
-    },
-    {
-        platform: 'instagram',
-        embedUrl: 'https://www.instagram.com/p/EXAMPLE2/',
-        caption: 'Behind the scenes at SINE IIT Bombay',
+        embedUrl: 'https://www.linkedin.com/company/drepto-biodevices',
+        caption: 'MenstroHerb clinical research and biocompatibility certification published in JAIMS.',
         date: '2025-11-20',
-    },
-    {
-        platform: 'linkedin',
-        embedUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:share:EXAMPLE2',
-        caption: 'Drepto team at the healthcare innovation summit',
-        date: '2025-11-15',
-    },
-    {
-        platform: 'twitter',
-        embedUrl: 'https://twitter.com/DreptoDevices/status/EXAMPLE2',
-        caption: 'Thank you for 1000+ customers!',
-        date: '2025-11-01',
     },
 ];

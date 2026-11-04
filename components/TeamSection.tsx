@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linkedin } from 'lucide-react';
+import { Linkedin, ShieldCheck } from 'lucide-react';
 
 interface TeamMember {
   name: string;
@@ -7,6 +7,7 @@ interface TeamMember {
   description: string;
   image?: string;
   linkedin?: string;
+  badge?: string;
 }
 
 const teamMembers: TeamMember[] = [
@@ -16,6 +17,7 @@ const teamMembers: TeamMember[] = [
     description: 'IIT Bombay Alumnus & Biomedical Innovator. Driving transdermal therapeutic formulation and corporate strategy.',
     image: '/images/rahulsir.jpeg',
     linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/',
+    badge: 'IIT Bombay Alum',
   },
   {
     name: 'Prof. Rohit Srivastava',
@@ -23,13 +25,14 @@ const teamMembers: TeamMember[] = [
     description: 'Professor, Dept of Biosciences & Bioengineering, IIT Bombay (Shanti Swarup Bhatnagar Awardee).',
     image: '/images/rohitsir.jpeg',
     linkedin: 'https://www.linkedin.com/in/rohit-srivastava-02bb2b16/',
+    badge: 'SSB Awardee • IIT Bombay',
   },
   {
     name: 'Dr. Chandan Yadav',
     role: 'Chief Medical Officer',
-    description: 'Senior Radiologist, Medanta Hospital. Leading clinical evaluation and therapeutic protocols.',
+    description: 'Senior Radiologist, Medanta Hospital. Leading clinical safety evaluation and therapeutic protocols.',
     image: '/images/dr_chandan.jpg',
-    linkedin: 'https://www.dreptobiodevices.com/',
+    badge: 'Senior Radiologist • Medanta',
   },
 ];
 
@@ -47,7 +50,7 @@ export const TeamSection: React.FC = () => {
             The Scientific &amp; Strategic Minds Behind Drepto
           </h2>
           <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
-            Combining world-class academic engineering from IIT Bombay with pharmaceutical industry leadership and clinical hospital expertise.
+            Combining world-class academic engineering from IIT Bombay with pharmaceutical innovation and clinical hospital expertise.
           </p>
         </div>
 
@@ -86,9 +89,9 @@ export const TeamSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* LinkedIn / Bio Link */}
-              {member.linkedin && (
-                <div className="mt-6 pt-4 border-t border-slate-300/60 flex items-center justify-center">
+              {/* Verified Badge / LinkedIn Profile */}
+              <div className="mt-6 pt-4 border-t border-slate-300/60 flex items-center justify-center">
+                {member.linkedin ? (
                   <a
                     href={member.linkedin}
                     target="_blank"
@@ -98,8 +101,13 @@ export const TeamSection: React.FC = () => {
                     <Linkedin className="w-4 h-4 text-[#0B6F6D]" />
                     <span>View Professional Profile</span>
                   </a>
-                </div>
-              )}
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-white/70 px-3 py-1 rounded-full border border-slate-200">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#0B6F6D]" />
+                    <span>{member.badge || 'Clinical Advisory'}</span>
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>

@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 
-// Using Vite's import.meta.glob to dynamically read files from the Videos directory.
-// This will automatically update during dev when a new file is added.
-const videoModules = import.meta.glob('/public/Videos/*.{mp4,webm,ogg,mov}', { eager: true });
-const videoFiles = Object.keys(videoModules).map(path => path.replace('/public', ''));
+const videoFiles = [
+    '/Videos/Video1.mp4',
+    '/Videos/Video2.mp4',
+    '/Videos/Video3.mp4',
+    '/Videos/Video4.mp4',
+];
 
 const VideoTestimonialsSection: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -109,7 +111,6 @@ const VideoTestimonialsSection: React.FC = () => {
     }, [isInView]);
 
     const handleVideoEnd = () => {
-        // Automatically play the next video when the current one finishes
         userPausedRef.current = false;
         handleNext();
     };
@@ -132,7 +133,6 @@ const VideoTestimonialsSection: React.FC = () => {
         }
     };
 
-    // If no videos are found, we don't render the section
     if (videoFiles.length === 0) return null;
 
     return (

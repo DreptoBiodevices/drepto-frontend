@@ -1,40 +1,39 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, TestTube2, ShoppingBag, User, Package, Shield } from 'lucide-react';
+import { Home, ShoppingBag, User, Package, Shield, Microscope } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const BottomNav: React.FC = () => {
-
-  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    const checkDrawer = () => {
-      setIsMobileDrawerOpen(document.body.getAttribute('data-mobile-menu') === 'open');
-    };
-    checkDrawer();
-    const observer = new MutationObserver(checkDrawer);
-    observer.observe(document.body, { attributes: true, attributeFilter: ['data-mobile-menu'] });
-    return () => observer.disconnect();
-  }, []);
-
   const navigate = useNavigate();
   const location = useLocation();
   const { user, setAuthModalView } = useAuth();
   const isAdmin = user?.role === 'Admin' || localStorage.getItem('adminAuth') === 'true';
 
+  const [cartCount, setCartCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const updateCart = () => {
+      try {
+        const stored = JSON.parse(localStorage.getItem('patient_cart') || '[]');
+        setCartCount(stored.length);
+      } catch {
+        setCartCount(0);
+      }
+    };
+    updateCart();
+    window.addEventListener('cart:updated', updateCart);
+    return () => window.removeEventListener('cart:updated', updateCart);
+  }, []);
+
   const navItems = [
-    { name: 'Home',      icon: Home,       path: '/' },
-    { name: 'Cart',      icon: ShoppingBag, path: '/cart' },
-    { name: 'Orders',    icon: Package,     path: '/orders', authRequired: true },
-    ...(isAdmin ? [{ name: 'Admin', icon: Shield, path: '/admin/dashboard' }] : []),
-    { name: 'Profile',   icon: User,        path: user ? (isAdmin ? '/admin/dashboard' : '/profile') : '/auth' },
+    { name: 'Home',     icon: Home,       path: '/' },
+    { name: 'Products', icon: Package,    path: '/our-products' },
+    { name: 'Research', icon: Microscope, path: '/our-research' },
+    { name: 'Cart',     icon: ShoppingBag, path: '/cart', badge: cartCount },
+    { name: 'Account',  icon: User,       path: user ? (isAdmin ? '/admin/dashboard' : '/profile') : '/auth' },
   ];
 
   const handleNavClick = (item: typeof navItems[0]) => {
-    if (item.authRequired && !user) {
-      setAuthModalView('login');
-      return;
-    }
     if (item.path === '/auth') {
       setAuthModalView('login');
       return;
@@ -72,7 +71,7 @@ const BottomNav: React.FC = () => {
 
               {/* Icon container */}
               <span
-                className={`flex items-center justify-center w-10 h-7 rounded-xl transition-all duration-200 ${
+                className={`flex items-center justify-center w-10 h-7 rounded-xl relative transition-all duration-200 ${
                   active
                     ? 'bg-[#F4F9F9] text-[#0B6F6D]'
                     : 'text-gray-400 group-active:bg-gray-100'
@@ -84,6 +83,11 @@ const BottomNav: React.FC = () => {
                   }`}
                   strokeWidth={active ? 2.5 : 1.8}
                 />
+                {item.badge && item.badge > 0 ? (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#E17C61] text-white text-[9px] font-black rounded-full flex items-center justify-center shadow-xs">
+                    {item.badge}
+                  </span>
+                ) : null}
               </span>
 
               {/* Label */}

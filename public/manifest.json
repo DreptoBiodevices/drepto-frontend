@@ -1,6 +1,6 @@
 {
   "short_name": "Drepto",
-  "name": "Drepto - Modern Telemedicine",
+  "name": "Drepto Biodevices",
   "icons": [
     {
       "src": "favicon.svg",
@@ -12,6 +12,6 @@
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#ffffff",
-  "description": "Modern Telemedicine Platform"
+  "theme_color": "#0B6F6D",
+  "description": "Deep-tech biomedical enterprise incubated at SINE, IIT Bombay. Targeted transdermal drug delivery and MenstroHerb™."
 }

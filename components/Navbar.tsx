@@ -93,13 +93,6 @@ const Navbar: React.FC<NavbarProps> = ({
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const languageRef = useRef<HTMLDivElement>(null);
 
-  // ── Upload Prescription state ──
-  const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
-  const [prescriptionFile, setPrescriptionFile] = useState<File | null>(null);
-  const [prescriptionPreview, setPrescriptionPreview] = useState<string | null>(null);
-  const [prescriptionUploading, setPrescriptionUploading] = useState(false);
-  const [prescriptionSuccess, setPrescriptionSuccess] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ── Cart State ──
   const [cartCount, setCartCount] = useState(0);
@@ -190,39 +183,6 @@ const Navbar: React.FC<NavbarProps> = ({
     }, 2000);
   };
 
-  // ── Prescription Upload logic ──
-  const handlePrescriptionClick = () => {
-    setShowPrescriptionModal(true);
-    setPrescriptionFile(null);
-    setPrescriptionPreview(null);
-    setPrescriptionSuccess(false);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPrescriptionFile(file);
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setPrescriptionPreview(ev.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handlePrescriptionUpload = async () => {
-    if (!prescriptionFile) return;
-    setPrescriptionUploading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setPrescriptionUploading(false);
-    setPrescriptionSuccess(true);
-    setTimeout(() => {
-      setShowPrescriptionModal(false);
-      setPrescriptionFile(null);
-      setPrescriptionPreview(null);
-      setPrescriptionSuccess(false);
-    }, 2500);
-  };
 
   // ── Click outside handlers ──
   useEffect(() => {
@@ -351,14 +311,14 @@ const Navbar: React.FC<NavbarProps> = ({
 
             {/* Desktop Right Utilities (Upload Prescription, Cart, Lang, Auth) */}
             <div className="hidden lg:flex items-center space-x-3.5 flex-shrink-0">
-              {/* Sleek Outline Upload Prescription Button */}
+              {/* Buy MenstroHerb Direct Action CTA */}
               <button
                 type="button"
-                onClick={handlePrescriptionClick}
-                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-white/30 hover:border-[#0B6F6D] text-white hover:text-white bg-white/10 hover:bg-[#0B6F6D]/30 font-semibold text-xs tracking-wide transition-all shadow-sm backdrop-blur-sm cursor-pointer"
+                onClick={() => navigate('/our-products')}
+                className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-full bg-[#0B6F6D] hover:bg-[#085553] text-white font-bold text-xs tracking-wide transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
               >
-                <FileText className="w-3.5 h-3.5 text-white/90" />
-                <span>{t('util.uploadPrescription')}</span>
+                <ShoppingBag className="w-3.5 h-3.5" />
+                <span>Buy MenstroHerb</span>
               </button>
 
               {/* Language Selector */}
@@ -596,24 +556,24 @@ const Navbar: React.FC<NavbarProps> = ({
 
               {/* Quick Action Cards */}
               <div className="space-y-2">
-                {/* Upload Prescription */}
+                {/* Explore MenstroHerb */}
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    handlePrescriptionClick();
+                    navigate('/our-products');
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#F4F9F9]/70 border border-[#D0E6E6]/90 text-slate-900 hover:bg-[#D0E6E6]/70 transition-all cursor-pointer group"
+                  className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#F4F9F9]/90 border border-[#D0E6E6] text-slate-900 hover:bg-[#D0E6E6]/70 transition-all cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-white text-[#0B6F6D] shadow-2xs group-hover:scale-105 transition-transform">
-                      <Upload className="w-4 h-4" />
+                    <div className="p-2.5 rounded-xl bg-[#0B6F6D] text-white shadow-2xs group-hover:scale-105 transition-transform">
+                      <ShoppingBag className="w-4 h-4" />
                     </div>
                     <div className="text-left">
-                      <span className="text-xs font-bold block text-slate-900">{t('util.uploadPrescription')}</span>
-                      <span className="text-[10px] text-slate-500 font-medium">Fast doorstep dispatch</span>
+                      <span className="text-xs font-bold block text-slate-900">Explore MenstroHerb™</span>
+                      <span className="text-[10px] text-slate-500 font-medium">Patented Transdermal Relief</span>
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                  <ChevronRight className="w-4 h-4 text-[#0B6F6D]" />
                 </button>
 
                 {/* Mobile Cart */}
@@ -726,123 +686,7 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
-          Upload Prescription Modal
-          ───────────────────────────────────────────────────────────── */}
-      {showPrescriptionModal && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-zoom-in">
-            {/* Header */}
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-slate-50">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#F4F9F9] flex items-center justify-center">
-                  <Upload className="w-5 h-5 text-[#0B6F6D]" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">{t('prescription.title')}</h3>
-                  <p className="text-xs text-gray-500">{t('prescription.subtitle')}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowPrescriptionModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Body */}
-            <div className="p-6 space-y-5">
-              {prescriptionSuccess ? (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-                    <Check className="w-8 h-8 text-green-600" />
-                  </div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">{t('prescription.uploadSuccess')}</h4>
-                  <p className="text-gray-500 text-sm">
-                    {t('prescription.successMessage')}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  {/* Upload Area */}
-                  <div
-                    className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center cursor-pointer hover:border-[#0B6F6D] hover:bg-[#F4F9F9]/20 transition-all"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    {prescriptionPreview ? (
-                      <div className="space-y-3">
-                        <img
-                          src={prescriptionPreview}
-                          alt="Prescription preview"
-                          className="max-h-48 mx-auto rounded-xl object-contain"
-                        />
-                        <p className="text-sm font-medium text-slate-800">{prescriptionFile?.name}</p>
-                        <p className="text-xs text-slate-400">{t('prescription.changeFile')}</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        <div className="w-14 h-14 mx-auto rounded-2xl bg-[#F4F9F9] flex items-center justify-center text-[#0B6F6D]">
-                          <Upload className="w-7 h-7" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-700">{t('prescription.dragDrop')}</p>
-                          <p className="text-xs text-gray-400 mt-1">PNG, JPG or PDF (Max 10MB)</p>
-                        </div>
-                        <button
-                          type="button"
-                          className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
-                        >
-                          {t('prescription.browseFiles')}
-                        </button>
-                      </div>
-                    )}
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*,.pdf"
-                      className="hidden"
-                      onChange={handleFileChange}
-                    />
-                  </div>
-
-                  {/* Security Notice */}
-                  <div className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-500">
-                    <Shield className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Your medical records are encrypted and protected under healthcare privacy standards.</span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-3 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setShowPrescriptionModal(false)}
-                      className="flex-1 py-3 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-colors text-sm cursor-pointer"
-                    >
-                      {t('prescription.cancel')}
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!prescriptionFile || prescriptionUploading}
-                      onClick={handlePrescriptionUpload}
-                      className="flex-1 py-3 bg-[#0B6F6D] text-white rounded-xl font-bold hover:bg-[#0B5C5A] transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
-                    >
-                      {prescriptionUploading ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          <span>{t('prescription.uploading')}</span>
-                        </>
-                      ) : (
-                        <span>{t('prescription.uploadNow')}</span>
-                      )}
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      
     </>
   );
 };
