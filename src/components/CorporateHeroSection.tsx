@@ -441,13 +441,6 @@ const CorporateHeroSection: React.FC = () => {
                             />
                           ) : null}
 
-                          {/* Top-Left Reel Badge */}
-                          <div className="absolute top-3 left-3 z-30 flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider backdrop-blur-md bg-black/60 text-white border border-white/20 shadow-md pointer-events-none">
-                            <span className="w-2 h-2 rounded-full bg-[#0B6F6D] animate-ping" />
-                            <Film className="w-3.5 h-3.5 text-teal-300" />
-                            <span>Drepto Reel</span>
-                          </div>
-
                           {/* Previous / Next Carousel Controls (if multiple reels) */}
                           {reels.length > 1 && (
                             <>
