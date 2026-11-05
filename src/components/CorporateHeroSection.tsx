@@ -448,33 +448,6 @@ const CorporateHeroSection: React.FC = () => {
                             <span>Drepto Reel</span>
                           </div>
 
-                          {/* Bottom Information Gradient Overlay */}
-                          <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 pt-12 flex flex-col justify-end text-left pointer-events-none">
-                            <h4 className="text-white text-base sm:text-lg font-bold drop-shadow-md line-clamp-1">
-                              {currentReel.title || 'Drepto Biodevices In Action'}
-                            </h4>
-                            {currentReel.caption && (
-                              <p className="text-slate-200 text-xs sm:text-sm mt-1 line-clamp-2 drop-shadow-sm leading-relaxed">
-                                {currentReel.caption}
-                              </p>
-                            )}
-
-                            {/* External Link if Available */}
-                            {currentReel.embedUrl && !currentReel.embedUrl.startsWith('data:') && (
-                              <div className="mt-2.5 pointer-events-auto">
-                                <a
-                                  href={currentReel.embedUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-teal-300 hover:text-white transition-colors"
-                                >
-                                  <span>View Original</span>
-                                  <ExternalLink className="w-3 h-3" />
-                                </a>
-                              </div>
-                            )}
-                          </div>
-
                           {/* Previous / Next Carousel Controls (if multiple reels) */}
                           {reels.length > 1 && (
                             <>
