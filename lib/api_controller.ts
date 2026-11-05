@@ -248,3 +248,16 @@ export const ReviewService = {
   update: (id: string, data: any) => api.put(`/reviews/${id}`, data),
   delete: (id: string) => api.delete(`/reviews/${id}`),
 };
+
+// Social Posts Controller
+export const SocialPostService = {
+  /** Fetch all active posts (public endpoint – used by the Social Media Blog page) */
+  getAll: () => api.get('/social-posts'),
+  getById: (id: string) => api.get(`/social-posts/${id}`),
+  /** Admin: create a new social post (Instagram reel, LinkedIn, Twitter) */
+  create: (data: any) => api.post('/social-posts', data),
+  /** Admin: get every post including inactive ones */
+  getAllAdmin: () => api.get('/social-posts/admin/all'),
+  update: (id: string, data: any) => api.patch(`/social-posts/${id}`, data),
+  delete: (id: string) => api.delete(`/social-posts/${id}`),
+};

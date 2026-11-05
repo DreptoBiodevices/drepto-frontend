@@ -11,6 +11,7 @@ import MedicineCRUD from './MedicineCRUD';
 import LabTestCRUD from './LabTestCRUD';
 import ProductCRUD from './ProductCRUD';
 import TransactionHistory from './TransactionHistory';
+import AdminReels from './AdminReels';
 import { ADMIN_AUTH_KEY } from './adminData';
 import { Menu, ExternalLink, LogOut, Shield } from 'lucide-react';
 
@@ -24,6 +25,7 @@ const titles: Record<string, string> = {
   medicines:    'Medicines Database',
   labtests:     'Lab Tests Database',
   feedback:     'Feedback & Customer Reviews',
+  reels:        'Homepage Reels & Media Showcase',
 };
 
 const AdminDashboard: React.FC = () => {
@@ -110,7 +112,8 @@ const AdminDashboard: React.FC = () => {
             {tab === 'products'     && <ProductCRUD />}
             {tab === 'medicines'    && <MedicineCRUD />}
             {tab === 'labtests'     && <LabTestCRUD />}
-            {tab === 'feedback'     && <AdminFeedback />}
+            {tab === 'feedback'     && <AdminFeedback />} 
+            {tab === 'reels'        && <AdminReels />}
           </div>
         </main>
       </div>
