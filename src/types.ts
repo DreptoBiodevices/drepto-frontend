@@ -242,8 +242,17 @@ export interface FeedbackSubmission {
 }
 
 export interface SocialMediaPost {
-    platform: 'instagram' | 'linkedin' | 'twitter';
+    _id?: string;
+    id?: string;
+    platform: 'instagram' | 'linkedin' | 'twitter' | 'reel' | 'video' | 'youtube';
     embedUrl: string;
+    title?: string;
+    videoUrl?: string;
+    thumbnailUrl?: string;
     caption?: string;
     date?: string;
+    isActive?: boolean;
+    order?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }

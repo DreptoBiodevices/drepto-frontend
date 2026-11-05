@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Instagram, Linkedin, Twitter, Loader2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { SOCIAL_MEDIA_EMBEDS } from '../constants';
+import { SocialPostService } from '../lib/api_controller';
 import { SocialMediaPost } from '../types';
 
 type PlatformFilter = 'all' | 'instagram' | 'linkedin' | 'twitter';
@@ -37,7 +37,9 @@ const platformMeta = {
 
 const SocialMediaBlogPage: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState<PlatformFilter>('all');
-    const [posts, setPosts] = useState<SocialMediaPost[]>(SOCIAL_MEDIA_EMBEDS);
+    const [posts, setPosts] = useState<SocialMediaPost[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const filteredPosts =
         activeFilter === 'all' ? posts : posts.filter((p) => p.platform === activeFilter);
@@ -49,7 +51,17 @@ const SocialMediaBlogPage: React.FC = () => {
         { key: 'twitter', label: 'Twitter', icon: Twitter },
     ];
 
-    // Load platform embed scripts
+    // Fetch posts from backend on mount
+    useEffect(() => {
+        setLoading(true);
+        setError(null);
+        SocialPostService.getAll()
+            .then((res) => setPosts(res.data))
+            .catch(() => setError('Failed to load social media posts. Please try again later.'))
+            .finally(() => setLoading(false));
+    }, []);
+
+    // Load platform embed scripts whenever posts change or filter changes
     useEffect(() => {
         // Instagram embed
         if (!document.getElementById('instagram-embed-script')) {
@@ -72,7 +84,7 @@ const SocialMediaBlogPage: React.FC = () => {
         } else {
             (window as any).twttr?.widgets?.load();
         }
-    }, [activeFilter]);
+    }, [activeFilter, posts]);
 
     return (
         <div className="bg-gray-50 min-h-screen">
@@ -94,7 +106,7 @@ const SocialMediaBlogPage: React.FC = () => {
                         Back to Home
                     </Link>
                     <h1 className="text-3xl md:text-5xl font-bold text-white font-display mb-4">
-                        Social Media & Blog
+                        Social Media &amp; Blog
                     </h1>
                     <p className="text-teal-200/70 max-w-xl mx-auto">
                         Stay updated with our latest posts, announcements, and behind-the-scenes content from across our social channels.
@@ -126,7 +138,15 @@ const SocialMediaBlogPage: React.FC = () => {
 
             {/* Posts Grid */}
             <section className="container mx-auto px-6 py-12">
-                {filteredPosts.length === 0 ? (
+                {loading ? (
+                    <div className="flex items-center justify-center py-24">
+                        <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-20">
+                        <p className="text-red-500 font-medium">{error}</p>
+                    </div>
+                ) : filteredPosts.length === 0 ? (
                     <div className="text-center py-20">
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <ExternalLink className="w-8 h-8 text-gray-300" />
@@ -177,7 +197,7 @@ const SocialMediaBlogPage: React.FC = () => {
                                             </p>
                                         )}
 
-                                        {/* Embed Placeholder */}
+                                        {/* Embed */}
                                         <div className="bg-white rounded-xl border border-gray-100 p-4 min-h-[200px] flex items-center justify-center">
                                             {post.platform === 'instagram' ? (
                                                 <blockquote

@@ -1,6 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import {
+  ChevronDown,
+  ArrowRight,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Film,
+  Instagram,
+  Youtube,
+  Sparkles,
+} from 'lucide-react';
+import { SocialPostService } from '../lib/api_controller';
+import { SocialMediaPost } from '../types';
 
 export const FounderQuoteCard: React.FC = () => {
   return (
@@ -92,6 +108,68 @@ const CorporateHeroSection: React.FC = () => {
     'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop'
   );
 
+  // Reels showcase state
+  const [reels, setReels] = useState<SocialMediaPost[]>([]);
+  const [activeReelIdx, setActiveReelIdx] = useState(0);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const loadReels = async () => {
+      try {
+        const res = await SocialPostService.getAll();
+        const data = res?.data || [];
+        // Filter for active reels and sort by order
+        const filtered = data
+          .filter((p: any) => p.isActive !== false)
+          .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
+        setReels(filtered);
+      } catch (err) {
+        console.warn('Could not load reels for hero showcase, fallback to static image:', err);
+      }
+    };
+    loadReels();
+
+    window.addEventListener('reels-updated', loadReels);
+    return () => window.removeEventListener('reels-updated', loadReels);
+  }, []);
+
+  const handleTogglePlay = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const currentReel = reels.length > 0 ? reels[activeReelIdx] : null;
+
+  const nextReel = () => {
+    setActiveReelIdx((prev) => (prev + 1) % reels.length);
+    setIsPlaying(true);
+  };
+
+  const prevReel = () => {
+    setActiveReelIdx((prev) => (prev - 1 + reels.length) % reels.length);
+    setIsPlaying(true);
+  };
+
+  const getInstagramEmbed = (url: string) => {
+    const match = url?.match(/instagram\.com\/(?:reel|p)\/([^/?#&]+)/);
+    if (match) return `https://www.instagram.com/reel/${match[1]}/embed`;
+    return url;
+  };
+
+  const getYoutubeEmbed = (url: string) => {
+    const match = url?.match(/(?:youtu\.be\/|youtube\.com\/(?:shorts\/|watch\?v=))([^/?#&]+)/);
+    if (match) return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=1&loop=1&playlist=${match[1]}&controls=0`;
+    return url;
+  };
+
   // Smooth scroll tracking using requestAnimationFrame
   const [scrollY, setScrollY] = useState(0);
 
@@ -120,9 +198,6 @@ const CorporateHeroSection: React.FC = () => {
   };
 
   // Scroll calculation parameters
-  // Over the first 360px of natural scroll:
-  // - The text translates UP by up to 200px, moving directly over and covering the image
-  // - The background image fades out smoothly to the dark slate background
   const maxScroll = 360;
   const progress = Math.min(1, Math.max(0, scrollY / maxScroll));
 
@@ -138,44 +213,40 @@ const CorporateHeroSection: React.FC = () => {
           1. HERO BANNER: Direct Seamless Banner (NO extra empty space)
           ───────────────────────────────────────────────────────────── */}
       <section className="relative w-full h-[76vh] sm:h-[84vh] md:h-[88vh] lg:h-[92vh] max-h-[1000px] overflow-hidden bg-[#052121] flex flex-col justify-end">
-        {/* Background Image: Fades out smoothly as text rises */}
+        {/* Dynamic Background Image: scales up gently, dims on scroll */}
         <div
-          className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
+          className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-75 ease-out select-none"
           style={{
+            backgroundImage: `url('${heroImg}')`,
             opacity: imageOpacity,
             transform: `scale(${imageScale})`,
-            willChange: 'opacity, transform',
+            willChange: 'transform, opacity',
           }}
-        >
-          <img
-            src={heroImg}
-            alt="Feminine Hygiene, Comfort, and Wellness"
-            onError={() =>
-              setHeroImg(
-                'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1920&auto=format&fit=crop'
-              )
-            }
-            className="w-full h-full object-cover object-[center_30%]"
-          />
-        </div>
+          onError={() =>
+            setHeroImg(
+              'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2000&auto=format&fit=crop'
+            )
+          }
+        />
 
-        {/* Dynamic Darkening Gradient Overlay */}
+        {/* Dynamic Dark Slate Wash Overlay */}
         <div
-          className="absolute inset-0 pointer-events-none transition-colors duration-150"
+          className="absolute inset-0 z-1 pointer-events-none transition-all duration-75 ease-out"
           style={{
-            backgroundColor: `rgba(5, 33, 33, ${overlayDarkness})`,
+            backgroundColor: `rgba(2, 28, 28, ${overlayDarkness})`,
           }}
         />
 
-        {/* Cinematic Vignette Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/85 pointer-events-none" />
+        {/* Subtle Top & Bottom Gradient Vignettes */}
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/60 to-transparent z-2 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-2 pointer-events-none" />
 
-        {/* Center / Bottom Content: Text moves UP and covers the image as you scroll */}
-        <div className="relative z-20 w-full flex flex-col items-center justify-end px-4 sm:px-6 pb-6 sm:pb-8 md:pb-10">
-          {/* Scroll Down Capsule Indicator */}
+        {/* Banner Foreground Layer */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-8 sm:pb-12 md:pb-16 flex flex-col items-center">
+          {/* Elegant Pill Capsule / Scroll Cue (Fades away instantly on scroll) */}
           <button
             onClick={scrollToOverview}
-            aria-label="Scroll to company overview"
+            aria-label="Scroll down to Curing the World, Caring Beyond overview"
             style={{
               opacity: capsuleOpacity,
               transition: 'opacity 0.15s ease-out',
@@ -222,7 +293,7 @@ const CorporateHeroSection: React.FC = () => {
           ───────────────────────────────────────────────────────────── */}
       <section id="caring-beyond" className="py-16 sm:py-24 lg:py-28 bg-white relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Heading in Signature Emcure Crimson Red */}
+          {/* Section Heading */}
           <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-slate-900 text-center mb-8 sm:mb-14 lg:mb-16">
             Curing the World, <span className="text-[#0B6F6D]">Caring Beyond</span>
           </h2>
@@ -276,21 +347,180 @@ const CorporateHeroSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Serene Woman Radiating Feminine Wellness with Red Accent Stripe */}
+            {/* Right Column: Uploaded Reel Showcase or Serene Woman Image */}
             <div className="lg:col-span-5 relative mt-4 lg:mt-0 flex justify-center">
               <div className="relative w-full max-w-md sm:max-w-lg lg:max-w-none">
-                {/* Photo */}
-                <div className="relative overflow-hidden rounded-2xl shadow-md border border-slate-300 bg-slate-100">
-                  <img
-                    src={patientImg}
-                    alt="Serene, comfortable woman experiencing feminine wellness"
-                    onError={() =>
-                      setPatientImg(
-                        'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop'
-                      )
-                    }
-                    className="w-full h-[380px] sm:h-[460px] lg:h-[500px] object-cover object-center"
-                  />
+                {/* Reel Card Container */}
+                <div className="relative overflow-hidden rounded-2xl shadow-xl border border-slate-300 bg-slate-950 group">
+                  {currentReel ? (
+                    (() => {
+                      const isVideo =
+                        currentReel.platform === 'reel' ||
+                        currentReel.platform === 'video' ||
+                        currentReel.embedUrl?.endsWith('.mp4') ||
+                        currentReel.embedUrl?.endsWith('.webm') ||
+                        currentReel.embedUrl?.startsWith('data:video') ||
+                        Boolean(currentReel.videoUrl);
+
+                      const isInstagram =
+                        currentReel.platform === 'instagram' ||
+                        currentReel.embedUrl?.includes('instagram.com');
+
+                      const isYoutube =
+                        currentReel.platform === 'youtube' ||
+                        currentReel.embedUrl?.includes('youtube.com') ||
+                        currentReel.embedUrl?.includes('youtu.be');
+
+                      return (
+                        <div className="relative w-full h-[380px] sm:h-[460px] lg:h-[500px] flex items-center justify-center bg-black">
+                          {isVideo ? (
+                            <>
+                              <video
+                                ref={videoRef}
+                                key={currentReel._id || currentReel.id || currentReel.embedUrl}
+                                src={currentReel.videoUrl || currentReel.embedUrl}
+                                poster={currentReel.thumbnailUrl}
+                                className="w-full h-full object-cover object-center"
+                                autoPlay
+                                loop
+                                playsInline
+                                muted={isMuted}
+                                onPlay={() => setIsPlaying(true)}
+                                onPause={() => setIsPlaying(false)}
+                              />
+
+                              {/* Play / Pause Center Click Overlay */}
+                              <div
+                                onClick={handleTogglePlay}
+                                className="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <div className="w-14 h-14 rounded-full bg-white/90 hover:bg-white text-slate-900 flex items-center justify-center shadow-2xl transition-transform hover:scale-110 active:scale-95">
+                                  {isPlaying ? (
+                                    <Pause className="w-6 h-6 fill-slate-900" />
+                                  ) : (
+                                    <Play className="w-6 h-6 fill-slate-900 ml-0.5" />
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Sound Mute / Unmute Button */}
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setIsMuted(!isMuted);
+                                }}
+                                title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
+                                className="absolute top-3 right-3 z-30 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md shadow-md transition-transform hover:scale-105 active:scale-95"
+                              >
+                                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                              </button>
+                            </>
+                          ) : isInstagram ? (
+                            <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center bg-gradient-to-br from-pink-950 via-purple-950 to-slate-950 text-white">
+                              <iframe
+                                src={getInstagramEmbed(currentReel.embedUrl)}
+                                className="w-full h-full border-0 rounded-xl"
+                                allowFullScreen
+                                title={currentReel.title || 'Instagram Reel'}
+                              />
+                            </div>
+                          ) : isYoutube ? (
+                            <iframe
+                              src={getYoutubeEmbed(currentReel.embedUrl)}
+                              className="w-full h-full border-0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title={currentReel.title || 'YouTube Short'}
+                            />
+                          ) : null}
+
+                          {/* Top-Left Reel Badge */}
+                          <div className="absolute top-3 left-3 z-30 flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider backdrop-blur-md bg-black/60 text-white border border-white/20 shadow-md pointer-events-none">
+                            <span className="w-2 h-2 rounded-full bg-[#0B6F6D] animate-ping" />
+                            <Film className="w-3.5 h-3.5 text-teal-300" />
+                            <span>Drepto Reel</span>
+                          </div>
+
+                          {/* Bottom Information Gradient Overlay */}
+                          <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 pt-12 flex flex-col justify-end text-left pointer-events-none">
+                            <h4 className="text-white text-base sm:text-lg font-bold drop-shadow-md line-clamp-1">
+                              {currentReel.title || 'Drepto Biodevices In Action'}
+                            </h4>
+                            {currentReel.caption && (
+                              <p className="text-slate-200 text-xs sm:text-sm mt-1 line-clamp-2 drop-shadow-sm leading-relaxed">
+                                {currentReel.caption}
+                              </p>
+                            )}
+
+                            {/* External Link if Available */}
+                            {currentReel.embedUrl && !currentReel.embedUrl.startsWith('data:') && (
+                              <div className="mt-2.5 pointer-events-auto">
+                                <a
+                                  href={currentReel.embedUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-teal-300 hover:text-white transition-colors"
+                                >
+                                  <span>View Original</span>
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Previous / Next Carousel Controls (if multiple reels) */}
+                          {reels.length > 1 && (
+                            <>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  prevReel();
+                                }}
+                                title="Previous Reel"
+                                className="absolute left-2.5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm shadow-md transition-all opacity-80 hover:opacity-100 hover:scale-110 active:scale-95"
+                              >
+                                <ChevronLeft className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  nextReel();
+                                }}
+                                title="Next Reel"
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm shadow-md transition-all opacity-80 hover:opacity-100 hover:scale-110 active:scale-95"
+                              >
+                                <ChevronRight className="w-4 h-4" />
+                              </button>
+
+                              {/* Carousel Indicator Dots */}
+                              <div className="absolute top-3 inset-x-0 z-30 flex justify-center gap-1.5 pointer-events-none">
+                                {reels.map((_, i) => (
+                                  <span
+                                    key={i}
+                                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                                      i === activeReelIdx ? 'w-5 bg-[#0B6F6D]' : 'w-1.5 bg-white/40'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })()
+                  ) : (
+                    /* Fallback to Original Photo if No Reels Uploaded Yet */
+                    <img
+                      src={patientImg}
+                      alt="Serene, comfortable woman experiencing feminine wellness"
+                      onError={() =>
+                        setPatientImg(
+                          'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop'
+                        )
+                      }
+                      className="w-full h-[380px] sm:h-[460px] lg:h-[500px] object-cover object-center"
+                    />
+                  )}
                 </div>
 
                 {/* Signature Red Vertical Accent Bar (bottom-right) */}

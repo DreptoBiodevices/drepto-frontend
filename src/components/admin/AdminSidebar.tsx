@@ -4,7 +4,7 @@ import { ADMIN_AUTH_KEY } from './adminData';
 import { useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, ShoppingBag, Package, Users, MapPin,
-  MessageSquare, CreditCard, FlaskConical, Pill, LogOut, Menu, X, ChevronRight
+  MessageSquare, CreditCard, FlaskConical, Pill, LogOut, Menu, X, ChevronRight, Film
 } from 'lucide-react';
 
 interface Props { activeTab: string; setActiveTab: (t: string) => void; }
@@ -18,6 +18,7 @@ const nav = [
   { id: 'products',      label: 'Products',       icon: Package,         group: 'Catalogue' },
   { id: 'medicines',     label: 'Medicines',      icon: Pill,            group: 'Catalogue' },
   { id: 'labtests',      label: 'Lab Tests',      icon: FlaskConical,    group: 'Catalogue' },
+  { id: 'reels',         label: 'Reels & Media',  icon: Film,            group: 'Catalogue' },
   { id: 'feedback',      label: 'Feedback',       icon: MessageSquare,   group: 'Insights' },
 ];
 
