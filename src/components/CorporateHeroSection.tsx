@@ -347,32 +347,38 @@ const CorporateHeroSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Uploaded Reel Showcase or Serene Woman Image */}
+            {/* Right Column: Uploaded Reel Showcase (9:16 Aspect Ratio) */}
             <div className="lg:col-span-5 relative mt-4 lg:mt-0 flex justify-center">
-              <div className="relative w-full max-w-md sm:max-w-lg lg:max-w-none">
+              <div className="relative w-full max-w-[340px] sm:max-w-[360px] lg:max-w-[370px] aspect-[9/16]">
                 {/* Reel Card Container */}
-                <div className="relative overflow-hidden rounded-2xl shadow-xl border border-slate-300 bg-slate-950 group">
+                <div className="relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-300 bg-black group">
                   {currentReel ? (
                     (() => {
-                      const isVideo =
-                        currentReel.platform === 'reel' ||
-                        currentReel.platform === 'video' ||
-                        currentReel.embedUrl?.endsWith('.mp4') ||
-                        currentReel.embedUrl?.endsWith('.webm') ||
-                        currentReel.embedUrl?.startsWith('data:video') ||
-                        Boolean(currentReel.videoUrl);
-
                       const isInstagram =
                         currentReel.platform === 'instagram' ||
-                        currentReel.embedUrl?.includes('instagram.com');
+                        currentReel.embedUrl?.includes('instagram.com') ||
+                        currentReel.videoUrl?.includes('instagram.com');
 
                       const isYoutube =
                         currentReel.platform === 'youtube' ||
                         currentReel.embedUrl?.includes('youtube.com') ||
-                        currentReel.embedUrl?.includes('youtu.be');
+                        currentReel.embedUrl?.includes('youtu.be') ||
+                        currentReel.videoUrl?.includes('youtube.com') ||
+                        currentReel.videoUrl?.includes('youtu.be');
+
+                      const isVideo = !isInstagram && !isYoutube && (
+                        currentReel.platform === 'reel' ||
+                        currentReel.platform === 'video' ||
+                        currentReel.embedUrl?.endsWith('.mp4') ||
+                        currentReel.embedUrl?.endsWith('.webm') ||
+                        currentReel.embedUrl?.endsWith('.mov') ||
+                        currentReel.embedUrl?.startsWith('data:video') ||
+                        currentReel.embedUrl?.startsWith('blob:') ||
+                        Boolean(currentReel.videoUrl && (currentReel.videoUrl.endsWith('.mp4') || currentReel.videoUrl.startsWith('data:video')))
+                      );
 
                       return (
-                        <div className="relative w-full h-[380px] sm:h-[460px] lg:h-[500px] flex items-center justify-center bg-black">
+                        <div className="relative w-full h-full flex items-center justify-center bg-black">
                           {isVideo ? (
                             <>
                               <video
@@ -416,17 +422,18 @@ const CorporateHeroSection: React.FC = () => {
                               </button>
                             </>
                           ) : isInstagram ? (
-                            <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center bg-gradient-to-br from-pink-950 via-purple-950 to-slate-950 text-white">
+                            <div className="w-full h-full flex flex-col items-center justify-center bg-black text-white">
                               <iframe
-                                src={getInstagramEmbed(currentReel.embedUrl)}
-                                className="w-full h-full border-0 rounded-xl"
+                                src={getInstagramEmbed(currentReel.embedUrl || currentReel.videoUrl || '')}
+                                className="w-full h-full border-0 rounded-2xl sm:rounded-3xl"
                                 allowFullScreen
+                                scrolling="no"
                                 title={currentReel.title || 'Instagram Reel'}
                               />
                             </div>
                           ) : isYoutube ? (
                             <iframe
-                              src={getYoutubeEmbed(currentReel.embedUrl)}
+                              src={getYoutubeEmbed(currentReel.embedUrl || currentReel.videoUrl || '')}
                               className="w-full h-full border-0"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
@@ -518,7 +525,7 @@ const CorporateHeroSection: React.FC = () => {
                           'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop'
                         )
                       }
-                      className="w-full h-[380px] sm:h-[460px] lg:h-[500px] object-cover object-center"
+                      className="w-full h-full object-cover object-center"
                     />
                   )}
                 </div>

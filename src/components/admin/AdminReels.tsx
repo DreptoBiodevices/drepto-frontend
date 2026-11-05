@@ -381,17 +381,23 @@ const AdminReels: React.FC = () => {
           {reels.map((reel) => {
             const id = reel._id || reel.id;
             const isThisPlaying = playingId === id;
-            const isVideoFile =
-              reel.platform === 'reel' ||
-              reel.platform === 'video' ||
-              reel.embedUrl.endsWith('.mp4') ||
-              reel.embedUrl.endsWith('.webm') ||
-              reel.embedUrl.startsWith('data:video');
-            const isInstagram = reel.platform === 'instagram' || reel.embedUrl.includes('instagram.com');
+            const isInstagram = reel.platform === 'instagram' || reel.embedUrl?.includes('instagram.com') || reel.videoUrl?.includes('instagram.com');
             const isYoutube =
               reel.platform === 'youtube' ||
-              reel.embedUrl.includes('youtube.com') ||
-              reel.embedUrl.includes('youtu.be');
+              reel.embedUrl?.includes('youtube.com') ||
+              reel.embedUrl?.includes('youtu.be') ||
+              reel.videoUrl?.includes('youtube.com') ||
+              reel.videoUrl?.includes('youtu.be');
+            const isVideoFile = !isInstagram && !isYoutube && (
+              reel.platform === 'video' ||
+              reel.embedUrl?.endsWith('.mp4') ||
+              reel.embedUrl?.endsWith('.webm') ||
+              reel.embedUrl?.endsWith('.mov') ||
+              reel.embedUrl?.startsWith('data:video') ||
+              reel.embedUrl?.startsWith('blob:') ||
+              Boolean(reel.videoUrl && (reel.videoUrl.endsWith('.mp4') || reel.videoUrl.startsWith('data:video'))) ||
+              (reel.platform === 'reel' && !reel.embedUrl?.includes('http'))
+            );
 
             return (
               <div
@@ -402,8 +408,8 @@ const AdminReels: React.FC = () => {
                     : 'border-dashed border-gray-300 opacity-70 bg-gray-50/50'
                 }`}
               >
-                {/* Media Preview Window */}
-                <div className="relative aspect-[9/14] max-h-[380px] bg-slate-950 flex items-center justify-center overflow-hidden group">
+                {/* Media Preview Window (9:16 Aspect Ratio) */}
+                <div className="relative aspect-[9/16] bg-slate-950 flex items-center justify-center overflow-hidden group">
                   {isVideoFile ? (
                     <>
                       <video
