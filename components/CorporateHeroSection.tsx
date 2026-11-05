@@ -347,38 +347,59 @@ const CorporateHeroSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Uploaded Reel Showcase (9:16 Aspect Ratio) */}
+            {/* Right Column: Uploaded Reel Showcase (Clean Borders) */}
             <div className="lg:col-span-5 relative mt-4 lg:mt-0 flex justify-center">
-              <div className="relative w-full max-w-[340px] sm:max-w-[360px] lg:max-w-[370px] aspect-[9/16]">
-                {/* Reel Card Container */}
-                <div className="relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-300 bg-black group">
-                  {currentReel ? (
-                    (() => {
-                      const isInstagram =
-                        currentReel.platform === 'instagram' ||
-                        currentReel.embedUrl?.includes('instagram.com') ||
-                        currentReel.videoUrl?.includes('instagram.com');
+              {(() => {
+                const isInstagram =
+                  Boolean(currentReel) &&
+                  (currentReel.platform === 'instagram' ||
+                    currentReel.embedUrl?.includes('instagram.com') ||
+                    currentReel.videoUrl?.includes('instagram.com'));
 
-                      const isYoutube =
-                        currentReel.platform === 'youtube' ||
-                        currentReel.embedUrl?.includes('youtube.com') ||
-                        currentReel.embedUrl?.includes('youtu.be') ||
-                        currentReel.videoUrl?.includes('youtube.com') ||
-                        currentReel.videoUrl?.includes('youtu.be');
+                const isYoutube =
+                  Boolean(currentReel) &&
+                  (currentReel.platform === 'youtube' ||
+                    currentReel.embedUrl?.includes('youtube.com') ||
+                    currentReel.embedUrl?.includes('youtu.be') ||
+                    currentReel.videoUrl?.includes('youtube.com') ||
+                    currentReel.videoUrl?.includes('youtu.be'));
 
-                      const isVideo = !isInstagram && !isYoutube && (
-                        currentReel.platform === 'reel' ||
-                        currentReel.platform === 'video' ||
-                        currentReel.embedUrl?.endsWith('.mp4') ||
-                        currentReel.embedUrl?.endsWith('.webm') ||
-                        currentReel.embedUrl?.endsWith('.mov') ||
-                        currentReel.embedUrl?.startsWith('data:video') ||
-                        currentReel.embedUrl?.startsWith('blob:') ||
-                        Boolean(currentReel.videoUrl && (currentReel.videoUrl.endsWith('.mp4') || currentReel.videoUrl.startsWith('data:video')))
-                      );
+                const isVideo =
+                  Boolean(currentReel) &&
+                  !isInstagram &&
+                  !isYoutube &&
+                  (currentReel.platform === 'reel' ||
+                    currentReel.platform === 'video' ||
+                    currentReel.embedUrl?.endsWith('.mp4') ||
+                    currentReel.embedUrl?.endsWith('.webm') ||
+                    currentReel.embedUrl?.endsWith('.mov') ||
+                    currentReel.embedUrl?.startsWith('data:video') ||
+                    currentReel.embedUrl?.startsWith('blob:') ||
+                    Boolean(
+                      currentReel.videoUrl &&
+                        (currentReel.videoUrl.endsWith('.mp4') || currentReel.videoUrl.startsWith('data:video'))
+                    ));
 
-                      return (
-                        <div className="relative w-full h-full flex items-center justify-center bg-black">
+                return (
+                  <div
+                    className={`relative w-full max-w-[340px] sm:max-w-[360px] lg:max-w-[380px] ${
+                      isInstagram
+                        ? 'h-[640px] sm:h-[660px]'
+                        : currentReel
+                        ? 'aspect-[9/16]'
+                        : 'h-[380px] sm:h-[460px] lg:h-[500px]'
+                    }`}
+                  >
+                    {/* Reel Card Container */}
+                    <div
+                      className={`relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl group ${
+                        isInstagram
+                          ? 'bg-white border border-slate-200'
+                          : 'bg-black border border-slate-300'
+                      }`}
+                    >
+                      {currentReel ? (
+                        <div className="relative w-full h-full flex items-center justify-center">
                           {isVideo ? (
                             <>
                               <video
@@ -422,7 +443,7 @@ const CorporateHeroSection: React.FC = () => {
                               </button>
                             </>
                           ) : isInstagram ? (
-                            <div className="w-full h-full flex flex-col items-center justify-center bg-black text-white">
+                            <div className="w-full h-full bg-white flex items-center justify-center">
                               <iframe
                                 src={getInstagramEmbed(currentReel.embedUrl || currentReel.videoUrl || '')}
                                 className="w-full h-full border-0 rounded-2xl sm:rounded-3xl"
@@ -479,29 +500,29 @@ const CorporateHeroSection: React.FC = () => {
                             </>
                           )}
                         </div>
-                      );
-                    })()
-                  ) : (
-                    /* Fallback to Original Photo if No Reels Uploaded Yet */
-                    <img
-                      src={patientImg}
-                      alt="Serene, comfortable woman experiencing feminine wellness"
-                      onError={() =>
-                        setPatientImg(
-                          'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop'
-                        )
-                      }
-                      className="w-full h-full object-cover object-center"
-                    />
-                  )}
-                </div>
+                      ) : (
+                        /* Fallback to Original Photo if No Reels Uploaded Yet */
+                        <img
+                          src={patientImg}
+                          alt="Serene, comfortable woman experiencing feminine wellness"
+                          onError={() =>
+                            setPatientImg(
+                              'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop'
+                            )
+                          }
+                          className="w-full h-full object-cover object-center"
+                        />
+                      )}
+                    </div>
 
-                {/* Signature Red Vertical Accent Bar (bottom-right) */}
-                <div
-                  className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-3 w-3 sm:w-4 h-28 sm:h-36 bg-[#0B6F6D] rounded-xs shadow-md pointer-events-none"
-                  aria-hidden="true"
-                />
-              </div>
+                    {/* Signature Teal Vertical Accent Bar (bottom-right) */}
+                    <div
+                      className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-3 w-3 sm:w-4 h-28 sm:h-36 bg-[#0B6F6D] rounded-xs shadow-md pointer-events-none"
+                      aria-hidden="true"
+                    />
+                  </div>
+                );
+              })()}
             </div>
           </div>
 
