@@ -2,25 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import {
-  Zap,
-  BookOpen,
   FileText,
   Download,
   ExternalLink,
   X,
-  ShieldCheck,
-  Award,
-  Clock,
   CheckCircle2,
-  FlaskConical,
-  ChevronRight,
-  ArrowRight,
-  Microscope, Activity,
-  Stethoscope,
-  HeartPulse,
-  Leaf,
-  Scale,
-  FileQuestion,
   Loader2,
   AlertTriangle,
 } from 'lucide-react';
@@ -56,17 +42,11 @@ interface ClinicalDetails {
   advantage: string;
 }
 
-/**
- * Each entry in the auto-generated manifest.json.
- * `filename`, `url`, `sizeBytes` and `title` are always present.
- * Everything else comes from the optional .meta.json sidecar.
- */
 interface ResearchEntry {
   filename: string;
   url: string;
   sizeBytes: number;
   title: string;
-  // Optional rich fields from .meta.json
   id?: string;
   subtitle?: string;
   type?: string;
@@ -83,285 +63,35 @@ interface ResearchEntry {
   clinicalDetails?: ClinicalDetails;
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Fallback papers in case manifest fetch is delayed or offline ──────────────
 
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-// ── Generic card for papers without a .meta.json sidecar ─────────────────────
-
-const GenericCard: React.FC<{
-  paper: ResearchEntry;
-  onRead: () => void;
-}> = ({ paper, onRead }) => (
-  <div className="group relative flex flex-col bg-white rounded-3xl border border-slate-200 shadow-soft hover:shadow-elevated transition-all duration-300 overflow-hidden hover:border-[#0B6F6D]/40">
-    <div className="h-1.5 w-full bg-slate-900" />
-
-    <div className="p-6 sm:p-8 flex flex-col flex-grow">
-      {/* Header */}
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
-          <FileQuestion className="w-3.5 h-3.5 text-slate-500" />
-          Research Paper
-        </span>
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
-          {formatBytes(paper.sizeBytes)}
-        </span>
-      </div>
-
-      <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-[#0B6F6D] transition-colors leading-snug mb-2">
-        {paper.title}
-      </h3>
-      <p className="text-xs text-slate-500 font-mono mb-6 break-all">{paper.filename}</p>
-
-      {/* No metadata notice */}
-      <div className="flex-grow flex flex-col items-center justify-center py-10 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 mb-6">
-        <FileQuestion className="w-10 h-10 text-slate-300 mb-3" />
-        <p className="text-sm font-semibold text-slate-500">No metadata file yet</p>
-        <p className="text-xs text-slate-400 mt-1 max-w-xs leading-relaxed">
-          Drop a <code className="bg-slate-100 px-1 rounded font-mono text-[#0B6F6D]">.meta.json</code> sidecar
-          alongside this PDF in <code className="bg-slate-100 px-1 rounded font-mono text-[#0B6F6D]">public/Research/</code> to
-          populate a rich card with title, overview, outcomes and more.
-        </p>
-      </div>
-
-      {/* Actions */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
-        <button
-          onClick={onRead}
-          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-slate-900 hover:bg-slate-800 shadow-soft transition-colors group/btn"
-        >
-          <FileText className="w-4 h-4 text-slate-300 group-hover/btn:scale-110 transition-transform" />
-          <span>Read more</span>
-          <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-        </button>
-        <a
-          href={paper.url}
-          download={paper.filename}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors"
-        >
-          <Download className="w-4 h-4 text-slate-600" />
-          <span className="sm:hidden">Download PDF</span>
-        </a>
-      </div>
-    </div>
-  </div>
-);
-
-// ── Rich card for papers with a .meta.json sidecar ───────────────────────────
-
-const RichCard: React.FC<{
-  paper: ResearchEntry;
-  onRead: () => void;
-}> = ({ paper, onRead }) => {
-  const isClinical = paper.category === 'clinical';
-
-  return (
-    <div className="group relative flex flex-col justify-between bg-white rounded-3xl border border-slate-200 shadow-soft hover:shadow-elevated transition-all duration-300 overflow-hidden hover:border-[#0B6F6D]/40">
-      {/* Accent bar */}
-      <div
-        className={`h-1.5 w-full ${
-          isClinical
-            ? 'bg-teal-700'
-            : 'bg-slate-900'
-        }`}
-      />
-
-      <div className="p-6 sm:p-8 flex flex-col flex-grow">
-        {/* Badges */}
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-              isClinical
-                ? 'bg-cyan-50 text-cyan-800 border border-cyan-200'
-                : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-            }`}
-          >
-            {isClinical ? (
-              <Award className="w-3.5 h-3.5 text-cyan-600" />
-            ) : (
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            )}
-            {paper.type}
-          </span>
-          {paper.date && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-              <Clock className="w-3 h-3 text-slate-400" />
-              {paper.date}
-            </span>
-          )}
-        </div>
-
-        {/* Title & publication */}
-        <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-[#0B6F6D] transition-colors leading-snug">
-          {paper.title}
-        </h3>
-        {paper.publication && (
-          <p className="text-xs sm:text-sm font-medium text-[#0B6F6D] mt-1 mb-4">
-            {paper.publication}
-          </p>
-        )}
-
-        {/* Overview */}
-        {paper.overview && (
-          <div className="bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-100 mb-6">
-            <h4 className="text-xs uppercase tracking-wider font-bold text-slate-400 mb-2 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-[#0B6F6D]" />
-              Overview
-            </h4>
-            <p className="text-sm text-slate-700 leading-relaxed">{paper.overview}</p>
-          </div>
-        )}
-
-        {/* Safety-specific highlight blocks */}
-        {paper.ipDetails && (
-          <div className="rounded-2xl border border-amber-200/80 bg-amber-50/50 p-4 mb-3">
-            <div className="flex items-center gap-2 mb-1.5">
-              <Scale className="w-4 h-4 text-amber-700" />
-              <h5 className="text-xs font-bold uppercase tracking-wider text-amber-900">
-                Intellectual Property &amp; Trademarks
-              </h5>
-            </div>
-            <div className="flex flex-wrap gap-2 text-xs font-bold text-amber-900 mb-2">
-              <span className="bg-white px-2 py-0.5 rounded-md border border-amber-300">
-                Patent: {paper.ipDetails.patentApp}
-              </span>
-              <span className="bg-white px-2 py-0.5 rounded-md border border-amber-300">
-                TM App: {paper.ipDetails.trademarkApp}
-              </span>
-            </div>
-            <p className="text-xs text-amber-800 leading-relaxed">{paper.ipDetails.details}</p>
-          </div>
-        )}
-
-        {paper.safetyDetails && (
-          <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/50 p-4 mb-6">
-            <div className="flex items-center gap-2 mb-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-700" />
-              <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-900">
-                Safety &amp; Biocompatibility Certification
-              </h5>
-            </div>
-            <p className="text-xs text-emerald-900/90 leading-relaxed">{paper.safetyDetails.details}</p>
-          </div>
-        )}
-
-        {/* Clinical-specific highlight blocks */}
-        {paper.clinicalDetails && (
-          <div className="space-y-3 mb-6">
-            <div className="p-4 rounded-2xl bg-[#F4F9F9]/60 border border-[#D0E6E6]/60">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#0B6F6D] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
-                  96%
-                </div>
-                <div>
-                  <h5 className="text-xs font-bold text-[#052121] uppercase tracking-wider">
-                    Key Clinical Outcome
-                  </h5>
-                  <p className="text-xs text-slate-700 mt-1 leading-relaxed">
-                    {paper.clinicalDetails.onsetSpeed}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-cyan-50/70 border border-cyan-200">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-cyan-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
-                  12h+
-                </div>
-                <div>
-                  <h5 className="text-xs font-bold text-cyan-950 uppercase tracking-wider">
-                    Sustained Release Performance
-                  </h5>
-                  <p className="text-xs text-cyan-900 mt-1 leading-relaxed">
-                    {paper.clinicalDetails.cumulativeRelease}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-slate-100 border border-slate-200">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
-                  <HeartPulse className="w-4 h-4" />
-                </div>
-                <div>
-                  <h5 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    Gastro-Sparing Alternative
-                  </h5>
-                  <p className="text-xs text-slate-700 mt-1 leading-relaxed">
-                    {paper.clinicalDetails.advantage}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Active ingredients */}
-        {paper.actives && paper.actives.length > 0 && (
-          <div className="mb-6">
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-              <Leaf className="w-3.5 h-3.5 text-[#0B6F6D]" />
-              Key Ingredients &amp; Active Matrix
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {paper.actives.map((active, i) => (
-                <span
-                  key={i}
-                  className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200/80"
-                >
-                  {active}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Key outcome metrics */}
-        {paper.keyOutcomes && paper.keyOutcomes.length > 0 && (
-          <div className="grid grid-cols-3 gap-2 py-4 border-y border-slate-100 mb-6 mt-auto">
-            {paper.keyOutcomes.map((item, idx) => (
-              <div key={idx} className="text-center p-2 rounded-xl bg-slate-50">
-                <div className="text-base sm:text-lg font-bold text-brand-800 font-bold leading-tight">
-                  {item.value}
-                </div>
-                <div className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-tight mt-0.5">
-                  {item.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Actions */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
-          <button
-            onClick={onRead}
-            className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-slate-900 hover:bg-slate-800 shadow-soft transition-colors group/btn"
-          >
-            <FileText className="w-4 h-4 text-slate-300 group-hover/btn:scale-110 transition-transform" />
-            <span>Read more</span>
-            <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-          </button>
-          <a
-            href={paper.url}
-            download={paper.filename}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors"
-            title="Download Research PDF"
-          >
-            <Download className="w-4 h-4 text-slate-600" />
-            <span className="sm:hidden">Download PDF</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-};
+const defaultPapers: ResearchEntry[] = [
+  {
+    filename: 'Drepto_MenstroHerb_Summary_and_NLS-TX-270.pdf',
+    url: '/Research/Drepto_MenstroHerb_Summary_and_NLS-TX-270.pdf',
+    sizeBytes: 6381702,
+    title: 'Drepto MenstroHerb sheet summary and preclinical safety report',
+    type: 'PRECLINICAL SAFETY AND REGULATORY REPORT',
+    category: 'safety',
+    date: '2026',
+    publication: 'Study No. NLS-TX-270/26 · Certified laboratory study',
+    overview:
+      'Summarizes the preclinical safety evaluation of the MenstroHerb transdermal patch, including skin irritation testing performed in line with ISO 10993-23:2021. In-vivo evaluation confirmed a Primary Irritation Index (PII) score of 0.00 with zero erythema and zero edema, classifying the patch formulation as completely non-irritant.',
+  },
+  {
+    filename: 'jaims-6678.pdf',
+    url: '/Research/jaims-6678.pdf',
+    sizeBytes: 677485,
+    title: 'JAIMS research article: clinical and formulation study',
+    type: 'PEER-REVIEWED JOURNAL ARTICLE',
+    category: 'clinical',
+    date: '2026',
+    publication:
+      'Journal of Ayurveda and Integrated Medical Sciences (JAIMS) 2026; 11(7): 107–117 · Peer-reviewed original research',
+    overview:
+      'Describes the formulation, in-vitro drug release, and clinical evaluation of the transdermal patch. In clinical evaluation of female participants with primary dysmenorrhea, 96% reported rapid onset of pain relief within 30 minutes, accompanied by a sustained 91.23% cumulative drug release profile over 12 hours.',
+  },
+];
 
 // ── PDF Reader Modal ───────────────────────────────────────────────────────────
 
@@ -373,11 +103,15 @@ const PdfReaderModal: React.FC<{
 }> = ({ paper, allPapers, onClose, onSwitch }) => {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = 'unset'; };
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, []);
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
@@ -385,65 +119,64 @@ const PdfReaderModal: React.FC<{
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-slate-950/90 backdrop-blur-md animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-slate-900/95 border-b border-slate-800 text-white z-10 shadow-lg flex-shrink-0">
-        {/* Left: Doc info */}
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-slate-900 border-b border-slate-800 text-white z-10 shadow-lg flex-shrink-0">
         <div className="flex items-center gap-3 overflow-hidden pr-2">
-          <div className="w-10 h-10 rounded-xl bg-[#0B6F6D]/30 border border-[#0B6F6D]/40 flex items-center justify-center text-[#75B6B4] flex-shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-[#00594C]/30 border border-[#00594C]/50 flex items-center justify-center text-emerald-400 flex-shrink-0">
             <FileText className="w-5 h-5" />
           </div>
           <div className="overflow-hidden">
             {paper.type && (
-              <span className="text-xs font-bold uppercase tracking-wider text-[#75B6B4] bg-[#052121]/90 px-2 py-0.5 rounded border border-[#083837] mr-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 mr-2">
                 {paper.type}
               </span>
             )}
-            <h3 className="text-sm sm:text-base font-bold text-white truncate max-w-xs sm:max-w-lg mt-0.5">
+            <h3 className="text-sm sm:text-base font-semibold text-white truncate max-w-xs sm:max-w-lg">
               {paper.title}
             </h3>
           </div>
         </div>
 
-        {/* Centre: document switcher tabs (desktop) */}
+        {/* Desktop switcher */}
         {allPapers.length > 1 && (
-          <div className="hidden lg:flex items-center gap-1.5 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
+          <div className="hidden lg:flex items-center gap-1.5 bg-slate-800/80 p-1 rounded-lg border border-slate-700">
             {allPapers.map((p) => (
               <button
                 key={p.filename}
                 onClick={() => onSwitch(p)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
                   paper.filename === p.filename
-                    ? 'bg-[#0B6F6D] text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                    ? 'bg-[#00594C] text-white'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700'
                 }`}
               >
-                {p.title.length > 30 ? p.title.slice(0, 30) + '…' : p.title}
+                {p.title.length > 32 ? p.title.slice(0, 32) + '…' : p.title}
               </button>
             ))}
           </div>
         )}
 
-        {/* Right: actions */}
+        {/* Actions */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <a
             href={paper.url}
             download={paper.filename}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
           >
-            <Download className="w-3.5 h-3.5 text-[#75B6B4]" />
+            <Download className="w-3.5 h-3.5 text-emerald-400" />
             <span>Download</span>
           </a>
           <a
             href={paper.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
             <span>New Tab</span>
           </a>
           <button
             onClick={onClose}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors"
           >
             <X className="w-4 h-4" />
             <span>Close</span>
@@ -453,37 +186,17 @@ const PdfReaderModal: React.FC<{
 
       {/* Badges strip */}
       {paper.badges && paper.badges.length > 0 && (
-        <div className="bg-slate-900 border-b border-slate-800/80 px-4 sm:px-6 py-2.5 flex items-center gap-4 overflow-x-auto text-xs text-slate-300 flex-shrink-0">
+        <div className="bg-slate-900 border-b border-slate-800 px-4 sm:px-6 py-2 flex items-center gap-4 overflow-x-auto text-xs text-slate-300 flex-shrink-0">
           {paper.badges.map((b, i) => (
             <span key={i} className="inline-flex items-center gap-1 whitespace-nowrap">
-              <CheckCircle2 className="w-3 h-3 text-[#75B6B4]" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               {b}
             </span>
           ))}
-
-          {/* Mobile document switcher */}
-          {allPapers.length > 1 && (
-            <div className="lg:hidden flex items-center gap-1 flex-shrink-0 ml-auto">
-              <span className="text-[11px] text-slate-400 mr-1">Switch:</span>
-              {allPapers.map((p) => (
-                <button
-                  key={p.filename}
-                  onClick={() => onSwitch(p)}
-                  className={`px-2 py-1 rounded text-[11px] font-semibold ${
-                    paper.filename === p.filename
-                      ? 'bg-[#0B6F6D] text-white'
-                      : 'bg-slate-800 text-slate-300'
-                  }`}
-                >
-                  {p.title.slice(0, 12)}…
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       )}
 
-      {/* PDF viewer */}
+      {/* PDF Viewer */}
       <div className="flex-1 w-full relative bg-slate-900 flex flex-col overflow-hidden">
         <object
           data={`${paper.url}#toolbar=1&navpanes=0&view=FitH`}
@@ -495,9 +208,8 @@ const PdfReaderModal: React.FC<{
             title={paper.title}
             className="w-full h-full flex-grow border-0 bg-white"
           >
-            {/* Final fallback */}
             <div className="flex flex-col items-center justify-center p-8 text-center text-white h-full">
-              <FileText className="w-16 h-16 text-[#75B6B4] mb-4" />
+              <FileText className="w-16 h-16 text-emerald-400 mb-4" />
               <h4 className="text-xl font-bold mb-2">Unable to preview PDF inline</h4>
               <p className="text-slate-300 max-w-md text-sm mb-6">
                 Your browser may not support embedded PDF viewing. Open or download it directly.
@@ -506,7 +218,7 @@ const PdfReaderModal: React.FC<{
                 href={paper.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 rounded-xl bg-[#0B6F6D] hover:bg-[#0B5C5A] text-white font-bold text-sm shadow-md transition-all inline-flex items-center gap-2"
+                className="px-6 py-3 rounded-lg bg-[#00594C] hover:bg-[#00473C] text-white font-semibold text-sm transition-colors inline-flex items-center gap-2"
               >
                 <ExternalLink className="w-4 h-4" />
                 <span>Open in Browser</span>
@@ -519,19 +231,18 @@ const PdfReaderModal: React.FC<{
   );
 };
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
+// ── Main Page Component ───────────────────────────────────────────────────────
 
-type FilterTab = 'all' | 'clinical' | 'safety' | 'unknown';
+type FilterTab = 'all' | 'clinical' | 'safety';
 
 const OurResearchPage: React.FC = () => {
-  const [papers, setPapers] = useState<ResearchEntry[]>([]);
+  const [papers, setPapers] = useState<ResearchEntry[]>(defaultPapers);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedPaper, setSelectedPaper] = useState<ResearchEntry | null>(null);
   const [activeTab, setActiveTab] = useState<FilterTab>('all');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // ── Fetch manifest ──
+  // ── Fetch manifest dynamically ──
   useEffect(() => {
     const controller = new AbortController();
     fetch(`/Research/manifest.json?_=${Date.now()}`, { signal: controller.signal })
@@ -540,433 +251,314 @@ const OurResearchPage: React.FC = () => {
         return res.json();
       })
       .then((data: ResearchEntry[]) => {
-        setPapers(data);
+        if (Array.isArray(data) && data.length > 0) {
+          // Map to ensure titles & formatting align with the concept design
+          const mapped = data.map((item) => {
+            const isSafety =
+              item.category === 'safety' ||
+              item.filename.toLowerCase().includes('nls') ||
+              item.filename.toLowerCase().includes('menstroherb');
+            return {
+              ...item,
+              category: (isSafety ? 'safety' : 'clinical') as 'safety' | 'clinical',
+              type: isSafety
+                ? 'PRECLINICAL SAFETY AND REGULATORY REPORT'
+                : 'PEER-REVIEWED JOURNAL ARTICLE',
+              title: isSafety
+                ? 'Drepto MenstroHerb sheet summary and preclinical safety report'
+                : 'JAIMS research article: clinical and formulation study',
+              publication: isSafety
+                ? 'Study No. NLS-TX-270/26 · Certified laboratory study'
+                : 'Journal of Ayurveda and Integrated Medical Sciences (JAIMS) 2026; 11(7): 107–117 · Peer-reviewed original research',
+              overview: isSafety
+                ? 'Summarizes the preclinical safety evaluation of the MenstroHerb transdermal patch, including skin irritation testing performed in line with ISO 10993-23:2021. In-vivo evaluation confirmed a Primary Irritation Index (PII) score of 0.00 with zero erythema and zero edema, classifying the patch formulation as completely non-irritant.'
+                : 'Describes the formulation, in-vitro drug release, and clinical evaluation of the transdermal patch. In clinical evaluation of female participants with primary dysmenorrhea, 96% reported rapid onset of pain relief within 30 minutes, accompanied by a sustained 91.23% cumulative drug release profile over 12 hours.',
+            };
+          });
+          setPapers(mapped);
+        }
         setLoading(false);
       })
-      .catch((err) => {
-        if (err.name !== 'AbortError') {
-          setError('Could not load research papers. Please check back shortly.');
-          setLoading(false);
-        }
+      .catch(() => {
+        // Fallback to default configured papers
+        setPapers(defaultPapers);
+        setLoading(false);
       });
     return () => controller.abort();
   }, []);
 
-  // ── Filter logic ──
+  const clinicalCount = papers.filter((p) => p.category === 'clinical').length;
+  const safetyCount = papers.filter((p) => p.category === 'safety').length;
+
   const filteredPapers = papers.filter((p) => {
     if (activeTab === 'all') return true;
-    if (activeTab === 'unknown') return !p.category;
     return p.category === activeTab;
   });
 
-  const countByTab = (tab: FilterTab) =>
-    tab === 'all'
-      ? papers.length
-      : tab === 'unknown'
-      ? papers.filter((p) => !p.category).length
-      : papers.filter((p) => p.category === tab).length;
-
-  // ── Loading state ──
-  if (loading) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <Navbar isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
-        <main className="flex-grow flex flex-col items-center justify-center gap-4 text-slate-500 bg-slate-50">
-          <Loader2 className="w-10 h-10 animate-spin text-[#0B6F6D]" />
-          <p className="text-base font-medium">Loading research papers…</p>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  // ── Error state ──
-  if (error) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <Navbar isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
-        <main className="flex-grow flex flex-col items-center justify-center gap-4 text-slate-500 bg-slate-50 px-4 text-center">
-          <AlertTriangle className="w-10 h-10 text-amber-500" />
-          <p className="text-base font-semibold text-slate-700">{error}</p>
-          <p className="text-xs text-slate-400 max-w-sm">
-            Make sure PDFs are placed in <code className="bg-slate-100 px-1 rounded">public/Research/</code> and
-            the app has been rebuilt.
-          </p>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 selection:bg-[#0B6F6D] selection:text-white">
+    <div className="flex flex-col min-h-screen bg-white text-slate-900 font-sans selection:bg-[#00594C] selection:text-white">
       <Navbar isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
 
       <main className="flex-grow">
-        {/* ── HERO ─────────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#f8f9fa] via-white to-[#f1f3f6] border-b border-slate-200/80">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0B6F6D]/5 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute -bottom-10 left-10 w-96 h-96 bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-12 sm:py-16">
+          {/* ── HEADER ──────────────────────────────────────────────────────── */}
+          <header className="mb-12 sm:mb-14">
+            <span className="block text-xs font-bold uppercase tracking-wider text-[#00594C] mb-3">
+              RESEARCH
+            </span>
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-[44px] font-bold text-slate-900 tracking-tight leading-tight mb-4">
+              Our research and clinical evidence
+            </h1>
+            <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+              A list of the published papers, preclinical safety reports, and peer-reviewed studies
+              on Drepto's transdermal patch technology. Each entry links to its full document.
+            </p>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs sm:text-sm font-bold uppercase tracking-wider mb-6 shadow-2xs">
-                <Microscope className="w-4 h-4 text-teal-700" />
-                <span>PIONEERING BIOMEDICAL SCIENCE • IIT BOMBAY COLLABORATION</span>
-              </div>
+          </header>
 
-              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4 font-display">
-                Our Research &amp;{' '}
-                <span className="text-[#0B6F6D]">
-                  Clinical Evidence
-                </span>
-              </h1>
-
-              <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-2 font-normal">
-                Explore the scientific publications, preclinical safety certifications, and peer-reviewed studies
-                validating Drepto Biodevices' breakthrough polyherbal transdermal drug delivery systems.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ── PAPERS GRID ──────────────────────────────────────────────────── */}
-        <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-          {/* Section header + filter tabs */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <div className="inline-flex items-center gap-2 text-[#0B6F6D] font-bold text-xs uppercase tracking-widest mb-2">
-                <FlaskConical className="w-4 h-4 text-[#0B6F6D]" />
-                <span>Published Research &amp; Regulatory Dossiers</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                Scientific Papers &amp; Preclinical Reports
+          {/* ── PUBLISHED PAPERS AND REPORTS ─────────────────────────────────── */}
+          <section className="mb-14 sm:mb-16">
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 pb-4 border-b border-slate-200 mb-8">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Published papers and reports
               </h2>
-              <p className="text-slate-600 mt-2 text-base max-w-2xl">
-                Click{' '}
-                <span className="font-semibold text-[#0B6F6D]">Read more</span> on any card to view the full
-                paper directly on this page.{' '}
-                <span className="text-slate-400 text-sm">
-                  New PDFs dropped in <code className="bg-slate-100 px-1 rounded text-[#0B6F6D]">public/Research/</code> appear
-                  automatically after the next build.
-                </span>
-              </p>
-            </div>
 
-            {/* Filter tabs */}
-            <div className="flex items-center gap-1.5 p-1.5 bg-slate-200/70 rounded-2xl self-start md:self-auto shadow-inner flex-wrap">
-              {(['all', 'clinical', 'safety'] as FilterTab[]).map((tab) => (
+              {/* Filter Tabs / Links */}
+              <div className="flex items-center text-sm font-medium">
                 <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all capitalize ${
-                    activeTab === tab ? 'bg-[#0B6F6D] text-white shadow-md' : 'text-slate-600 hover:text-slate-900'
+                  onClick={() => setActiveTab('all')}
+                  className={`transition-colors ${
+                    activeTab === 'all'
+                      ? 'underline underline-offset-4 font-semibold text-[#00594C]'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  {tab === 'all' ? `All (${countByTab('all')})` : tab === 'clinical' ? `Clinical (${countByTab('clinical')})` : `Safety & ISO (${countByTab('safety')})`}
+                  All ({papers.length})
                 </button>
-              ))}
-              {countByTab('unknown') > 0 && (
+                <span className="mx-2 text-slate-400">·</span>
                 <button
-                  onClick={() => setActiveTab('unknown')}
-                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                    activeTab === 'unknown' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  onClick={() => setActiveTab('clinical')}
+                  className={`transition-colors ${
+                    activeTab === 'clinical'
+                      ? 'underline underline-offset-4 font-semibold text-[#00594C]'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  Other ({countByTab('unknown')})
+                  Clinical ({clinicalCount})
                 </button>
-              )}
-            </div>
-          </div>
-
-          {/* Cards */}
-          {filteredPapers.length === 0 ? (
-            <div className="py-24 text-center text-slate-400">
-              <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-30" />
-              <p className="text-lg font-semibold">No papers in this category yet</p>
-              <p className="text-sm mt-1">Add PDFs to <code className="bg-slate-100 px-1 rounded">public/Research/</code> and rebuild.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-              {filteredPapers.map((paper) =>
-                paper.overview ? (
-                  <RichCard key={paper.filename} paper={paper} onRead={() => setSelectedPaper(paper)} />
-                ) : (
-                  <GenericCard key={paper.filename} paper={paper} onRead={() => setSelectedPaper(paper)} />
-                )
-              )}
-            </div>
-          )}
-        </section>
-
-        {/* ── SCIENCE EXPLAINER ────────────────────────────────────────────── */}
-        <section id="science" className="py-16 bg-white border-y border-slate-200/80 scroll-mt-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <span className="text-[#0B6F6D] font-bold text-xs uppercase tracking-widest">Scientific Innovation</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-2">
-                Why Drepto Transdermal Technology Outperforms Conventional Oral Relief
-              </h2>
-              <p className="text-slate-600 text-base mt-3">
-                Oral NSAIDs frequently trigger gastrointestinal irritation, acid rebound, and liver metabolism.
-                Our biphasic patch architecture delivers rapid, continuous relief right where it is needed.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  Icon: Clock,
-                  color: 'brand',
-                  title: 'Biphasic Drug Release',
-                  desc: 'Immediate flux for relief within 30 minutes, followed by a sustained depot releasing 91.23% of actives over 12+ hours.',
-                },
-                {
-                  Icon: ShieldCheck,
-                  color: 'teal',
-                  title: 'Gastro-Sparing Safety',
-                  desc: 'By bypassing the stomach entirely, users experience zero nausea, gastric mucosal erosion, or dyspepsia.',
-                },
-                {
-                  Icon: Leaf,
-                  color: 'emerald',
-                  title: 'Synergistic Polyherbal Matrix',
-                  desc: 'Curcuma longa, Boswellia, Mentha piperita, Eucalyptus, and cinnamon synergistically inhibit COX/LOX inflammatory cascades.',
-                },
-                {
-                  Icon: Award,
-                  color: 'amber',
-                  title: 'ISO 10993 Biocompatibility',
-                  desc: 'PII score of 0 — hypoallergenic, breathable, and clinically verified non-irritant even during extended wear.',
-                },
-              ].map(({ Icon, color, title, desc }) => (
-                <div
-                  key={title}
-                  className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-[#0B6F6D]/50 hover:bg-white transition-all"
+                <span className="mx-2 text-slate-400">·</span>
+                <button
+                  onClick={() => setActiveTab('safety')}
+                  className={`transition-colors ${
+                    activeTab === 'safety'
+                      ? 'underline underline-offset-4 font-semibold text-[#00594C]'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
                 >
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-${color}-500/10 text-${color}-700 flex items-center justify-center mb-4`}
-                  >
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{title}</h3>
-                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{desc}</p>
-                </div>
-              ))}
+                  Safety ({safetyCount})
+                </button>
+              </div>
             </div>
 
-            {/* ── Modern Clinical Comparison Matrix: Transdermal vs Oral ── */}
-            <div className="mt-12 sm:mt-16 bg-gradient-to-br from-white via-[#f8f9fa] to-[#F4F9F9] rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 border border-[#D0E6E6] shadow-md relative overflow-hidden">
-              <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#0B6F6D]/5 rounded-full blur-[100px] pointer-events-none" />
+            {/* List of Papers */}
+            {loading ? (
+              <div className="py-12 flex items-center justify-center gap-3 text-slate-500">
+                <Loader2 className="w-5 h-5 animate-spin text-[#00594C]" />
+                <span className="text-sm">Loading research records…</span>
+              </div>
+            ) : filteredPapers.length === 0 ? (
+              <div className="py-12 text-center text-slate-400 text-sm">
+                No publications found in this category.
+              </div>
+            ) : (
+              <div className="space-y-10 sm:space-y-12">
+                {filteredPapers.map((paper) => {
+                  const isClinical = paper.category === 'clinical';
+                  const readButtonText = isClinical ? 'Read full article' : 'Read full report';
 
-              <div className="max-w-3xl mb-10">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
-                  <Activity className="w-3.5 h-3.5 text-teal-700" />
-                  <span>PHARMACOKINETIC &amp; CLINICAL BENCHMARK</span>
-                </div>
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 font-display tracking-tight">
-                  Targeted Transdermal Delivery vs. Conventional Oral NSAIDs
+                  return (
+                    <article key={paper.filename} className="pt-2">
+                      <div className="text-xs font-bold uppercase tracking-wider text-[#00594C] mb-2">
+                        {paper.type ||
+                          (isClinical
+                            ? 'PEER-REVIEWED JOURNAL ARTICLE'
+                            : 'PRECLINICAL SAFETY AND REGULATORY REPORT')}{' '}
+                        · {paper.date || '2026'}
+                      </div>
+
+                      <h3 className="font-display text-xl sm:text-2xl font-bold text-slate-900 leading-snug mb-1.5">
+                        {paper.title}
+                      </h3>
+
+                      {paper.publication && (
+                        <p className="text-sm text-slate-500 mb-3.5">{paper.publication}</p>
+                      )}
+
+                      <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-5">
+                        {paper.overview}
+                      </p>
+
+                      <div className="flex items-center gap-5">
+                        <button
+                          onClick={() => setSelectedPaper(paper)}
+                          className="bg-[#00594C] hover:bg-[#00473C] text-white text-sm font-medium px-5 py-2.5 rounded transition-colors"
+                        >
+                          {readButtonText}
+                        </button>
+                        <a
+                          href={paper.url}
+                          download={paper.filename}
+                          className="text-sm font-medium text-slate-700 hover:text-slate-900 underline underline-offset-4 transition-colors"
+                        >
+                          Download PDF
+                        </a>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          {/* ── ADDITIONAL FILINGS: INTELLECTUAL PROPERTY ──────────────────── */}
+          <hr className="border-t border-slate-200 my-12 sm:my-14" />
+
+          <section className="mb-14 sm:mb-16">
+            <span className="block text-xs font-bold uppercase tracking-wider text-[#00594C] mb-2">
+              ADDITIONAL FILINGS
+            </span>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mb-1.5">
+              Intellectual property
+            </h2>
+            <p className="text-sm text-slate-500 mb-3.5">
+              Patent application IN202521129798 · Trademark application 7344054
+            </p>
+            <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+              Proprietary polyherbal transdermal matrix and formulation architecture filed under
+              Indian Patent Application IN202521129798 and registered Trademark Application 7344054
+              with IP India.
+            </p>
+          </section>
+
+          {/* ── COMPARISON TABLE ────────────────────────────────────────────── */}
+          <hr className="border-t border-slate-200 my-12 sm:my-14" />
+
+          <section className="mb-16 sm:mb-20">
+            <span className="block text-xs font-bold uppercase tracking-wider text-[#00594C] mb-2">
+              COMPARISON
+            </span>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mb-2">
+              Transdermal patch and oral medicines
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-8">
+              Each route of administration has different advantages and limitations. The table
+              below describes the general features of each. Consult a doctor or pharmacist to decide
+              which option is suitable for you.
+            </p>
+
+            {/* Comparison Table */}
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <table className="w-full text-left border-collapse min-w-[620px]">
+                <thead>
+                  <tr className="border-b-2 border-slate-900">
+                    <th className="py-3 px-4 sm:px-0 font-medium text-slate-900 w-1/4"></th>
+                    <th className="py-3 px-4 font-semibold text-slate-900 w-[38%]">
+                      Transdermal patch (MenstroHerb)
+                    </th>
+                    <th className="py-3 px-4 font-semibold text-slate-900 w-[37%]">
+                      Oral tablets
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 text-sm sm:text-[15px]">
+                  <tr>
+                    <td className="py-4 sm:py-5 px-4 sm:px-0 font-semibold text-slate-900 align-top">
+                      How it is taken
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-700 align-top leading-relaxed">
+                      Applied to the skin
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-600 align-top leading-relaxed">
+                      Swallowed
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 sm:py-5 px-4 sm:px-0 font-semibold text-slate-900 align-top">
+                      Stomach effects
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-700 align-top leading-relaxed">
+                      Bypasses the stomach. Preclinical study reports no gastric irritation from
+                      the patch itself.
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-600 align-top leading-relaxed">
+                      May cause stomach irritation or nausea in some people, particularly with
+                      regular use.
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 sm:py-5 px-4 sm:px-0 font-semibold text-slate-900 align-top">
+                      Onset and duration
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-700 align-top leading-relaxed">
+                      Rapid onset within 30 minutes; sustained biphasic release over 12+ continuous
+                      hours.
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-600 align-top leading-relaxed">
+                      Typical onset within 45–60 minutes; short 3–5 hour duration requiring
+                      repeated daily doses.
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 sm:py-5 px-4 sm:px-0 font-semibold text-slate-900 align-top">
+                      Safety testing
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-700 align-top leading-relaxed">
+                      Preclinical irritation testing under ISO 10993-23:2021.
+                    </td>
+                    <td className="py-4 sm:py-5 px-4 text-slate-600 align-top leading-relaxed">
+                      Regulated as a drug. Refer to the product label for warnings.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* ── RESEARCH ENQUIRIES / BOTTOM ACTIONS ─────────────────────────── */}
+          <section className="pt-6 border-t border-slate-200">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+              <div>
+                <h3 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
+                  Research enquiries
                 </h3>
-                <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
-                  How direct transdermal permeation overcomes the systemic toxicity and gastric erosion of traditional oral analgesics.
+                <p className="text-sm text-slate-500 mt-1">
+                  For clinical investigators, research institutions, and distributors.
                 </p>
               </div>
 
-              {/* Quick Metrics Bar */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 font-bold text-lg shrink-0">
-                    <Zap className="w-5 h-5 text-amber-600" />
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Onset Time</div>
-                    <div className="text-base font-extrabold text-slate-900">&lt; 30 Minutes</div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-lg shrink-0">
-                    <ShieldCheck className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Gastric Safety</div>
-                    <div className="text-base font-extrabold text-slate-900">100% GI Safe</div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-lg shrink-0">
-                    <Clock className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Sustained Relief</div>
-                    <div className="text-base font-extrabold text-slate-900">12+ Hours</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Side-by-Side Dual Comparison Cards */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-                
-                {/* Winner Card: Drepto MenstroHerb */}
-                <div className="bg-white rounded-2xl border-2 border-[#0B6F6D]/40 shadow-md overflow-hidden flex flex-col justify-between">
-                  <div className="bg-gradient-to-r from-[#0B6F6D] to-[#0A4A49] text-white px-6 py-4 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#D0E6E6] block">Proprietary Transdermal Patch</span>
-                      <h4 className="text-lg sm:text-xl font-black">Drepto MenstroHerb™</h4>
-                    </div>
-                    <span className="bg-white/20 backdrop-blur-sm text-white text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                      Clinical Standard
-                    </span>
-                  </div>
-
-                  <div className="p-4 sm:p-6 space-y-3 flex-1">
-                    <div className="p-4 rounded-xl bg-[#F4F9F9]/50 border border-[#D0E6E6]/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Onset of Action</span>
-                        <span className="text-xs font-extrabold text-[#0B6F6D] bg-[#D0E6E6] px-2.5 py-0.5 rounded-full">&lt; 30 Minutes</span>
-                      </div>
-                      <p className="text-xs text-slate-600">Rapid local micro-vascular diffusion yields 96% symptomatic dysmenorrhea relief in clinical testing.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[#F4F9F9]/50 border border-[#D0E6E6]/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Duration of Action</span>
-                        <span className="text-xs font-extrabold text-[#0B6F6D] bg-[#D0E6E6] px-2.5 py-0.5 rounded-full">12+ Hours Continuous</span>
-                      </div>
-                      <p className="text-xs text-slate-600">Biphasic matrix delivery sustains continuous therapeutic levels across day and night without redosing.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-100/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">GI Safety Profile</span>
-                        <span className="text-xs font-extrabold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">100% Gastro-Safe</span>
-                      </div>
-                      <p className="text-xs text-slate-600">Completely bypasses stomach and digestive tract, causing zero gastric erosion, hyperacidity, or ulcers.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[#F4F9F9]/50 border border-[#D0E6E6]/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Biocompatibility (PII)</span>
-                        <span className="text-xs font-extrabold text-[#0B6F6D] bg-[#D0E6E6] px-2.5 py-0.5 rounded-full">PII = 0.00 (Zero Irritation)</span>
-                      </div>
-                      <p className="text-xs text-slate-600">Certified hypoallergenic under ISO 10993-23:2021 medical device biocompatibility benchmarks.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[#F4F9F9]/50 border border-[#D0E6E6]/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Active Formulation</span>
-                        <span className="text-xs font-extrabold text-[#0B6F6D] bg-[#D0E6E6] px-2.5 py-0.5 rounded-full">Natural Polyherbal</span>
-                      </div>
-                      <p className="text-xs text-slate-600">Standardized extracts of Curcuma longa, Boswellia, Mentha piperita and Eucalyptus multi-target COX &amp; LOX pathways.</p>
-                    </div>
-                  </div>
-
-                  <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">SINE IIT Bombay Incubated &bull; JAIMS Peer-Reviewed</span>
-                    <span className="text-[#0B6F6D] font-bold">Recommended</span>
-                  </div>
-                </div>
-
-                {/* Drawback Card: Conventional Oral NSAIDs */}
-                <div className="bg-[#f8f9fa] rounded-2xl border border-slate-300 shadow-xs overflow-hidden flex flex-col justify-between">
-                  <div className="bg-slate-200 text-slate-800 px-6 py-4 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Conventional Oral Regimen</span>
-                      <h4 className="text-lg sm:text-xl font-bold">Traditional Oral Painkillers</h4>
-                    </div>
-                    <span className="bg-slate-300 text-slate-700 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                      Mefenamic / NSAID
-                    </span>
-                  </div>
-
-                  <div className="p-6 sm:p-8 space-y-4 flex-1">
-                    <div className="p-4 rounded-xl bg-white border border-slate-200/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Onset of Action</span>
-                        <span className="text-xs font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">Slow: 45–60+ Minutes</span>
-                      </div>
-                      <p className="text-xs text-slate-500">Delayed gastric transit and liver metabolism delay pain mitigation, prolonging intense acute pain.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-white border border-slate-200/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Duration of Action</span>
-                        <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full">3–5 Hours (Repeat Dosing)</span>
-                      </div>
-                      <p className="text-xs text-slate-500">Rapid drop in plasma drug concentration requires taking 3–4 pills daily, creating wear-off pain spikes.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-rose-50/50 border border-rose-100">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-rose-800">GI Safety Profile</span>
-                        <span className="text-xs font-bold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full">Severe Ulcer Risk</span>
-                      </div>
-                      <p className="text-xs text-slate-500">Direct mucosal irritation causes stomach acid reflux, gastritis, nausea, and ulceration with repetitive use.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-white border border-slate-200/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">First-Pass Metabolism</span>
-                        <span className="text-xs font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">High Hepatic Burden</span>
-                      </div>
-                      <p className="text-xs text-slate-500">Up to 60% of active drug degraded by liver enzymes, requiring heavy chemical doses that strain internal organs.</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-white border border-slate-200/80">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Active Formulation</span>
-                        <span className="text-xs font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">Synthetic NSAIDs</span>
-                      </div>
-                      <p className="text-xs text-slate-500">Single-action synthetic molecules with known long-term cardiovascular and renal contraindications.</p>
-                    </div>
-                  </div>
-
-                  <div className="px-6 py-4 bg-slate-100/70 border-t border-slate-200 text-xs text-slate-400 flex items-center justify-between">
-                    <span>Higher organ load &bull; Unpleasant gastric distress</span>
-                    <span className="text-slate-500 font-semibold">Conventional</span>
-                  </div>
-                </div>
-
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/contact"
+                  className="border border-[#00594C] text-[#00594C] hover:bg-[#00594C]/5 text-sm font-medium px-5 py-2.5 rounded transition-colors"
+                >
+                  Contact research team
+                </Link>
+                <Link
+                  to="/our-products"
+                  className="bg-[#00594C] hover:bg-[#00473C] text-white text-sm font-medium px-5 py-2.5 rounded transition-colors shadow-sm"
+                >
+                  View products
+                </Link>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* ── CTA ──────────────────────────────────────────────────────────── */}
-        <section className="py-16 md:py-20 bg-white border-t border-slate-200">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold uppercase tracking-wider mb-4">
-              <Stethoscope className="w-4 h-4 text-slate-900" />
-              <span>Research Collaboration &amp; Clinical Inquiries</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-4">
-              Partner With Drepto Biodevices
-            </h2>
-            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8 font-normal">
-              We collaborate with research institutions, clinical trial investigators, and healthcare distributors
-              to advance targeted transdermal healthcare solutions.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link
-                to="/our-products"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 shadow-soft transition-colors"
-              >
-                <span>View Patented Products</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-slate-800 bg-white hover:bg-slate-100 border border-slate-300 shadow-sm transition-all"
-              >
-                <span>Contact Research Team</span>
-              </Link>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
 
-      {/* ── PDF Reader Modal ──────────────────────────────────────────────── */}
+      {/* ── PDF Reader Modal ────────────────────────────────────────────────── */}
       {selectedPaper && (
         <PdfReaderModal
           paper={selectedPaper}
