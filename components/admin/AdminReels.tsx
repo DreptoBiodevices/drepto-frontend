@@ -23,7 +23,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { SocialPostService } from '../../lib/api_controller';
-import { supabase } from '../../lib/supabase';
 import { SocialMediaPost } from '../../types';
 
 interface ReelFormState {
@@ -156,33 +155,8 @@ const AdminReels: React.FC = () => {
     }
   };
 
-  // Upload file helper: tries Supabase storage bucket, falls back to base64
+  // Convert selected video file to base64 data URL
   const uploadVideoFile = async (file: File): Promise<string> => {
-    try {
-      if (supabase && supabase.storage) {
-        const fileExt = file.name.split('.').pop() || 'mp4';
-        const fileName = `reel_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
-        const filePath = `reels/${fileName}`;
-
-        const { data, error: uploadErr } = await supabase.storage
-          .from('reels')
-          .upload(filePath, file, {
-            cacheControl: '3600',
-            upsert: false,
-          });
-
-        if (!uploadErr && data) {
-          const { data: publicUrlData } = supabase.storage.from('reels').getPublicUrl(filePath);
-          if (publicUrlData?.publicUrl) {
-            return publicUrlData.publicUrl;
-          }
-        }
-      }
-    } catch (e) {
-      console.warn('Supabase storage upload skipped or failed, falling back to base64/dataURL:', e);
-    }
-
-    // Fallback: convert file to Base64 data URL
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result as string);
