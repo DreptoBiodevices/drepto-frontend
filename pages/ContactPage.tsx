@@ -33,7 +33,7 @@ const ContactPage: React.FC = () => {
 
             {/* Quick Contact Cards: Signature Emcure-inspired Soft Grey Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
-              <div className="bg-[#F4F9F9] rounded-[2rem] p-6 text-center border border-[#D0E6E6]/80 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden">
+              {/* <div className="bg-[#F4F9F9] rounded-[2rem] p-6 text-center border border-[#D0E6E6]/80 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-[#0B6F6D] opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-white shadow-2xs flex items-center justify-center group-hover:scale-105 transition-transform">
                   <Phone className="w-5 h-5 text-[#0B6F6D]" />
@@ -42,7 +42,7 @@ const ContactPage: React.FC = () => {
                 <a href="tel:+918451822256" className="text-slate-600 text-sm font-medium hover:text-[#0B6F6D] transition-colors">
                   +91 84518 22256
                 </a>
-              </div>
+              </div> */}
 
               <div className="bg-[#F4F9F9] rounded-[2rem] p-6 text-center border border-[#D0E6E6]/80 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-[#0B6F6D] opacity-0 group-hover:opacity-100 transition-opacity" />
