@@ -113,7 +113,7 @@ const AboutUsPage: React.FC = () => {
           <GallerySection />
         </div>
 
-        {/* Founder & CEO Thought Leadership Card + Executive Leadership Team */}
+        {/* Founder & Director Thought Leadership Card + Executive Leadership Team */}
         <div id="team" className="scroll-mt-24">
           <FounderQuoteCard />
           <TeamSection />

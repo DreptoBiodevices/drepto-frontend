@@ -12,7 +12,7 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     name: 'Rahul Kumar Gupta',
-    role: 'Founder & Chief Executive Officer',
+    role: 'Founder & Director',
     description: 'IIT Bombay Alumnus & Biomedical Innovator. Driving transdermal therapeutic formulation and corporate strategy.',
     image: '/images/rahulsir.jpeg',
     linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/',
