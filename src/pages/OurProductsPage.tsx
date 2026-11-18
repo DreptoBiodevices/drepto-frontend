@@ -511,10 +511,10 @@ const OurProductsPage: React.FC = () => {
                     </div>
                 )}
 
-                {/* Video Reviews / Testimonials */}
-                <div className="mt-16">
+                {/* Video Reviews / Testimonials (Hidden) */}
+                {/* <div className="mt-16">
                     <VideoTestimonialsSection />
-                </div>
+                </div> */}
             </div>
             </main>
 

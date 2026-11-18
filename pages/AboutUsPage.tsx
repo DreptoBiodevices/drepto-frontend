@@ -105,8 +105,8 @@ const AboutUsPage: React.FC = () => {
           <AboutSection />
         </div>
 
-        {/* User Testimonial Videos (same as below Products) */}
-        <VideoTestimonialsSection />
+        {/* User Testimonial Videos (Hidden) */}
+        {/* <VideoTestimonialsSection /> */}
 
         {/* Visual Journey Gallery & Institutional Recognition */}
         <div id="recognition" className="scroll-mt-24">

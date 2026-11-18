@@ -132,8 +132,8 @@ const VideoTestimonialsSection: React.FC = () => {
         }
     };
 
-    // If no videos are found, we don't render the section
-    if (videoFiles.length === 0) return null;
+    // Hidden from website per request
+    return null;
 
     return (
         <section ref={sectionRef} className="py-12 md:py-16 bg-transparent overflow-hidden border-t border-slate-100">
