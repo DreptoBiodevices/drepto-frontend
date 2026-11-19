@@ -12,21 +12,21 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     name: 'Rahul Kumar Gupta',
-    role: 'Founder & Director',
+    role: 'Director',
     description: 'IIT Bombay Alumnus & Biomedical Innovator. Driving transdermal therapeutic formulation and corporate strategy.',
     image: '/images/rahulsir.jpeg',
     linkedin: 'https://www.linkedin.com/in/rahul-kumar-gupta-4b8bb8190/',
   },
   {
     name: 'Prof. Rohit Srivastava',
-    role: 'Scientific Advisor & Mentor',
+    role: 'Co-Founder & Mentor',
     description: 'Professor, Dept of Biosciences & Bioengineering, IIT Bombay (Shanti Swarup Bhatnagar Awardee).',
     image: '/images/rohitsir.jpeg',
     linkedin: 'https://www.linkedin.com/in/rohit-srivastava-02bb2b16/',
   },
   {
     name: 'Dr. Chandan Yadav',
-    role: 'Chief Medical Officer',
+    role: 'Medical Advisor',
     description: 'Senior Radiologist, Medanta Hospital. Leading clinical evaluation and therapeutic protocols.',
     image: '/images/dr_chandan.jpg',
     linkedin: 'https://www.dreptobiodevices.com/',

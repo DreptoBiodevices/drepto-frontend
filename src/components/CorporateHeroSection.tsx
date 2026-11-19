@@ -49,7 +49,7 @@ export const FounderQuoteCard: React.FC = () => {
                 {/* Leader Image */}
                 <img
                   src="/images/rahulsir.jpeg"
-                  alt="Rahul Kumar Gupta, Founder & Director of Drepto Biodevices"
+                  alt="Rahul Kumar Gupta, Director of Drepto Biodevices"
                   className="w-full h-full object-cover object-top rounded-lg shadow-md bg-slate-200"
                 />
               </div>
@@ -74,7 +74,7 @@ export const FounderQuoteCard: React.FC = () => {
                   RAHUL KUMAR GUPTA
                 </h3>
                 <p className="text-slate-600 font-medium text-xs sm:text-sm lg:text-base mt-1">
-                  Founder &amp; Director
+                  Director
                 </p>
                 <p className="text-slate-500 font-medium text-xs sm:text-sm">
                   Drepto Biodevices Pvt. Ltd. &bull; Incubated at SINE, IIT Bombay
@@ -573,7 +573,7 @@ const CorporateHeroSection: React.FC = () => {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          3. LEADERSHIP QUOTE CARD: Founder & Director Inspiring Message
+          3. LEADERSHIP QUOTE CARD: Director Inspiring Message
           ───────────────────────────────────────────────────────────── */}
       <FounderQuoteCard />
     </div>

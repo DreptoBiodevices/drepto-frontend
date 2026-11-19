@@ -143,7 +143,7 @@ const Navbar: React.FC<NavbarProps> = ({
       path: '/about-us',
       dropdown: [
         { label: 'About Drepto', desc: 'Deeptech biomedical innovations at SINE, IIT Bombay', path: '/about-us', hash: '#purpose' },
-        { label: 'Leadership & Team', desc: 'Message from Founder & Director Rahul Kumar Gupta & Advisors', path: '/about-us', hash: '#team' },
+        { label: 'Leadership & Team', desc: 'Message from Director Rahul Kumar Gupta & Advisors', path: '/about-us', hash: '#team' },
         { label: 'Incubation & Recognition', desc: 'SINE IIT Bombay, BIRAC, and JAIMS', path: '/about-us', hash: '#recognition' },
       ],
     },
