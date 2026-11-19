@@ -242,17 +242,8 @@ const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* ── Video Display with Clinical Chassis ── */}
+        {/* ── Video Display ── */}
         <div className="mt-10 sm:mt-12 relative rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl bg-slate-950">
-          <div className="px-6 py-3.5 bg-slate-900 border-b border-white/10 flex items-center justify-between text-xs text-slate-300">
-            <div className="flex items-center gap-2.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="font-semibold text-white tracking-tight">Transdermal Kinetic Release &amp; Polymer Matrix Architecture</span>
-            </div>
-            <span className="hidden sm:inline text-slate-400 text-[11px] font-mono">
-              Franz Diffusion Cell Evaluation • Ex-Vivo Bio-Permeation Demonstration
-            </span>
-          </div>
           <video
             src="/images/vid.mp4"
             className="w-full object-cover max-h-[460px]"
