@@ -165,7 +165,7 @@ const CorporateHeroSection: React.FC = () => {
         <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-2 pointer-events-none" />
 
         {/* Banner Foreground Layer */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-8 sm:pb-12 md:pb-16 flex flex-col items-center">
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 md:pb-16 flex flex-col items-center justify-center text-center">
           {/* Elegant Pill Capsule / Scroll Cue (Fades away instantly on scroll) */}
           <button
             onClick={scrollToOverview}
@@ -184,7 +184,7 @@ const CorporateHeroSection: React.FC = () => {
 
           {/* Dynamic Floating Container: Moves UPwards over the image on scroll */}
           <div
-            className="w-full flex flex-col items-center text-center pointer-events-none select-none"
+            className="w-full flex flex-col items-center justify-center text-center pointer-events-none select-none mx-auto"
             style={{
               transform: `translateY(${textTranslateY}px)`,
               willChange: 'transform',
@@ -203,7 +203,7 @@ const CorporateHeroSection: React.FC = () => {
             </div>
 
             {/* Massive Typography: CURE & BEYOND (Moves up and covers the image) */}
-            <h1 className="w-full text-center text-3xl sm:text-5xl md:text-7xl lg:text-[9.5rem] xl:text-[11.5rem] font-black uppercase tracking-tight text-white leading-none select-none drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] font-display">
+            <h1 className="w-full text-center whitespace-nowrap text-[clamp(2.5rem,8.8vw,10.5rem)] font-black uppercase tracking-tight text-white leading-none select-none drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] font-display mx-auto">
               CURE &amp; BEYOND
             </h1>
           </div>
